@@ -5,8 +5,8 @@ This experiment was created using PsychoPy3 Experiment Builder (v2022.2.4),
     on November 02, 2022, at 13:20
 If you publish work using this script the most relevant publication is:
 
-    Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
-        PsychoPy2: Experiments in behavior made easy Behav Res 51: 195. 
+    Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019)
+        PsychoPy2: Experiments in behavior made easy Behav Res 51: 195.
         https://doi.org/10.3758/s13428-018-01193-y
 
 """
@@ -64,10 +64,10 @@ frameTolerance = 0.001  # how close to onset before 'same' frame
 
 # --- Setup the Window ---
 win = visual.Window(
-    size=[2560, 1440], fullscr=True, screen=0, 
+    size=[2560, 1440], fullscr=True, screen=0,
     winType='pyglet', allowStencil=False,
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
-    blendMode='avg', useFBO=True, 
+    blendMode='avg', useFBO=True,
     units='height')
 win.mouseVisible = False
 # store frame rate of monitor if we can measure it
@@ -99,8 +99,8 @@ wrap = 1.6
 Instructions = visual.TextStim(win=win, name='Instructions',
     text='As discussed in the instructions, you will choose between a gamble and a guaranteed alternative.\n\nOnce "V-Left" and "N-Right" appear on the screen, you may press "V" to select the option on the left and "N" to choose the option on the right.\n\nPress "enter" to move on to the next screen.',
     font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-1.0);
 inst1 = keyboard.Keyboard()
@@ -109,8 +109,8 @@ inst1 = keyboard.Keyboard()
 startPract = visual.TextStim(win=win, name='startPract',
     text='There will now be 5 practice trials.\n\nWhen you are ready to begin the practice, press "V" or "N".',
     font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=0.0);
 startPracResp = keyboard.Keyboard()
@@ -139,43 +139,43 @@ lineLeft = visual.Rect(
 orText = visual.TextStim(win=win, name='orText',
     text='OR',
     font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(0, 0), height=0.05, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-4.0);
 lossTxt = visual.TextStim(win=win, name='lossTxt',
     text='',
     font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color='black', colorSpace='rgb', opacity=1, 
+    pos=[0,0], height=0.1, wrapWidth=None, ori=0,
+    color='black', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-5.0);
 gainTxt = visual.TextStim(win=win, name='gainTxt',
     text='',
     font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color='black', colorSpace='rgb', opacity=1, 
+    pos=[0,0], height=0.1, wrapWidth=None, ori=0,
+    color='black', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-6.0);
 safeTxt = visual.TextStim(win=win, name='safeTxt',
     text='',
     font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color='black', colorSpace='rgb', opacity=1, 
+    pos=[0,0], height=0.1, wrapWidth=None, ori=0,
+    color='black', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-7.0);
 vLeft = visual.TextStim(win=win, name='vLeft',
     text='V-Left',
     font='Arial',
-    pos=(-.4, -.35), height=0.05, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(-.4, -.35), height=0.05, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-8.0);
 nRight = visual.TextStim(win=win, name='nRight',
     text='N-Right',
     font='Arial',
-    pos=(.4, -.35), height=0.05, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(.4, -.35), height=0.05, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-9.0);
 choice1 = keyboard.Keyboard()
@@ -184,8 +184,8 @@ choice1 = keyboard.Keyboard()
 isiText = visual.TextStim(win=win, name='isiText',
     text='+',
     font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(0, 0), height=0.05, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=0.0);
 
@@ -193,8 +193,8 @@ isiText = visual.TextStim(win=win, name='isiText',
 noRespTxt = visual.TextStim(win=win, name='noRespTxt',
     text='You did not respond in time\n',
     font='Arial',
-    pos=[0,0], height=textHeight, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=[0,0], height=textHeight, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-1.0);
 ocGamble = visual.Rect(
@@ -212,8 +212,8 @@ ocSafe = visual.Rect(
 outcomeText = visual.TextStim(win=win, name='outcomeText',
     text='',
     font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=[0,0], height=0.1, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-4.0);
 hideGamble = visual.Rect(
@@ -227,8 +227,8 @@ hideGamble = visual.Rect(
 itiText = visual.TextStim(win=win, name='itiText',
     text='+',
     font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(0, 0), height=0.05, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=0.0);
 
@@ -236,8 +236,8 @@ itiText = visual.TextStim(win=win, name='itiText',
 postPracText = visual.TextStim(win=win, name='postPracText',
     text='Practice complete.\n\nWhen you are ready to start the real task, press "V" or "N".\n',
     font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=0.0);
 postPractResp = keyboard.Keyboard()
@@ -266,43 +266,43 @@ lineLeftReal = visual.Rect(
 orTextReal = visual.TextStim(win=win, name='orTextReal',
     text='OR',
     font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(0, 0), height=0.05, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-4.0);
 lossTxtReal = visual.TextStim(win=win, name='lossTxtReal',
     text='',
     font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color='black', colorSpace='rgb', opacity=1, 
+    pos=[0,0], height=0.1, wrapWidth=None, ori=0,
+    color='black', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-5.0);
 gainTxtReal = visual.TextStim(win=win, name='gainTxtReal',
     text='',
     font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color='black', colorSpace='rgb', opacity=1, 
+    pos=[0,0], height=0.1, wrapWidth=None, ori=0,
+    color='black', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-6.0);
 safeTxtReal = visual.TextStim(win=win, name='safeTxtReal',
     text='',
     font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color='black', colorSpace='rgb', opacity=1, 
+    pos=[0,0], height=0.1, wrapWidth=None, ori=0,
+    color='black', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-7.0);
 vLeftReal = visual.TextStim(win=win, name='vLeftReal',
     text='V-Left',
     font='Arial',
-    pos=(-.4, -.35), height=0.05, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(-.4, -.35), height=0.05, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-8.0);
 nRightReal = visual.TextStim(win=win, name='nRightReal',
     text='N-Right',
     font='Arial',
-    pos=(.4, -.35), height=0.05, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(.4, -.35), height=0.05, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-9.0);
 realChoice = keyboard.Keyboard()
@@ -311,8 +311,8 @@ realChoice = keyboard.Keyboard()
 isiTextReal = visual.TextStim(win=win, name='isiTextReal',
     text='+',
     font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(0, 0), height=0.05, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=0.0);
 
@@ -326,8 +326,8 @@ outcomes = []
 noRespTxtReal = visual.TextStim(win=win, name='noRespTxtReal',
     text='You did not respond in time\n',
     font='Arial',
-    pos=[0,0], height=0.08, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=[0,0], height=0.08, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-1.0);
 ocGambleReal = visual.Rect(
@@ -345,8 +345,8 @@ ocSafeReal = visual.Rect(
 outcomeTextReal = visual.TextStim(win=win, name='outcomeTextReal',
     text='',
     font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=[0,0], height=0.1, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-4.0);
 hideGambleReal = visual.Rect(
@@ -360,8 +360,8 @@ hideGambleReal = visual.Rect(
 itiTextReal = visual.TextStim(win=win, name='itiTextReal',
     text='+',
     font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(0, 0), height=0.05, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=0.0);
 
@@ -375,35 +375,35 @@ def choice_probability(parameters, riskyGv, riskyLv, certv):
     # Pull out parameters
     rho = parameters[0];
     mu = parameters[1];
-    
+
     nTrials = len(riskyGv);
-    
+
     # Calculate utility of the two options
     utility_riskygain_value = [math.pow(value, rho) for value in riskyGv];
     utility_riskyloss_value = [math.pow(value, rho) for value in riskyLv];
     utility_risky_option = [.5 * utility_riskygain_value[t] + .5 * utility_riskyloss_value[t] for t in range(nTrials)];
     utility_safe_option = [math.pow(value, rho) for value in certv]
-    
+
     # Normalize values with div
     div = max(riskyGv)**rho;
-    
+
     # Softmax
     p = [1/(1 + math.exp(-mu/div*(utility_risky_option[t] - utility_safe_option[t]))) for t in range(nTrials)];
     return p
 
 def negLLprospect_cgt(parameters, riskyGv, riskyLv, certv, choices):
     choiceP = choice_probability(parameters, riskyGv, riskyLv, certv);
-    
+
     nTrials = len(choiceP);
-    
+
     likelihood = [choices[t]*choiceP[t] + (1-choices[t])*(1-choiceP[t]) for t in range(nTrials)];
     zeroindex = [likelihood[t] == 0 for t in range(nTrials)];
     for ind in range(nTrials):
         if zeroindex[ind]:
             likelihood[ind] = 0.000000000000001;
-    
+
     loglikelihood = [math.log(likelihood[t]) for t in range(nTrials)];
-    
+
     nll = -sum(loglikelihood);
     return nll
 
@@ -424,8 +424,8 @@ bestMuContainer = []
 settingUpForPart2 = visual.TextStim(win=win, name='settingUpForPart2',
     text='The first round of the gambling task is complete! \n\nSetting up for the last round of the gambling task.\n\nPlease wait...\n\n\n',
     font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
-    color='white', colorSpace='rgb', opacity=None, 
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0,
+    color='white', colorSpace='rgb', opacity=None,
     languageStyle='LTR',
     depth=-4.0);
 
@@ -433,8 +433,8 @@ settingUpForPart2 = visual.TextStim(win=win, name='settingUpForPart2',
 text = visual.TextStim(win=win, name='text',
     text=None,
     font='Open Sans',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0.0, 
-    color='white', colorSpace='rgb', opacity=None, 
+    pos=(0, 0), height=0.05, wrapWidth=None, ori=0.0,
+    color='white', colorSpace='rgb', opacity=None,
     languageStyle='LTR',
     depth=0.0);
 staticLoadChoiceset = clock.StaticPeriod(win=win, screenHz=expInfo['frameRate'], name='staticLoadChoiceset')
@@ -443,8 +443,8 @@ staticLoadChoiceset = clock.StaticPeriod(win=win, screenHz=expInfo['frameRate'],
 moveToRDMpart2 = visual.TextStim(win=win, name='moveToRDMpart2',
     text='When you are ready to begin the next round of the gambling task, press "enter".',
     font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
-    color='white', colorSpace='rgb', opacity=None, 
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0,
+    color='white', colorSpace='rgb', opacity=None,
     languageStyle='LTR',
     depth=0.0);
 key_resp = keyboard.Keyboard()
@@ -473,43 +473,43 @@ lineLeftReal = visual.Rect(
 orTextReal = visual.TextStim(win=win, name='orTextReal',
     text='OR',
     font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(0, 0), height=0.05, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-4.0);
 lossTxtReal = visual.TextStim(win=win, name='lossTxtReal',
     text='',
     font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color='black', colorSpace='rgb', opacity=1, 
+    pos=[0,0], height=0.1, wrapWidth=None, ori=0,
+    color='black', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-5.0);
 gainTxtReal = visual.TextStim(win=win, name='gainTxtReal',
     text='',
     font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color='black', colorSpace='rgb', opacity=1, 
+    pos=[0,0], height=0.1, wrapWidth=None, ori=0,
+    color='black', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-6.0);
 safeTxtReal = visual.TextStim(win=win, name='safeTxtReal',
     text='',
     font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color='black', colorSpace='rgb', opacity=1, 
+    pos=[0,0], height=0.1, wrapWidth=None, ori=0,
+    color='black', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-7.0);
 vLeftReal = visual.TextStim(win=win, name='vLeftReal',
     text='V-Left',
     font='Arial',
-    pos=(-.4, -.35), height=0.05, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(-.4, -.35), height=0.05, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-8.0);
 nRightReal = visual.TextStim(win=win, name='nRightReal',
     text='N-Right',
     font='Arial',
-    pos=(.4, -.35), height=0.05, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(.4, -.35), height=0.05, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-9.0);
 realChoice = keyboard.Keyboard()
@@ -518,8 +518,8 @@ realChoice = keyboard.Keyboard()
 isiTextReal = visual.TextStim(win=win, name='isiTextReal',
     text='+',
     font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(0, 0), height=0.05, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=0.0);
 
@@ -533,8 +533,8 @@ outcomes = []
 noRespTxtReal = visual.TextStim(win=win, name='noRespTxtReal',
     text='You did not respond in time\n',
     font='Arial',
-    pos=[0,0], height=0.08, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=[0,0], height=0.08, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-1.0);
 ocGambleReal = visual.Rect(
@@ -552,8 +552,8 @@ ocSafeReal = visual.Rect(
 outcomeTextReal = visual.TextStim(win=win, name='outcomeTextReal',
     text='',
     font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=[0,0], height=0.1, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-4.0);
 hideGambleReal = visual.Rect(
@@ -567,8 +567,8 @@ hideGambleReal = visual.Rect(
 itiTextReal = visual.TextStim(win=win, name='itiTextReal',
     text='+',
     font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    pos=(0, 0), height=0.05, wrapWidth=None, ori=0,
+    color='white', colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=0.0);
 
@@ -576,8 +576,8 @@ itiTextReal = visual.TextStim(win=win, name='itiTextReal',
 breaktxt = visual.TextStim(win=win, name='breaktxt',
     text="You have sucessfully completed the first task in this experiment!\n\nPlease take a brief 1 minute break. \n\nYou are welcome to take a longer break, but keep in mind this study should take no longer than 1 hour to complete. \n\nWhen you are ready to move on, press 'enter' to continue.\n",
     font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
-    color='white', colorSpace='rgb', opacity=None, 
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0,
+    color='white', colorSpace='rgb', opacity=None,
     languageStyle='LTR',
     depth=0.0);
 stopBreak = keyboard.Keyboard()
@@ -588,14 +588,14 @@ stopBreak = keyboard.Keyboard()
 ThankYou = visual.TextStim(win=win, name='ThankYou',
     text='Thank you! You have sucessfully completed the second portion of this study.\n\nYou will now be automatically redirected to Qualtrics.',
     font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
-    color='white', colorSpace='rgb', opacity=None, 
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0,
+    color='white', colorSpace='rgb', opacity=None,
     languageStyle='LTR',
     depth=0.0);
 
 # Create some handy timers
 globalClock = core.Clock()  # to track the time since experiment started
-routineTimer = core.Clock()  # to track time remaining of each (possibly non-slip) routine 
+routineTimer = core.Clock()  # to track time remaining of each (possibly non-slip) routine
 
 # --- Prepare to start Routine "instructions" ---
 continueRoutine = True
@@ -626,7 +626,7 @@ while continueRoutine:
     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
     # update/draw components on each frame
-    
+
     # *Instructions* updates
     if Instructions.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
         # keep track of start time/frame for later
@@ -637,7 +637,7 @@ while continueRoutine:
         # add timestamp to datafile
         thisExp.timestampOnFlip(win, 'Instructions.started')
         Instructions.setAutoDraw(True)
-    
+
     # *inst1* updates
     waitOnFlip = False
     if inst1.status == NOT_STARTED and tThisFlip >= 2-frameTolerance:
@@ -661,11 +661,11 @@ while continueRoutine:
             inst1.rt = _inst1_allKeys[-1].rt
             # a response ends the routine
             continueRoutine = False
-    
+
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
         core.quit()
-    
+
     # check if all components have finished
     if not continueRoutine:  # a component has requested a forced-end of Routine
         routineForceEnded = True
@@ -675,7 +675,7 @@ while continueRoutine:
         if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
             continueRoutine = True
             break  # at least one component has not yet finished
-    
+
     # refresh the screen
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
@@ -723,7 +723,7 @@ while continueRoutine:
     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
     # update/draw components on each frame
-    
+
     # *startPract* updates
     if startPract.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
         # keep track of start time/frame for later
@@ -734,7 +734,7 @@ while continueRoutine:
         # add timestamp to datafile
         thisExp.timestampOnFlip(win, 'startPract.started')
         startPract.setAutoDraw(True)
-    
+
     # *startPracResp* updates
     waitOnFlip = False
     if startPracResp.status == NOT_STARTED and tThisFlip >= 2-frameTolerance:
@@ -758,11 +758,11 @@ while continueRoutine:
             startPracResp.rt = _startPracResp_allKeys[-1].rt
             # a response ends the routine
             continueRoutine = False
-    
+
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
         core.quit()
-    
+
     # check if all components have finished
     if not continueRoutine:  # a component has requested a forced-end of Routine
         routineForceEnded = True
@@ -772,7 +772,7 @@ while continueRoutine:
         if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
             continueRoutine = True
             break  # at least one component has not yet finished
-    
+
     # refresh the screen
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
@@ -792,7 +792,7 @@ thisExp.nextEntry()
 routineTimer.reset()
 
 # set up handler to look after randomisation of conditions etc
-trials = data.TrialHandler(nReps=1, method='sequential', 
+trials = data.TrialHandler(nReps=1, method='sequential',
     extraInfo=expInfo, originPath=-1,
     trialList=data.importConditions('cgtRDMPractice.xlsx', selection='0:2'),
     seed=None, name='trials')
@@ -809,7 +809,7 @@ for thisTrial in trials:
     if thisTrial != None:
         for paramName in thisTrial:
             exec('{} = thisTrial[paramName]'.format(paramName))
-    
+
     # --- Prepare to start Routine "practiceTask" ---
     continueRoutine = True
     routineForceEnded = False
@@ -819,7 +819,7 @@ for thisTrial in trials:
         targetPos=[-.4,0]
     else:
         targetPos=[.4,0]
-    
+
     if loc==1:
         lossLoc=[-.4,-.1]
         gainLoc=[-.4,.1]
@@ -828,8 +828,8 @@ for thisTrial in trials:
         lossLoc=[.4,-.1]
         gainLoc=[.4,.1]
         safeLoc=[-.4,0]
-        
-        
+
+
     pracLossRounded = '$%.0f' % round(riskyLoss,0)
     pracGainRounded = '$%.2f' % round(riskyGain,2)
     pracSafeRounded = '$%.2f' % round(alternative,2)
@@ -860,7 +860,7 @@ for thisTrial in trials:
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
-    
+
     # --- Run Routine "practiceTask" ---
     while continueRoutine and routineTimer.getTime() < 4.0:
         # get current time
@@ -869,7 +869,7 @@ for thisTrial in trials:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        
+
         # *circleLeft* updates
         if circleLeft.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
             # keep track of start time/frame for later
@@ -889,7 +889,7 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'circleLeft.stopped')
                 circleLeft.setAutoDraw(False)
-        
+
         # *circleRight* updates
         if circleRight.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -909,7 +909,7 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'circleRight.stopped')
                 circleRight.setAutoDraw(False)
-        
+
         # *lineLeft* updates
         if lineLeft.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -929,7 +929,7 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'lineLeft.stopped')
                 lineLeft.setAutoDraw(False)
-        
+
         # *orText* updates
         if orText.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -949,7 +949,7 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'orText.stopped')
                 orText.setAutoDraw(False)
-        
+
         # *lossTxt* updates
         if lossTxt.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -969,7 +969,7 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'lossTxt.stopped')
                 lossTxt.setAutoDraw(False)
-        
+
         # *gainTxt* updates
         if gainTxt.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -989,7 +989,7 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'gainTxt.stopped')
                 gainTxt.setAutoDraw(False)
-        
+
         # *safeTxt* updates
         if safeTxt.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -1009,7 +1009,7 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'safeTxt.stopped')
                 safeTxt.setAutoDraw(False)
-        
+
         # *vLeft* updates
         if vLeft.status == NOT_STARTED and tThisFlip >= 2-frameTolerance:
             # keep track of start time/frame for later
@@ -1029,7 +1029,7 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'vLeft.stopped')
                 vLeft.setAutoDraw(False)
-        
+
         # *nRight* updates
         if nRight.status == NOT_STARTED and tThisFlip >= 2-frameTolerance:
             # keep track of start time/frame for later
@@ -1049,7 +1049,7 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'nRight.stopped')
                 nRight.setAutoDraw(False)
-        
+
         # *choice1* updates
         waitOnFlip = False
         if choice1.status == NOT_STARTED and tThisFlip >= 2-frameTolerance:
@@ -1082,11 +1082,11 @@ for thisTrial in trials:
                 choice1.rt = _choice1_allKeys[-1].rt
                 # a response ends the routine
                 continueRoutine = False
-        
+
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
-        
+
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
             routineForceEnded = True
@@ -1096,11 +1096,11 @@ for thisTrial in trials:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
-        
+
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-    
+
     # --- Ending Routine "practiceTask" ---
     for thisComponent in practiceTaskComponents:
         if hasattr(thisComponent, "setAutoDraw"):
@@ -1116,7 +1116,7 @@ for thisTrial in trials:
         routineTimer.reset()
     else:
         routineTimer.addTime(-4.000000)
-    
+
     # --- Prepare to start Routine "isiPrac" ---
     continueRoutine = True
     routineForceEnded = False
@@ -1134,7 +1134,7 @@ for thisTrial in trials:
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
-    
+
     # --- Run Routine "isiPrac" ---
     while continueRoutine:
         # get current time
@@ -1143,7 +1143,7 @@ for thisTrial in trials:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        
+
         # *isiText* updates
         if isiText.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -1163,11 +1163,11 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'isiText.stopped')
                 isiText.setAutoDraw(False)
-        
+
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
-        
+
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
             routineForceEnded = True
@@ -1177,18 +1177,18 @@ for thisTrial in trials:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
-        
+
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-    
+
     # --- Ending Routine "isiPrac" ---
     for thisComponent in isiPracComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
     # the Routine "isiPrac" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
-    
+
     # --- Prepare to start Routine "feedback" ---
     continueRoutine = True
     routineForceEnded = False
@@ -1244,7 +1244,7 @@ for thisTrial in trials:
             ocSafeLoc = [5,5]
             hideGamLoc = [.4,.125]
             noRespLoc = [5,5]
-    
+
     if outcome == riskyLoss:
         pracFeedbackRounded = "$%.0f" % round(outcome,0)
     else:
@@ -1269,7 +1269,7 @@ for thisTrial in trials:
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
-    
+
     # --- Run Routine "feedback" ---
     while continueRoutine and routineTimer.getTime() < 1.0:
         # get current time
@@ -1278,7 +1278,7 @@ for thisTrial in trials:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        
+
         # *noRespTxt* updates
         if noRespTxt.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -1298,7 +1298,7 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'noRespTxt.stopped')
                 noRespTxt.setAutoDraw(False)
-        
+
         # *ocGamble* updates
         if ocGamble.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -1318,7 +1318,7 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'ocGamble.stopped')
                 ocGamble.setAutoDraw(False)
-        
+
         # *ocSafe* updates
         if ocSafe.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -1338,7 +1338,7 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'ocSafe.stopped')
                 ocSafe.setAutoDraw(False)
-        
+
         # *outcomeText* updates
         if outcomeText.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -1358,7 +1358,7 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'outcomeText.stopped')
                 outcomeText.setAutoDraw(False)
-        
+
         # *hideGamble* updates
         if hideGamble.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -1378,11 +1378,11 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'hideGamble.stopped')
                 hideGamble.setAutoDraw(False)
-        
+
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
-        
+
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
             routineForceEnded = True
@@ -1392,11 +1392,11 @@ for thisTrial in trials:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
-        
+
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-    
+
     # --- Ending Routine "feedback" ---
     for thisComponent in feedbackComponents:
         if hasattr(thisComponent, "setAutoDraw"):
@@ -1408,7 +1408,7 @@ for thisTrial in trials:
         routineTimer.reset()
     else:
         routineTimer.addTime(-1.000000)
-    
+
     # --- Prepare to start Routine "itiPrac_2" ---
     continueRoutine = True
     routineForceEnded = False
@@ -1426,7 +1426,7 @@ for thisTrial in trials:
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
-    
+
     # --- Run Routine "itiPrac_2" ---
     while continueRoutine:
         # get current time
@@ -1435,7 +1435,7 @@ for thisTrial in trials:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        
+
         # *itiText* updates
         if itiText.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -1455,11 +1455,11 @@ for thisTrial in trials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'itiText.stopped')
                 itiText.setAutoDraw(False)
-        
+
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
-        
+
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
             routineForceEnded = True
@@ -1469,11 +1469,11 @@ for thisTrial in trials:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
-        
+
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-    
+
     # --- Ending Routine "itiPrac_2" ---
     for thisComponent in itiPrac_2Components:
         if hasattr(thisComponent, "setAutoDraw"):
@@ -1481,7 +1481,7 @@ for thisTrial in trials:
     # the Routine "itiPrac_2" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
     thisExp.nextEntry()
-    
+
 # completed 1 repeats of 'trials'
 
 
@@ -1514,7 +1514,7 @@ while continueRoutine:
     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
     # update/draw components on each frame
-    
+
     # *postPracText* updates
     if postPracText.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
         # keep track of start time/frame for later
@@ -1525,7 +1525,7 @@ while continueRoutine:
         # add timestamp to datafile
         thisExp.timestampOnFlip(win, 'postPracText.started')
         postPracText.setAutoDraw(True)
-    
+
     # *postPractResp* updates
     waitOnFlip = False
     if postPractResp.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
@@ -1549,11 +1549,11 @@ while continueRoutine:
             postPractResp.rt = _postPractResp_allKeys[-1].rt
             # a response ends the routine
             continueRoutine = False
-    
+
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
         core.quit()
-    
+
     # check if all components have finished
     if not continueRoutine:  # a component has requested a forced-end of Routine
         routineForceEnded = True
@@ -1563,7 +1563,7 @@ while continueRoutine:
         if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
             continueRoutine = True
             break  # at least one component has not yet finished
-    
+
     # refresh the screen
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
@@ -1583,7 +1583,7 @@ thisExp.nextEntry()
 routineTimer.reset()
 
 # set up handler to look after randomisation of conditions etc
-staticRDM = data.TrialHandler(nReps=1, method='random', 
+staticRDM = data.TrialHandler(nReps=1, method='random',
     extraInfo=expInfo, originPath=-1,
     trialList=data.importConditions('CGT-choice-set.csv', selection='0:3'),
     seed=None, name='staticRDM')
@@ -1600,21 +1600,21 @@ for thisStaticRDM in staticRDM:
     if thisStaticRDM != None:
         for paramName in thisStaticRDM:
             exec('{} = thisStaticRDM[paramName]'.format(paramName))
-    
+
     # --- Prepare to start Routine "choiceWindow" ---
     continueRoutine = True
     routineForceEnded = False
     # update component parameters for each repeat
     # Run 'Begin Routine' code from randLoc_2
     import random
-    
+
     loc = random.choice([1,2])
-    
+
     if loc==1:
         targetPos=[-.4,0]
     else:
         targetPos=[.4,0]
-    
+
     if loc==1:
         lossLoc=[-.4,-.1]
         gainLoc=[-.4,.1]
@@ -1623,11 +1623,11 @@ for thisStaticRDM in staticRDM:
         lossLoc=[.4,-.1]
         gainLoc=[.4,.1]
         safeLoc=[-.4,0]
-    
+
     lossRounded = "$%.0f" % round(riskyoption2,0)
     gainRounded = "$%.2f" % round(riskyoption1,2)
     safeRounded = "$%.2f" % round(safeoption,2)
-    
+
     #lossRounded = ("$" + str(round(riskyoption2, 2)))
     #gainRounded = ("$" + str(round(riskyoption1, 2)))
     #safeRounded = ("$" + str(round(safeoption, 2)))
@@ -1656,7 +1656,7 @@ for thisStaticRDM in staticRDM:
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
-    
+
     # --- Run Routine "choiceWindow" ---
     while continueRoutine and routineTimer.getTime() < 4.0:
         # get current time
@@ -1665,7 +1665,7 @@ for thisStaticRDM in staticRDM:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        
+
         # *circleLeftReal* updates
         if circleLeftReal.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
             # keep track of start time/frame for later
@@ -1685,7 +1685,7 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'circleLeftReal.stopped')
                 circleLeftReal.setAutoDraw(False)
-        
+
         # *circleRightReal* updates
         if circleRightReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -1705,7 +1705,7 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'circleRightReal.stopped')
                 circleRightReal.setAutoDraw(False)
-        
+
         # *lineLeftReal* updates
         if lineLeftReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -1725,7 +1725,7 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'lineLeftReal.stopped')
                 lineLeftReal.setAutoDraw(False)
-        
+
         # *orTextReal* updates
         if orTextReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -1745,7 +1745,7 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'orTextReal.stopped')
                 orTextReal.setAutoDraw(False)
-        
+
         # *lossTxtReal* updates
         if lossTxtReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -1765,7 +1765,7 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'lossTxtReal.stopped')
                 lossTxtReal.setAutoDraw(False)
-        
+
         # *gainTxtReal* updates
         if gainTxtReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -1785,7 +1785,7 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'gainTxtReal.stopped')
                 gainTxtReal.setAutoDraw(False)
-        
+
         # *safeTxtReal* updates
         if safeTxtReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -1805,7 +1805,7 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'safeTxtReal.stopped')
                 safeTxtReal.setAutoDraw(False)
-        
+
         # *vLeftReal* updates
         if vLeftReal.status == NOT_STARTED and tThisFlip >= 2-frameTolerance:
             # keep track of start time/frame for later
@@ -1825,7 +1825,7 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'vLeftReal.stopped')
                 vLeftReal.setAutoDraw(False)
-        
+
         # *nRightReal* updates
         if nRightReal.status == NOT_STARTED and tThisFlip >= 2-frameTolerance:
             # keep track of start time/frame for later
@@ -1845,7 +1845,7 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'nRightReal.stopped')
                 nRightReal.setAutoDraw(False)
-        
+
         # *realChoice* updates
         waitOnFlip = False
         if realChoice.status == NOT_STARTED and tThisFlip >= 2-frameTolerance:
@@ -1878,11 +1878,11 @@ for thisStaticRDM in staticRDM:
                 realChoice.rt = _realChoice_allKeys[-1].rt
                 # a response ends the routine
                 continueRoutine = False
-        
+
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
-        
+
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
             routineForceEnded = True
@@ -1892,11 +1892,11 @@ for thisStaticRDM in staticRDM:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
-        
+
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-    
+
     # --- Ending Routine "choiceWindow" ---
     for thisComponent in choiceWindowComponents:
         if hasattr(thisComponent, "setAutoDraw"):
@@ -1914,7 +1914,7 @@ for thisStaticRDM in staticRDM:
         routineTimer.reset()
     else:
         routineTimer.addTime(-4.000000)
-    
+
     # --- Prepare to start Routine "isi" ---
     continueRoutine = True
     routineForceEnded = False
@@ -1932,7 +1932,7 @@ for thisStaticRDM in staticRDM:
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
-    
+
     # --- Run Routine "isi" ---
     while continueRoutine and routineTimer.getTime() < 0.5:
         # get current time
@@ -1941,7 +1941,7 @@ for thisStaticRDM in staticRDM:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        
+
         # *isiTextReal* updates
         if isiTextReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -1961,11 +1961,11 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'isiTextReal.stopped')
                 isiTextReal.setAutoDraw(False)
-        
+
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
-        
+
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
             routineForceEnded = True
@@ -1975,11 +1975,11 @@ for thisStaticRDM in staticRDM:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
-        
+
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-    
+
     # --- Ending Routine "isi" ---
     for thisComponent in isiComponents:
         if hasattr(thisComponent, "setAutoDraw"):
@@ -1989,7 +1989,7 @@ for thisStaticRDM in staticRDM:
         routineTimer.reset()
     else:
         routineTimer.addTime(-0.500000)
-    
+
     # --- Prepare to start Routine "showOutcome" ---
     continueRoutine = True
     routineForceEnded = False
@@ -2066,13 +2066,13 @@ for thisStaticRDM in staticRDM:
             ocSafeLoc = [5,5]
             hideGamLoc = [.4,.125]
             noRespLoc = [5,5]
-    
-    
+
+
     if outcome == riskyoption2:
         feedbackRounded = "$%.0f" % round(outcome,0)
     else:
         feedbackRounded = "$%.2f" % round(outcome,2)
-    
+
     outcomes.append(outcometmp)
     choices.append(choicetmp)
     riskyloss_values.append(riskyLoss)
@@ -2098,7 +2098,7 @@ for thisStaticRDM in staticRDM:
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
-    
+
     # --- Run Routine "showOutcome" ---
     while continueRoutine and routineTimer.getTime() < 1.0:
         # get current time
@@ -2107,7 +2107,7 @@ for thisStaticRDM in staticRDM:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        
+
         # *noRespTxtReal* updates
         if noRespTxtReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -2127,7 +2127,7 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'noRespTxtReal.stopped')
                 noRespTxtReal.setAutoDraw(False)
-        
+
         # *ocGambleReal* updates
         if ocGambleReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -2147,7 +2147,7 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'ocGambleReal.stopped')
                 ocGambleReal.setAutoDraw(False)
-        
+
         # *ocSafeReal* updates
         if ocSafeReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -2167,7 +2167,7 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'ocSafeReal.stopped')
                 ocSafeReal.setAutoDraw(False)
-        
+
         # *outcomeTextReal* updates
         if outcomeTextReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -2187,7 +2187,7 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'outcomeTextReal.stopped')
                 outcomeTextReal.setAutoDraw(False)
-        
+
         # *hideGambleReal* updates
         if hideGambleReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -2207,11 +2207,11 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'hideGambleReal.stopped')
                 hideGambleReal.setAutoDraw(False)
-        
+
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
-        
+
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
             routineForceEnded = True
@@ -2221,11 +2221,11 @@ for thisStaticRDM in staticRDM:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
-        
+
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-    
+
     # --- Ending Routine "showOutcome" ---
     for thisComponent in showOutcomeComponents:
         if hasattr(thisComponent, "setAutoDraw"):
@@ -2238,7 +2238,7 @@ for thisStaticRDM in staticRDM:
         routineTimer.reset()
     else:
         routineTimer.addTime(-1.000000)
-    
+
     # --- Prepare to start Routine "iti" ---
     continueRoutine = True
     routineForceEnded = False
@@ -2256,7 +2256,7 @@ for thisStaticRDM in staticRDM:
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
-    
+
     # --- Run Routine "iti" ---
     while continueRoutine and routineTimer.getTime() < 1.0:
         # get current time
@@ -2265,7 +2265,7 @@ for thisStaticRDM in staticRDM:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        
+
         # *itiTextReal* updates
         if itiTextReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -2285,11 +2285,11 @@ for thisStaticRDM in staticRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'itiTextReal.stopped')
                 itiTextReal.setAutoDraw(False)
-        
+
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
-        
+
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
             routineForceEnded = True
@@ -2299,11 +2299,11 @@ for thisStaticRDM in staticRDM:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
-        
+
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-    
+
     # --- Ending Routine "iti" ---
     for thisComponent in itiComponents:
         if hasattr(thisComponent, "setAutoDraw"):
@@ -2314,7 +2314,7 @@ for thisStaticRDM in staticRDM:
     else:
         routineTimer.addTime(-1.000000)
     thisExp.nextEntry()
-    
+
 # completed 1 repeats of 'staticRDM'
 
 
@@ -2325,7 +2325,7 @@ routineForceEnded = False
 # Run 'Begin Routine' code from gridSearchCode
 
 ### Grid Search Code
-import math 
+import math
 
 # Prepare choice set values to remove any nans
 finiteChoices = []
@@ -2403,7 +2403,7 @@ while continueRoutine:
     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
     # update/draw components on each frame
-    
+
     # *settingUpForPart2* updates
     if settingUpForPart2.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
         # keep track of start time/frame for later
@@ -2423,11 +2423,11 @@ while continueRoutine:
             # add timestamp to datafile
             thisExp.timestampOnFlip(win, 'settingUpForPart2.stopped')
             settingUpForPart2.setAutoDraw(False)
-    
+
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
         core.quit()
-    
+
     # check if all components have finished
     if not continueRoutine:  # a component has requested a forced-end of Routine
         routineForceEnded = True
@@ -2437,7 +2437,7 @@ while continueRoutine:
         if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
             continueRoutine = True
             break  # at least one component has not yet finished
-    
+
     # refresh the screen
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
@@ -2478,7 +2478,7 @@ while continueRoutine and routineTimer.getTime() < 2.0:
     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
     # update/draw components on each frame
-    
+
     # *text* updates
     if text.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
         # keep track of start time/frame for later
@@ -2514,11 +2514,11 @@ while continueRoutine and routineTimer.getTime() < 2.0:
         # Component updates done
         staticLoadChoiceset.complete()  # finish the static period
         staticLoadChoiceset.tStop = staticLoadChoiceset.tStart + 2  # record stop time
-    
+
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
         core.quit()
-    
+
     # check if all components have finished
     if not continueRoutine:  # a component has requested a forced-end of Routine
         routineForceEnded = True
@@ -2528,7 +2528,7 @@ while continueRoutine and routineTimer.getTime() < 2.0:
         if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
             continueRoutine = True
             break  # at least one component has not yet finished
-    
+
     # refresh the screen
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
@@ -2572,7 +2572,7 @@ while continueRoutine:
     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
     # update/draw components on each frame
-    
+
     # *moveToRDMpart2* updates
     if moveToRDMpart2.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
         # keep track of start time/frame for later
@@ -2583,7 +2583,7 @@ while continueRoutine:
         # add timestamp to datafile
         thisExp.timestampOnFlip(win, 'moveToRDMpart2.started')
         moveToRDMpart2.setAutoDraw(True)
-    
+
     # *key_resp* updates
     waitOnFlip = False
     if key_resp.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
@@ -2607,11 +2607,11 @@ while continueRoutine:
             key_resp.rt = _key_resp_allKeys[-1].rt
             # a response ends the routine
             continueRoutine = False
-    
+
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
         core.quit()
-    
+
     # check if all components have finished
     if not continueRoutine:  # a component has requested a forced-end of Routine
         routineForceEnded = True
@@ -2621,7 +2621,7 @@ while continueRoutine:
         if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
             continueRoutine = True
             break  # at least one component has not yet finished
-    
+
     # refresh the screen
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
@@ -2641,7 +2641,7 @@ thisExp.nextEntry()
 routineTimer.reset()
 
 # set up handler to look after randomisation of conditions etc
-dynamicRDM = data.TrialHandler(nReps=1.0, method='sequential', 
+dynamicRDM = data.TrialHandler(nReps=1.0, method='sequential',
     extraInfo=expInfo, originPath=-1,
     trialList=data.importConditions(fname[0], selection='0:3'),
     seed=None, name='dynamicRDM')
@@ -2658,21 +2658,21 @@ for thisDynamicRDM in dynamicRDM:
     if thisDynamicRDM != None:
         for paramName in thisDynamicRDM:
             exec('{} = thisDynamicRDM[paramName]'.format(paramName))
-    
+
     # --- Prepare to start Routine "choiceWindow" ---
     continueRoutine = True
     routineForceEnded = False
     # update component parameters for each repeat
     # Run 'Begin Routine' code from randLoc_2
     import random
-    
+
     loc = random.choice([1,2])
-    
+
     if loc==1:
         targetPos=[-.4,0]
     else:
         targetPos=[.4,0]
-    
+
     if loc==1:
         lossLoc=[-.4,-.1]
         gainLoc=[-.4,.1]
@@ -2681,11 +2681,11 @@ for thisDynamicRDM in dynamicRDM:
         lossLoc=[.4,-.1]
         gainLoc=[.4,.1]
         safeLoc=[-.4,0]
-    
+
     lossRounded = "$%.0f" % round(riskyoption2,0)
     gainRounded = "$%.2f" % round(riskyoption1,2)
     safeRounded = "$%.2f" % round(safeoption,2)
-    
+
     #lossRounded = ("$" + str(round(riskyoption2, 2)))
     #gainRounded = ("$" + str(round(riskyoption1, 2)))
     #safeRounded = ("$" + str(round(safeoption, 2)))
@@ -2714,7 +2714,7 @@ for thisDynamicRDM in dynamicRDM:
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
-    
+
     # --- Run Routine "choiceWindow" ---
     while continueRoutine and routineTimer.getTime() < 4.0:
         # get current time
@@ -2723,7 +2723,7 @@ for thisDynamicRDM in dynamicRDM:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        
+
         # *circleLeftReal* updates
         if circleLeftReal.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
             # keep track of start time/frame for later
@@ -2743,7 +2743,7 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'circleLeftReal.stopped')
                 circleLeftReal.setAutoDraw(False)
-        
+
         # *circleRightReal* updates
         if circleRightReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -2763,7 +2763,7 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'circleRightReal.stopped')
                 circleRightReal.setAutoDraw(False)
-        
+
         # *lineLeftReal* updates
         if lineLeftReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -2783,7 +2783,7 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'lineLeftReal.stopped')
                 lineLeftReal.setAutoDraw(False)
-        
+
         # *orTextReal* updates
         if orTextReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -2803,7 +2803,7 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'orTextReal.stopped')
                 orTextReal.setAutoDraw(False)
-        
+
         # *lossTxtReal* updates
         if lossTxtReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -2823,7 +2823,7 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'lossTxtReal.stopped')
                 lossTxtReal.setAutoDraw(False)
-        
+
         # *gainTxtReal* updates
         if gainTxtReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -2843,7 +2843,7 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'gainTxtReal.stopped')
                 gainTxtReal.setAutoDraw(False)
-        
+
         # *safeTxtReal* updates
         if safeTxtReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -2863,7 +2863,7 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'safeTxtReal.stopped')
                 safeTxtReal.setAutoDraw(False)
-        
+
         # *vLeftReal* updates
         if vLeftReal.status == NOT_STARTED and tThisFlip >= 2-frameTolerance:
             # keep track of start time/frame for later
@@ -2883,7 +2883,7 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'vLeftReal.stopped')
                 vLeftReal.setAutoDraw(False)
-        
+
         # *nRightReal* updates
         if nRightReal.status == NOT_STARTED and tThisFlip >= 2-frameTolerance:
             # keep track of start time/frame for later
@@ -2903,7 +2903,7 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'nRightReal.stopped')
                 nRightReal.setAutoDraw(False)
-        
+
         # *realChoice* updates
         waitOnFlip = False
         if realChoice.status == NOT_STARTED and tThisFlip >= 2-frameTolerance:
@@ -2936,11 +2936,11 @@ for thisDynamicRDM in dynamicRDM:
                 realChoice.rt = _realChoice_allKeys[-1].rt
                 # a response ends the routine
                 continueRoutine = False
-        
+
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
-        
+
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
             routineForceEnded = True
@@ -2950,11 +2950,11 @@ for thisDynamicRDM in dynamicRDM:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
-        
+
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-    
+
     # --- Ending Routine "choiceWindow" ---
     for thisComponent in choiceWindowComponents:
         if hasattr(thisComponent, "setAutoDraw"):
@@ -2972,7 +2972,7 @@ for thisDynamicRDM in dynamicRDM:
         routineTimer.reset()
     else:
         routineTimer.addTime(-4.000000)
-    
+
     # --- Prepare to start Routine "isi" ---
     continueRoutine = True
     routineForceEnded = False
@@ -2990,7 +2990,7 @@ for thisDynamicRDM in dynamicRDM:
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
-    
+
     # --- Run Routine "isi" ---
     while continueRoutine and routineTimer.getTime() < 0.5:
         # get current time
@@ -2999,7 +2999,7 @@ for thisDynamicRDM in dynamicRDM:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        
+
         # *isiTextReal* updates
         if isiTextReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -3019,11 +3019,11 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'isiTextReal.stopped')
                 isiTextReal.setAutoDraw(False)
-        
+
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
-        
+
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
             routineForceEnded = True
@@ -3033,11 +3033,11 @@ for thisDynamicRDM in dynamicRDM:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
-        
+
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-    
+
     # --- Ending Routine "isi" ---
     for thisComponent in isiComponents:
         if hasattr(thisComponent, "setAutoDraw"):
@@ -3047,7 +3047,7 @@ for thisDynamicRDM in dynamicRDM:
         routineTimer.reset()
     else:
         routineTimer.addTime(-0.500000)
-    
+
     # --- Prepare to start Routine "showOutcome" ---
     continueRoutine = True
     routineForceEnded = False
@@ -3124,13 +3124,13 @@ for thisDynamicRDM in dynamicRDM:
             ocSafeLoc = [5,5]
             hideGamLoc = [.4,.125]
             noRespLoc = [5,5]
-    
-    
+
+
     if outcome == riskyoption2:
         feedbackRounded = "$%.0f" % round(outcome,0)
     else:
         feedbackRounded = "$%.2f" % round(outcome,2)
-    
+
     outcomes.append(outcometmp)
     choices.append(choicetmp)
     riskyloss_values.append(riskyLoss)
@@ -3156,7 +3156,7 @@ for thisDynamicRDM in dynamicRDM:
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
-    
+
     # --- Run Routine "showOutcome" ---
     while continueRoutine and routineTimer.getTime() < 1.0:
         # get current time
@@ -3165,7 +3165,7 @@ for thisDynamicRDM in dynamicRDM:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        
+
         # *noRespTxtReal* updates
         if noRespTxtReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -3185,7 +3185,7 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'noRespTxtReal.stopped')
                 noRespTxtReal.setAutoDraw(False)
-        
+
         # *ocGambleReal* updates
         if ocGambleReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -3205,7 +3205,7 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'ocGambleReal.stopped')
                 ocGambleReal.setAutoDraw(False)
-        
+
         # *ocSafeReal* updates
         if ocSafeReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -3225,7 +3225,7 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'ocSafeReal.stopped')
                 ocSafeReal.setAutoDraw(False)
-        
+
         # *outcomeTextReal* updates
         if outcomeTextReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -3245,7 +3245,7 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'outcomeTextReal.stopped')
                 outcomeTextReal.setAutoDraw(False)
-        
+
         # *hideGambleReal* updates
         if hideGambleReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -3265,11 +3265,11 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'hideGambleReal.stopped')
                 hideGambleReal.setAutoDraw(False)
-        
+
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
-        
+
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
             routineForceEnded = True
@@ -3279,11 +3279,11 @@ for thisDynamicRDM in dynamicRDM:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
-        
+
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-    
+
     # --- Ending Routine "showOutcome" ---
     for thisComponent in showOutcomeComponents:
         if hasattr(thisComponent, "setAutoDraw"):
@@ -3296,7 +3296,7 @@ for thisDynamicRDM in dynamicRDM:
         routineTimer.reset()
     else:
         routineTimer.addTime(-1.000000)
-    
+
     # --- Prepare to start Routine "iti" ---
     continueRoutine = True
     routineForceEnded = False
@@ -3314,7 +3314,7 @@ for thisDynamicRDM in dynamicRDM:
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
-    
+
     # --- Run Routine "iti" ---
     while continueRoutine and routineTimer.getTime() < 1.0:
         # get current time
@@ -3323,7 +3323,7 @@ for thisDynamicRDM in dynamicRDM:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        
+
         # *itiTextReal* updates
         if itiTextReal.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -3343,11 +3343,11 @@ for thisDynamicRDM in dynamicRDM:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'itiTextReal.stopped')
                 itiTextReal.setAutoDraw(False)
-        
+
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
-        
+
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
             routineForceEnded = True
@@ -3357,11 +3357,11 @@ for thisDynamicRDM in dynamicRDM:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
-        
+
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-    
+
     # --- Ending Routine "iti" ---
     for thisComponent in itiComponents:
         if hasattr(thisComponent, "setAutoDraw"):
@@ -3372,7 +3372,7 @@ for thisDynamicRDM in dynamicRDM:
     else:
         routineTimer.addTime(-1.000000)
     thisExp.nextEntry()
-    
+
 # completed 1.0 repeats of 'dynamicRDM'
 
 
@@ -3405,7 +3405,7 @@ while continueRoutine:
     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
     # update/draw components on each frame
-    
+
     # *breaktxt* updates
     if breaktxt.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
         # keep track of start time/frame for later
@@ -3416,7 +3416,7 @@ while continueRoutine:
         # add timestamp to datafile
         thisExp.timestampOnFlip(win, 'breaktxt.started')
         breaktxt.setAutoDraw(True)
-    
+
     # *stopBreak* updates
     waitOnFlip = False
     if stopBreak.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
@@ -3440,11 +3440,11 @@ while continueRoutine:
             stopBreak.rt = _stopBreak_allKeys[-1].rt
             # a response ends the routine
             continueRoutine = False
-    
+
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
         core.quit()
-    
+
     # check if all components have finished
     if not continueRoutine:  # a component has requested a forced-end of Routine
         routineForceEnded = True
@@ -3454,7 +3454,7 @@ while continueRoutine:
         if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
             continueRoutine = True
             break  # at least one component has not yet finished
-    
+
     # refresh the screen
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
@@ -3474,71 +3474,76 @@ thisExp.nextEntry()
 routineTimer.reset()
 
 
-# --- Prepare to start Routine "END" ---
-continueRoutine = True
-routineForceEnded = False
-# update component parameters for each repeat
-# keep track of which components have finished
-ENDComponents = [ThankYou]
-for thisComponent in ENDComponents:
-    thisComponent.tStart = None
-    thisComponent.tStop = None
-    thisComponent.tStartRefresh = None
-    thisComponent.tStopRefresh = None
-    if hasattr(thisComponent, 'status'):
-        thisComponent.status = NOT_STARTED
-# reset timers
-t = 0
-_timeToFirstFrame = win.getFutureFlipTime(clock="now")
-frameN = -1
 
-# --- Run Routine "END" ---
-while continueRoutine:
-    # get current time
-    t = routineTimer.getTime()
-    tThisFlip = win.getFutureFlipTime(clock=routineTimer)
-    tThisFlipGlobal = win.getFutureFlipTime(clock=None)
-    frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
-    # update/draw components on each frame
-    
-    # *ThankYou* updates
-    if ThankYou.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-        # keep track of start time/frame for later
-        ThankYou.frameNStart = frameN  # exact frame index
-        ThankYou.tStart = t  # local t and not account for scr refresh
-        ThankYou.tStartRefresh = tThisFlipGlobal  # on global time
-        win.timeOnFlip(ThankYou, 'tStartRefresh')  # time at next scr refresh
-        # add timestamp to datafile
-        thisExp.timestampOnFlip(win, 'ThankYou.started')
-        ThankYou.setAutoDraw(True)
-    
-    # check for quit (typically the Esc key)
-    if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
-        core.quit()
-    
-    # check if all components have finished
-    if not continueRoutine:  # a component has requested a forced-end of Routine
-        routineForceEnded = True
-        break
-    continueRoutine = False  # will revert to True if at least one component still running
-    for thisComponent in ENDComponents:
-        if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
-            continueRoutine = True
-            break  # at least one component has not yet finished
-    
-    # refresh the screen
-    if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
-        win.flip()
 
-# --- Ending Routine "END" ---
-for thisComponent in ENDComponents:
-    if hasattr(thisComponent, "setAutoDraw"):
-        thisComponent.setAutoDraw(False)
-# the Routine "END" was not non-slip safe, so reset the non-slip timer
-routineTimer.reset()
+# # THE CODE BELOW DOESN'T EXIT GRACEFULLY; NO KEY RESPONSE QUITS?
+# # --- Prepare to start Routine "END" ---
+# continueRoutine = True
+# routineForceEnded = False
+# # update component parameters for each repeat
+# # keep track of which components have finished
+# ENDComponents = [ThankYou]
+# for thisComponent in ENDComponents:
+#     thisComponent.tStart = None
+#     thisComponent.tStop = None
+#     thisComponent.tStartRefresh = None
+#     thisComponent.tStopRefresh = None
+#     if hasattr(thisComponent, 'status'):
+#         thisComponent.status = NOT_STARTED
+# # reset timers
+# t = 0
+# _timeToFirstFrame = win.getFutureFlipTime(clock="now")
+# frameN = -1
+#
+# # --- Run Routine "END" ---
+# while continueRoutine:
+#     # get current time
+#     t = routineTimer.getTime()
+#     tThisFlip = win.getFutureFlipTime(clock=routineTimer)
+#     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
+#     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
+#     # update/draw components on each frame
+#
+#     # *ThankYou* updates
+#     if ThankYou.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+#         # keep track of start time/frame for later
+#         ThankYou.frameNStart = frameN  # exact frame index
+#         ThankYou.tStart = t  # local t and not account for scr refresh
+#         ThankYou.tStartRefresh = tThisFlipGlobal  # on global time
+#         win.timeOnFlip(ThankYou, 'tStartRefresh')  # time at next scr refresh
+#         # add timestamp to datafile
+#         thisExp.timestampOnFlip(win, 'ThankYou.started')
+#         ThankYou.setAutoDraw(True)
+#
+#     # check for quit (typically the Esc key)
+#     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
+#         core.quit()
+#
+#     # check if all components have finished
+#     if not continueRoutine:  # a component has requested a forced-end of Routine
+#         routineForceEnded = True
+#         break
+#     continueRoutine = False  # will revert to True if at least one component still running
+#     for thisComponent in ENDComponents:
+#         if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
+#             continueRoutine = True
+#             break  # at least one component has not yet finished
+#
+#     # refresh the screen
+#     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
+#         win.flip()
+#
+# # --- Ending Routine "END" ---
+# for thisComponent in ENDComponents:
+#     if hasattr(thisComponent, "setAutoDraw"):
+#         thisComponent.setAutoDraw(False)
+# # the Routine "END" was not non-slip safe, so reset the non-slip timer
+# routineTimer.reset()
+
+
 
 # --- End experiment ---
-# Flip one final time so any remaining win.callOnFlip() 
+# Flip one final time so any remaining win.callOnFlip()
 # and win.timeOnFlip() tasks get executed before quitting
 win.flip()
 
