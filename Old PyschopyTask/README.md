@@ -1,3 +1,6 @@
+# Note: This is old copied file from CGT
+- The new file is CGE (Cognitive Gambling Eye-tracking)
+
 # PsychoPy Tasks (NOTE: the files in this repo are dated and not what is used for our online study)
 
 - We first stored the task on Github as we were programming the study before pushing it online. Once we pushed it online, we needed to move the study out of Github since Pavlovia uses Gitlab.
