@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.4),
@@ -50,7 +50,7 @@ filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expNa
 # An ExperimentHandler isn't essential but helps with data saving
 thisExp = data.ExperimentHandler(name=expName, version='',
     extraInfo=expInfo, runtimeInfo=None,
-    originPath='C:\\Users\\jvonm\\Documents\\GitHub\\cgt.VM\\cgt.VM\\PyschopyTask\\tasks_RDM_digitSpan\\CGTbothTasks_lastrun.py',
+    originPath='C:\\Users\\jvonm\\Documents\\GitHub\\cge\\CGE\\CGE_draft_version.py',
     savePickle=True, saveWideText=True,
     dataFileName=filename)
 # save a log file for detail verbose info
@@ -1195,8 +1195,9 @@ for thisTrial in trials:
     # update component parameters for each repeat
     # Run 'Begin Routine' code from codeFeedback
     import random
+    import math
     if not choice1.keys:
-        outcome = " "
+        outcome = math.nan
         noRespLoc = [0,0]
         ocLoc = [5,5]
         ocGambleLoc = [5,5]
@@ -2068,10 +2069,10 @@ for thisStaticRDM in staticRDM:
             noRespLoc = [5,5]
 
 
-    if outcome == riskyoption2:
-        feedbackRounded = "$%.0f" % round(outcome,0)
+    if outcometmp == riskyoption2:
+        feedbackRounded = "$%.0f" % round(outcometmp,0)
     else:
-        feedbackRounded = "$%.2f" % round(outcome,2)
+        feedbackRounded = "$%.2f" % round(outcometmp,2)
 
     outcomes.append(outcometmp)
     choices.append(choicetmp)
@@ -2376,7 +2377,7 @@ for r in range(n_rho_values):
 
 print('The best R index is', bestR, 'while the best M index is', bestM, ', with an NLL of', best_nll_value);
 
-fname.append("../tasks_RDM_digitSpan/bespoke_choicesets/bespoke_choiceset_rhoInd%03i_muInd%03i.csv" % (bestR, bestM))
+fname.append("../CGE/bespoke_choicesets/bespoke_choiceset_rhoInd%03i_muInd%03i.csv" % (bestR, bestM))
 dynamicChoiceSet = fname[0]  # Set routine start values for dynamicChoiceSet
 thisExp.addData('dynamicChoiceSet.routineStartVal', dynamicChoiceSet)  # Save exp start value
 bestRho = bestR  # Set routine start values for bestRho
@@ -3126,11 +3127,14 @@ for thisDynamicRDM in dynamicRDM:
             noRespLoc = [5,5]
 
 
-    if outcome == riskyoption2:
-        feedbackRounded = "$%.0f" % round(outcome,0)
+    if outcometmp == riskyoption2:
+        feedbackRounded = "$%.0f" % round(outcometmp,0)
     else:
-        feedbackRounded = "$%.2f" % round(outcome,2)
+        feedbackRounded = "$%.2f" % round(outcometmp,2)
 
+
+    # print('gain:',riskyGain, 'riskyLoss', riskyLoss, 'certain:', certain ,'outcome:', outcometmp, 'choice:', choicetmp, 'feedback text:', feedbackRounded, 'choice keys:', realChoice.keys)
+    
     outcomes.append(outcometmp)
     choices.append(choicetmp)
     riskyloss_values.append(riskyLoss)
