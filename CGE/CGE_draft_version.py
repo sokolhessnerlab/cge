@@ -794,7 +794,7 @@ routineTimer.reset()
 # set up handler to look after randomisation of conditions etc
 trials = data.TrialHandler(nReps=1, method='sequential',
     extraInfo=expInfo, originPath=-1,
-    trialList=data.importConditions('cgtRDMPractice.xlsx', selection='0:2'),
+    trialList=data.importConditions('cgtRDMPractice.xlsx', selection='0:4'),
     seed=None, name='trials')
 thisExp.addLoop(trials)  # add the loop to the experiment
 thisTrial = trials.trialList[0]  # so we can initialise stimuli with some values
@@ -1586,7 +1586,7 @@ routineTimer.reset()
 # set up handler to look after randomisation of conditions etc
 staticRDM = data.TrialHandler(nReps=1, method='random',
     extraInfo=expInfo, originPath=-1,
-    trialList=data.importConditions('CGT-choice-set.csv', selection='0:3'),
+    trialList=data.importConditions('CGT-choice-set.csv', selection='0:49'),
     seed=None, name='staticRDM')
 thisExp.addLoop(staticRDM)  # add the loop to the experiment
 thisStaticRDM = staticRDM.trialList[0]  # so we can initialise stimuli with some values
@@ -2644,7 +2644,7 @@ routineTimer.reset()
 # set up handler to look after randomisation of conditions etc
 dynamicRDM = data.TrialHandler(nReps=1.0, method='sequential',
     extraInfo=expInfo, originPath=-1,
-    trialList=data.importConditions(fname[0], selection='0:3'),
+    trialList=data.importConditions(fname[0], selection='0:119'),
     seed=None, name='dynamicRDM')
 thisExp.addLoop(dynamicRDM)  # add the loop to the experiment
 thisDynamicRDM = dynamicRDM.trialList[0]  # so we can initialise stimuli with some values
