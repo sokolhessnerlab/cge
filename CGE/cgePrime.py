@@ -17,10 +17,10 @@ def rcsPrimary(subID, isReal, computerNumber, taskSet): # define the function an
 
     #isReal = 0 for testing, 1 for real
     # computer numbers:
-            # 1 - HB macbook
-            # 2 - mahimahi
+            # 1 - VM Laptop
+            # 2 - Chicharron
             # 3 - tofu
-            # 4 - goulash
+            # 4 - goulash (removed goulash since no eye-tracking)
             
     #taskSet:
         # 1: do all
@@ -38,17 +38,15 @@ def rcsPrimary(subID, isReal, computerNumber, taskSet): # define the function an
 
     # set working directory
     if computerNumber ==1:
-        dirName = ("/Users/hayley/Documents/Github/rcs/task/")
-        dataDirName = ("/Users/hayley/Documents/Github/rcs/task/data")
+        dirName = ("Users/jvonm/Documents/GitHub/cge/CGE")
+        dataDirName = ("/Users/jvonm/Documents/GitHub/cge/CGE/data")
     elif computerNumber ==2:
-        dirName = ("/Users/shlab/Documents/Github/rcs/task/")
-        dataDirName = ("/Users/shlab/Documents/Github/rcs/task/data")
+        dirName = ("/Users/shlab/Documents/Github/cge/CGE/")
+        dataDirName = ("/Users/shlab/Documents/Github/cge/CGE/data")
     elif computerNumber ==3:
-        dirName = ("/Users/Display/Desktop/Github/rcs/task/")
-        dataDirName = ("/Users/Display/Desktop/rcsData/")
-    elif computerNumber ==4:
-        dirName = ("/Users/sokolhessnerlab/Desktop/Github/rcs/task/")
-        dataDirName =("/Users/sokolhessnerlab/Desktop/rcsData/")
+        dirName = ("/Users/Display/Desktop/Github/cge/CGE/")
+        dataDirName = ("/Users/Display/Desktop/Github/cge/CGE/data")
+
     
     
     
