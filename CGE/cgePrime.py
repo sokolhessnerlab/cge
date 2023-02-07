@@ -60,25 +60,25 @@ def rcsPrimary(subID, isReal, computerNumber, taskSet): # define the function an
     from symspan.symSpanTaskModule import symSpanTask
     from ospan.ospanTaskModule import ospanTask
     
-    # read condition order from pre-existing text file which determines conditions and color for each round of RDM task
-    #conditionDF = pd.read_csv(dirName + "rdmTask/rcsConditions.csv", dtype={"subID":"string"}) # specify that subID is a string
-    conditionDF = pd.read_csv(dirName + "rdmTask/rcsConditionsUpdated_Winter.csv", dtype={"subID":"string"}) # specify that subID is a string
+    # # read condition order from pre-existing text file which determines conditions and color for each round of RDM task
+    # #conditionDF = pd.read_csv(dirName + "rdmTask/rcsConditions.csv", dtype={"subID":"string"}) # specify that subID is a string
+    # conditionDF = pd.read_csv(dirName + "rdmTask/rcsConditionsUpdated_Winter.csv", dtype={"subID":"string"}) # specify that subID is a string
     
-    # reading the csv file above does some weird stuff to the subID column, removing the extra characters:
-    #conditionDF.subID = conditionDF["subID"].str.replace("=","")
-    #conditionDF.subID = conditionDF["subID"].str.replace('"',"")
+    # # reading the csv file above does some weird stuff to the subID column, removing the extra characters:
+    # #conditionDF.subID = conditionDF["subID"].str.replace("=","")
+    # #conditionDF.subID = conditionDF["subID"].str.replace('"',"")
     
-    # determine condition 1 and condition 2 (0=control, 1 = strategy) for participant
-    cond1 = conditionDF.cond1[conditionDF.subID == subID]
-    cond1 = cond1.iat[0] # just save the integer, not the extra info like dtype and Name
-    cond2 = conditionDF.cond2[conditionDF.subID == subID]
-    cond2 = cond2.iat[0] # just save the integer, not the extra info like dtype and Name
+    # # determine condition 1 and condition 2 (0=control, 1 = strategy) for participant
+    # cond1 = conditionDF.cond1[conditionDF.subID == subID]
+    # cond1 = cond1.iat[0] # just save the integer, not the extra info like dtype and Name
+    # cond2 = conditionDF.cond2[conditionDF.subID == subID]
+    # cond2 = cond2.iat[0] # just save the integer, not the extra info like dtype and Name
      
-    # determine the condition colors (green = 0 or purple = 1)
-    cond1color = conditionDF.cond1color[conditionDF.subID == subID]
-    cond1color = cond1color.iat[0] # just save the integer, not the extra info like dtype and Name
-    cond2color = conditionDF.cond2color[conditionDF.subID == subID]
-    cond2color = cond2color.iat[0] # just save the integer, not the extra info like dtype and Name
+    # # determine the condition colors (green = 0 or purple = 1)
+    # cond1color = conditionDF.cond1color[conditionDF.subID == subID]
+    # cond1color = cond1color.iat[0] # just save the integer, not the extra info like dtype and Name
+    # cond2color = conditionDF.cond2color[conditionDF.subID == subID]
+    # cond2color = cond2color.iat[0] # just save the integer, not the extra info like dtype and Name
     
     
     
