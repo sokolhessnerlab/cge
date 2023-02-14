@@ -56,7 +56,6 @@ def cgePrime(subID, isReal, computerNumber, taskSet): # define the function and 
     
     # Import scripts
 
-    import CGE_draft_version
     from symspan.symSpanTaskModule import symSpanTask
     from ospan.ospanTaskModule import ospanTask
     
