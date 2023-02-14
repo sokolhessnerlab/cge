@@ -56,7 +56,7 @@ def cgePrime(subID, isReal, computerNumber, taskSet): # define the function and 
     
     # Import scripts
 
-    from rdmTask.rcsRDMmodule import rcsRDM # risky decision-making task + condition instructions
+    import CGE_draft_version
     from symspan.symSpanTaskModule import symSpanTask
     from ospan.ospanTaskModule import ospanTask
     
@@ -85,7 +85,7 @@ def cgePrime(subID, isReal, computerNumber, taskSet): # define the function and 
     if taskSet ==1:
         
         # risky decision-making task (input arguments determined above)
-        rcsRDM(subID, cond1, cond2, cond1color, cond2color, isReal, dirName, dataDirName)
+        # rcsRDM(subID, cond1, cond2, cond1color, cond2color, isReal, dirName, dataDirName)
         
         # ospan instructions + instructions quiz + practice + task
         ospanTask(subID, isReal,dirName, dataDirName)
