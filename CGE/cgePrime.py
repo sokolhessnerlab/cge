@@ -38,8 +38,8 @@ def cgePrime(subID, isReal, computerNumber, taskSet): # define the function and 
 
     # set working directory
     if computerNumber ==1:
-        dirName = ("Users/jvonm/Documents/GitHub/cge/CGE")
-        dataDirName = ("/Users/jvonm/Documents/GitHub/cge/CGE/data")
+        dirName = ("C:\\Users\\jvonm\\Documents\\GitHub\\cge\\CGE")
+        dataDirName = ("C:\\Users\\jvonm\\Documents\\GitHub\\cge\\CGE\\data")
     elif computerNumber ==2:
         dirName = ("/Users/shlab/Documents/Github/cge/CGE/")
         dataDirName = ("/Users/shlab/Documents/Github/cge/CGE/data")
