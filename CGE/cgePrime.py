@@ -13,7 +13,7 @@ This script does some set up for the experiment and calls all required scripts t
 
     
 
-def rcsPrimary(subID, isReal, computerNumber, taskSet): # define the function and specify the argument(s)
+def cgePrime(subID, isReal, computerNumber, taskSet): # define the function and specify the argument(s)
 
     #isReal = 0 for testing, 1 for real
     # computer numbers:
