@@ -84,7 +84,7 @@ def cgePrime(subID, isReal, computerNumber, taskSet): # define the function and 
     
     if taskSet ==1:
         
-        # risky decision-making task (input arguments determined above)
+        # risky decision-making task (input arguments determined above) # This needs to be CGE # How to replace this to be the CGE
         # rcsRDM(subID, cond1, cond2, cond1color, cond2color, isReal, dirName, dataDirName)
         
         # ospan instructions + instructions quiz + practice + task
