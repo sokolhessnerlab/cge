@@ -45,7 +45,7 @@ def ospanTask(subID, isReal,dirName, dataDirName):
         # operationSet1 = pd.read_excel('/Users/shlab/Documents/GitHub/rcs/task/ospan/operationSet1.xlsx')
         # operationSet2 = pd.read_excel('/Users/shlab/Documents/GitHub/rcs/task/ospan/operationSet2.xlsx')
         
-        
+        print(dirName + os.sep + 'ospan' + os.sep + 'practiceOperations.xlsx')
         practiceOperations = pd.read_excel(dirName + os.sep + 'ospan' + os.sep + 'practiceOperations.xlsx')
         practiceOperations2 = pd.read_excel(dirName + os.sep + 'ospan' + os.sep + 'practiceOperations2.xlsx')
         operationSet1 = pd.read_excel(dirName + os.sep + 'ospan' + os.sep + 'operationSet1.xlsx')
