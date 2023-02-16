@@ -56,8 +56,10 @@ def cgePrime(subID, isReal, computerNumber, taskSet): # define the function and 
     
     # Import scripts
 
+    # import CGE_draft_version
+    # from ospan.ospanTaskModule import ospanTask
     from symspan.symSpanTaskModule import symSpanTask
-    from ospan.ospanTaskModule import ospanTask
+
     
     # # read condition order from pre-existing text file which determines conditions and color for each round of RDM task
     # #conditionDF = pd.read_csv(dirName + "rdmTask/rcsConditions.csv", dtype={"subID":"string"}) # specify that subID is a string
@@ -87,7 +89,7 @@ def cgePrime(subID, isReal, computerNumber, taskSet): # define the function and 
         # rcsRDM(subID, cond1, cond2, cond1color, cond2color, isReal, dirName, dataDirName)
         
         # ospan instructions + instructions quiz + practice + task
-        ospanTask(subID, isReal,dirName, dataDirName)
+        # ospanTask(subID, isReal,dirName, dataDirName)
         
         # symspan instructions + instructions quiz + practice + task
         symSpanTask(subID, isReal,dirName, dataDirName)
