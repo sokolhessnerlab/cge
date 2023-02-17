@@ -31,12 +31,12 @@ def ospanTask(subID, isReal,dirName, dataDirName):
         
         # change directory
         #os.chdir('/Users/shlab/Documents/GitHub/rcs/task/ospan')
-        os.chdir(dirName + "ospan")
+        os.chdir(dirName + os.sep + "ospan")
         
         
         #dataDirectoryPath = dirName + 'data/'
         #dataDirectoryPath = '/Users/shlab/Documents/Github/rcs/task/data/'
-        dataDirectoryPath = dataDirName + "ospanData/"
+        dataDirectoryPath = dataDirName + "ospanData" + os.sep
 
         
         # import files
@@ -45,11 +45,11 @@ def ospanTask(subID, isReal,dirName, dataDirName):
         # operationSet1 = pd.read_excel('/Users/shlab/Documents/GitHub/rcs/task/ospan/operationSet1.xlsx')
         # operationSet2 = pd.read_excel('/Users/shlab/Documents/GitHub/rcs/task/ospan/operationSet2.xlsx')
         
-        
-        practiceOperations = pd.read_excel(dirName + 'ospan/practiceOperations.xlsx')
-        practiceOperations2 = pd.read_excel(dirName + 'ospan/practiceOperations2.xlsx')
-        operationSet1 = pd.read_excel(dirName + 'ospan/operationSet1.xlsx')
-        operationSet2 = pd.read_excel(dirName + 'ospan/operationSet2.xlsx')
+        print(dirName + os.sep + 'ospan' + os.sep + 'practiceOperations.xlsx')
+        practiceOperations = pd.read_excel(dirName + os.sep + 'ospan' + os.sep + 'practiceOperations.xlsx')
+        practiceOperations2 = pd.read_excel(dirName + os.sep + 'ospan' + os.sep + 'practiceOperations2.xlsx')
+        operationSet1 = pd.read_excel(dirName + os.sep + 'ospan' + os.sep + 'operationSet1.xlsx')
+        operationSet2 = pd.read_excel(dirName + os.sep + 'ospan' + os.sep + 'operationSet2.xlsx')
         
         operationSet1.columns = ["weight", "problem", "Sum1", "difficulty"]# fix column names
         operationSet1 = operationSet1[operationSet1['weight'] ==1] # removing operations we wont use
