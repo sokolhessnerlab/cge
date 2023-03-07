@@ -30,18 +30,16 @@ import os  # handy system and path functions
 import platform # from picture.py
 import random # from picture.py
 import time # from picture.py
-import sys # from picture.py
 import sys  # to get file system encoding
+from EyeLinkCoreGraphicsPsychoPy import EyeLinkCoreGraphicsPsychoPy # from picture.py
+from psychopy import visual, core, event, monitors, gui # from
+from PIL import Image  # for preparing the Host backdrop image # from
+from string import ascii_letters, digits # from
 
 import psychopy.iohub as io
 from psychopy.hardware import keyboard
 
 ##### from picture.py
-from EyeLinkCoreGraphicsPsychoPy import EyeLinkCoreGraphicsPsychoPy
-from psychopy import visual, core, event, monitors, gui
-from PIL import Image  # for preparing the Host backdrop image
-from string import ascii_letters, digits
-
 # Switch to the script folder
 script_path = os.path.dirname(sys.argv[0])
 if len(script_path) != 0:
