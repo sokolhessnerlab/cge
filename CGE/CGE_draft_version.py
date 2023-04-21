@@ -60,7 +60,7 @@ dummy_mode = True
 
 # Set this variable to True to run the task in full screen mode
 # It is easier to debug the script in non-fullscreen mode
-full_screen = True
+full_screen = False
 
 # Store the parameters of all trials in a list, [condition, image]
 trials = [
