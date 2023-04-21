@@ -699,19 +699,21 @@ circleLeft = visual.Rect(
     win=win, name='circleLeft',
     width=(.5, .5)[0], height=(.5, .5)[1],
     ori=0, pos=(-.4,0), anchor='center',
-    lineWidth=5,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=None,
+    lineWidth=5,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=[-0.0667,0.6392,1],
     opacity=1, depth=-1.0, interpolate=True)
+    # Original line color: [-0.0667,0.6392,1]
+    # Original silver color: 0.5216,0.5216,0.5216
 circleRight = visual.Rect(
     win=win, name='circleRight',
     width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
     ori=0, pos=(.4,0), anchor='center',
-    lineWidth=10,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=None,
+    lineWidth=10,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=[-0.0667,0.6392,1],
     opacity=1, depth=-2.0, interpolate=True)
 lineLeft = visual.Rect(
     win=win, name='lineLeft',
     width=(0.5, 0.01)[0], height=(0.5, 0.01)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=3,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=[-0.0667,0.6392,1],
+    lineWidth=3,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
     opacity=1, depth=-3.0, interpolate=True)
 orText = visual.TextStim(win=win, name='orText',
     text='OR',
@@ -724,21 +726,21 @@ lossTxt = visual.TextStim(win=win, name='lossTxt',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0,
-    color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=1,
+    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-5.0);
 gainTxt = visual.TextStim(win=win, name='gainTxt',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0,
-    color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=1,
+    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-6.0);
 safeTxt = visual.TextStim(win=win, name='safeTxt',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0,
-    color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=1,
+    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-7.0);
 vLeft = visual.TextStim(win=win, name='vLeft',
@@ -778,19 +780,19 @@ ocGamble = visual.Rect(
     win=win, name='ocGamble',
     width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=None,
+    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=[-0.0667,0.6392,1],
     opacity=1, depth=-2.0, interpolate=True)
 ocSafe = visual.Rect(
     win=win, name='ocSafe',
     width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=None,
+    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=[-0.0667,0.6392,1],
     opacity=1, depth=-3.0, interpolate=True)
 outcomeText = visual.TextStim(win=win, name='outcomeText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0,
-    color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=1,
+    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-4.0);
 hideGamble = visual.Rect(
@@ -911,19 +913,19 @@ ocGambleReal = visual.Rect(
     win=win, name='ocGambleReal',
     width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=None,
+    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=[-0.0667,0.6392,1],
     opacity=1, depth=-2.0, interpolate=True)
 ocSafeReal = visual.Rect(
     win=win, name='ocSafeReal',
     width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=None,
+    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=[-0.0667,0.6392,1],
     opacity=1, depth=-3.0, interpolate=True)
 outcomeTextReal = visual.TextStim(win=win, name='outcomeTextReal',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0,
-    color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=1,
+    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-4.0);
 hideGambleReal = visual.Rect(
@@ -1130,7 +1132,7 @@ outcomeTextReal = visual.TextStim(win=win, name='outcomeTextReal',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0,
-    color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=1,
+    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-4.0);
 hideGambleReal = visual.Rect(
@@ -1410,8 +1412,8 @@ for thisTrial in trials:
     pracLossRounded = '$%.0f' % round(riskyLoss,0)
     pracGainRounded = '$%.2f' % round(riskyGain,2)
     pracSafeRounded = '$%.2f' % round(alternative,2)
-    circleRight.setFillColor([0.5216,0.5216,0.5216])
-    circleRight.setLineColor([-0.0667,0.6392,1])
+    #circleRight.setFillColor([-0.0667,0.6392,1])
+    #circleRight.setLineColor([0.5216,0.5216,0.5216])
     lineLeft.setPos(targetPos)
     lossTxt.setPos(lossLoc)
     lossTxt.setText(pracLossRounded
@@ -1830,7 +1832,7 @@ for thisTrial in trials:
     noRespTxt.setPos(noRespLoc)
     ocGamble.setPos(ocGambleLoc)
     ocSafe.setPos(ocSafeLoc)
-    outcomeText.setColor([-0.0667,0.6392,1], colorSpace='rgb')
+    #outcomeText.setColor([0.5216,0.5216,0.5216], colorSpace='rgb')
     outcomeText.setPos(ocLoc)
     outcomeText.setText(pracFeedbackRounded)
     hideGamble.setPos(hideGamLoc)
