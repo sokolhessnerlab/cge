@@ -1,0 +1,4 @@
+﻿trials.thisRepN,trials.thisTrialN,trials.thisN,trials.thisIndex,riskyGain,riskyLoss,alternative,isi,iti,loc,Instructions.started,inst1.started,inst1.keys,inst1.rt,startPract.started,startPracResp.started,startPracResp.keys,startPracResp.rt,circleLeft.started,circleRight.started,lineLeft.started,orText.started,lossTxt.started,gainTxt.started,safeTxt.started,participant,session,date,expName,psychopyVersion,frameRate,
+,,,,,,,,,,17.291084399999818,19.291073100001086,return,0.28061389999857056,,,,,,,,,,,,,001,2023-04-23_10h37.06.211,CGTriskyDMtask,2022.2.4,60.09528708780756,
+,,,,,,,,,,,,,,19.590785600001254,21.58773370000199,v,0.23150069999610423,,,,,,,,,001,2023-04-23_10h37.06.211,CGTriskyDMtask,2022.2.4,60.09528708780756,
+,,,,,,,,,,,,,,,,,,21.885058800002298,21.885058800002298,21.885058800002298,21.885058800002298,21.885058800002298,21.885058800002298,21.885058800002298,,,,,,,
