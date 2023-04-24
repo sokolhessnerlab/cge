@@ -207,7 +207,7 @@ el_tracker.sendCommand("button_function 5 'accept_target_fixation'")
 # Step 4: set up a graphics environment for calibration
 #
 # Open a window, be sure to specify monitor parameters
-mon = monitors.Monitor('myMonitor', width=53.0, distance=70.0)
+mon = monitors.Monitor('myMonitor', width=34.0, distance=60.0)
 win = visual.Window(fullscr=full_screen,
                     monitor=mon,
                     winType='pyglet',
