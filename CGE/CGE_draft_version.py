@@ -641,7 +641,7 @@ frameTolerance = 0.001  # how close to onset before 'same' frame
 
 # --- Setup the Window ---
 win = visual.Window(
-    size=[2560, 1440], fullscr=True, screen=0,
+    size=[1280, 1024], fullscr=True, screen=0,
     winType='pyglet', allowStencil=False,
     monitor='testMonitor', color=[0.5216,0.5216,0.5216], colorSpace='rgb',
     blendMode='avg', useFBO=True,
