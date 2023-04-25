@@ -677,11 +677,11 @@ defaultKeyboard = keyboard.Keyboard(backend='iohub')
 # Run 'Begin Experiment' code from code
 instructionsTextHeight = 0.04;
 letterTextHeight = 0.1;
-wrap = 1.6
+# wrap = 1.6
 Instructions = visual.TextStim(win=win, name='Instructions',
     text='As discussed in the instructions, you will choose between a gamble and a guaranteed alternative.\n\nOnce "V-Left" and "N-Right" appear on the screen, you may press "V" to select the option on the left and "N" to choose the option on the right.\n\nPress "enter" to move on to the next screen.',
     font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0,
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=None, ori=0,
     color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-1.0);
@@ -691,7 +691,7 @@ inst1 = keyboard.Keyboard()
 startPract = visual.TextStim(win=win, name='startPract',
     text='There will now be 5 practice trials.\n\nWhen you are ready to begin the practice, press "V" or "N".',
     font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0,
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=None, ori=0,
     color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=0.0);
@@ -822,7 +822,7 @@ itiText = visual.TextStim(win=win, name='itiText',
 postPracText = visual.TextStim(win=win, name='postPracText',
     text='Practice complete.\n\nWhen you are ready to start the real task, press "V" or "N".\n',
     font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0,
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=None, ori=0,
     color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=0.0);
@@ -1014,7 +1014,7 @@ bestMuContainer = []
 settingUpForPart2 = visual.TextStim(win=win, name='settingUpForPart2',
     text='The first round of the gambling task is complete! \n\nSetting up for the last round of the gambling task.\n\nPlease wait...\n\n\n',
     font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0,
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=None, ori=0.0,
     color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=None,
     languageStyle='LTR',
     depth=-4.0);
@@ -1035,7 +1035,7 @@ staticLoadChoiceset = clock.StaticPeriod(win=win, screenHz=expInfo['frameRate'],
 moveToRDMpart2 = visual.TextStim(win=win, name='moveToRDMpart2',
     text='When you are ready to begin the next round of the gambling task, press "enter".',
     font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0,
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=None, ori=0.0,
     color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=None,
     languageStyle='LTR',
     depth=0.0);
@@ -1172,7 +1172,7 @@ itiTextReal = visual.TextStim(win=win, name='itiTextReal',
 breaktxt = visual.TextStim(win=win, name='breaktxt',
     text="You have sucessfully completed the first task in this experiment!\n\nPlease take a brief 1 minute break. \n\nYou are welcome to take a longer break, but keep in mind this study should take no longer than 1 hour to complete. \n\nWhen you are ready to move on, press 'enter' to continue.\n",
     font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0,
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=None, ori=0.0,
     color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=None,
     languageStyle='LTR',
     depth=0.0);
@@ -1184,7 +1184,7 @@ stopBreak = keyboard.Keyboard()
 ThankYou = visual.TextStim(win=win, name='ThankYou',
     text='Thank you! You have sucessfully completed the second portion of this study.\n\nYou will now be automatically redirected to the next portion.',
     font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0,
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=None, ori=0.0,
     color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=None,
     languageStyle='LTR',
     depth=0.0);
