@@ -56,11 +56,11 @@ logging.console.setLevel(logging.CRITICAL)
 use_retina = False
 
 # Set this variable to True to run the script in "Dummy Mode"
-dummy_mode = True
+dummy_mode = False
 
 # Set this variable to True to run the task in full screen mode
 # It is easier to debug the script in non-fullscreen mode
-full_screen = False
+full_screen = True
 
 # Store the parameters of all trials in a list, [condition, image]
 trials = [
@@ -677,11 +677,11 @@ defaultKeyboard = keyboard.Keyboard(backend='iohub')
 # Run 'Begin Experiment' code from code
 instructionsTextHeight = 0.04;
 letterTextHeight = 0.1;
-# wrap = 1.6
+wrap = .5
 Instructions = visual.TextStim(win=win, name='Instructions',
     text='As discussed in the instructions, you will choose between a gamble and a guaranteed alternative.\n\nOnce "V-Left" and "N-Right" appear on the screen, you may press "V" to select the option on the left and "N" to choose the option on the right.\n\nPress "enter" to move on to the next screen.',
     font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=None, ori=0,
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0,
     color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-1.0);
