@@ -605,7 +605,7 @@ if not dummy_mode:
         print('ERROR:', err)
         el_tracker.exitCalibration()
 
-##### OG CGE
+##### Original CGE
 
 # Ensure that relative paths start from the same directory as this script
 _thisDir = os.path.dirname(os.path.abspath(__file__))
@@ -668,7 +668,12 @@ eyetracker = None
 # create a default keyboard (e.g. to check for escape)
 defaultKeyboard = keyboard.Keyboard(backend='iohub')
 
-# --- Initialize components for Routine "instructions" ---
+
+### COMPONENTS: Setting up the components (shapes, texts, colors, etc.) to use to run the routines (Instructions, Choicesets, Outcome, ITI, etc.)
+
+### Practice Choiceset
+
+# --- Initialize components for Routine "instructions" --- Practice Choiceset Start Part 1
 # Run 'Begin Experiment' code from code
 instructionsTextHeight = 0.04;
 letterTextHeight = 0.1;
@@ -682,7 +687,7 @@ Instructions = visual.TextStim(win=win, name='Instructions',
     depth=-1.0);
 inst1 = keyboard.Keyboard()
 
-# --- Initialize components for Routine "pracStart" ---
+# --- Initialize components for Routine "pracStart" --- Practice Choiceset Start Part 2
 startPract = visual.TextStim(win=win, name='startPract',
     text='There will now be 5 practice trials.\n\nWhen you are ready to begin the practice, press "V" or "N".',
     font='Arial',
@@ -692,13 +697,13 @@ startPract = visual.TextStim(win=win, name='startPract',
     depth=0.0);
 startPracResp = keyboard.Keyboard()
 
-# --- Initialize components for Routine "practiceTask" ---
+# --- Initialize components for Routine "practiceTask" --- Practice Choiceset Components
 # Run 'Begin Experiment' code from randLoc
 textHeight = 0.05;
 circleLeft = visual.Rect(
     win=win, name='circleLeft',
     width=(.5, .5)[0], height=(.5, .5)[1],
-    ori=0, pos=(-.4,0), anchor='center',
+    ori=0, pos=(-.35,0), anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=[-0.0667,0.6392,1],
     opacity=1, depth=-1.0, interpolate=True)
     # Original line color: [-0.0667,0.6392,1]
@@ -706,7 +711,7 @@ circleLeft = visual.Rect(
 circleRight = visual.Rect(
     win=win, name='circleRight',
     width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
-    ori=0, pos=(.4,0), anchor='center',
+    ori=0, pos=(.35,0), anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=[-0.0667,0.6392,1],
     opacity=1, depth=-2.0, interpolate=True)
 lineLeft = visual.Rect(
@@ -746,20 +751,20 @@ safeTxt = visual.TextStim(win=win, name='safeTxt',
 vLeft = visual.TextStim(win=win, name='vLeft',
     text='V-Left',
     font='Arial',
-    pos=(-.4, -.35), height=0.05, wrapWidth=None, ori=0,
+    pos=(-.35, -.35), height=0.05, wrapWidth=None, ori=0,
     color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-8.0);
 nRight = visual.TextStim(win=win, name='nRight',
     text='N-Right',
     font='Arial',
-    pos=(.4, -.35), height=0.05, wrapWidth=None, ori=0,
+    pos=(.35, -.35), height=0.05, wrapWidth=None, ori=0,
     color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-9.0);
 choice1 = keyboard.Keyboard()
 
-# --- Initialize components for Routine "isiPrac" ---
+# --- Initialize components for Routine "isiPrac" --- Practice Choiceset ISI
 isiText = visual.TextStim(win=win, name='isiText',
     text='+',
     font='Arial',
@@ -768,7 +773,7 @@ isiText = visual.TextStim(win=win, name='isiText',
     languageStyle='LTR',
     depth=0.0);
 
-# --- Initialize components for Routine "feedback" ---
+# --- Initialize components for Routine "feedback" --- Practice Choiceset Outcome
 noRespTxt = visual.TextStim(win=win, name='noRespTxt',
     text='You did not respond in time\n',
     font='Arial',
@@ -802,7 +807,7 @@ hideGamble = visual.Rect(
     lineWidth=1,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
     opacity=1, depth=-5.0, interpolate=True)
 
-# --- Initialize components for Routine "itiPrac_2" ---
+# --- Initialize components for Routine "itiPrac_2" --- Practice Choiceset ITI
 itiText = visual.TextStim(win=win, name='itiText',
     text='+',
     font='Arial',
@@ -811,7 +816,9 @@ itiText = visual.TextStim(win=win, name='itiText',
     languageStyle='LTR',
     depth=0.0);
 
-# --- Initialize components for Routine "postPrac" ---
+### Static Choiceset
+
+# --- Initialize components for Routine "postPrac" --- Static Choiceset Start
 postPracText = visual.TextStim(win=win, name='postPracText',
     text='Practice complete.\n\nWhen you are ready to start the real task, press "V" or "N".\n',
     font='Arial',
@@ -821,7 +828,7 @@ postPracText = visual.TextStim(win=win, name='postPracText',
     depth=0.0);
 postPractResp = keyboard.Keyboard()
 
-# --- Initialize components for Routine "choiceWindow" ---
+# --- Initialize components for Routine "choiceWindow" --- Static Choiceset Components
 # Run 'Begin Experiment' code from randLoc_2
 loc = [];
 circleLeftReal = visual.Rect(
@@ -888,7 +895,7 @@ nRightReal = visual.TextStim(win=win, name='nRightReal',
     depth=-9.0);
 realChoice = keyboard.Keyboard()
 
-# --- Initialize components for Routine "isi" ---
+# --- Initialize components for Routine "isi" --- Static Choiceset ISI
 isiTextReal = visual.TextStim(win=win, name='isiTextReal',
     text='+',
     font='Arial',
@@ -897,7 +904,7 @@ isiTextReal = visual.TextStim(win=win, name='isiTextReal',
     languageStyle='LTR',
     depth=0.0);
 
-# --- Initialize components for Routine "showOutcome" ---
+# --- Initialize components for Routine "showOutcome" --- Static Choiceset Outcome
 # Run 'Begin Experiment' code from codeFeedbackReal
 riskygain_values = []
 riskyloss_values = []
@@ -937,7 +944,7 @@ hideGambleReal = visual.Rect(
     lineWidth=1,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
     opacity=1, depth=-5.0, interpolate=True)
 
-# --- Initialize components for Routine "iti" ---
+# --- Initialize components for Routine "iti" --- Static Choiceset ITI
 itiTextReal = visual.TextStim(win=win, name='itiTextReal',
     text='+',
     font='Arial',
@@ -946,11 +953,13 @@ itiTextReal = visual.TextStim(win=win, name='itiTextReal',
     languageStyle='LTR',
     depth=0.0);
 
+### Risk Preference Calculations
+
 # --- Initialize components for Routine "computeEstimates" ---
 # Run 'Begin Experiment' code from gridSearchCode
 import math
 
-### Function Definitions
+### Function Definitions --- Calculating Risk Preferences from Static Choiceset to tailor Dynamic Choiceset
 
 def choice_probability(parameters, riskyGv, riskyLv, certv):
     # Pull out parameters
@@ -1010,7 +1019,9 @@ settingUpForPart2 = visual.TextStim(win=win, name='settingUpForPart2',
     languageStyle='LTR',
     depth=-4.0);
 
-# --- Initialize components for Routine "loadDynamicChoiceset" ---
+### Dynamic Choiceset
+
+# --- Initialize components for Routine "loadDynamicChoiceset" --- Loading Calculated Dynamic Choiceset
 text = visual.TextStim(win=win, name='text',
     text=None,
     font='Open Sans',
@@ -1020,7 +1031,7 @@ text = visual.TextStim(win=win, name='text',
     depth=0.0);
 staticLoadChoiceset = clock.StaticPeriod(win=win, screenHz=expInfo['frameRate'], name='staticLoadChoiceset')
 
-# --- Initialize components for Routine "startDynamicTask" ---
+# --- Initialize components for Routine "startDynamicTask" --- Dynamic Choiceset Start
 moveToRDMpart2 = visual.TextStim(win=win, name='moveToRDMpart2',
     text='When you are ready to begin the next round of the gambling task, press "enter".',
     font='Arial',
@@ -1030,7 +1041,7 @@ moveToRDMpart2 = visual.TextStim(win=win, name='moveToRDMpart2',
     depth=0.0);
 key_resp = keyboard.Keyboard()
 
-# --- Initialize components for Routine "choiceWindow" ---
+# --- Initialize components for Routine "choiceWindow" --- Dynamic Choiceset Components
 # Run 'Begin Experiment' code from randLoc_2
 loc = [];
 circleLeftReal = visual.Rect(
@@ -1097,7 +1108,7 @@ nRightReal = visual.TextStim(win=win, name='nRightReal',
     depth=-9.0);
 realChoice = keyboard.Keyboard()
 
-# --- Initialize components for Routine "isi" ---
+# --- Initialize components for Routine "isi" --- Dynamic Choiceset ISI
 isiTextReal = visual.TextStim(win=win, name='isiTextReal',
     text='+',
     font='Arial',
@@ -1106,7 +1117,7 @@ isiTextReal = visual.TextStim(win=win, name='isiTextReal',
     languageStyle='LTR',
     depth=0.0);
 
-# --- Initialize components for Routine "showOutcome" ---
+# --- Initialize components for Routine "showOutcome" --- Dynamic Choiceset Outcome
 # Run 'Begin Experiment' code from codeFeedbackReal
 riskygain_values = []
 riskyloss_values = []
@@ -1146,7 +1157,7 @@ hideGambleReal = visual.Rect(
     lineWidth=1,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
     opacity=1, depth=-5.0, interpolate=True)
 
-# --- Initialize components for Routine "iti" ---
+# --- Initialize components for Routine "iti" --- Dynamic Choiceset ITI
 itiTextReal = visual.TextStim(win=win, name='itiTextReal',
     text='+',
     font='Arial',
@@ -1154,6 +1165,8 @@ itiTextReal = visual.TextStim(win=win, name='itiTextReal',
     color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=0.0);
+
+### Redirect to Working Memory Span (Originally Digit Span in CGT)
 
 # --- Initialize components for Routine "rdmToSpanTransition" ---
 breaktxt = visual.TextStim(win=win, name='breaktxt',
@@ -1165,20 +1178,25 @@ breaktxt = visual.TextStim(win=win, name='breaktxt',
     depth=0.0);
 stopBreak = keyboard.Keyboard()
 
-
+### End of CGE (Orignally Redirected to Qualtrics in CGT)
 
 # --- Initialize components for Routine "END" ---
 ThankYou = visual.TextStim(win=win, name='ThankYou',
-    text='Thank you! You have sucessfully completed the second portion of this study.\n\nYou will now be automatically redirected to Qualtrics.',
+    text='Thank you! You have sucessfully completed the second portion of this study.\n\nYou will now be automatically redirected to the next portion.',
     font='Arial',
     pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0,
     color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=None,
     languageStyle='LTR',
     depth=0.0);
 
-# Create some handy timers
+### Setting up the clock to be used for running the routines
+
+# Create some handy timers ---- Is this the timestamps that I need?
 globalClock = core.Clock()  # to track the time since experiment started
 routineTimer = core.Clock()  # to track time remaining of each (possibly non-slip) routine
+
+
+### Script for running the routines (Instructions, Choicesets, Outcome, etc.)
 
 # --- Prepare to start Routine "instructions" ---
 continueRoutine = True
@@ -1277,6 +1295,8 @@ thisExp.nextEntry()
 # the Routine "instructions" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 
+### Practice Choiceset Routine
+
 # --- Prepare to start Routine "pracStart" ---
 continueRoutine = True
 routineForceEnded = False
@@ -1374,6 +1394,8 @@ thisExp.nextEntry()
 # the Routine "pracStart" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 
+### Practice Choiceset Location Function
+
 # set up handler to look after randomisation of conditions etc
 trials = data.TrialHandler(nReps=1, method='sequential',
     extraInfo=expInfo, originPath=-1,
@@ -1399,18 +1421,18 @@ for thisTrial in trials:
     # update component parameters for each repeat
     # Run 'Begin Routine' code from randLoc
     if loc==1:
-        targetPos=[-.4,0]
+        targetPos=[-.35,0]
     else:
-        targetPos=[.4,0]
+        targetPos=[.35,0]
 
     if loc==1:
-        lossLoc=[-.4,-.1]
-        gainLoc=[-.4,.1]
-        safeLoc=[.4,0]
+        lossLoc=[-.35,-.1]
+        gainLoc=[-.35,.1]
+        safeLoc=[.35,0]
     else:
-        lossLoc=[.4,-.1]
-        gainLoc=[.4,.1]
-        safeLoc=[-.4,0]
+        lossLoc=[.35,-.1]
+        gainLoc=[.35,.1]
+        safeLoc=[-.35,0]
 
 
     pracLossRounded = '$%.0f' % round(riskyLoss,0)
@@ -1772,7 +1794,7 @@ for thisTrial in trials:
     # the Routine "isiPrac" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
 
-    # --- Prepare to start Routine "feedback" ---
+    # --- Prepare to start Routine "feedback" --- Practice Choiceset Outcome Locations
     continueRoutine = True
     routineForceEnded = False
     # update component parameters for each repeat
@@ -1782,34 +1804,34 @@ for thisTrial in trials:
     if not choice1.keys:
         outcome = math.nan
         noRespLoc = [0,0]
-        ocLoc = [5,5]
+        ocLoc = [5,5] # What is the 5,5 referring to? Is it saying that it is happening offscreen?
         ocGambleLoc = [5,5]
         ocSafeLoc = [5,5]
         hideGamLoc = [5,5]
     elif choice1.keys == 'v' and loc == 1:
         outcome = random.choice([riskyGain, riskyLoss])
         if outcome == riskyGain:
-            ocLoc = [-.4,.1]
-            ocGambleLoc = [-.4,0]
+            ocLoc = [-.35,.1]
+            ocGambleLoc = [-.35,0]
             ocSafeLoc = [5,5]
             noRespLoc = [5,5]
-            hideGamLoc = [-.4,-.125]
+            hideGamLoc = [-.35,-.125]
         elif outcome == riskyLoss:
-             ocLoc = [-.4,-.1]
-             ocGambleLoc = [-.4,0]
+             ocLoc = [-.35,-.1]
+             ocGambleLoc = [-.35,0]
              ocSafeLoc = [5,5]
-             hideGamLoc = [-.4,.125]
+             hideGamLoc = [-.35,.125]
              noRespLoc = [5,5]
     elif choice1.keys == 'v' and loc == 2:
         outcome = alternative
-        ocLoc = [-.4,0]
+        ocLoc = [-.35,0]
         ocGambleLoc = [5,5]
         ocSafeLoc = ocLoc
         hideGamLoc = ocGambleLoc
         noRespLoc = [5,5]
     elif choice1.keys == 'n' and loc ==1:
         outcome = alternative
-        ocLoc = [.4,0]
+        ocLoc = [.35,0]
         ocGambleLoc = [5,5]
         ocSafeLoc = ocLoc
         hideGamLoc = ocGambleLoc
@@ -1817,16 +1839,16 @@ for thisTrial in trials:
     elif choice1.keys == 'n' and loc ==2:
         outcome = random.choice([riskyGain, riskyLoss])
         if outcome == riskyGain:
-            ocLoc = [.4,.1]
-            ocGambleLoc = [.4,0]
+            ocLoc = [.35,.1]
+            ocGambleLoc = [.35,0]
             ocSafeLoc = [5,5]
-            hideGamLoc = [.4,-.125]
+            hideGamLoc = [.35,-.125]
             noRespLoc = [5,5]
         elif outcome == riskyLoss:
-            ocLoc = [.4,-.1]
-            ocGambleLoc = [.4,0]
+            ocLoc = [.35,-.1]
+            ocGambleLoc = [.35,0]
             ocSafeLoc = [5,5]
-            hideGamLoc = [.4,.125]
+            hideGamLoc = [.35,.125]
             noRespLoc = [5,5]
 
     if outcome == riskyLoss:
@@ -2068,6 +2090,7 @@ for thisTrial in trials:
 
 # completed 1 repeats of 'trials'
 
+### Static Choiceset Routine
 
 # --- Prepare to start Routine "postPrac" ---
 continueRoutine = True
@@ -2166,10 +2189,12 @@ thisExp.nextEntry()
 # the Routine "postPrac" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 
+### Static Choiceset Location Function
+
 # set up handler to look after randomisation of conditions etc
 staticRDM = data.TrialHandler(nReps=1, method='random',
     extraInfo=expInfo, originPath=-1,
-    trialList=data.importConditions('CGT-choice-set.csv', selection='0:4'),
+    trialList=data.importConditions('CGT-choice-set.csv', selection='0:4'), #### Static Choiceset (50) Trials
     seed=None, name='staticRDM')
 thisExp.addLoop(staticRDM)  # add the loop to the experiment
 thisStaticRDM = staticRDM.trialList[0]  # so we can initialise stimuli with some values
@@ -2574,7 +2599,7 @@ for thisStaticRDM in staticRDM:
     else:
         routineTimer.addTime(-0.500000)
 
-    # --- Prepare to start Routine "showOutcome" ---
+    # --- Prepare to start Routine "showOutcome" --- Static Choiceset Outcome Locations
     continueRoutine = True
     routineForceEnded = False
     # update component parameters for each repeat
@@ -2901,6 +2926,7 @@ for thisStaticRDM in staticRDM:
 
 # completed 1 repeats of 'staticRDM'
 
+### Risk Preference Calculation Routine
 
 # --- Prepare to start Routine "computeEstimates" ---
 continueRoutine = True
@@ -3035,6 +3061,8 @@ thisExp.addData('bestRho.routineEndVal', bestRho)  # Save end routine value
 thisExp.addData('bestMu.routineEndVal', bestMu)  # Save end routine value
 # the Routine "computeEstimates" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
+
+### Dynamic Choiceset Routine
 
 # --- Prepare to start Routine "loadDynamicChoiceset" ---
 continueRoutine = True
@@ -3224,10 +3252,12 @@ thisExp.nextEntry()
 # the Routine "startDynamicTask" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 
+### Dynamic Choiceset Location Function
+
 # set up handler to look after randomisation of conditions etc
 dynamicRDM = data.TrialHandler(nReps=1.0, method='sequential',
     extraInfo=expInfo, originPath=-1,
-    trialList=data.importConditions(fname[0], selection='0:4'),
+    trialList=data.importConditions(fname[0], selection='0:4'), ### Dynamic Choiceset (60 Easy + 60 Hard = 120) Trials
     seed=None, name='dynamicRDM')
 thisExp.addLoop(dynamicRDM)  # add the loop to the experiment
 thisDynamicRDM = dynamicRDM.trialList[0]  # so we can initialise stimuli with some values
@@ -3632,7 +3662,7 @@ for thisDynamicRDM in dynamicRDM:
     else:
         routineTimer.addTime(-0.500000)
 
-    # --- Prepare to start Routine "showOutcome" ---
+    # --- Prepare to start Routine "showOutcome" --- Dynamic Choiceset Outcome Locations
     continueRoutine = True
     routineForceEnded = False
     # update component parameters for each repeat
@@ -3962,6 +3992,7 @@ for thisDynamicRDM in dynamicRDM:
 
 # completed 1.0 repeats of 'dynamicRDM'
 
+### Transition to Working Memory Span (Originally Digit Span in CGT) Now Ospan and Sspan
 
 # --- Prepare to start Routine "rdmToSpanTransition" ---
 continueRoutine = True
@@ -4061,7 +4092,7 @@ thisExp.nextEntry()
 routineTimer.reset()
 
 
-
+### End Study Redirect to Qualtrics - Not Working Properly so Commented Out 
 
 # # THE CODE BELOW DOESN'T EXIT GRACEFULLY; NO KEY RESPONSE QUITS?
 # # --- Prepare to start Routine "END" ---
@@ -4128,6 +4159,7 @@ routineTimer.reset()
 # routineTimer.reset()
 
 
+### End of Experiment
 
 # --- End experiment ---
 # Flip one final time so any remaining win.callOnFlip()
