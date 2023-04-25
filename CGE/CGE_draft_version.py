@@ -1047,7 +1047,7 @@ loc = [];
 circleLeftReal = visual.Rect(
     win=win, name='circleLeftReal',
     width=(.5, .5)[0], height=(.5, .5)[1],
-    ori=0, pos=(-.4,0), anchor='center',
+    ori=0, pos=(-.35,0), anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=[-0.0667,0.6392,1],
     opacity=1, depth=-1.0, interpolate=True)
     # Silver [0.5216,0.5216,0.5216]
@@ -1055,7 +1055,7 @@ circleLeftReal = visual.Rect(
 circleRightReal = visual.Rect(
     win=win, name='circleRightReal',
     width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
-    ori=0, pos=(.4,0), anchor='center',
+    ori=0, pos=(.35,0), anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1], fillColor=[-0.0667,0.6392,1],
     opacity=1, depth=-2.0, interpolate=True)
 lineLeftReal = visual.Rect(
@@ -1095,14 +1095,14 @@ safeTxtReal = visual.TextStim(win=win, name='safeTxtReal',
 vLeftReal = visual.TextStim(win=win, name='vLeftReal',
     text='V-Left',
     font='Arial',
-    pos=(-.4, -.35), height=0.05, wrapWidth=None, ori=0,
+    pos=(-.35, -.35), height=0.05, wrapWidth=None, ori=0,
     color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-8.0);
 nRightReal = visual.TextStim(win=win, name='nRightReal',
     text='N-Right',
     font='Arial',
-    pos=(.4, -.35), height=0.05, wrapWidth=None, ori=0,
+    pos=(.35, -.35), height=0.05, wrapWidth=None, ori=0,
     color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=1,
     languageStyle='LTR',
     depth=-9.0);
@@ -3283,18 +3283,18 @@ for thisDynamicRDM in dynamicRDM:
     loc = random.choice([1,2])
 
     if loc==1:
-        targetPos=[-.4,0]
+        targetPos=[-.35,0]
     else:
-        targetPos=[.4,0]
+        targetPos=[.35,0]
 
     if loc==1:
-        lossLoc=[-.4,-.1]
-        gainLoc=[-.4,.1]
-        safeLoc=[.4,0]
+        lossLoc=[-.35,-.1]
+        gainLoc=[-.35,.1]
+        safeLoc=[.35,0]
     else:
-        lossLoc=[.4,-.1]
-        gainLoc=[.4,.1]
-        safeLoc=[-.4,0]
+        lossLoc=[.35,-.1]
+        gainLoc=[.35,.1]
+        safeLoc=[-.35,0]
 
     lossRounded = "$%.0f" % round(riskyoption2,0)
     gainRounded = "$%.2f" % round(riskyoption1,2)
@@ -3687,16 +3687,16 @@ for thisDynamicRDM in dynamicRDM:
         riskyGain = riskyoption1
         certain = safeoption
         if outcometmp == riskyoption1:
-            ocLoc = [-.4,.1]
-            ocGambleLoc = [-.4,0]
+            ocLoc = [-.35,.1]
+            ocGambleLoc = [-.35,0]
             ocSafeLoc = [5,5]
             noRespLoc = [5,5]
-            hideGamLoc = [-.4,-.125]
+            hideGamLoc = [-.35,-.125]
         elif outcometmp == riskyoption2:
-             ocLoc = [-.4,-.1]
-             ocGambleLoc = [-.4,0]
+             ocLoc = [-.35,-.1]
+             ocGambleLoc = [-.35,0]
              ocSafeLoc = [5,5]
-             hideGamLoc = [-.4,.125]
+             hideGamLoc = [-.35,.125]
              noRespLoc = [5,5]
     elif realChoice.keys == 'v' and loc == 2:
         outcometmp = safeoption
@@ -3704,7 +3704,7 @@ for thisDynamicRDM in dynamicRDM:
         riskyLoss = riskyoption2
         riskyGain = riskyoption1
         certain = safeoption
-        ocLoc = [-.4,0]
+        ocLoc = [-.35,0]
         ocGambleLoc = [5,5]
         ocSafeLoc = ocLoc
         hideGamLoc = ocGambleLoc
@@ -3715,7 +3715,7 @@ for thisDynamicRDM in dynamicRDM:
         riskyLoss = riskyoption2
         riskyGain = riskyoption1
         certain = safeoption
-        ocLoc = [.4,0]
+        ocLoc = [.35,0]
         ocGambleLoc = [5,5]
         ocSafeLoc = ocLoc
         hideGamLoc = ocGambleLoc
@@ -3727,16 +3727,16 @@ for thisDynamicRDM in dynamicRDM:
         riskyGain = riskyoption1
         certain = safeoption
         if outcometmp == riskyoption1:
-            ocLoc = [.4,.1]
-            ocGambleLoc = [.4,0]
+            ocLoc = [.35,.1]
+            ocGambleLoc = [.35,0]
             ocSafeLoc = [5,5]
-            hideGamLoc = [.4,-.125]
+            hideGamLoc = [.35,-.125]
             noRespLoc = [5,5]
         elif outcometmp == riskyoption2:
-            ocLoc = [.4,-.1]
-            ocGambleLoc = [.4,0]
+            ocLoc = [.35,-.1]
+            ocGambleLoc = [.35,0]
             ocSafeLoc = [5,5]
-            hideGamLoc = [.4,.125]
+            hideGamLoc = [.35,.125]
             noRespLoc = [5,5]
 
 
