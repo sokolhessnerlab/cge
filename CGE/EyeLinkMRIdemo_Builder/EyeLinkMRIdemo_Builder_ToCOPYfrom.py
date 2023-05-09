@@ -28,6 +28,14 @@ import sys  # to get file system encoding
 import psychopy.iohub as io
 from psychopy.hardware import keyboard
 
+##### From MRIdemo_Builder - START of elConnect 'Before Experiment' Code #####
+
+""" 
+    PLACE 
+        AFTER 'Import packages'
+        BEFORE DIRECTORY AND WINDOW SETUP
+"""
+
 # Run 'Before Experiment' code from elConnect
 # DESCRIPTION:
 # This is a basic example illustrating how to do continuous eye tracker 
@@ -322,6 +330,13 @@ def abort_trial():
 
     return pylink.TRIAL_ERROR
 
+""" 
+    PLACE 
+        AFTER 'Import packages'
+        BEFORE DIRECTORY AND WINDOW SETUP
+"""
+
+##### From MRIdemo_Builder - END of elConnect 'Before Experiment' Code #####
 
 # Ensure that relative paths start from the same directory as this script
 _thisDir = os.path.dirname(os.path.abspath(__file__))
@@ -386,6 +401,14 @@ eyetracker = None
 # create a default keyboard (e.g. to check for escape)
 defaultKeyboard = keyboard.Keyboard(backend='iohub')
 
+##### From MRIdemo_Builder - START of 'eyelinkSetup' Routine components #####
+
+""" 
+    PLACE 
+        AFTER setting up window and keyboard
+        BEFORE START of elConnect 'Begin Experiment' Code
+"""
+
 # --- Initialize components for Routine "eyelinkSetup" ---
 elInstructions = visual.TextStim(win=win, name='elInstructions',
     text='Press any key to start Camera Setup',
@@ -395,6 +418,23 @@ elInstructions = visual.TextStim(win=win, name='elInstructions',
     languageStyle='LTR',
     depth=0.0);
 key_resp = keyboard.Keyboard()
+
+""" 
+    PLACE 
+        AFTER setting up window and keyboard
+        BEFORE START of elConnect 'Begin Experiment' Code
+""" # Included with the elConnect Code because they are all part of the same routine
+
+##### From MRIdemo_Builder - END of 'eyelinkSetup' Routine components #####
+
+##### From MRIDemo_Builder - START of elConnect 'Begin Experiment' Code #####
+
+""" 
+    PLACE 
+        AFTER 'Intialize components for Routine "eyelinkSetup"'
+        BEFORE 'Initialize components for Routine "instruct"'
+"""
+
 # Run 'Begin Experiment' code from elConnect
 # This Begin Experiment tab of the elConnect component gets graphic 
 # information from Psychopy, sets the screen_pixel_coords on the Host PC based
@@ -420,6 +460,14 @@ el_tracker.sendCommand(el_coords)
 # Viewer User Manual, "Protocol for EyeLink Data to Viewer Integration"
 dv_coords = "DISPLAY_COORDS  0 0 %d %d" % (scn_width - 1, scn_height - 1)
 el_tracker.sendMessage(dv_coords)
+
+""" 
+    PLACE 
+        AFTER 'Intialize components for Routine "eyelinkSetup"'
+        BEFORE 'Initialize components for Routine "instruct"'
+"""
+
+##### From MRIDemo_Builder - END of elConnect 'Begin Experiment' Code #####
 
 # --- Initialize components for Routine "instruct" ---
 taskInstructions = visual.TextStim(win=win, name='taskInstructions',
@@ -482,6 +530,14 @@ endScreen = visual.TextStim(win=win, name='endScreen',
 # Create some handy timers
 globalClock = core.Clock()  # to track the time since experiment started
 routineTimer = core.Clock()  # to track time remaining of each (possibly non-slip) routine 
+
+##### From MRIdemo_Builder - START of 'eyelinkSetup' Routine #####
+
+"""
+    PLACE
+        AFTER 'Create some handy timers'
+        BEFORE elConnect 'End Routine' Code
+""" 
 
 # --- Prepare to start Routine "eyelinkSetup" ---
 continueRoutine = True
@@ -573,6 +629,23 @@ thisExp.addData('key_resp.keys',key_resp.keys)
 if key_resp.keys != None:  # we had a response
     thisExp.addData('key_resp.rt', key_resp.rt)
 thisExp.nextEntry()
+
+"""
+    PLACE
+        AFTER 'Create some handy timers'
+        BEFORE elConnect 'End Routine' Code
+""" # Included with the elConnect Code because they are all part of the same routine
+
+##### From MRIdemo_Builder - START of 'eyelinkSetup' Routine #####
+
+##### From MRIdemo_Builder - START of elConnect 'End Routine' Code #####
+
+"""
+    PLACE
+        AFTER 'Ending Routine "eyelinkSetup"' (Included as part of "eyelinkSetup" routine)
+        BEFORE 'Prepare to start Routine "instruct"' OR my version of instruction routine
+"""
+
 # Run 'End Routine' code from elConnect
 # This End Routine tab of the elConnect component configures some
 # graphics options for calibration, and then performs a camera setup
@@ -632,7 +705,16 @@ if not dummy_mode:
         print('ERROR:', err)
         el_tracker.exitCalibration()
 # the Routine "eyelinkSetup" was not non-slip safe, so reset the non-slip timer
-routineTimer.reset()
+routineTimer.reset() ### Not part of the code but PsychoPy Coder AutoAdds for end of a routine
+
+"""
+    PLACE
+        AFTER 'Ending Routine "eyelinkSetup"' (Included as part of "eyelinkSetup" routine)
+        BEFORE 'Prepare to start Routine "instruct"' OR my version of instruction routine
+"""
+
+##### From MRIdemo_Builder - END of elConnect 'End Routine' Code #####
+
 
 # --- Prepare to start Routine "instruct" ---
 continueRoutine = True
@@ -1442,6 +1524,15 @@ if routineForceEnded:
     routineTimer.reset()
 else:
     routineTimer.addTime(-2.000000)
+
+##### From MRIdemo_Builder - START of elConnect 'End Experiment' Code #####
+
+"""
+    PLACE
+        AFTER last run routine script
+        BEFORE 'End experiment'
+"""
+
 # Run 'End Experiment' code from elConnect
 # This End Experiment tab of the elConnect component calls the 
 # terminate_task helper function to get the EDF file and close the connection
@@ -1449,6 +1540,15 @@ else:
 
 # Disconnect, download the EDF file, then terminate the task
 terminate_task()
+
+"""
+    PLACE
+        AFTER last run routine script
+        BEFORE 'End experiment'
+"""
+
+##### From MRIdemo_Builder - END of elConnect 'End Experiment' Code #####
+
 
 # --- End experiment ---
 # Flip one final time so any remaining win.callOnFlip() 
