@@ -11,6 +11,8 @@ If you publish work using this script the most relevant publication is:
 
 """
 
+##### Start of Original CGE Imports #####
+
 # --- Import packages ---
 from psychopy import locale_setup
 from psychopy import prefs
@@ -28,9 +30,11 @@ import sys  # to get file system encoding
 import psychopy.iohub as io
 from psychopy.hardware import keyboard
 
+##### End of Original CGE Imports #####
 
 
-##### Original CGE
+
+##### Original CGE #####
 
 # Ensure that relative paths start from the same directory as this script
 _thisDir = os.path.dirname(os.path.abspath(__file__))
