@@ -34,6 +34,316 @@ from psychopy.hardware import keyboard
 
 
 
+##### From MRIdemo_Builder - START of elConnect 'Before Experiment' Code #####
+
+""" 
+    PLACE 
+        AFTER 'Import packages'
+        BEFORE DIRECTORY AND WINDOW SETUP
+"""
+
+# Run 'Before Experiment' code from elConnect
+# DESCRIPTION:
+# This is a basic example illustrating how to do continuous eye tracker 
+# recording through a block of trials (e.g., in an MRI setup), and how to 
+# synchronize the presentation of trials with a sync signal from the MRI. With 
+# a long recording, we start and stop recording at the beginning and end of a 
+# testing session (block/run), rather than at the beginning and end of each 
+# experimental trial. We still send the TRIALID and TRIAL_RESULT messages to 
+# the tracker, and Data Viewer will still be able to segment the long recording 
+# into small segments (trials).
+
+# The code components in the eyelinkSetup, eyelinkStartRecording, trial, and 
+# eyelinkStopRecording routines handle communication with the Host PC/EyeLink
+# system.  All the code components are set to Code Type Py, and each code 
+# component may have code in the various tabs (e.g., Before Experiment, Begin
+# Experiment, etc.)
+
+# Last updated: March 7 2023
+
+# This Before Experiment tab of the elConnect component imports some
+# modules we need, manages data filenames, allows for dummy mode configuration
+# (for testing), connects to the Host PC, configures some tracker settings,
+# and defines some helper function definitions (which are called later)
+
+import pylink
+import time
+import platform
+from PIL import Image  # for preparing the Host backdrop image
+from EyeLinkCoreGraphicsPsychoPy import EyeLinkCoreGraphicsPsychoPy
+from string import ascii_letters, digits
+
+# Switch to the script folder
+script_path = os.path.dirname(sys.argv[0])
+if len(script_path) != 0:
+    os.chdir(script_path)
+
+
+# Set this variable to True if you use the built-in retina screen as your
+# primary display device on macOS. If have an external monitor, set this
+# variable True if you choose to "Optimize for Built-in Retina Display"
+# in the Displays preference settings.
+use_retina = False
+
+# Set this variable to True to run the script in "Dummy Mode"
+dummy_mode = False
+
+# Prompt user to specify an EDF data filename
+# before we open a fullscreen window
+dlg_title = 'Enter EDF File Name'
+dlg_prompt = 'Please enter a file name with 8 or fewer characters\n' + \
+             '[letters, numbers, and underscore].'
+
+
+# Set up EDF data file name and local data folder
+#
+# The EDF data filename should not exceed 8 alphanumeric characters
+# use ONLY number 0-9, letters, & _ (underscore) in the filename
+edf_fname = 'TEST'
+
+# Prompt user to specify an EDF data filename
+# before we open a fullscreen window
+dlg_title = 'Enter EDF File Name'
+dlg_prompt = 'Please enter a file name with 8 or fewer characters\n' + \
+             '[letters, numbers, and underscore].'
+
+# loop until we get a valid filename
+while True:
+    dlg = gui.Dlg(dlg_title)
+    dlg.addText(dlg_prompt)
+    dlg.addField('File Name:', edf_fname)
+    # show dialog and wait for OK or Cancel
+    ok_data = dlg.show()
+    if dlg.OK:  # if ok_data is not None
+        print('EDF data filename: {}'.format(ok_data[0]))
+    else:
+        print('user cancelled')
+        core.quit()
+        sys.exit()
+
+    # get the string entered by the experimenter
+    tmp_str = dlg.data[0]
+    # strip trailing characters, ignore the ".edf" extension
+    edf_fname = tmp_str.rstrip().split('.')[0]
+
+    # check if the filename is valid (length <= 8 & no special char)
+    allowed_char = ascii_letters + digits + '_'
+    if not all([c in allowed_char for c in edf_fname]):
+        print('ERROR: Invalid EDF filename')
+    elif len(edf_fname) > 8:
+        print('ERROR: EDF filename should not exceed 8 characters')
+    else:
+        break
+        
+# Set up a folder to store the EDF data files and the associated resources
+# e.g., files defining the interest areas used in each trial
+results_folder = 'results'
+if not os.path.exists(results_folder):
+    os.makedirs(results_folder)
+
+# We download EDF data file from the EyeLink Host PC to the local hard
+# drive at the end of each testing session, here we rename the EDF to
+# include session start date/time
+time_str = time.strftime("_%Y_%m_%d_%H_%M", time.localtime())
+session_identifier = edf_fname + time_str
+
+# create a folder for the current testing session in the "results" folder
+session_folder = os.path.join(results_folder, session_identifier)
+if not os.path.exists(session_folder):
+    os.makedirs(session_folder)
+
+# For macOS users check if they have a retina screen
+if 'Darwin' in platform.system():
+        dlg = gui.Dlg("Retina Screen?", labelButtonOK='Yes', labelButtonCancel='No')
+        dlg.addText("Does your Mac have a Retina screen?")
+        # show dialog and wait for OK or Cancel
+        ok_data = dlg.show()
+        if dlg.OK:  # if ok_data is not None
+            use_retina = True
+        else:
+            use_retina = False
+    
+# Step 1: Connect to the EyeLink Host PC
+#
+# The Host IP address, by default, is "100.1.1.1".
+# the "el_tracker" objected created here can be accessed through the Pylink
+# Set the Host PC address to "None" (without quotes) to run the script
+# in "Dummy Mode"
+if dummy_mode:
+    el_tracker = pylink.EyeLink(None)
+else:
+    try:
+        el_tracker = pylink.EyeLink("100.1.1.1")
+    except RuntimeError as error:
+        dlg = gui.Dlg("Dummy Mode?")
+        dlg.addText("Couldn't connect to tracker at 100.1.1.1 -- continue in Dummy Mode?")
+        # show dialog and wait for OK or Cancel
+        ok_data = dlg.show()
+        if dlg.OK:  # if ok_data is not None
+            #print('EDF data filename: {}'.format(ok_data[0]))
+            dummy_mode = True
+            el_tracker = pylink.EyeLink(None)
+        else:
+            print('user cancelled')
+            core.quit()
+            sys.exit()
+
+# Step 2: Open an EDF data file on the Host PC
+edf_file = edf_fname + ".EDF"
+try:
+    el_tracker.openDataFile(edf_file)
+except RuntimeError as err:
+    print('ERROR:', err)
+    # close the link if we have one open
+    if el_tracker.isConnected():
+        el_tracker.close()
+    core.quit()
+    sys.exit()
+
+# Add a header text to the EDF file to identify the current experiment name
+# This is OPTIONAL. If your text starts with "RECORDED BY " it will be
+# available in DataViewer's Inspector window by clicking
+# the EDF session node in the top panel and looking for the "Recorded By:"
+# field in the bottom panel of the Inspector.
+preamble_text = 'RECORDED BY %s' % os.path.basename(__file__)
+el_tracker.sendCommand("add_file_preamble_text '%s'" % preamble_text)
+
+# Step 3: Configure the tracker
+#
+# Put the tracker in offline mode before we change tracking parameters
+el_tracker.setOfflineMode()
+
+# Get the software version:  1-EyeLink I, 2-EyeLink II, 3/4-EyeLink 1000,
+# 5-EyeLink 1000 Plus, 6-Portable DUO
+eyelink_ver = 0  # set version to 0, in case running in Dummy mode
+if not dummy_mode:
+    vstr = el_tracker.getTrackerVersionString()
+    eyelink_ver = int(vstr.split()[-1].split('.')[0])
+    # print out some version info in the shell
+    print('Running experiment on %s, version %d' % (vstr, eyelink_ver))
+
+# File and Link data control
+# what eye events to save in the EDF file, include everything by default
+file_event_flags = 'LEFT,RIGHT,FIXATION,SACCADE,BLINK,MESSAGE,BUTTON,INPUT'
+# what eye events to make available over the link, include everything by default
+link_event_flags = 'LEFT,RIGHT,FIXATION,SACCADE,BLINK,BUTTON,FIXUPDATE,INPUT'
+# what sample data to save in the EDF data file and to make available
+# over the link, include the 'HTARGET' flag to save head target sticker
+# data for supported eye trackers
+if eyelink_ver > 3:
+    file_sample_flags = 'LEFT,RIGHT,GAZE,HREF,RAW,AREA,HTARGET,GAZERES,BUTTON,STATUS,INPUT'
+    link_sample_flags = 'LEFT,RIGHT,GAZE,GAZERES,AREA,HTARGET,STATUS,INPUT'
+else:
+    file_sample_flags = 'LEFT,RIGHT,GAZE,HREF,RAW,AREA,GAZERES,BUTTON,STATUS,INPUT'
+    link_sample_flags = 'LEFT,RIGHT,GAZE,GAZERES,AREA,STATUS,INPUT'
+el_tracker.sendCommand("file_event_filter = %s" % file_event_flags)
+el_tracker.sendCommand("file_sample_data = %s" % file_sample_flags)
+el_tracker.sendCommand("link_event_filter = %s" % link_event_flags)
+el_tracker.sendCommand("link_sample_data = %s" % link_sample_flags)
+
+# Optional tracking parameters
+# Sample rate, 250, 500, 1000, or 2000, check your tracker specification
+# if eyelink_ver > 2:
+#     el_tracker.sendCommand("sample_rate 1000")
+# Choose a calibration type, H3, HV3, HV5, HV13 (HV = horizontal/vertical),
+el_tracker.sendCommand("calibration_type = HV9")
+# Set a gamepad button to accept calibration/drift check target
+# You need a supported gamepad/button box that is connected to the Host PC
+el_tracker.sendCommand("button_function 5 'accept_target_fixation'")
+
+def clear_screen(win):
+    """ clear up the PsychoPy window"""
+    win.fillColor = genv.getBackgroundColor()
+    win.flip()
+
+def show_msg(win, text, wait_for_keypress=True):
+    """ Show task instructions on screen"""
+
+    msg = visual.TextStim(win, text,
+                          color=genv.getForegroundColor(),
+                          wrapWidth=scn_width/2)
+    clear_screen(win)
+    msg.draw()
+    win.flip()
+
+    # wait indefinitely, terminates upon any key press
+    if wait_for_keypress:
+        event.waitKeys()
+        clear_screen(win)
+
+def terminate_task():
+    """ Terminate the task gracefully and retrieve the EDF data file
+    """
+    el_tracker = pylink.getEYELINK()
+
+    if el_tracker.isConnected():
+        # Terminate the current trial first if the task terminated prematurely
+        error = el_tracker.isRecording()
+        if error == pylink.TRIAL_OK:
+            abort_trial()
+
+        # Put tracker in Offline mode
+        el_tracker.setOfflineMode()
+
+        # Clear the Host PC screen and wait for 500 ms
+        el_tracker.sendCommand('clear_screen 0')
+        pylink.msecDelay(500)
+
+        # Close the edf data file on the Host
+        el_tracker.closeDataFile()
+
+        # Show a file transfer message on the screen
+        msg = 'EDF data is transferring from EyeLink Host PC...'
+        show_msg(win, msg, wait_for_keypress=False)
+
+        # Download the EDF data file from the Host PC to a local data folder
+        # parameters: source_file_on_the_host, destination_file_on_local_drive
+        local_edf = os.path.join(session_folder, session_identifier + '.EDF')
+        try:
+            el_tracker.receiveDataFile(edf_file, local_edf)
+        except RuntimeError as error:
+            print('ERROR:', error)
+
+        # Close the link to the tracker.
+        el_tracker.close()
+
+    # close the PsychoPy window
+    win.close()
+
+    # quit PsychoPy
+    core.quit()
+    sys.exit()
+
+
+def abort_trial():
+    """Ends recording """
+    el_tracker = pylink.getEYELINK()
+
+    # Stop recording
+    if el_tracker.isRecording():
+        # add 100 ms to catch final trial events
+        pylink.pumpDelay(100)
+        el_tracker.stopRecording()
+
+    # clear the screen
+    clear_screen(win)
+    # Send a message to clear the Data Viewer screen
+    bgcolor_RGB = (116, 116, 116)
+    el_tracker.sendMessage('!V CLEAR %d %d %d' % bgcolor_RGB)
+
+    # send a message to mark trial end
+    el_tracker.sendMessage('TRIAL_RESULT %d' % pylink.TRIAL_ERROR)
+
+    return pylink.TRIAL_ERROR
+
+""" 
+    PLACE 
+        AFTER 'Import packages'
+        BEFORE DIRECTORY AND WINDOW SETUP
+"""
+
+##### From MRIdemo_Builder - END of elConnect 'Before Experiment' Code #####
+
 ##### Original CGE #####
 
 # Ensure that relative paths start from the same directory as this script
@@ -97,8 +407,79 @@ eyetracker = None
 # create a default keyboard (e.g. to check for escape)
 defaultKeyboard = keyboard.Keyboard(backend='iohub')
 
+##### Original CGE #####
 
 ### COMPONENTS: Setting up the components (shapes, texts, colors, etc.) to use to run the routines (Instructions, Choicesets, Outcome, ITI, etc.)
+
+##### From MRIdemo_Builder - START of 'eyelinkSetup' Routine components #####
+
+""" 
+    PLACE 
+        AFTER setting up window and keyboard
+        BEFORE START of elConnect 'Begin Experiment' Code
+"""
+
+# --- Initialize components for Routine "eyelinkSetup" ---
+elInstructions = visual.TextStim(win=win, name='elInstructions',
+    text='Press any key to start Camera Setup',
+    font='Open Sans',
+    pos=(0, 0), height=50.0, wrapWidth=None, ori=0.0, 
+    color='white', colorSpace='rgb', opacity=None, 
+    languageStyle='LTR',
+    depth=0.0);
+key_resp = keyboard.Keyboard()
+
+""" 
+    PLACE 
+        AFTER setting up window and keyboard
+        BEFORE START of elConnect 'Begin Experiment' Code
+""" # Included with the elConnect Code because they are all part of the same routine
+
+##### From MRIdemo_Builder - END of 'eyelinkSetup' Routine components #####
+
+##### From MRIDemo_Builder - START of elConnect 'Begin Experiment' Code #####
+
+""" 
+    PLACE 
+        AFTER 'Intialize components for Routine "eyelinkSetup"'
+        BEFORE 'Initialize components for Routine "instruct"'
+"""
+
+# Run 'Begin Experiment' code from elConnect
+# This Begin Experiment tab of the elConnect component gets graphic 
+# information from Psychopy, sets the screen_pixel_coords on the Host PC based
+# on these values, and logs the screen resolution for Data Viewer via 
+# a DISPLAY_COORDS message
+
+# get the native screen resolution used by PsychoPy
+scn_width, scn_height = win.size
+
+# resolution fix for Mac retina displays
+if 'Darwin' in platform.system():
+    if use_retina:
+        scn_width = int(scn_width/2.0)
+        scn_height = int(scn_height/2.0)
+
+# Pass the display pixel coordinates (left, top, right, bottom) to the tracker
+# see the EyeLink Installation Guide, "Customizing Screen Settings"
+el_coords = "screen_pixel_coords = 0 0 %d %d" % (scn_width - 1, scn_height - 1)
+el_tracker.sendCommand(el_coords)
+
+# Write a DISPLAY_COORDS message to the EDF file
+# Data Viewer needs this piece of info for proper visualization, see Data
+# Viewer User Manual, "Protocol for EyeLink Data to Viewer Integration"
+dv_coords = "DISPLAY_COORDS  0 0 %d %d" % (scn_width - 1, scn_height - 1)
+el_tracker.sendMessage(dv_coords)
+
+""" 
+    PLACE 
+        AFTER 'Intialize components for Routine "eyelinkSetup"'
+        BEFORE 'Initialize components for Routine "instruct"'
+"""
+
+##### From MRIDemo_Builder - END of elConnect 'Begin Experiment' Code #####
+
+### Orgiginal CGE
 
 ### Practice Choiceset
 
@@ -618,14 +999,202 @@ ThankYou = visual.TextStim(win=win, name='ThankYou',
     languageStyle='LTR',
     depth=0.0);
 
+### Original CGE ###
 ### Setting up the clock to be used for running the routines
 
 # Create some handy timers ---- Is this the timestamps that I need?
 globalClock = core.Clock()  # to track the time since experiment started
 routineTimer = core.Clock()  # to track time remaining of each (possibly non-slip) routine
 
+### Original CGE ###
 
 ### Script for running the routines (Instructions, Choicesets, Outcome, etc.)
+
+##### From MRIdemo_Builder - START of 'eyelinkSetup' Routine #####
+
+"""
+    PLACE
+        AFTER 'Create some handy timers'
+        BEFORE elConnect 'End Routine' Code
+""" 
+
+# --- Prepare to start Routine "eyelinkSetup" ---
+continueRoutine = True
+routineForceEnded = False
+# update component parameters for each repeat
+key_resp.keys = []
+key_resp.rt = []
+_key_resp_allKeys = []
+# keep track of which components have finished
+eyelinkSetupComponents = [elInstructions, key_resp]
+for thisComponent in eyelinkSetupComponents:
+    thisComponent.tStart = None
+    thisComponent.tStop = None
+    thisComponent.tStartRefresh = None
+    thisComponent.tStopRefresh = None
+    if hasattr(thisComponent, 'status'):
+        thisComponent.status = NOT_STARTED
+# reset timers
+t = 0
+_timeToFirstFrame = win.getFutureFlipTime(clock="now")
+frameN = -1
+
+# --- Run Routine "eyelinkSetup" ---
+while continueRoutine:
+    # get current time
+    t = routineTimer.getTime()
+    tThisFlip = win.getFutureFlipTime(clock=routineTimer)
+    tThisFlipGlobal = win.getFutureFlipTime(clock=None)
+    frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
+    # update/draw components on each frame
+    
+    # *elInstructions* updates
+    if elInstructions.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+        # keep track of start time/frame for later
+        elInstructions.frameNStart = frameN  # exact frame index
+        elInstructions.tStart = t  # local t and not account for scr refresh
+        elInstructions.tStartRefresh = tThisFlipGlobal  # on global time
+        win.timeOnFlip(elInstructions, 'tStartRefresh')  # time at next scr refresh
+        # add timestamp to datafile
+        thisExp.timestampOnFlip(win, 'elInstructions.started')
+        elInstructions.setAutoDraw(True)
+    
+    # *key_resp* updates
+    waitOnFlip = False
+    if key_resp.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+        # keep track of start time/frame for later
+        key_resp.frameNStart = frameN  # exact frame index
+        key_resp.tStart = t  # local t and not account for scr refresh
+        key_resp.tStartRefresh = tThisFlipGlobal  # on global time
+        win.timeOnFlip(key_resp, 'tStartRefresh')  # time at next scr refresh
+        # add timestamp to datafile
+        thisExp.timestampOnFlip(win, 'key_resp.started')
+        key_resp.status = STARTED
+        # keyboard checking is just starting
+        waitOnFlip = True
+        win.callOnFlip(key_resp.clock.reset)  # t=0 on next screen flip
+        win.callOnFlip(key_resp.clearEvents, eventType='keyboard')  # clear events on next screen flip
+    if key_resp.status == STARTED and not waitOnFlip:
+        theseKeys = key_resp.getKeys(keyList=None, waitRelease=False)
+        _key_resp_allKeys.extend(theseKeys)
+        if len(_key_resp_allKeys):
+            key_resp.keys = _key_resp_allKeys[-1].name  # just the last key pressed
+            key_resp.rt = _key_resp_allKeys[-1].rt
+            # a response ends the routine
+            continueRoutine = False
+    
+    # check if all components have finished
+    if not continueRoutine:  # a component has requested a forced-end of Routine
+        routineForceEnded = True
+        break
+    continueRoutine = False  # will revert to True if at least one component still running
+    for thisComponent in eyelinkSetupComponents:
+        if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
+            continueRoutine = True
+            break  # at least one component has not yet finished
+    
+    # refresh the screen
+    if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
+        win.flip()
+
+# --- Ending Routine "eyelinkSetup" ---
+for thisComponent in eyelinkSetupComponents:
+    if hasattr(thisComponent, "setAutoDraw"):
+        thisComponent.setAutoDraw(False)
+# check responses
+if key_resp.keys in ['', [], None]:  # No response was made
+    key_resp.keys = None
+thisExp.addData('key_resp.keys',key_resp.keys)
+if key_resp.keys != None:  # we had a response
+    thisExp.addData('key_resp.rt', key_resp.rt)
+thisExp.nextEntry()
+
+"""
+    PLACE
+        AFTER 'Create some handy timers'
+        BEFORE elConnect 'End Routine' Code
+""" # Included with the elConnect Code because they are all part of the same routine
+
+##### From MRIdemo_Builder - START of 'eyelinkSetup' Routine #####
+
+##### From MRIdemo_Builder - START of elConnect 'End Routine' Code #####
+
+"""
+    PLACE
+        AFTER 'Ending Routine "eyelinkSetup"' (Included as part of "eyelinkSetup" routine)
+        BEFORE 'Prepare to start Routine "instruct"' OR my version of instruction routine
+"""
+
+# Run 'End Routine' code from elConnect
+# This End Routine tab of the elConnect component configures some
+# graphics options for calibration, and then performs a camera setup
+# so that you can set up the eye tracker and calibrate/validate the participant
+
+# Configure a graphics environment (genv) for tracker calibration
+genv = EyeLinkCoreGraphicsPsychoPy(el_tracker, win)
+print(genv)  # print out the version number of the CoreGraphics library
+
+# Set background and foreground colors for the calibration target
+# in PsychoPy, (-1, -1, -1)=black, (1, 1, 1)=white, (0, 0, 0)=mid-gray
+foreground_color = (-1, -1, -1)
+background_color = tuple(win.color)
+genv.setCalibrationColors(foreground_color, background_color)
+
+# Set up the calibration target
+#
+# The target could be a "circle" (default), a "picture", a "movie" clip,
+# or a rotating "spiral". To configure the type of calibration target, set
+# genv.setTargetType to "circle", "picture", "movie", or "spiral", e.g.,
+# genv.setTargetType('picture')
+#
+# Use genv.setMovieTarget() to set a "movie" target
+# genv.setMovieTarget(os.path.join('videos', 'calibVid.mov'))
+
+# Use a picture as the calibration target
+genv.setTargetType('picture')
+genv.setPictureTarget(os.path.join('images', 'fixTarget.bmp'))
+
+# Configure the size of the calibration target (in pixels)
+# this option applies only to "circle" and "spiral" targets
+# genv.setTargetSize(24)
+
+# Beeps to play during calibration, validation and drift correction
+# parameters: target, good, error
+#     target -- sound to play when target moves
+#     good -- sound to play on successful operation
+#     error -- sound to play on failure or interruption
+# Each parameter could be ''--default sound, 'off'--no sound, or a wav file
+genv.setCalibrationSounds('', '', '')
+
+# resolution fix for macOS retina display issues
+if use_retina:
+    genv.fixMacRetinaDisplay()
+
+#clear the screen before we begin Camera Setup mode
+clear_screen(win)
+
+# Request Pylink to use the PsychoPy window we opened above for calibration
+pylink.openGraphicsEx(genv)
+
+# skip this step if running the script in Dummy Mode
+if not dummy_mode:
+    try:
+        el_tracker.doTrackerSetup()
+    except RuntimeError as err:
+        print('ERROR:', err)
+        el_tracker.exitCalibration()
+# the Routine "eyelinkSetup" was not non-slip safe, so reset the non-slip timer
+routineTimer.reset() ### Not part of the code but PsychoPy Coder AutoAdds for end of a routine
+
+"""
+    PLACE
+        AFTER 'Ending Routine "eyelinkSetup"' (Included as part of "eyelinkSetup" routine)
+        BEFORE 'Prepare to start Routine "instruct"' OR my version of instruction routine
+"""
+
+##### From MRIdemo_Builder - END of elConnect 'End Routine' Code #####
+
+### Original CGE ###
 
 # --- Prepare to start Routine "instructions" ---
 continueRoutine = True
@@ -3587,6 +4156,33 @@ routineTimer.reset()
 # # the Routine "END" was not non-slip safe, so reset the non-slip timer
 # routineTimer.reset()
 
+### Original CGE ###
+
+##### From MRIdemo_Builder - START of elConnect 'End Experiment' Code #####
+
+"""
+    PLACE
+        AFTER last run routine script
+        BEFORE 'End experiment'
+"""
+
+# Run 'End Experiment' code from elConnect
+# This End Experiment tab of the elConnect component calls the 
+# terminate_task helper function to get the EDF file and close the connection
+# to the Host PC
+
+# Disconnect, download the EDF file, then terminate the task
+terminate_task()
+
+"""
+    PLACE
+        AFTER last run routine script
+        BEFORE 'End experiment'
+"""
+
+##### From MRIdemo_Builder - END of elConnect 'End Experiment' Code #####
+
+### Original CGE ###
 
 ### End of Experiment
 
