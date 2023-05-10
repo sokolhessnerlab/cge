@@ -34,14 +34,12 @@ from psychopy.hardware import keyboard
 
 
 
-##### From MRIdemo_Builder - START of elConnect 'Before Experiment' Code #####
-
+##### eyelinkSetuo - From MRIdemo_Builder - START of elConnect 'Before Experiment' Code #####
 """ 
     PLACE 
         AFTER 'Import packages'
         BEFORE DIRECTORY AND WINDOW SETUP
 """
-
 # Run 'Before Experiment' code from elConnect
 # DESCRIPTION:
 # This is a basic example illustrating how to do continuous eye tracker 
@@ -335,14 +333,12 @@ def abort_trial():
     el_tracker.sendMessage('TRIAL_RESULT %d' % pylink.TRIAL_ERROR)
 
     return pylink.TRIAL_ERROR
-
 """ 
     PLACE 
         AFTER 'Import packages'
         BEFORE DIRECTORY AND WINDOW SETUP
 """
-
-##### From MRIdemo_Builder - END of elConnect 'Before Experiment' Code #####
+##### eyelinkSetuo - From MRIdemo_Builder - END of elConnect 'Before Experiment' Code #####
 
 ##### Original CGE #####
 
@@ -411,14 +407,12 @@ defaultKeyboard = keyboard.Keyboard(backend='iohub')
 
 ### COMPONENTS: Setting up the components (shapes, texts, colors, etc.) to use to run the routines (Instructions, Choicesets, Outcome, ITI, etc.)
 
-##### From MRIdemo_Builder - START of 'eyelinkSetup' Routine components #####
-
+##### eyelinkSetuo - From MRIdemo_Builder - START of 'eyelinkSetup' Routine components #####
 """ 
     PLACE 
         AFTER setting up window and keyboard
         BEFORE START of elConnect 'Begin Experiment' Code
 """
-
 # --- Initialize components for Routine "eyelinkSetup" ---
 instructionsTextHeight = 0.04;
 letterTextHeight = 0.1;
@@ -431,23 +425,19 @@ elInstructions = visual.TextStim(win=win, name='elInstructions',
     languageStyle='LTR',
     depth=0.0);
 key_resp = keyboard.Keyboard()
-
 """ 
     PLACE 
         AFTER setting up window and keyboard
         BEFORE START of elConnect 'Begin Experiment' Code
 """ # Included with the elConnect Code because they are all part of the same routine
+##### eyelinkSetuo -  From MRIdemo_Builder - END of 'eyelinkSetup' Routine components #####
 
-##### From MRIdemo_Builder - END of 'eyelinkSetup' Routine components #####
-
-##### From MRIDemo_Builder - START of elConnect 'Begin Experiment' Code #####
-
+##### eyelinkSetuo - From MRIDemo_Builder - START of elConnect 'Begin Experiment' Code #####
 """ 
     PLACE 
         AFTER 'Intialize components for Routine "eyelinkSetup"'
         BEFORE 'Initialize components for Routine "instruct"'
 """
-
 # Run 'Begin Experiment' code from elConnect
 # This Begin Experiment tab of the elConnect component gets graphic 
 # information from Psychopy, sets the screen_pixel_coords on the Host PC based
@@ -473,14 +463,12 @@ el_tracker.sendCommand(el_coords)
 # Viewer User Manual, "Protocol for EyeLink Data to Viewer Integration"
 dv_coords = "DISPLAY_COORDS  0 0 %d %d" % (scn_width - 1, scn_height - 1)
 el_tracker.sendMessage(dv_coords)
-
 """ 
     PLACE 
         AFTER 'Intialize components for Routine "eyelinkSetup"'
         BEFORE 'Initialize components for Routine "instruct"'
 """
-
-##### From MRIDemo_Builder - END of elConnect 'Begin Experiment' Code #####
+##### eyelinkSetuo - From MRIDemo_Builder - END of elConnect 'Begin Experiment' Code #####
 
 ### Orgiginal CGE
 
@@ -503,13 +491,11 @@ inst1 = keyboard.Keyboard()
 ### Orginal CGE
 
 ### eyelinkStartRecording - From MRIdemo_Builder - START of elStartRecord 'Begin Experiment' Code ###
-
 """
     PLACE
         AFTER instructions
         BEFORE next Routine run
 """
-
 # --- Initialize components for Routine "eyelinkStartRecording" ---
 # Run 'Begin Experiment' code from elStartRecord
 # This Begin Experiment tab of the elStartRecord component initializes some 
@@ -518,13 +504,11 @@ inst1 = keyboard.Keyboard()
 
 trial_index = 1
 block_index = 0
-
 """
     PLACE
         AFTER instructions
         BEFORE next Routine run
 """
-
 ### eyelinkStartRecording - From MRIdemo_Builder - END of elStartRecord 'Begin Experiment' Code ###
 
 ### Original CGE
@@ -1042,14 +1026,12 @@ routineTimer = core.Clock()  # to track time remaining of each (possibly non-sli
 
 ### Script for running the routines (Instructions, Choicesets, Outcome, etc.)
 
-##### From MRIdemo_Builder - START of 'eyelinkSetup' Routine #####
-
+##### eyelinkSetuo - From MRIdemo_Builder - START of 'eyelinkSetup' Routine #####
 """
     PLACE
         AFTER 'Create some handy timers'
         BEFORE elConnect 'End Routine' Code
 """ 
-
 # --- Prepare to start Routine "eyelinkSetup" ---
 continueRoutine = True
 routineForceEnded = False
@@ -1140,23 +1122,19 @@ thisExp.addData('key_resp.keys',key_resp.keys)
 if key_resp.keys != None:  # we had a response
     thisExp.addData('key_resp.rt', key_resp.rt)
 thisExp.nextEntry()
-
 """
     PLACE
         AFTER 'Create some handy timers'
         BEFORE elConnect 'End Routine' Code
 """ # Included with the elConnect Code because they are all part of the same routine
-
 ##### From MRIdemo_Builder - START of 'eyelinkSetup' Routine #####
 
 ##### From MRIdemo_Builder - START of elConnect 'End Routine' Code #####
-
 """
     PLACE
         AFTER 'Ending Routine "eyelinkSetup"' (Included as part of "eyelinkSetup" routine)
         BEFORE 'Prepare to start Routine "instruct"' OR my version of instruction routine
 """
-
 # Run 'End Routine' code from elConnect
 # This End Routine tab of the elConnect component configures some
 # graphics options for calibration, and then performs a camera setup
@@ -1217,13 +1195,11 @@ if not dummy_mode:
         el_tracker.exitCalibration()
 # the Routine "eyelinkSetup" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset() ### Not part of the code but PsychoPy Coder AutoAdds for end of a routine
-
 """
     PLACE
         AFTER 'Ending Routine "eyelinkSetup"' (Included as part of "eyelinkSetup" routine)
         BEFORE 'Prepare to start Routine "instruct"' OR my version of instruction routine
 """
-
 ##### From MRIdemo_Builder - END of elConnect 'End Routine' Code #####
 
 ### Original CGE ###
@@ -1424,10 +1400,9 @@ thisExp.nextEntry()
 # the Routine "pracStart" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 
-### Original CGE ###
+### Original CGE 
 
 ### eyelinkStartRecording - From MRIdemo_Builder - START of 'eyelinkStartRecording' Routine ###
-
 """
     PLACE
         AFTER (in this case) after 'set up handler to look after randomisation of conditions etc' for block OR after instructions Routine
@@ -1440,13 +1415,11 @@ routineForceEnded = False
 # update component parameters for each repeat
 
 ### eyelinkStartRecording - From MRIdemo_Builder - START of elStartRecord 'Begin Routine' Code ###
-    
 """
     PLACE
         AFTER 'Prepare to start Routine "eyelinkStartRecording"'
         BEFORE 'keep track of which components have finished'
 """
-
 # Run 'Begin Routine' code from elStartRecord
 # This Begin Routine tab of the elStartRecord component updates some 
 # variables that are used to keep track of the current trial and block 
@@ -1528,13 +1501,11 @@ el_tracker.sendMessage('pre 100 pause')
 
 # Allocate some time for the tracker to cache some samples
 pylink.pumpDelay(100)
-
 """
     PLACE
         AFTER 'Prepare to start Routine "eyelinkStartRecording"'
         BEFORE 'keep track of which components have finished'
 """ # Still withing the 'Prepare to start Routine "eyelinkStartRecording"'
-
 ### eyelinkStartRecording - From MRIdemo_Builder - END of elStartRecord 'Begin Routine' Code ###
 
 # keep track of which components have finished
@@ -1580,13 +1551,11 @@ for thisComponent in eyelinkStartRecordingComponents:
         thisComponent.setAutoDraw(False)
 # the Routine "eyelinkStartRecording" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
-
 """
     PLACE
         AFTER (in this case) after 'set up handler to look after randomisation of conditions etc' for block OR after instructions Routine
         BEFORE elStartRecord 'Begin Routine'
 """ # elStartRecord is within
-
 ### eyelinkStartRecording - From MRIdemo_Builder - END of 'eyelinkStartRecording' Routine ###
 
 ### Original CGE ###
@@ -4291,13 +4260,11 @@ routineTimer.reset()
 ### Original CGE ###
 
 ### eyelinkStopRecording - From MRIdemo_Builder - START of 'eyelinkStopRecording' Routine ###
-
 """ 
     PLACE
         AFTER (in this case) the trial routine code
         BEFORE elStopRecord 'End Routine'
 """ # elStopRecord code is within
-
 # --- Prepare to start Routine "eyelinkStopRecording" ---
 continueRoutine = True
 routineForceEnded = False
@@ -4345,13 +4312,11 @@ for thisComponent in eyelinkStopRecordingComponents:
         thisComponent.setAutoDraw(False)
         
 ### eyelinkStopRecording - From MRIdemo_Builder - START of elStopRecord 'End Routine' Code ###
-
 """
     PLACE
         AFTER 'Ending Routine "eyelinkStopRecording"'
         BEFORE next Routine
 """
-
 # Run 'End Routine' code from elStopRecord
 # This End Routine tab of the elStopRecord component stops eye tracker recording
 
@@ -4361,13 +4326,11 @@ el_tracker.stopRecording()
 # the Routine "eyelinkStopRecording" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset() ### Not part of the eyetrack code but autoadd to end of routine
 # completed 2.0 repeats of 'block'
-
 """
     PLACE
         AFTER 'Ending Routine "eyelinkStopRecording"'
         BEFORE next Routine
 """
-
 ### eyelinkStopRecording - From MRIdemo_Builder - END of elStopRecord 'End Routine' Code ###
 """ 
     PLACE
@@ -4447,13 +4410,11 @@ routineTimer.reset() ### Not part of the eyetrack code but autoadd to end of rou
 ### Original CGE ###
 
 ##### From MRIdemo_Builder - START of elConnect 'End Experiment' Code #####
-
 """
     PLACE
         AFTER last run routine script
         BEFORE 'End experiment'
 """
-
 # Run 'End Experiment' code from elConnect
 # This End Experiment tab of the elConnect component calls the 
 # terminate_task helper function to get the EDF file and close the connection
@@ -4461,13 +4422,11 @@ routineTimer.reset() ### Not part of the eyetrack code but autoadd to end of rou
 
 # Disconnect, download the EDF file, then terminate the task
 terminate_task()
-
 """
     PLACE
         AFTER last run routine script
-        BEFORE 'End experiment'
+        BEFORE 'End of experiment'
 """
-
 ##### From MRIdemo_Builder - END of elConnect 'End Experiment' Code #####
 
 ### Original CGE ###
