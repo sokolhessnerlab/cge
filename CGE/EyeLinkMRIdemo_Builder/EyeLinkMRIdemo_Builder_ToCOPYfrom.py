@@ -837,26 +837,26 @@ for thisBlock in block:
         for paramName in thisBlock:
             exec('{} = thisBlock[paramName]'.format(paramName))
     
-### eyelinkStartRecording - From MRIdemo_Builder - START of 'eyelinkStartRecording' Routine ###
+    ### eyelinkStartRecording - From MRIdemo_Builder - START of 'eyelinkStartRecording' Routine ###
 
-"""
-    PLACE
-        AFTER (in this case) after 'set up handler to look after randomisation of conditions etc' for block OR after instructions Routine
-        BEFORE elStartRecord 'Begin Routine'
-""" # elStartRecord is within
+    """
+        PLACE
+            AFTER (in this case) after 'set up handler to look after randomisation of conditions etc' for block OR after instructions Routine
+            BEFORE elStartRecord 'Begin Routine'
+    """ # elStartRecord is within
     
     # --- Prepare to start Routine "eyelinkStartRecording" ---
     continueRoutine = True
     routineForceEnded = False
     # update component parameters for each repeat
     
-### eyelinkStartRecording - From MRIdemo_Builder - START of elStartRecord 'Begin Routine' Code ###
-    
-"""
-    PLACE
-        AFTER 'Prepare to start Routine "eyelinkStartRecording"'
-        BEFORE 'keep track of which components have finished'
-"""
+    ### eyelinkStartRecording - From MRIdemo_Builder - START of elStartRecord 'Begin Routine' Code ###
+        
+    """
+        PLACE
+            AFTER 'Prepare to start Routine "eyelinkStartRecording"'
+            BEFORE 'keep track of which components have finished'
+    """
 
     # Run 'Begin Routine' code from elStartRecord
     # This Begin Routine tab of the elStartRecord component updates some 
@@ -940,13 +940,13 @@ for thisBlock in block:
     # Allocate some time for the tracker to cache some samples
     pylink.pumpDelay(100)
     
-"""
-    PLACE
-        AFTER 'Prepare to start Routine "eyelinkStartRecording"'
-        BEFORE 'keep track of which components have finished'
-""" # Still withing the 'Prepare to start Routine "eyelinkStartRecording"'
+    """
+        PLACE
+            AFTER 'Prepare to start Routine "eyelinkStartRecording"'
+            BEFORE 'keep track of which components have finished'
+    """ # Still withing the 'Prepare to start Routine "eyelinkStartRecording"'
 
-### eyelinkStartRecording - From MRIdemo_Builder - END of elStartRecord 'Begin Routine' Code ###
+    ### eyelinkStartRecording - From MRIdemo_Builder - END of elStartRecord 'Begin Routine' Code ###
     
     # keep track of which components have finished
     eyelinkStartRecordingComponents = []
@@ -992,13 +992,13 @@ for thisBlock in block:
     # the Routine "eyelinkStartRecording" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
     
-"""
-    PLACE
-        AFTER (in this case) after 'set up handler to look after randomisation of conditions etc' for block OR after instructions Routine
-        BEFORE elStartRecord 'Begin Routine'
-""" # elStartRecord is within
+    """
+        PLACE
+            AFTER (in this case) after 'set up handler to look after randomisation of conditions etc' for block OR after instructions Routine
+            BEFORE elStartRecord 'Begin Routine'
+    """ # elStartRecord is within
     
-### eyelinkStartRecording - From MRIdemo_Builder - END of 'eyelinkStartRecording' Routine ###
+    ### eyelinkStartRecording - From MRIdemo_Builder - END of 'eyelinkStartRecording' Routine ###
     
     # --- Prepare to start Routine "waitForScannerPulse" ---
     continueRoutine = True
@@ -1448,13 +1448,13 @@ for thisBlock in block:
         stimOut=params,
         dataOut=['n','all_mean','all_std', 'all_raw'])
     
-### eyelinkStopRecording - From MRIdemo_Builder - START of 'eyelinkStopRecording' Routine ###
+    ### eyelinkStopRecording - From MRIdemo_Builder - START of 'eyelinkStopRecording' Routine ###
 
-""" 
-    PLACE
-        AFTER (in this case) the trial routine code
-        BEFORE elStopRecord 'End Routine'
-""" # elStopRecord code is within
+    """ 
+        PLACE
+            AFTER (in this case) the trial routine code
+            BEFORE elStopRecord 'End Routine'
+    """ # elStopRecord code is within
 
     # --- Prepare to start Routine "eyelinkStopRecording" ---
     continueRoutine = True
@@ -1502,13 +1502,13 @@ for thisBlock in block:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
             
-### eyelinkStopRecording - From MRIdemo_Builder - START of elStopRecord 'End Routine' Code ###
+    ### eyelinkStopRecording - From MRIdemo_Builder - START of elStopRecord 'End Routine' Code ###
 
-"""
-    PLACE
-        AFTER 'Ending Routine "eyelinkStopRecording"'
-        BEFORE next Routine
-"""
+    """
+        PLACE
+            AFTER 'Ending Routine "eyelinkStopRecording"'
+            BEFORE next Routine
+    """
 
     # Run 'End Routine' code from elStopRecord
     # This End Routine tab of the elStopRecord component stops eye tracker recording
@@ -1520,19 +1520,19 @@ for thisBlock in block:
     routineTimer.reset() ### Not part of the eyetrack code but autoadd to end of routine
 # completed 2.0 repeats of 'block'
 
-"""
-    PLACE
-        AFTER 'Ending Routine "eyelinkStopRecording"'
-        BEFORE next Routine
-"""
+    """
+        PLACE
+            AFTER 'Ending Routine "eyelinkStopRecording"'
+            BEFORE next Routine
+    """
 
-### eyelinkStopRecording - From MRIdemo_Builder - END of elStopRecord 'End Routine' Code ###
-""" 
-    PLACE
-        AFTER (in this case) the trial routine code
-        BEFORE elStopRecord 'End Routine'
-""" # elStopRecord code is within
-### eyelinkStopRecording - From MRIdemo_Builder - START of 'eyelinkStopRecording' Routine ###
+    ### eyelinkStopRecording - From MRIdemo_Builder - END of elStopRecord 'End Routine' Code ###
+    """ 
+        PLACE
+            AFTER (in this case) the trial routine code
+            BEFORE elStopRecord 'End Routine'
+    """ # elStopRecord code is within
+    ### eyelinkStopRecording - From MRIdemo_Builder - START of 'eyelinkStopRecording' Routine ###
 
 # --- Prepare to start Routine "thanks" ---
 continueRoutine = True
