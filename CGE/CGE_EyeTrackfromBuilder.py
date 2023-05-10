@@ -497,6 +497,35 @@ Instructions = visual.TextStim(win=win, name='Instructions',
     depth=-1.0);
 inst1 = keyboard.Keyboard()
 
+### Orginal CGE
+
+### eyelinkStartRecording - From MRIdemo_Builder - START of elStartRecord 'Begin Experiment' Code ###
+
+"""
+    PLACE
+        AFTER instructions
+        BEFORE next Routine run
+"""
+
+# --- Initialize components for Routine "eyelinkStartRecording" ---
+# Run 'Begin Experiment' code from elStartRecord
+# This Begin Experiment tab of the elStartRecord component initializes some 
+# variables that are used to keep track of the current trial and block 
+# numbers
+
+trial_index = 1
+block_index = 0
+
+"""
+    PLACE
+        AFTER instructions
+        BEFORE next Routine run
+"""
+
+### eyelinkStartRecording - From MRIdemo_Builder - END of elStartRecord 'Begin Experiment' Code ###
+
+### Original CGE
+
 # --- Initialize components for Routine "pracStart" --- Practice Choiceset Start Part 2
 startPract = visual.TextStim(win=win, name='startPract',
     text='There will now be 5 practice trials.\n\nWhen you are ready to begin the practice, press "V" or "N".',
@@ -1391,6 +1420,173 @@ if startPracResp.keys != None:  # we had a response
 thisExp.nextEntry()
 # the Routine "pracStart" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
+
+### Original CGE ###
+
+### eyelinkStartRecording - From MRIdemo_Builder - START of 'eyelinkStartRecording' Routine ###
+
+"""
+    PLACE
+        AFTER (in this case) after 'set up handler to look after randomisation of conditions etc' for block OR after instructions Routine
+        BEFORE elStartRecord 'Begin Routine'
+""" # elStartRecord is within
+
+# --- Prepare to start Routine "eyelinkStartRecording" ---
+continueRoutine = True
+routineForceEnded = False
+# update component parameters for each repeat
+
+### eyelinkStartRecording - From MRIdemo_Builder - START of elStartRecord 'Begin Routine' Code ###
+    
+"""
+    PLACE
+        AFTER 'Prepare to start Routine "eyelinkStartRecording"'
+        BEFORE 'keep track of which components have finished'
+"""
+
+# Run 'Begin Routine' code from elStartRecord
+# This Begin Routine tab of the elStartRecord component updates some 
+# variables that are used to keep track of the current trial and block 
+# numbers, draws some feedback graphics (a simple shape) on the 
+# Host PC, sends a trial start messages to the EDF, performs a 
+# drift check/drift correct, and starts eye tracker recording
+
+# these keep track of the current trial number within the block/run and
+# the block/run number
+trial_in_block = 1
+block_index = block_index + 1
+
+# get a reference to the currently active EyeLink connection
+el_tracker = pylink.getEYELINK()
+
+# put the tracker in the offline mode first
+el_tracker.setOfflineMode()
+
+# clear the host screen before we draw the backdrop
+el_tracker.sendCommand('clear_screen 0')
+
+# OPTIONAL: draw landmarks and texts on the Host screen
+# In addition to backdrop image, You may draw simples on the Host PC to use
+# as landmarks. For illustration purpose, here we draw some texts and a box
+# For a list of supported draw commands, see the "COMMANDS.INI" file on the
+# Host PC (under /elcl/exe)
+left = int(scn_width/2.0) - 60
+top = int(scn_height/2.0) - 60
+right = int(scn_width/2.0) + 60
+bottom = int(scn_height/2.0) + 60
+draw_cmd = 'draw_filled_box %d %d %d %d 1' % (left, top, right, bottom)
+el_tracker.sendCommand(draw_cmd)
+
+# send a "TRIALID" message to mark the start of a trial, see Data
+# Viewer User Manual, "Protocol for EyeLink Data to Viewer Integration"
+el_tracker.sendMessage('TRIALID %d' % trial_index)
+
+# record_status_message : show some info on the Host PC
+# here we show how many trial has been tested
+status_msg = 'Block number %d' % block_index
+el_tracker.sendCommand("record_status_message '%s'" % status_msg)
+
+# drift check
+# we recommend drift-check at the beginning of each trial
+# the doDriftCorrect() function requires target position in integers
+# the last two arguments:
+# draw_target (1-default, 0-draw the target then call doDriftCorrect)
+# allow_setup (1-press ESCAPE to recalibrate, 0-not allowed)
+#
+# Skip drift-check if running the script in Dummy Mode
+while not dummy_mode:
+    # terminate the task if no longer connected to the tracker or
+    # user pressed Ctrl-C to terminate the task
+    if (not el_tracker.isConnected()) or el_tracker.breakPressed():
+        terminate_task()
+    # drift-check and re-do camera setup if ESCAPE is pressed
+    try:
+        error = el_tracker.doDriftCorrect(int(scn_width/2.0),
+                                            int(scn_height/2.0), 1, 1)
+        # break following a success drift-check
+        if error is not pylink.ESC_KEY:
+            break
+    except:
+        pass
+
+# put tracker in idle/offline mode before recording
+el_tracker.setOfflineMode()
+
+# Start recording
+# arguments: sample_to_file, events_to_file, sample_over_link,
+# event_over_link (1-yes, 0-no)
+try:
+    el_tracker.startRecording(1, 1, 1, 1)
+except RuntimeError as error:
+    print("ERROR:", error)
+    abort_trial()
+
+el_tracker.sendMessage('pre 100 pause')
+
+# Allocate some time for the tracker to cache some samples
+pylink.pumpDelay(100)
+
+"""
+    PLACE
+        AFTER 'Prepare to start Routine "eyelinkStartRecording"'
+        BEFORE 'keep track of which components have finished'
+""" # Still withing the 'Prepare to start Routine "eyelinkStartRecording"'
+
+### eyelinkStartRecording - From MRIdemo_Builder - END of elStartRecord 'Begin Routine' Code ###
+
+# keep track of which components have finished
+eyelinkStartRecordingComponents = []
+for thisComponent in eyelinkStartRecordingComponents:
+    thisComponent.tStart = None
+    thisComponent.tStop = None
+    thisComponent.tStartRefresh = None
+    thisComponent.tStopRefresh = None
+    if hasattr(thisComponent, 'status'):
+        thisComponent.status = NOT_STARTED
+# reset timers
+t = 0
+_timeToFirstFrame = win.getFutureFlipTime(clock="now")
+frameN = -1
+
+# --- Run Routine "eyelinkStartRecording" ---
+while continueRoutine:
+    # get current time
+    t = routineTimer.getTime()
+    tThisFlip = win.getFutureFlipTime(clock=routineTimer)
+    tThisFlipGlobal = win.getFutureFlipTime(clock=None)
+    frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
+    # update/draw components on each frame
+    
+    # check if all components have finished
+    if not continueRoutine:  # a component has requested a forced-end of Routine
+        routineForceEnded = True
+        break
+    continueRoutine = False  # will revert to True if at least one component still running
+    for thisComponent in eyelinkStartRecordingComponents:
+        if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
+            continueRoutine = True
+            break  # at least one component has not yet finished
+    
+    # refresh the screen
+    if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
+        win.flip()
+
+# --- Ending Routine "eyelinkStartRecording" ---
+for thisComponent in eyelinkStartRecordingComponents:
+    if hasattr(thisComponent, "setAutoDraw"):
+        thisComponent.setAutoDraw(False)
+# the Routine "eyelinkStartRecording" was not non-slip safe, so reset the non-slip timer
+routineTimer.reset()
+
+"""
+    PLACE
+        AFTER (in this case) after 'set up handler to look after randomisation of conditions etc' for block OR after instructions Routine
+        BEFORE elStartRecord 'Begin Routine'
+""" # elStartRecord is within
+
+### eyelinkStartRecording - From MRIdemo_Builder - END of 'eyelinkStartRecording' Routine ###
+
+### Original CGE ###
 
 ### Practice Choiceset Location Function
 
@@ -4089,6 +4285,95 @@ thisExp.nextEntry()
 # the Routine "rdmToSpanTransition" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 
+### Original CGE ###
+
+### eyelinkStopRecording - From MRIdemo_Builder - START of 'eyelinkStopRecording' Routine ###
+
+""" 
+    PLACE
+        AFTER (in this case) the trial routine code
+        BEFORE elStopRecord 'End Routine'
+""" # elStopRecord code is within
+
+# --- Prepare to start Routine "eyelinkStopRecording" ---
+continueRoutine = True
+routineForceEnded = False
+# update component parameters for each repeat
+# keep track of which components have finished
+eyelinkStopRecordingComponents = []
+for thisComponent in eyelinkStopRecordingComponents:
+    thisComponent.tStart = None
+    thisComponent.tStop = None
+    thisComponent.tStartRefresh = None
+    thisComponent.tStopRefresh = None
+    if hasattr(thisComponent, 'status'):
+        thisComponent.status = NOT_STARTED
+# reset timers
+t = 0
+_timeToFirstFrame = win.getFutureFlipTime(clock="now")
+frameN = -1
+
+# --- Run Routine "eyelinkStopRecording" ---
+while continueRoutine:
+    # get current time
+    t = routineTimer.getTime()
+    tThisFlip = win.getFutureFlipTime(clock=routineTimer)
+    tThisFlipGlobal = win.getFutureFlipTime(clock=None)
+    frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
+    # update/draw components on each frame
+    
+    # check if all components have finished
+    if not continueRoutine:  # a component has requested a forced-end of Routine
+        routineForceEnded = True
+        break
+    continueRoutine = False  # will revert to True if at least one component still running
+    for thisComponent in eyelinkStopRecordingComponents:
+        if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
+            continueRoutine = True
+            break  # at least one component has not yet finished
+    
+    # refresh the screen
+    if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
+        win.flip()
+
+# --- Ending Routine "eyelinkStopRecording" ---
+for thisComponent in eyelinkStopRecordingComponents:
+    if hasattr(thisComponent, "setAutoDraw"):
+        thisComponent.setAutoDraw(False)
+        
+### eyelinkStopRecording - From MRIdemo_Builder - START of elStopRecord 'End Routine' Code ###
+
+"""
+    PLACE
+        AFTER 'Ending Routine "eyelinkStopRecording"'
+        BEFORE next Routine
+"""
+
+# Run 'End Routine' code from elStopRecord
+# This End Routine tab of the elStopRecord component stops eye tracker recording
+
+# stop recording; add 100 msec to catch final events before stopping
+pylink.pumpDelay(100)
+el_tracker.stopRecording()
+# the Routine "eyelinkStopRecording" was not non-slip safe, so reset the non-slip timer
+routineTimer.reset() ### Not part of the eyetrack code but autoadd to end of routine
+# completed 2.0 repeats of 'block'
+
+"""
+    PLACE
+        AFTER 'Ending Routine "eyelinkStopRecording"'
+        BEFORE next Routine
+"""
+
+### eyelinkStopRecording - From MRIdemo_Builder - END of elStopRecord 'End Routine' Code ###
+""" 
+    PLACE
+        AFTER (in this case) the trial routine code
+        BEFORE elStopRecord 'End Routine'
+""" # elStopRecord code is within
+### eyelinkStopRecording - From MRIdemo_Builder - START of 'eyelinkStopRecording' Routine ###
+
+### Original CGE ###
 
 ### End Study Redirect to Qualtrics - Not Working Properly so Commented Out 
 
