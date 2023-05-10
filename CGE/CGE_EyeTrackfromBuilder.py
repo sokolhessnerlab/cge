@@ -420,10 +420,13 @@ defaultKeyboard = keyboard.Keyboard(backend='iohub')
 """
 
 # --- Initialize components for Routine "eyelinkSetup" ---
+instructionsTextHeight = 0.04;
+letterTextHeight = 0.1;
+wrap = .5
 elInstructions = visual.TextStim(win=win, name='elInstructions',
     text='Press any key to start Camera Setup',
     font='Open Sans',
-    pos=(0, 0), height=50.0, wrapWidth=None, ori=0.0, 
+    pos=(0, 0), height=instructionsTextHeight, wrapWidth=None, ori=0.0, 
     color='white', colorSpace='rgb', opacity=None, 
     languageStyle='LTR',
     depth=0.0);
@@ -485,9 +488,9 @@ el_tracker.sendMessage(dv_coords)
 
 # --- Initialize components for Routine "instructions" --- Practice Choiceset Start Part 1
 # Run 'Begin Experiment' code from code
-instructionsTextHeight = 0.04;
-letterTextHeight = 0.1;
-wrap = .5
+# instructionsTextHeight = 0.04;
+# letterTextHeight = 0.1;
+# wrap = .5
 Instructions = visual.TextStim(win=win, name='Instructions',
     text='As discussed in the instructions, you will choose between a gamble and a guaranteed alternative.\n\nOnce "V-Left" and "N-Right" appear on the screen, you may press "V" to select the option on the left and "N" to choose the option on the right.\n\nPress "enter" to move on to the next screen.',
     font='Arial',
