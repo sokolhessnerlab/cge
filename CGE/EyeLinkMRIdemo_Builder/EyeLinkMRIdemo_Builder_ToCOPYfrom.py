@@ -1448,6 +1448,14 @@ for thisBlock in block:
         stimOut=params,
         dataOut=['n','all_mean','all_std', 'all_raw'])
     
+### eyelinkStopRecording - From MRIdemo_Builder - START of 'eyelinkStopRecording' Routine ###
+
+""" 
+    PLACE
+        AFTER (in this case) the trial routine code
+        BEFORE elStopRecord 'End Routine'
+""" # elStopRecord code is within
+
     # --- Prepare to start Routine "eyelinkStopRecording" ---
     continueRoutine = True
     routineForceEnded = False
@@ -1519,7 +1527,12 @@ for thisBlock in block:
 """
 
 ### eyelinkStopRecording - From MRIdemo_Builder - END of elStopRecord 'End Routine' Code ###
-
+""" 
+    PLACE
+        AFTER (in this case) the trial routine code
+        BEFORE elStopRecord 'End Routine'
+""" # elStopRecord code is within
+### eyelinkStopRecording - From MRIdemo_Builder - START of 'eyelinkStopRecording' Routine ###
 
 # --- Prepare to start Routine "thanks" ---
 continueRoutine = True
