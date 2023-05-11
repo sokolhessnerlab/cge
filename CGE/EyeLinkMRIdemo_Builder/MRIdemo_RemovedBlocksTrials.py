@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.4),
-    on May 10, 2023, at 11:38
+    on May 10, 2023, at 18:39
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -447,7 +447,7 @@ fixation = visual.TextStim(win=win, name='fixation',
     pos=(0, 0), height=50.0, wrapWidth=None, ori=0.0, 
     color='white', colorSpace='rgb', opacity=None, 
     languageStyle='LTR',
-    depth=-1.0);
+    depth=0.0);
 image = visual.ImageStim(
     win=win,
     name='image', units='pix', 
@@ -455,7 +455,7 @@ image = visual.ImageStim(
     ori=0.0, pos=(0, 0), size=None,
     color=[1,1,1], colorSpace='rgb', opacity=None,
     flipHoriz=False, flipVert=False,
-    texRes=128.0, interpolate=True, depth=-2.0)
+    texRes=128.0, interpolate=True, depth=-1.0)
 resp = keyboard.Keyboard()
 
 # --- Initialize components for Routine "eyelinkStopRecording" ---
@@ -862,37 +862,6 @@ for thisTrial in trials:
     continueRoutine = True
     routineForceEnded = False
     # update component parameters for each repeat
-    # Run 'Begin Routine' code from elTrial
-    # This Begin Routine tab of the elTrial component resets some 
-    # variables that are used to keep track of whether certain trial events have
-    # happened and sends trial variable messages to the EDF to mark condition
-    # information
-    
-    # these variables keep track of whether the fixation presentation, image 
-    # presentation, and trial response have occured yet (0 = no, 1 = yes).
-    # They later help us to ensure that each event marking message only gets
-    # sent once, at the time of each event
-    sentResponseMessage = 0
-    sentFixationMessage = 0
-    sentImageMessage = 0
-    
-    # send a "TRIALID" message to mark the start of a trial, see Data
-    # Viewer User Manual, "Protocol for EyeLink Data to Viewer Integration"
-    # Skip this message for the first trial
-    if trial_in_block > 1:
-        el_tracker.sendMessage('TRIALID %d' % trial_index)
-        
-    # record trial variables to the EDF data file, for details, see Data
-    # Viewer User Manual, "Protocol for EyeLink Data to Viewer Integration"
-    el_tracker.sendMessage('!V TRIAL_VAR scanPulseTime %s' % scanPulseTime)
-    el_tracker.sendMessage('!V TRIAL_VAR condition %s' % condition)
-    el_tracker.sendMessage('!V TRIAL_VAR identifier %s' % identifier)
-    el_tracker.sendMessage('!V TRIAL_VAR image %s' % trialImage)
-    
-    # if sending many messages in a row, add a 1 msec pause between after 
-    # every 5 messages or so
-    time.sleep(0.001)
-    el_tracker.sendMessage('!V TRIAL_VAR corrAns %s' % corrAns)
     image.setImage(trialImage)
     resp.keys = []
     resp.rt = []
@@ -919,120 +888,6 @@ for thisTrial in trials:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        # Run 'Each Frame' code from elTrial
-        # This Each Frame tab of the elTrial component handles the marking
-        # of experimental events via messages to the EDF, sends additional messages
-        # to allow visualization of trial stimuli in Data Viewer, logs trial variable
-        # information associated with responses and stimulus timing, and checks whether
-        # the eye tracker is still properly recording (and aborts the trial if not)
-        
-        # if a key was presssed, calculate the difference between the current time 
-        # and the time of the key press onset. 
-        # This offset value will be sent at the beginning of the message
-        # and will automatically be subtracted by Data Viewer from the timestamp
-        # of the message to position the message at the correct point in time
-        # then send a message marking the event
-        if not isinstance(resp.rt,list) and sentResponseMessage == 0:
-            offsetValue = int(round((core.getTime() - \
-                (image.tStartRefresh + resp.rt))*1000))
-            el_tracker.sendMessage('%i KEY_PRESSED' % offsetValue)
-        
-            # after every few messages, include a 1 msec delay to ensure
-            # that no messages are missed 
-            time.sleep(0.001)
-            el_tracker.sendMessage('!V TRIAL_VAR accuracy %i' % resp.corr)
-            el_tracker.sendMessage('!V TRIAL_VAR keyPressed %s' % resp.keys)
-        
-            # log that the response message has been written so that we don't 
-            # write it again on future frames
-            sentResponseMessage = 1
-        
-        # if the trial fixaton target onset just occurred then mark its occurence
-        # and send some draw command messages to the EDF
-        if fixation.tStartRefresh is not None and sentFixationMessage == 0:
-            # calculate the difference between the current time and the time of the 
-            # fixation onset. This offset value will be sent at the beginning of the message
-            # and will automatically be subtracted by Data Viewer from the timestamp
-            # of the message to position the message at the correct point in time
-            # then send a message marking the event
-            offsetValue = int(round((core.getTime() - fixation.tStartRefresh)*1000))
-            el_tracker.sendMessage('%i FIXATION_ONSET' % offsetValue)
-            
-            # send some Data Viewer drawing commands so that you can see a representation
-            # of the fixation cross in Data Viewer's various visualizations
-            # For more information on this, see section "Protocol for EyeLink Data to 
-            # Viewer Integration" section of the Data Viewer User Manual (Help -> Contents)
-            el_tracker.sendMessage('%i !V CLEAR 128 128 128' % offsetValue)
-            el_tracker.sendMessage('%i !V DRAWLINE 255 255 255 %i %i %i %i' % \
-                (offsetValue,scn_width/2 - 25,scn_height/2,scn_width/2 + 25,\
-                scn_height/2))  
-            el_tracker.sendMessage('%i !V DRAWLINE 255 255 255 %i %i %i %i' % \
-                (offsetValue,scn_width/2,scn_height/2 - 25,scn_width/2,\
-                scn_height/2 + 25)) 
-            
-            # after every few messages, include a 1 msec delay to ensure
-            # that no messages are missed 
-            time.sleep(0.001)
-            
-            # log the fixation onset time (in Display PC time) as a Trial Variable
-            fixationTime = fixation.tStartRefresh*1000
-            el_tracker.sendMessage('!V TRIAL_VAR fixationTime %i' % fixationTime)
-            
-            # log that the fixation onset message has been written so that we don't 
-            # write it again on future frames
-            sentFixationMessage = 1
-            
-        # if the trial image onset just occurred then mark its occurence
-        # and send an image load message to the EDF
-        if image.tStartRefresh is not None and sentImageMessage == 0:
-        
-            # calculate the difference between the current time and the time of the 
-            # image onset. This offset value will be sent at the beginning of the message
-            # and will automatically be subtracted by Data Viewer from the timestamp
-            # of the message to position the message at the correct point in time
-            # then send a message marking the event
-            offsetValue = int(round((core.getTime()-image.tStartRefresh)*1000))
-            el_tracker.sendMessage(str(offsetValue) + ' IMAGE_ONSET')  
-        
-            # send some Data Viewer drawing commands so that you can see the trial image
-            # in Data Viewer's various visualizations
-            # For more information on this, see section "Protocol for EyeLink Data to 
-            # Viewer Integration" section of the Data Viewer User Manual (Help -> Contents)
-            el_tracker.sendMessage('%i !V CLEAR 128 128 128' % offsetValue)
-            el_tracker.sendMessage('%i !V IMGLOAD CENTER ../../%s %i %i' % \
-                (offsetValue,trialImage,scn_width/2,scn_height/2)) 
-                
-            #log the fixation onset time (in Display PC time) as a Trial Variable
-            imageTime = image.tStartRefresh*1000
-            el_tracker.sendMessage('!V TRIAL_VAR imageTime %i' % imageTime)
-            
-            # log that the image onset message has been written so that we don't 
-            # write it again on future frames
-            sentImageMessage = 1
-        
-        # abort the current trial if the tracker is no longer recording
-        error = el_tracker.isRecording()
-        if error is not pylink.TRIAL_OK:
-            el_tracker.sendMessage('tracker_disconnected')
-            abort_trial()
-        
-        # check keyboard events
-        for keycode, modifier in event.getKeys(modifiers=True):
-        
-        # Abort a trial if "ESCAPE" is pressed
-            if keycode == 'escape':
-                el_tracker.sendMessage('trial_skipped_by_user')
-                # clear the screen
-                clear_screen(win)
-                # abort trial
-                abort_trial()
-                contineRoutine = False
-                
-            # Terminate the task if Ctrl-c
-            if keycode == 'c' and (modifier['ctrl'] is True):
-                el_tracker.sendMessage('terminated_by_user')
-                terminate_task()
-                
         
         # *fixation* updates
         if fixation.status == NOT_STARTED and tThisFlip >= 0.5-frameTolerance:
@@ -1128,24 +983,6 @@ for thisTrial in trials:
     for thisComponent in trialComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
-    # Run 'End Routine' code from elTrial
-    # This End Routine tab of the elTrial component clears the screen and logs
-    # an additional message to mark the end of the trial
-    
-    # clear the screen
-    clear_screen(win)
-    el_tracker.sendMessage('blank_screen')
-    # send a message to clear the Data Viewer screen as well
-    el_tracker.sendMessage('!V CLEAR 128 128 128')
-        
-    # send a 'TRIAL_RESULT' message to mark the end of trial, see Data
-    # Viewer User Manual, "Protocol for EyeLink Data to Viewer Integration"
-    el_tracker.sendMessage('TRIAL_RESULT %d' % 0)
-    
-    # update the trial counter for the next trial
-    trial_index = trial_index + 1
-    trial_in_block = trial_in_block + 1
-    
     # check responses
     if resp.keys in ['', [], None]:  # No response was made
         resp.keys = None
