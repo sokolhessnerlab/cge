@@ -1876,7 +1876,7 @@ function pracOutcomeRoutineBegin(snapshot) {
         extraITI = 0;
     }else if(choice1.keys =='v' && loc ==1) {
         outcome = random_item([riskyGain, riskyLoss])
-        extraITI = 4-choice1.rt
+        extraITI = 4-pracChoiceResp.rt
         if(outcome == riskyGain){
             ocLoc = [-.35,.1];
             ocGambleLoc = [-.35,0];
@@ -1891,7 +1891,7 @@ function pracOutcomeRoutineBegin(snapshot) {
             noRespLoc = [5,5];
         }
     } else if(choice1.keys == 'v' && loc ==2){
-        extraITI = 4-choice1.rt
+        extraITI = 4-pracChoiceResp.rt
         outcome = alternative
         ocLoc = [-.35,0];
         ocGambleLoc = [5,5];
@@ -1899,7 +1899,7 @@ function pracOutcomeRoutineBegin(snapshot) {
         hideGamLoc = ocGambleLoc;
         noRespLoc = [5,5];
     } else if (choice1.keys=='n' && loc ==1){
-        extraITI = 4-choice1.rt
+        extraITI = 4-pracChoiceResp.rt
         outcome = alternative
         ocLoc = [.35,0];
         ocGambleLoc = [5,5];
@@ -1908,7 +1908,7 @@ function pracOutcomeRoutineBegin(snapshot) {
         noRespLoc = [5,5];
     } else if (choice1.keys =='n' && loc ==2){
         outcome = random_item([riskyGain, riskyLoss]);
-        extraITI = 4-choice1.rt
+        extraITI = 4-pracChoiceResp.rt
         if (outcome == riskyGain){
             ocLoc = [.35,.1];
             ocGambleLoc = [.35,0];
@@ -2745,7 +2745,7 @@ function staticOutcomeRoutineBegin(snapshot) {
     } else if (realChoice.keys === "v" && realloc === 1) {
          outcometmp = random_item([riskyoption1, riskyoption2]);
          choicetmp = 1;
-         extraITI = 4-realChoice.rt
+         extraITI = 4-realChoiceResp.rt
          if (outcometmp === riskyoption1) {
               ocLoc = [(- 0.35), 0.1];
               ocGambleLoc = [(- 0.35), 0];
@@ -2762,7 +2762,7 @@ function staticOutcomeRoutineBegin(snapshot) {
      } else if (realChoice.keys === "v" && realloc === 2) {
          outcometmp = safeoption;
          choicetmp = 0;
-         extraITI = 4-realChoice.rt
+         extraITI = 4-realChoiceResp.rt
          ocLoc = [(- 0.35), 0];
          ocGambleLoc = [5, 5];
          ocSafeLoc = ocLoc;
@@ -2771,7 +2771,7 @@ function staticOutcomeRoutineBegin(snapshot) {
      } else if (realChoice.keys === "n" && realloc === 1) {
          outcometmp = safeoption;
          choicetmp = 0;
-         extraITI = 4-realChoice.rt
+         extraITI = 4-realChoiceResp.rt
          ocLoc = [0.35, 0];
          ocGambleLoc = [5, 5];
          ocSafeLoc = ocLoc;
@@ -2780,7 +2780,7 @@ function staticOutcomeRoutineBegin(snapshot) {
     } else if (realChoice.keys === "n" && realloc === 2) {
         outcometmp = random_item([riskyoption1, riskyoption2]);
         choicetmp = 1;
-        extraITI = 4-realChoice.rt
+        extraITI = 4-realChoiceResp.rt
         if (outcometmp === riskyoption1) {
             ocLoc = [0.35, 0.1];
             ocGambleLoc = [0.35, 0];
@@ -3603,7 +3603,7 @@ function dynamicOutcomeRoutineBegin(snapshot) {
     } else if (realChoice.keys === "v" && realloc === 1) {
          outcometmp = random_item([riskyoption1, riskyoption2]);
          choicetmp = 1;
-         extraITI = 4-realChoice.rt
+         extraITI = 4-realChoiceResp.rt
          if (outcometmp === riskyoption1) {
               ocLoc = [(- 0.35), 0.1];
               ocGambleLoc = [(- 0.35), 0];
@@ -3629,7 +3629,7 @@ function dynamicOutcomeRoutineBegin(snapshot) {
      } else if (realChoice.keys === "n" && realloc === 1) {
          outcometmp = safeoption;
          choicetmp = 0;
-         extraITI = 4-realChoice.rt
+         extraITI = 4-realChoiceResp.rt
          ocLoc = [0.35, 0];
          ocGambleLoc = [5, 5];
          ocSafeLoc = ocLoc;
@@ -3638,7 +3638,7 @@ function dynamicOutcomeRoutineBegin(snapshot) {
     } else if (realChoice.keys === "n" && realloc === 2) {
         outcometmp = random_item([riskyoption1, riskyoption2]);
         choicetmp = 1;
-        extraITI = 4-realChoice.rt
+        extraITI = 4-realChoiceResp.rt
         if (outcometmp === riskyoption1) {
             ocLoc = [0.35, 0.1];
             ocGambleLoc = [0.35, 0];
