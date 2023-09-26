@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.1),
-    on September 26, 2023, at 14:41
+    on September 26, 2023, at 15:53
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -333,7 +333,7 @@ isiFix = visual.TextStim(win=win, name='isiFix',
 
 # --- Initialize components for Routine "staticOutcome" ---
 # Run 'Begin Experiment' code from staticOCcode
-actualITI = []
+actualITI = None
 riskygain_values = []
 riskyloss_values = []
 certain_values = []
@@ -1241,14 +1241,15 @@ for thisPracTrial in pracTrials:
     # update component parameters for each repeat
     # Run 'Begin Routine' code from pracOCcode
     import random
-    if not choice1.keys:
-        outcome = " "
+    import math
+    if not pracChoiceResp.keys:
+        outcome = math.nan
         noRespLoc = [0,0]
         ocLoc = [5,5]
         ocGambleLoc = [5,5]
         ocSafeLoc = [5,5]
         hideGamLoc = [5,5]
-    elif choice1.keys == 'v' and loc == 1:
+    elif pracChoiceResp.keys == 'v' and loc == 1:
         outcome = random.choice([riskyGain, riskyLoss])
         extraITI = 4-pracChoiceResp.rt
         if outcome == riskyGain:
@@ -1263,7 +1264,7 @@ for thisPracTrial in pracTrials:
              ocSafeLoc = [5,5]
              hideGamLoc = [-.4,.125]
              noRespLoc = [5,5]
-    elif choice1.keys == 'v' and loc == 2:
+    elif pracChoiceResp.keys == 'v' and loc == 2:
         extraITI = 4-pracChoiceResp.rt
         outcome = alternative
         ocLoc = [-.35,0]
@@ -1271,7 +1272,7 @@ for thisPracTrial in pracTrials:
         ocSafeLoc = ocLoc
         hideGamLoc = ocGambleLoc
         noRespLoc = [5,5]
-    elif choice1.keys == 'n' and loc ==1:
+    elif pracChoiceResp.keys == 'n' and loc ==1:
         extraITI = 4-pracChoiceResp.rt
         outcome = alternative
         ocLoc = [.35,0]
@@ -1279,7 +1280,7 @@ for thisPracTrial in pracTrials:
         ocSafeLoc = ocLoc
         hideGamLoc = ocGambleLoc
         noRespLoc = [5,5]
-    elif choice1.keys == 'n' and loc ==2:
+    elif pracChoiceResp.keys == 'n' and loc ==2:
         outcome = random.choice([riskyGain, riskyLoss])
         extraITI = 4-pracChoiceResp.rt
         if outcome == riskyGain:
@@ -2029,7 +2030,7 @@ for thisStaticTrial in staticTrials:
     # Run 'Begin Routine' code from staticOCcode
     import random
     import math
-    if not realChoice.keys:
+    if not realChoiceResp.keys:
         outcometmp = math.nan
         choicetmp = math.nan
         riskyLossReal = math.nan
@@ -2040,7 +2041,7 @@ for thisStaticTrial in staticTrials:
         ocGambleLoc = [5,5]
         ocSafeLoc = [5,5]
         hideGamLoc = [5,5]
-    elif realChoice.keys == 'v' and loc == 1:
+    elif realChoiceResp.keys == 'v' and loc == 1:
         outcometmp = random.choice([riskyoption1, riskyoption2])
         choicetmp = 1
         extraITI = 4-realChoiceResp.rt
@@ -2059,7 +2060,7 @@ for thisStaticTrial in staticTrials:
              ocSafeLoc = [5,5]
              hideGamLoc = [-.35,.125]
              noRespLoc = [5,5]
-    elif realChoice.keys == 'v' and loc == 2:
+    elif realChoiceResp.keys == 'v' and loc == 2:
         outcometmp = safeoption
         choicetmp = 0
         extraITI = 4-realChoiceResp.rt
@@ -2071,7 +2072,7 @@ for thisStaticTrial in staticTrials:
         ocSafeLoc = ocLoc
         hideGamLoc = ocGambleLoc
         noRespLoc = [5,5]
-    elif realChoice.keys == 'n' and loc ==1:
+    elif realChoiceResp.keys == 'n' and loc ==1:
         outcometmp = safeoption
         choicetmp = 0
         extraITI = 4-realChoiceResp.rt
@@ -2083,7 +2084,7 @@ for thisStaticTrial in staticTrials:
         ocSafeLoc = ocLoc
         hideGamLoc = ocGambleLoc
         noRespLoc = [5,5]
-    elif realChoice.keys == 'n' and loc ==2:
+    elif realChoiceResp.keys == 'n' and loc ==2:
         outcometmp = random.choice([riskyoption1, riskyoption2])
         choicetmp = 1
         extraITI = 4-realChoiceResp.rt
@@ -3051,7 +3052,7 @@ for thisDynamicTrial in dynamicTrials:
     # Run 'Begin Routine' code from dynamicOCcode
     import random
     import math
-    if not realChoice.keys:
+    if not realChoiceResp.keys:
         outcometmp = math.nan
         choicetmp = math.nan
         riskyLossReal = math.nan
@@ -3062,7 +3063,7 @@ for thisDynamicTrial in dynamicTrials:
         ocGambleLoc = [5,5]
         ocSafeLoc = [5,5]
         hideGamLoc = [5,5]
-    elif realChoice.keys == 'v' and loc == 1:
+    elif realChoiceResp.keys == 'v' and loc == 1:
         outcometmp = random.choice([riskyoption1, riskyoption2])
         choicetmp = 1
         extraITI = 4-realChoiceResp.rt
@@ -3081,7 +3082,7 @@ for thisDynamicTrial in dynamicTrials:
              ocSafeLoc = [5,5]
              hideGamLoc = [-.35,.125]
              noRespLoc = [5,5]
-    elif realChoice.keys == 'v' and loc == 2:
+    elif realChoiceResp.keys == 'v' and loc == 2:
         outcometmp = safeoption
         choicetmp = 0
         extraITI = 4-realChoiceResp.rt
@@ -3093,7 +3094,7 @@ for thisDynamicTrial in dynamicTrials:
         ocSafeLoc = ocLoc
         hideGamLoc = ocGambleLoc
         noRespLoc = [5,5]
-    elif realChoice.keys == 'n' and loc ==1:
+    elif realChoiceResp.keys == 'n' and loc ==1:
         outcometmp = safeoption
         choicetmp = 0
         extraITI = 4-realChoiceResp.rt
@@ -3105,7 +3106,7 @@ for thisDynamicTrial in dynamicTrials:
         ocSafeLoc = ocLoc
         hideGamLoc = ocGambleLoc
         noRespLoc = [5,5]
-    elif realChoice.keys == 'n' and loc ==2:
+    elif realChoiceResp.keys == 'n' and loc ==2:
         outcometmp = random.choice([riskyoption1, riskyoption2])
         choicetmp = 1
         extraITI = 4-realChoiceResp.rt
