@@ -106,8 +106,8 @@ psychoJS.start({
   expName: expName,
   expInfo: expInfo,
   resources: [
-    {'name': 'cgtRDMPractice.xlsx', 'path': 'cgtRDMPractice.xlsx'},
-    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'}
+    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'},
+    {'name': 'cgtRDMPractice.xlsx', 'path': 'cgtRDMPractice.xlsx'}
   ]
 });
 
@@ -1469,18 +1469,18 @@ function pracChoiceRoutineBegin(snapshot) {
     var pracLossRounded, pracGainRounded, pracSafeRounded
     
     if ((loc === 1)) {
-        targetPos = [(- 0.4), 0];
+        targetPos = [(- 0.35), 0];
     } else {
-        targetPos = [0.4, 0];
+        targetPos = [0.35, 0];
     }
     if ((loc === 1)) {
-        lossLoc = [(- 0.4), (- 0.1)];
-        gainLoc = [(- 0.4), 0.1];
-        safeLoc = [0.4, 0];
+        lossLoc = [(- 0.35), (- 0.1)];
+        gainLoc = [(- 0.35), 0.1];
+        safeLoc = [0.35, 0];
     } else {
-        lossLoc = [0.4, (- 0.1)];
-        gainLoc = [0.4, 0.1];
-        safeLoc = [(- 0.4), 0];
+        lossLoc = [0.35, (- 0.1)];
+        gainLoc = [0.35, 0.1];
+        safeLoc = [(- 0.35), 0];
     }
     
     
@@ -1878,22 +1878,22 @@ function pracOutcomeRoutineBegin(snapshot) {
         outcome = random_item([riskyGain, riskyLoss])
         extraITI = 4-choice1.rt
         if(outcome == riskyGain){
-            ocLoc = [-.4,.1];
-            ocGambleLoc = [-.4,0];
+            ocLoc = [-.35,.1];
+            ocGambleLoc = [-.35,0];
             ocSafeLoc = [5,5];
             noRespLoc = [5,5];
-            hideGamLoc = [-.4,-.125];
+            hideGamLoc = [-.35,-.125];
         } else if (outcome ==riskyLoss){
-            ocLoc = [-.4,-.1];
-            ocGambleLoc = [-.4,0];
+            ocLoc = [-.35,-.1];
+            ocGambleLoc = [-.35,0];
             ocSafeLoc = [5,5];
-            hideGamLoc = [-.4,.125];
+            hideGamLoc = [-.35,.125];
             noRespLoc = [5,5];
         }
     } else if(choice1.keys == 'v' && loc ==2){
         extraITI = 4-choice1.rt
         outcome = alternative
-        ocLoc = [-.4,0];
+        ocLoc = [-.35,0];
         ocGambleLoc = [5,5];
         ocSafeLoc = ocLoc;
         hideGamLoc = ocGambleLoc;
@@ -1901,7 +1901,7 @@ function pracOutcomeRoutineBegin(snapshot) {
     } else if (choice1.keys=='n' && loc ==1){
         extraITI = 4-choice1.rt
         outcome = alternative
-        ocLoc = [.4,0];
+        ocLoc = [.35,0];
         ocGambleLoc = [5,5];
         ocSafeLoc = ocLoc;
         hideGamLoc = ocGambleLoc;
@@ -1910,16 +1910,16 @@ function pracOutcomeRoutineBegin(snapshot) {
         outcome = random_item([riskyGain, riskyLoss]);
         extraITI = 4-choice1.rt
         if (outcome == riskyGain){
-            ocLoc = [.4,.1];
-            ocGambleLoc = [.4,0];
+            ocLoc = [.35,.1];
+            ocGambleLoc = [.35,0];
             ocSafeLoc = [5,5];
-            hideGamLoc = [.4,-.125];
+            hideGamLoc = [.35,-.125];
             noRespLoc = [5,5];
         } else if (outcome == riskyLoss){
-            ocLoc = [.4,-.1];
-            ocGambleLoc = [.4,0];
+            ocLoc = [.35,-.1];
+            ocGambleLoc = [.35,0];
             ocSafeLoc = [5,5];
-            hideGamLoc = [.4,.125];
+            hideGamLoc = [.35,.125];
             noRespLoc = [5,5];
         }
     }
@@ -2337,18 +2337,18 @@ function choiceWindowRoutineBegin(snapshot) {
     realloc = random_item([1, 2]);
     
     if ((realloc === 1)) {
-        targetPos = [(- 0.4), 0];
+        targetPos = [(- 0.35), 0];
     } else {
-        targetPos = [0.4, 0];
+        targetPos = [0.35, 0];
     }
     if ((realloc === 1)) {
-        lossLoc = [(- 0.4), (- 0.1)];
-        gainLoc = [(- 0.4), 0.1];
-        safeLoc = [0.4, 0];
+        lossLoc = [(- 0.35), (- 0.1)];
+        gainLoc = [(- 0.35), 0.1];
+        safeLoc = [0.35, 0];
     } else {
-        lossLoc = [0.4, (- 0.1)];
-        gainLoc = [0.4, 0.1];
-        safeLoc = [(- 0.4), 0];
+        lossLoc = [0.35, (- 0.1)];
+        gainLoc = [0.35, 0.1];
+        safeLoc = [(- 0.35), 0];
     }
     
     //console.log(realloc)
@@ -2747,23 +2747,23 @@ function staticOutcomeRoutineBegin(snapshot) {
          choicetmp = 1;
          extraITI = 4-realChoice.rt
          if (outcometmp === riskyoption1) {
-              ocLoc = [(- 0.4), 0.1];
-              ocGambleLoc = [(- 0.4), 0];
+              ocLoc = [(- 0.35), 0.1];
+              ocGambleLoc = [(- 0.35), 0];
               ocSafeLoc = [5, 5];
               noRespLoc = [5, 5];
-              hideGamLoc = [(- 0.4), (- 0.125)];
+              hideGamLoc = [(- 0.35), (- 0.125)];
          } else if (outcometmp === riskyoption2) {
-              ocLoc = [(- 0.4), (- 0.1)];
-              ocGambleLoc = [(- 0.4), 0];
+              ocLoc = [(- 0.35), (- 0.1)];
+              ocGambleLoc = [(- 0.35), 0];
               ocSafeLoc = [5, 5];
-              hideGamLoc = [(- 0.4), 0.125];
+              hideGamLoc = [(- 0.35), 0.125];
               noRespLoc = [5, 5];
          }
      } else if (realChoice.keys === "v" && realloc === 2) {
          outcometmp = safeoption;
          choicetmp = 0;
          extraITI = 4-realChoice.rt
-         ocLoc = [(- 0.4), 0];
+         ocLoc = [(- 0.35), 0];
          ocGambleLoc = [5, 5];
          ocSafeLoc = ocLoc;
          hideGamLoc = ocGambleLoc;
@@ -2772,7 +2772,7 @@ function staticOutcomeRoutineBegin(snapshot) {
          outcometmp = safeoption;
          choicetmp = 0;
          extraITI = 4-realChoice.rt
-         ocLoc = [0.4, 0];
+         ocLoc = [0.35, 0];
          ocGambleLoc = [5, 5];
          ocSafeLoc = ocLoc;
          hideGamLoc = ocGambleLoc;
@@ -2782,16 +2782,16 @@ function staticOutcomeRoutineBegin(snapshot) {
         choicetmp = 1;
         extraITI = 4-realChoice.rt
         if (outcometmp === riskyoption1) {
-            ocLoc = [0.4, 0.1];
-            ocGambleLoc = [0.4, 0];
+            ocLoc = [0.35, 0.1];
+            ocGambleLoc = [0.35, 0];
             ocSafeLoc = [5, 5];
-            hideGamLoc = [0.4, (- 0.125)];
+            hideGamLoc = [0.35, (- 0.125)];
             noRespLoc = [5, 5];
         } else if (outcometmp === riskyoption2) {
-            ocLoc = [0.4, (- 0.1)];
-            ocGambleLoc = [0.4, 0];
+            ocLoc = [0.35, (- 0.1)];
+            ocGambleLoc = [0.35, 0];
             ocSafeLoc = [5, 5];
-            hideGamLoc = [0.4, 0.125];
+            hideGamLoc = [0.35, 0.125];
             noRespLoc = [5, 5];
         }
     }
@@ -3605,23 +3605,23 @@ function dynamicOutcomeRoutineBegin(snapshot) {
          choicetmp = 1;
          extraITI = 4-realChoice.rt
          if (outcometmp === riskyoption1) {
-              ocLoc = [(- 0.4), 0.1];
-              ocGambleLoc = [(- 0.4), 0];
+              ocLoc = [(- 0.35), 0.1];
+              ocGambleLoc = [(- 0.35), 0];
               ocSafeLoc = [5, 5];
               noRespLoc = [5, 5];
-              hideGamLoc = [(- 0.4), (- 0.125)];
+              hideGamLoc = [(- 0.35), (- 0.125)];
          } else if (outcometmp === riskyoption2) {
-              ocLoc = [(- 0.4), (- 0.1)];
-              ocGambleLoc = [(- 0.4), 0];
+              ocLoc = [(- 0.35), (- 0.1)];
+              ocGambleLoc = [(- 0.35), 0];
               ocSafeLoc = [5, 5];
-              hideGamLoc = [(- 0.4), 0.125];
+              hideGamLoc = [(- 0.35), 0.125];
               noRespLoc = [5, 5];
          }
      } else if (realChoice.keys === "v" && realloc === 2) {
          outcometmp = safeoption;
          choicetmp = 0;
          extraITI = 4-realChoice.rt
-         ocLoc = [(- 0.4), 0];
+         ocLoc = [(- 0.35), 0];
          ocGambleLoc = [5, 5];
          ocSafeLoc = ocLoc;
          hideGamLoc = ocGambleLoc;
@@ -3630,7 +3630,7 @@ function dynamicOutcomeRoutineBegin(snapshot) {
          outcometmp = safeoption;
          choicetmp = 0;
          extraITI = 4-realChoice.rt
-         ocLoc = [0.4, 0];
+         ocLoc = [0.35, 0];
          ocGambleLoc = [5, 5];
          ocSafeLoc = ocLoc;
          hideGamLoc = ocGambleLoc;
@@ -3640,16 +3640,16 @@ function dynamicOutcomeRoutineBegin(snapshot) {
         choicetmp = 1;
         extraITI = 4-realChoice.rt
         if (outcometmp === riskyoption1) {
-            ocLoc = [0.4, 0.1];
-            ocGambleLoc = [0.4, 0];
+            ocLoc = [0.35, 0.1];
+            ocGambleLoc = [0.35, 0];
             ocSafeLoc = [5, 5];
-            hideGamLoc = [0.4, (- 0.125)];
+            hideGamLoc = [0.35, (- 0.125)];
             noRespLoc = [5, 5];
         } else if (outcometmp === riskyoption2) {
-            ocLoc = [0.4, (- 0.1)];
-            ocGambleLoc = [0.4, 0];
+            ocLoc = [0.35, (- 0.1)];
+            ocGambleLoc = [0.35, 0];
             ocSafeLoc = [5, 5];
-            hideGamLoc = [0.4, 0.125];
+            hideGamLoc = [0.35, 0.125];
             noRespLoc = [5, 5];
         }
     }
