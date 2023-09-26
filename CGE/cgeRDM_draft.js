@@ -106,8 +106,8 @@ psychoJS.start({
   expName: expName,
   expInfo: expInfo,
   resources: [
-    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'},
-    {'name': 'cgtRDMPractice.xlsx', 'path': 'cgtRDMPractice.xlsx'}
+    {'name': 'cgtRDMPractice.xlsx', 'path': 'cgtRDMPractice.xlsx'},
+    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'}
   ]
 });
 
@@ -1866,7 +1866,7 @@ function pracOutcomeRoutineBegin(snapshot) {
         return items[Math.floor(Math.random()*items.length)]; 
     }
     
-    if (choice1.keys === undefined){
+    if (pracChoiceResp.keys === undefined){
         outcome = " ";
         noRespLoc = [0,0];
         ocLoc = [5,5];
@@ -1874,7 +1874,7 @@ function pracOutcomeRoutineBegin(snapshot) {
         ocSafeLoc = [5,5];
         hideGamLoc = [5,5];
         extraITI = 0;
-    }else if(choice1.keys =='v' && loc ==1) {
+    }else if(pracChoiceResp.keys =='v' && loc ==1) {
         outcome = random_item([riskyGain, riskyLoss])
         extraITI = 4-pracChoiceResp.rt
         if(outcome == riskyGain){
@@ -1890,7 +1890,7 @@ function pracOutcomeRoutineBegin(snapshot) {
             hideGamLoc = [-.35,.125];
             noRespLoc = [5,5];
         }
-    } else if(choice1.keys == 'v' && loc ==2){
+    } else if(pracChoiceResp.keys == 'v' && loc ==2){
         extraITI = 4-pracChoiceResp.rt
         outcome = alternative
         ocLoc = [-.35,0];
@@ -1898,7 +1898,7 @@ function pracOutcomeRoutineBegin(snapshot) {
         ocSafeLoc = ocLoc;
         hideGamLoc = ocGambleLoc;
         noRespLoc = [5,5];
-    } else if (choice1.keys=='n' && loc ==1){
+    } else if (pracChoiceResp.keys=='n' && loc ==1){
         extraITI = 4-pracChoiceResp.rt
         outcome = alternative
         ocLoc = [.35,0];
@@ -1906,7 +1906,7 @@ function pracOutcomeRoutineBegin(snapshot) {
         ocSafeLoc = ocLoc;
         hideGamLoc = ocGambleLoc;
         noRespLoc = [5,5];
-    } else if (choice1.keys =='n' && loc ==2){
+    } else if (pracChoiceResp.keys =='n' && loc ==2){
         outcome = random_item([riskyGain, riskyLoss]);
         extraITI = 4-pracChoiceResp.rt
         if (outcome == riskyGain){
@@ -2733,7 +2733,7 @@ function staticOutcomeRoutineBegin(snapshot) {
         return items[Math.floor(Math.random()*items.length)]; 
     }
     
-    if (realChoice.keys === undefined) {
+    if (realChoiceResp.keys === undefined) {
         outcometmp = Math.nan;
         choicetmp = Math.nan;
         noRespLoc = [0, 0];
@@ -2742,7 +2742,7 @@ function staticOutcomeRoutineBegin(snapshot) {
         ocSafeLoc = [5, 5];
         hideGamLoc = [5, 5];
         extraITI = 0;
-    } else if (realChoice.keys === "v" && realloc === 1) {
+    } else if (realChoiceResp.keys === "v" && realloc === 1) {
          outcometmp = random_item([riskyoption1, riskyoption2]);
          choicetmp = 1;
          extraITI = 4-realChoiceResp.rt
@@ -2759,7 +2759,7 @@ function staticOutcomeRoutineBegin(snapshot) {
               hideGamLoc = [(- 0.35), 0.125];
               noRespLoc = [5, 5];
          }
-     } else if (realChoice.keys === "v" && realloc === 2) {
+     } else if (realChoiceResp.keys === "v" && realloc === 2) {
          outcometmp = safeoption;
          choicetmp = 0;
          extraITI = 4-realChoiceResp.rt
@@ -2768,7 +2768,7 @@ function staticOutcomeRoutineBegin(snapshot) {
          ocSafeLoc = ocLoc;
          hideGamLoc = ocGambleLoc;
          noRespLoc = [5, 5];
-     } else if (realChoice.keys === "n" && realloc === 1) {
+     } else if (realChoiceResp.keys === "n" && realloc === 1) {
          outcometmp = safeoption;
          choicetmp = 0;
          extraITI = 4-realChoiceResp.rt
@@ -2777,7 +2777,7 @@ function staticOutcomeRoutineBegin(snapshot) {
          ocSafeLoc = ocLoc;
          hideGamLoc = ocGambleLoc;
          noRespLoc = [5, 5];
-    } else if (realChoice.keys === "n" && realloc === 2) {
+    } else if (realChoiceResp.keys === "n" && realloc === 2) {
         outcometmp = random_item([riskyoption1, riskyoption2]);
         choicetmp = 1;
         extraITI = 4-realChoiceResp.rt
@@ -3591,7 +3591,7 @@ function dynamicOutcomeRoutineBegin(snapshot) {
         return items[Math.floor(Math.random()*items.length)]; 
     }
     
-    if (realChoice.keys === undefined) {
+    if (realChoiceResp.keys === undefined) {
         outcometmp = Math.nan;
         choicetmp = Math.nan;
         noRespLoc = [0, 0];
@@ -3600,7 +3600,7 @@ function dynamicOutcomeRoutineBegin(snapshot) {
         ocSafeLoc = [5, 5];
         hideGamLoc = [5, 5];
         extraITI = 0;
-    } else if (realChoice.keys === "v" && realloc === 1) {
+    } else if (realChoiceResp.keys === "v" && realloc === 1) {
          outcometmp = random_item([riskyoption1, riskyoption2]);
          choicetmp = 1;
          extraITI = 4-realChoiceResp.rt
@@ -3617,7 +3617,7 @@ function dynamicOutcomeRoutineBegin(snapshot) {
               hideGamLoc = [(- 0.35), 0.125];
               noRespLoc = [5, 5];
          }
-     } else if (realChoice.keys === "v" && realloc === 2) {
+     } else if (realChoiceResp.keys === "v" && realloc === 2) {
          outcometmp = safeoption;
          choicetmp = 0;
          extraITI = 4-realChoice.rt
@@ -3626,7 +3626,7 @@ function dynamicOutcomeRoutineBegin(snapshot) {
          ocSafeLoc = ocLoc;
          hideGamLoc = ocGambleLoc;
          noRespLoc = [5, 5];
-     } else if (realChoice.keys === "n" && realloc === 1) {
+     } else if (realChoiceResp.keys === "n" && realloc === 1) {
          outcometmp = safeoption;
          choicetmp = 0;
          extraITI = 4-realChoiceResp.rt
@@ -3635,7 +3635,7 @@ function dynamicOutcomeRoutineBegin(snapshot) {
          ocSafeLoc = ocLoc;
          hideGamLoc = ocGambleLoc;
          noRespLoc = [5, 5];
-    } else if (realChoice.keys === "n" && realloc === 2) {
+    } else if (realChoiceResp.keys === "n" && realloc === 2) {
         outcometmp = random_item([riskyoption1, riskyoption2]);
         choicetmp = 1;
         extraITI = 4-realChoiceResp.rt
