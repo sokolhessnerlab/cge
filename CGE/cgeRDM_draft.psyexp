@@ -26,7 +26,7 @@
     <Param val="False" valType="bool" updates="None" name="Show mouse"/>
     <Param val="height" valType="str" updates="None" name="Units"/>
     <Param val="2022.2.1" valType="str" updates="None" name="Use version"/>
-    <Param val="[2560, 1440]" valType="code" updates="None" name="Window size (pixels)"/>
+    <Param val="[1920, 1080]" valType="code" updates="None" name="Window size (pixels)"/>
     <Param val="avg" valType="str" updates="None" name="blendMode"/>
     <Param val="$[-1,-1,-1]" valType="str" updates="None" name="color"/>
     <Param val="rgb" valType="str" updates="None" name="colorSpace"/>
@@ -2673,7 +2673,7 @@
       </KeyboardComponent>
     </Routine>
     <Routine name="pracChoice">
-      <CodeComponent name="pracRandLoc">
+      <CodeComponent name="pracChoiceRandLoc">
         <Param val="" valType="extendedCode" updates="constant" name="Before Experiment"/>
         <Param val="" valType="extendedCode" updates="constant" name="Before JS Experiment"/>
         <Param val="textHeight = 0.05;" valType="extendedCode" updates="constant" name="Begin Experiment"/>
@@ -2688,7 +2688,7 @@
         <Param val="" valType="extendedCode" updates="constant" name="End JS Routine"/>
         <Param val="" valType="extendedCode" updates="constant" name="End Routine"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
-        <Param val="pracRandLoc" valType="code" updates="None" name="name"/>
+        <Param val="pracChoiceRandLoc" valType="code" updates="None" name="name"/>
       </CodeComponent>
       <PolygonComponent name="pracCircleLeft">
         <Param val="center" valType="str" updates="constant" name="anchor"/>
@@ -4117,23 +4117,6 @@
         <Param val="False" valType="bool" updates="constant" name="storeCorrect"/>
         <Param val="True" valType="bool" updates="constant" name="syncScreenRefresh"/>
       </KeyboardComponent>
-      <CodeComponent name="setUpTextFormatting">
-        <Param val="" valType="extendedCode" updates="constant" name="Before Experiment"/>
-        <Param val="" valType="extendedCode" updates="constant" name="Before JS Experiment"/>
-        <Param val="instructionsTextHeight = 0.04;&amp;#10;letterTextHeight = 0.1;&amp;#10;wrap = 1.6" valType="extendedCode" updates="constant" name="Begin Experiment"/>
-        <Param val="instructionsTextHeight = 0.04;&amp;#10;letterTextHeight = 0.1;&amp;#10;wrap = 1.6;&amp;#10;" valType="extendedCode" updates="constant" name="Begin JS Experiment"/>
-        <Param val="" valType="extendedCode" updates="constant" name="Begin JS Routine"/>
-        <Param val="" valType="extendedCode" updates="constant" name="Begin Routine"/>
-        <Param val="Auto-&gt;JS" valType="str" updates="None" name="Code Type"/>
-        <Param val="" valType="extendedCode" updates="constant" name="Each Frame"/>
-        <Param val="" valType="extendedCode" updates="constant" name="Each JS Frame"/>
-        <Param val="" valType="extendedCode" updates="constant" name="End Experiment"/>
-        <Param val="" valType="extendedCode" updates="constant" name="End JS Experiment"/>
-        <Param val="" valType="extendedCode" updates="constant" name="End JS Routine"/>
-        <Param val="" valType="extendedCode" updates="constant" name="End Routine"/>
-        <Param val="False" valType="bool" updates="None" name="disabled"/>
-        <Param val="setUpTextFormatting" valType="code" updates="None" name="name"/>
-      </CodeComponent>
     </Routine>
   </Routines>
   <Flow>
