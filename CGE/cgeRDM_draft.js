@@ -2796,7 +2796,7 @@ function staticOutcomeRoutineBegin(snapshot) {
         }
     }
     
-    actualITI = initITIstatic[staticRDM.thisN] + extraITI
+    actualITI = initITIstatic[staticTrials.thisN] + extraITI
     
     
     if (outcometmp === riskyoption2) {
@@ -3654,7 +3654,7 @@ function dynamicOutcomeRoutineBegin(snapshot) {
         }
     }
     
-    actualITI = initITIdynamic[dynamicRDM.thisN] + extraITI
+    actualITI = initITIdynamic[dynamicTrials.thisN] + extraITI
     
     
     if (outcometmp === riskyoption2) {
