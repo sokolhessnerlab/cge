@@ -32,7 +32,7 @@ const psychoJS = new PsychoJS({
 // open window:
 psychoJS.openWindow({
   fullscr: true,
-  color: new util.Color([(- 1), (- 1), (- 1)]),
+  color: new util.Color([0.5216, 0.5216, 0.5216]),
   units: 'height',
   waitBlanking: true
 });
@@ -73,9 +73,9 @@ const BestFitLoopScheduler = new Scheduler(psychoJS);
 flowScheduler.add(BestFitLoopBegin(BestFitLoopScheduler));
 flowScheduler.add(BestFitLoopScheduler);
 flowScheduler.add(BestFitLoopEnd);
-flowScheduler.add(loadDynamicChoiceSetRoutineBegin());
-flowScheduler.add(loadDynamicChoiceSetRoutineEachFrame());
-flowScheduler.add(loadDynamicChoiceSetRoutineEnd());
+flowScheduler.add(loadingDynamicChoicesRoutineBegin());
+flowScheduler.add(loadingDynamicChoicesRoutineEachFrame());
+flowScheduler.add(loadingDynamicChoicesRoutineEnd());
 flowScheduler.add(dynamicStartRoutineBegin());
 flowScheduler.add(dynamicStartRoutineEachFrame());
 flowScheduler.add(dynamicStartRoutineEnd());
@@ -197,7 +197,9 @@ var ITIClock;
 var itiFix;
 var computeBestFitClock;
 var setupBestFit;
-var loadDynamicChoiceSetClock;
+var loadingDynamicChoicesClock;
+var text;
+var loadDynamicChoices;
 var dynamicStartClock;
 var dynamicStartText;
 var dynamicStartResp;
@@ -403,18 +405,18 @@ async function experimentInit() {
     depth: -1.0 
   });
   
-  pracRiskOC = new visual.Rect ({
+  pracRiskOC = new visual.Polygon({
     win: psychoJS.window, name: 'pracRiskOC', 
-    width: [0.5, 0.5][0], height: [0.5, 0.5][1],
+    edges: 100, size:[0.5, 0.5],
     ori: 0, pos: [0, 0],
     lineWidth: 1, lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, 1, 1]),
     opacity: 1, depth: -2, interpolate: true,
   });
   
-  pracSafeOC = new visual.Rect ({
+  pracSafeOC = new visual.Polygon({
     win: psychoJS.window, name: 'pracSafeOC', 
-    width: [0.5, 0.5][0], height: [0.5, 0.5][1],
+    edges: 100, size:[0.5, 0.5],
     ori: 0, pos: [0, 0],
     lineWidth: 1, lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, 1, 1]),
@@ -678,8 +680,23 @@ async function experimentInit() {
     depth: -1.0 
   });
   
-  // Initialize components for Routine "loadDynamicChoiceSet"
-  loadDynamicChoiceSetClock = new util.Clock();
+  // Initialize components for Routine "loadingDynamicChoices"
+  loadingDynamicChoicesClock = new util.Clock();
+  text = new visual.TextStim({
+    win: psychoJS.window,
+    name: 'text',
+    text: '',
+    font: 'Open Sans',
+    units: undefined, 
+    pos: [0, 0], height: 0.05,  wrapWidth: undefined, ori: 0.0,
+    languageStyle: 'LTR',
+    color: new util.Color('white'),  opacity: undefined,
+    depth: 0.0 
+  });
+  
+  loadDynamicChoices = {
+    status: PsychoJS.Status.NOT_STARTED
+  };
   // Initialize components for Routine "dynamicStart"
   dynamicStartClock = new util.Clock();
   dynamicStartText = new visual.TextStim({
@@ -1171,7 +1188,7 @@ function pracTrialsLoopBegin(pracTrialsLoopScheduler, snapshot) {
       psychoJS: psychoJS,
       nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
       extraInfo: expInfo, originPath: undefined,
-      trialList: 'cgtRDMPractice.xlsx',
+      trialList: TrialHandler.importConditions(psychoJS.serverManager, 'cgtRDMPractice.xlsx', '0:2'),
       seed: undefined, name: 'pracTrials'
     });
     psychoJS.experiment.addLoop(pracTrials); // add the loop to the experiment
@@ -1244,7 +1261,7 @@ function staticTrialsLoopBegin(staticTrialsLoopScheduler, snapshot) {
       psychoJS: psychoJS,
       nReps: 1, method: TrialHandler.Method.RANDOM,
       extraInfo: expInfo, originPath: undefined,
-      trialList: 'CGT-choice-set.csv',
+      trialList: TrialHandler.importConditions(psychoJS.serverManager, 'CGT-choice-set.csv', '0:2'),
       seed: undefined, name: 'staticTrials'
     });
     psychoJS.experiment.addLoop(staticTrials); // add the loop to the experiment
@@ -1381,7 +1398,7 @@ function dynamicTrialsLoopBegin(dynamicTrialsLoopScheduler, snapshot) {
       psychoJS: psychoJS,
       nReps: 1, method: TrialHandler.Method.RANDOM,
       extraInfo: expInfo, originPath: undefined,
-      trialList: dynamicChoicesetResourceName,
+      trialList: TrialHandler.importConditions(psychoJS.serverManager, fname[0], '0:2'),
       seed: undefined, name: 'dynamicTrials'
     });
     psychoJS.experiment.addLoop(dynamicTrials); // add the loop to the experiment
@@ -3346,52 +3363,23 @@ function computeBestFitRoutineEnd(snapshot) {
 }
 
 
-var pulledDataForDynamicRDM;
-var getDynamicCSpath;
-var getDynamicCSname;
-var dynamicChoicesetResourceName;
-var dynamicChoicesetResourcePath;
-var loadDynamicChoiceSetComponents;
-function loadDynamicChoiceSetRoutineBegin(snapshot) {
+var loadingDynamicChoicesComponents;
+function loadingDynamicChoicesRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //--- Prepare to start Routine 'loadDynamicChoiceSet' ---
+    //--- Prepare to start Routine 'loadingDynamicChoices' ---
     t = 0;
-    loadDynamicChoiceSetClock.reset(); // clock
+    loadingDynamicChoicesClock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
-    var pulledDataForDynamicRDM, dynamicChoicesetResource
-    
-    pulledDataForDynamicRDM = psychoJS.experiment._trialsData
-    //console.log("pulled data:", pulledDataForDynamicRDM)
-    
-    // just pull out the column of data that has the path and filename
-    getDynamicCSpath = pulledDataForDynamicRDM.map((trial) => trial['dynamicChoiceSetPath']);
-    getDynamicCSname = pulledDataForDynamicRDM.map((trial) => trial['dynamicChoiceSetName']);
-    
-    // print in console to make sure it worked
-    //console.log("pulled filepath vector:", getDynamicCSpath)
-    //console.log("pulled filename vector:", getDynamicCSname)
-    
-    // now just get the file name and file path (these are the last element in getchoicesetResource*
-    dynamicChoicesetResourceName = getDynamicCSname[getDynamicCSname.length -1]
-    dynamicChoicesetResourcePath = getDynamicCSpath[getDynamicCSpath.length -1]
-    
-    //console.log("pulled filename:", dynamicChoicesetResourceName)
-    //console.log("pulled filepath:", dynamicChoicesetResourcePath)
-    
-    psychoJS._serverManager.prepareResources([
-      // relative path to index.html
-      { name: dynamicChoicesetResourceName, path: dynamicChoicesetResourcePath},
-    ]);
-    
-    
     // keep track of which components have finished
-    loadDynamicChoiceSetComponents = [];
+    loadingDynamicChoicesComponents = [];
+    loadingDynamicChoicesComponents.push(text);
+    loadingDynamicChoicesComponents.push(loadDynamicChoices);
     
-    loadDynamicChoiceSetComponents.forEach( function(thisComponent) {
+    loadingDynamicChoicesComponents.forEach( function(thisComponent) {
       if ('status' in thisComponent)
         thisComponent.status = PsychoJS.Status.NOT_STARTED;
        });
@@ -3400,13 +3388,42 @@ function loadDynamicChoiceSetRoutineBegin(snapshot) {
 }
 
 
-function loadDynamicChoiceSetRoutineEachFrame() {
+function loadingDynamicChoicesRoutineEachFrame() {
   return async function () {
-    //--- Loop for each frame of Routine 'loadDynamicChoiceSet' ---
+    //--- Loop for each frame of Routine 'loadingDynamicChoices' ---
     // get current time
-    t = loadDynamicChoiceSetClock.getTime();
+    t = loadingDynamicChoicesClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
+    
+    // *text* updates
+    if (t >= 0.0 && text.status === PsychoJS.Status.NOT_STARTED) {
+      // keep track of start time/frame for later
+      text.tStart = t;  // (not accounting for frame time here)
+      text.frameNStart = frameN;  // exact frame index
+      
+      text.setAutoDraw(true);
+    }
+
+    frameRemains = 0.0 + 2.0 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
+    if (text.status === PsychoJS.Status.STARTED && t >= frameRemains) {
+      text.setAutoDraw(false);
+    }
+    // start downloading resources specified by component loadDynamicChoices
+    if (t >= 2 && loadDynamicChoices.status === PsychoJS.Status.NOT_STARTED) {
+      console.log('register and start downloading resources specified by component loadDynamicChoices');
+      await psychoJS.serverManager.prepareResources(core.ServerManager.ALL_RESOURCES);
+      loadDynamicChoices.status = PsychoJS.Status.STARTED;
+    }
+    // check on the resources specified by component loadDynamicChoices
+    if (t >= null && loadDynamicChoices.status === PsychoJS.Status.STARTED) {
+      if (psychoJS.serverManager.getResourceStatus(core.ServerManager.ALL_RESOURCES) === core.ServerManager.ResourceStatus.DOWNLOADED) {
+        console.log('finished downloading resources specified by component loadDynamicChoices');
+        loadDynamicChoices.status = PsychoJS.Status.FINISHED;
+      } else {
+        console.log('resource specified in loadDynamicChoices took longer than expected to download');
+      }
+    }
     // check for quit (typically the Esc key)
     if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
       return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
@@ -3418,7 +3435,7 @@ function loadDynamicChoiceSetRoutineEachFrame() {
     }
     
     continueRoutine = false;  // reverts to True if at least one component still running
-    loadDynamicChoiceSetComponents.forEach( function(thisComponent) {
+    loadingDynamicChoicesComponents.forEach( function(thisComponent) {
       if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
         continueRoutine = true;
       }
@@ -3434,15 +3451,15 @@ function loadDynamicChoiceSetRoutineEachFrame() {
 }
 
 
-function loadDynamicChoiceSetRoutineEnd(snapshot) {
+function loadingDynamicChoicesRoutineEnd(snapshot) {
   return async function () {
-    //--- Ending Routine 'loadDynamicChoiceSet' ---
-    loadDynamicChoiceSetComponents.forEach( function(thisComponent) {
+    //--- Ending Routine 'loadingDynamicChoices' ---
+    loadingDynamicChoicesComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // the Routine "loadDynamicChoiceSet" was not non-slip safe, so reset the non-slip timer
+    // the Routine "loadingDynamicChoices" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
     // Routines running outside a loop should always advance the datafile row
