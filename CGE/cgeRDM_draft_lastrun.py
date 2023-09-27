@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.1),
-    on September 26, 2023, at 15:53
+    on September 26, 2023, at 23:50
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -39,7 +39,7 @@ _thisDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(_thisDir)
 # Store info about the experiment session
 psychopyVersion = '2022.2.1'
-expName = 'CGTriskyDMtask'  # from the Builder filename that created this script
+expName = 'cgeRDMtask'  # from the Builder filename that created this script
 expInfo = {
     'participant': '',
 }
@@ -104,9 +104,13 @@ instructionsTextHeight = .05
 lettersTextHeight = .1
 wrap = 1.5
 
-
 initITIstatic = []
 initITIdynamic = []
+
+#blue([-0.0667,0.6392,1])
+### Choice Shape; V, N, and OR text;
+#grey([0.5216,0.5216,0.5216])
+### Background; Choice Line
 
 # --- Initialize components for Routine "CGErdmStart" ---
 CGErdmStartText = visual.TextStim(win=win, name='CGErdmStartText',
@@ -131,15 +135,15 @@ pracStartResp = keyboard.Keyboard()
 # --- Initialize components for Routine "pracChoice" ---
 # Run 'Begin Experiment' code from pracChoiceRandLoc
 textHeight = 0.05;
-pracCircleLeft = visual.Rect(
+pracCircleLeft = visual.ShapeStim(
     win=win, name='pracCircleLeft',
-    width=(.5, .5)[0], height=(.5, .5)[1],
+    size=(.5, .5), vertices='circle',
     ori=0, pos=(-.4,0), anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=[1,1,1], fillColor=[1,1,1],
     opacity=1, depth=-1.0, interpolate=True)
-pracCircleRight = visual.Rect(
+pracCircleRight = visual.ShapeStim(
     win=win, name='pracCircleRight',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
+    size=(0.5, 0.5), vertices='circle',
     ori=0, pos=(.4,0), anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor='white', fillColor='white',
     opacity=1, depth=-2.0, interpolate=True)
@@ -333,7 +337,7 @@ isiFix = visual.TextStim(win=win, name='isiFix',
 
 # --- Initialize components for Routine "staticOutcome" ---
 # Run 'Begin Experiment' code from staticOCcode
-actualITI = None
+actualITI = []
 riskygain_values = []
 riskyloss_values = []
 certain_values = []
@@ -652,6 +656,30 @@ while continueRoutine:
 for thisComponent in SetUpComponents:
     if hasattr(thisComponent, "setAutoDraw"):
         thisComponent.setAutoDraw(False)
+# Run 'End Routine' code from setupCode
+# Getting random module
+import random
+
+# Define the shuffle function (equivalent to the JavaScript version)
+def shuffle(array):
+    currentIndex = len(array)
+    while currentIndex != 0:
+        randomIndex = random.randint(0, currentIndex - 1)
+        currentIndex -= 1
+        array[currentIndex], array[randomIndex] = array[randomIndex], array[currentIndex]
+
+# Initialize ITIs
+initITIstatic = [1, 1.5] * 25
+initITIdynamic = [1, 1.5] * 60
+
+# Shuffle the ITIs using the shuffle function
+shuffle(initITIstatic)
+shuffle(initITIdynamic)
+
+# Save the ITIs as experiment data
+thisExp.addData('initITIstatic', initITIstatic)
+thisExp.addData('initITIdynamic', initITIdynamic)
+
 # the Routine "SetUp" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 
@@ -2107,9 +2135,9 @@ for thisStaticTrial in staticTrials:
     actualITI = initITIstatic[staticTrials.thisN] + extraITI
     
     if outcome == riskyoption2:
-        feedbackRounded = "$%.0f" % round(outcome,0)
+        feedbackRounded = "$%.0f" % round(outcometmp,0)
     else:
-        feedbackRounded = "$%.2f" % round(outcome,2)
+        feedbackRounded = "$%.2f" % round(outcometmp,2)
     
     outcomes.append(outcometmp)
     choices.append(choicetmp)

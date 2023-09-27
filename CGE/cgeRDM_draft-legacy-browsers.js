@@ -222,7 +222,6 @@ async function experimentInit() {
   lettersTextHeight = 0.1;
   wrap = 1.5;
   
-  
   var initITIstatic
   var initITIdynamic
   
@@ -265,18 +264,18 @@ async function experimentInit() {
   // Run 'Begin Experiment' code from pracChoiceRandLoc
   textHeight = 0.05;
   
-  pracCircleLeft = new visual.Rect ({
+  pracCircleLeft = new visual.Polygon({
     win: psychoJS.window, name: 'pracCircleLeft', 
-    width: [0.5, 0.5][0], height: [0.5, 0.5][1],
+    edges: 100, size:[0.5, 0.5],
     ori: 0, pos: [(- 0.4), 0],
     lineWidth: 1, lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, 1, 1]),
     opacity: 1, depth: -1, interpolate: true,
   });
   
-  pracCircleRight = new visual.Rect ({
+  pracCircleRight = new visual.Polygon({
     win: psychoJS.window, name: 'pracCircleRight', 
-    width: [0.5, 0.5][0], height: [0.5, 0.5][1],
+    edges: 100, size:[0.5, 0.5],
     ori: 0, pos: [0.4, 0],
     lineWidth: 1, lineColor: new util.Color('white'),
     fillColor: new util.Color('white'),
@@ -863,6 +862,7 @@ function SetUpRoutineEnd(snapshot) {
         thisComponent.setAutoDraw(false);
       }
     });
+    // Run 'End Routine' code from setupCode
     function shuffle(array) {
       let currentIndex = array.length,  randomIndex;
     
