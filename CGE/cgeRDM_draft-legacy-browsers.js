@@ -98,8 +98,8 @@ psychoJS.start({
   expName: expName,
   expInfo: expInfo,
   resources: [
-    {'name': 'cgtRDMPractice.xlsx', 'path': 'cgtRDMPractice.xlsx'},
-    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'}
+    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'},
+    {'name': 'cgtRDMPractice.xlsx', 'path': 'cgtRDMPractice.xlsx'}
   ]
 });
 

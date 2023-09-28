@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.1),
-    on September 27, 2023, at 11:55
+    on September 27, 2023, at 17:15
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -2145,7 +2145,7 @@ for thisStaticTrial in staticTrials:
     
     actualITI = initITIstatic[staticTrials.thisN] + extraITI
     
-    if outcome == riskyoption2:
+    if outcometmp == riskyoption2:
         feedbackRounded = "$%.0f" % round(outcometmp,0)
     else:
         feedbackRounded = "$%.2f" % round(outcometmp,2)
@@ -2462,7 +2462,7 @@ for thisBestFit in BestFit:
     
     print('The best R index is', bestR, 'while the best M index is', bestM, ', with an NLL of', best_nll_value);
     
-    fname.append("../cgt_gamblingSpanTasks/bespoke_choicesets/bespoke_choiceset_rhoInd%03i_muInd%03i.csv" % (bestR, bestM))
+    fname.append("../CGE/bespoke_choicesets/bespoke_choiceset_rhoInd%03i_muInd%03i.csv" % (bestR, bestM))
     dynamicChoiceSetFilename = fname[0]
     dynamicChoiceSet = fname[0]  # Set routine start values for dynamicChoiceSet
     thisExp.addData('dynamicChoiceSet.routineStartVal', dynamicChoiceSet)  # Save exp start value
@@ -3187,10 +3187,10 @@ for thisDynamicTrial in dynamicTrials:
     
     actualITI = initITIdynamic[dynamicTrials.thisN] + extraITI
     
-    if outcome == riskyoption2:
-        feedbackRounded = "$%.0f" % round(outcome,0)
+    if outcometmp == riskyoption2:
+        feedbackRounded = "$%.0f" % round(outcometmp,0)
     else:
-        feedbackRounded = "$%.2f" % round(outcome,2)
+        feedbackRounded = "$%.2f" % round(outcometmp,2)
     
     outcomes.append(outcometmp)
     choices.append(choicetmp)
