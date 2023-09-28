@@ -66,7 +66,7 @@
   <Routines>
     <Routine name="pracStart">
       <TextComponent name="pracStartText">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -2512,7 +2512,7 @@
     </Routine>
     <Routine name="END">
       <TextComponent name="ThankYou">
-        <Param val="white" valType="color" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="color" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -2696,10 +2696,10 @@
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
-        <Param val="$[1,1,1]" valType="str" updates="constant" name="fillColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="fillColor"/>
         <Param val="rgb" valType="str" updates="constant" name="fillColorSpace"/>
         <Param val="linear" valType="str" updates="constant" name="interpolate"/>
-        <Param val="$[1,1,1]" valType="str" updates="constant" name="lineColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="lineColor"/>
         <Param val="rgb" valType="str" updates="constant" name="lineColorSpace"/>
         <Param val="1" valType="code" updates="constant" name="lineWidth"/>
         <Param val="130" valType="int" updates="constant" name="nVertices"/>
@@ -2725,10 +2725,10 @@
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
-        <Param val="$[1,1,1]" valType="str" updates="set every repeat" name="fillColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="set every repeat" name="fillColor"/>
         <Param val="rgb" valType="str" updates="constant" name="fillColorSpace"/>
         <Param val="linear" valType="str" updates="constant" name="interpolate"/>
-        <Param val="$[1,1,1]" valType="str" updates="set every repeat" name="lineColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="set every repeat" name="lineColor"/>
         <Param val="rgb" valType="str" updates="constant" name="lineColorSpace"/>
         <Param val="1" valType="code" updates="constant" name="lineWidth"/>
         <Param val="130" valType="int" updates="constant" name="nVertices"/>
@@ -2754,10 +2754,10 @@
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
-        <Param val="$[-1,-1,-1]" valType="str" updates="constant" name="fillColor"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="fillColor"/>
         <Param val="rgb" valType="str" updates="constant" name="fillColorSpace"/>
         <Param val="linear" valType="str" updates="constant" name="interpolate"/>
-        <Param val="$[-1,-1,-1]" valType="str" updates="constant" name="lineColor"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="lineColor"/>
         <Param val="rgb" valType="str" updates="constant" name="lineColorSpace"/>
         <Param val="3" valType="code" updates="constant" name="lineWidth"/>
         <Param val="4" valType="int" updates="constant" name="nVertices"/>
@@ -2778,7 +2778,7 @@
         <Param val="" valType="list" updates="constant" name="vertices"/>
       </PolygonComponent>
       <TextComponent name="pracORtext">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -2803,7 +2803,7 @@
         <Param val="" valType="code" updates="constant" name="wrapWidth"/>
       </TextComponent>
       <TextComponent name="pracLossText">
-        <Param val="black" valType="str" updates="constant" name="color"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -2828,7 +2828,7 @@
         <Param val="" valType="code" updates="constant" name="wrapWidth"/>
       </TextComponent>
       <TextComponent name="pracGainText">
-        <Param val="black" valType="str" updates="constant" name="color"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -2853,7 +2853,7 @@
         <Param val="" valType="code" updates="constant" name="wrapWidth"/>
       </TextComponent>
       <TextComponent name="pracSafeText">
-        <Param val="black" valType="str" updates="constant" name="color"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -2878,7 +2878,7 @@
         <Param val="" valType="code" updates="constant" name="wrapWidth"/>
       </TextComponent>
       <TextComponent name="pracVLeft">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -2903,7 +2903,7 @@
         <Param val="" valType="code" updates="constant" name="wrapWidth"/>
       </TextComponent>
       <TextComponent name="pracNRight">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -2948,7 +2948,7 @@
     </Routine>
     <Routine name="pracISI">
       <TextComponent name="isiPracFix">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -2992,7 +2992,7 @@
         <Param val="pracOCcode" valType="code" updates="None" name="name"/>
       </CodeComponent>
       <TextComponent name="pracNoRespText">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3022,10 +3022,10 @@
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
-        <Param val="$[1,1,1]" valType="str" updates="constant" name="fillColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="fillColor"/>
         <Param val="rgb" valType="str" updates="constant" name="fillColorSpace"/>
         <Param val="linear" valType="str" updates="constant" name="interpolate"/>
-        <Param val="$[1,1,1]" valType="str" updates="constant" name="lineColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="lineColor"/>
         <Param val="rgb" valType="str" updates="constant" name="lineColorSpace"/>
         <Param val="1" valType="code" updates="constant" name="lineWidth"/>
         <Param val="130" valType="int" updates="constant" name="nVertices"/>
@@ -3051,10 +3051,10 @@
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
-        <Param val="$[1,1,1]" valType="str" updates="constant" name="fillColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="fillColor"/>
         <Param val="rgb" valType="str" updates="constant" name="fillColorSpace"/>
         <Param val="linear" valType="str" updates="constant" name="interpolate"/>
-        <Param val="$[1,1,1]" valType="str" updates="constant" name="lineColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="lineColor"/>
         <Param val="rgb" valType="str" updates="constant" name="lineColorSpace"/>
         <Param val="1" valType="code" updates="constant" name="lineWidth"/>
         <Param val="130" valType="int" updates="constant" name="nVertices"/>
@@ -3075,7 +3075,7 @@
         <Param val="" valType="list" updates="constant" name="vertices"/>
       </PolygonComponent>
       <TextComponent name="pracOCtext">
-        <Param val="black" valType="str" updates="set every repeat" name="color"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="set every repeat" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3105,10 +3105,10 @@
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
-        <Param val="$[-1,-1,-1]" valType="str" updates="constant" name="fillColor"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="fillColor"/>
         <Param val="rgb" valType="str" updates="constant" name="fillColorSpace"/>
         <Param val="linear" valType="str" updates="constant" name="interpolate"/>
-        <Param val="$[-1,-1,-1]" valType="str" updates="constant" name="lineColor"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="lineColor"/>
         <Param val="rgb" valType="str" updates="constant" name="lineColorSpace"/>
         <Param val="1" valType="code" updates="constant" name="lineWidth"/>
         <Param val="4" valType="int" updates="constant" name="nVertices"/>
@@ -3131,7 +3131,7 @@
     </Routine>
     <Routine name="pracITI">
       <TextComponent name="itiPracFix">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3158,7 +3158,7 @@
     </Routine>
     <Routine name="CGErdmStart">
       <TextComponent name="CGErdmStartText">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3203,7 +3203,7 @@
     </Routine>
     <Routine name="staticStart">
       <TextComponent name="staticStartText">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3265,7 +3265,7 @@
         <Param val="staticOCcode" valType="code" updates="None" name="name"/>
       </CodeComponent>
       <TextComponent name="staticNoRespText">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3295,10 +3295,10 @@
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
-        <Param val="$[1,1,1]" valType="str" updates="constant" name="fillColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="fillColor"/>
         <Param val="rgb" valType="str" updates="constant" name="fillColorSpace"/>
         <Param val="linear" valType="str" updates="constant" name="interpolate"/>
-        <Param val="$[1,1,1]" valType="str" updates="constant" name="lineColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="lineColor"/>
         <Param val="rgb" valType="str" updates="constant" name="lineColorSpace"/>
         <Param val="1" valType="code" updates="constant" name="lineWidth"/>
         <Param val="130" valType="int" updates="constant" name="nVertices"/>
@@ -3348,7 +3348,7 @@
         <Param val="" valType="list" updates="constant" name="vertices"/>
       </PolygonComponent>
       <TextComponent name="staticOCtext">
-        <Param val="black" valType="str" updates="set every repeat" name="color"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="set every repeat" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3378,10 +3378,10 @@
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
-        <Param val="$[-1,-1,-1]" valType="str" updates="constant" name="fillColor"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="fillColor"/>
         <Param val="rgb" valType="str" updates="constant" name="fillColorSpace"/>
         <Param val="linear" valType="str" updates="constant" name="interpolate"/>
-        <Param val="$[-1,-1,-1]" valType="str" updates="constant" name="lineColor"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="lineColor"/>
         <Param val="rgb" valType="str" updates="constant" name="lineColorSpace"/>
         <Param val="1" valType="code" updates="constant" name="lineWidth"/>
         <Param val="4" valType="int" updates="constant" name="nVertices"/>
@@ -3481,7 +3481,7 @@
         <Param val="False" valType="bool" updates="None" name="syncScreenRefresh"/>
       </VariableComponent>
       <TextComponent name="setupBestFit">
-        <Param val="white" valType="color" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="color" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3527,7 +3527,7 @@
     </Routine>
     <Routine name="dynamicStart">
       <TextComponent name="dynamicStartText">
-        <Param val="white" valType="color" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="color" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3572,7 +3572,7 @@
     </Routine>
     <Routine name="ISI">
       <TextComponent name="isiFix">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3599,7 +3599,7 @@
     </Routine>
     <Routine name="ITI">
       <TextComponent name="itiFix">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3648,10 +3648,10 @@
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
-        <Param val="$[1,1,1]" valType="str" updates="constant" name="fillColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="fillColor"/>
         <Param val="rgb" valType="str" updates="constant" name="fillColorSpace"/>
         <Param val="linear" valType="str" updates="constant" name="interpolate"/>
-        <Param val="$[1,1,1]" valType="str" updates="constant" name="lineColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="lineColor"/>
         <Param val="rgb" valType="str" updates="constant" name="lineColorSpace"/>
         <Param val="1" valType="code" updates="constant" name="lineWidth"/>
         <Param val="130" valType="int" updates="constant" name="nVertices"/>
@@ -3677,10 +3677,10 @@
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
-        <Param val="$[1,1,1]" valType="str" updates="set every repeat" name="fillColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="set every repeat" name="fillColor"/>
         <Param val="rgb" valType="str" updates="constant" name="fillColorSpace"/>
         <Param val="linear" valType="str" updates="constant" name="interpolate"/>
-        <Param val="$[1,1,1]" valType="str" updates="set every repeat" name="lineColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="set every repeat" name="lineColor"/>
         <Param val="rgb" valType="str" updates="constant" name="lineColorSpace"/>
         <Param val="1" valType="code" updates="constant" name="lineWidth"/>
         <Param val="130" valType="int" updates="constant" name="nVertices"/>
@@ -3706,10 +3706,10 @@
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
-        <Param val="$[-1,-1,-1]" valType="str" updates="constant" name="fillColor"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="fillColor"/>
         <Param val="rgb" valType="str" updates="constant" name="fillColorSpace"/>
         <Param val="linear" valType="str" updates="constant" name="interpolate"/>
-        <Param val="$[-1,-1,-1]" valType="str" updates="constant" name="lineColor"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="lineColor"/>
         <Param val="rgb" valType="str" updates="constant" name="lineColorSpace"/>
         <Param val="3" valType="code" updates="constant" name="lineWidth"/>
         <Param val="4" valType="int" updates="constant" name="nVertices"/>
@@ -3730,7 +3730,7 @@
         <Param val="" valType="list" updates="constant" name="vertices"/>
       </PolygonComponent>
       <TextComponent name="realORtext">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3755,7 +3755,7 @@
         <Param val="" valType="code" updates="constant" name="wrapWidth"/>
       </TextComponent>
       <TextComponent name="realLossText">
-        <Param val="black" valType="str" updates="constant" name="color"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3780,7 +3780,7 @@
         <Param val="" valType="code" updates="constant" name="wrapWidth"/>
       </TextComponent>
       <TextComponent name="realGainText">
-        <Param val="black" valType="str" updates="constant" name="color"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3805,7 +3805,7 @@
         <Param val="" valType="code" updates="constant" name="wrapWidth"/>
       </TextComponent>
       <TextComponent name="realSafeText">
-        <Param val="black" valType="str" updates="constant" name="color"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3830,7 +3830,7 @@
         <Param val="" valType="code" updates="constant" name="wrapWidth"/>
       </TextComponent>
       <TextComponent name="realVLeft">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3855,7 +3855,7 @@
         <Param val="" valType="code" updates="constant" name="wrapWidth"/>
       </TextComponent>
       <TextComponent name="realNRight">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3917,7 +3917,7 @@
         <Param val="dynamicOCcode" valType="code" updates="None" name="name"/>
       </CodeComponent>
       <TextComponent name="dynamicNoRespText">
-        <Param val="white" valType="str" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -3947,10 +3947,10 @@
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
-        <Param val="$[1,1,1]" valType="str" updates="constant" name="fillColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="fillColor"/>
         <Param val="rgb" valType="str" updates="constant" name="fillColorSpace"/>
         <Param val="linear" valType="str" updates="constant" name="interpolate"/>
-        <Param val="$[1,1,1]" valType="str" updates="constant" name="lineColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="lineColor"/>
         <Param val="rgb" valType="str" updates="constant" name="lineColorSpace"/>
         <Param val="1" valType="code" updates="constant" name="lineWidth"/>
         <Param val="130" valType="int" updates="constant" name="nVertices"/>
@@ -3976,10 +3976,10 @@
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
-        <Param val="$[1,1,1]" valType="str" updates="constant" name="fillColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="fillColor"/>
         <Param val="rgb" valType="str" updates="constant" name="fillColorSpace"/>
         <Param val="linear" valType="str" updates="constant" name="interpolate"/>
-        <Param val="$[1,1,1]" valType="str" updates="constant" name="lineColor"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="lineColor"/>
         <Param val="rgb" valType="str" updates="constant" name="lineColorSpace"/>
         <Param val="1" valType="code" updates="constant" name="lineWidth"/>
         <Param val="130" valType="int" updates="constant" name="nVertices"/>
@@ -4000,7 +4000,7 @@
         <Param val="" valType="list" updates="constant" name="vertices"/>
       </PolygonComponent>
       <TextComponent name="dynamicOCtext">
-        <Param val="black" valType="str" updates="set every repeat" name="color"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="set every repeat" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
@@ -4030,10 +4030,10 @@
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
-        <Param val="$[-1,-1,-1]" valType="str" updates="constant" name="fillColor"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="fillColor"/>
         <Param val="rgb" valType="str" updates="constant" name="fillColorSpace"/>
         <Param val="linear" valType="str" updates="constant" name="interpolate"/>
-        <Param val="$[-1,-1,-1]" valType="str" updates="constant" name="lineColor"/>
+        <Param val="$[0.5216,0.5216,0.5216]" valType="str" updates="constant" name="lineColor"/>
         <Param val="rgb" valType="str" updates="constant" name="lineColorSpace"/>
         <Param val="1" valType="code" updates="constant" name="lineWidth"/>
         <Param val="4" valType="int" updates="constant" name="nVertices"/>
@@ -4075,7 +4075,7 @@
     </Routine>
     <Routine name="cgeRDMend">
       <TextComponent name="cgeRDMendText">
-        <Param val="white" valType="color" updates="constant" name="color"/>
+        <Param val="$[-0.0667,0.6392,1.0000]" valType="color" updates="constant" name="color"/>
         <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>

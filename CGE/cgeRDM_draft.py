@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.1),
-    on September 27, 2023, at 17:40
+    on September 28, 2023, at 11:05
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -121,7 +121,7 @@ CGErdmStartText = visual.TextStim(win=win, name='CGErdmStartText',
     text='As discussed in the instructions, you will choose between a gamble and a guaranteed alternative.\n\nYou may press "V" to select the option on the left and "N" to select the option on the right.\n\nPress "enter" to move on to the next screen.',
     font='Arial',
     pos=(0, 0), height=.05, wrapWidth=wrap, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    color=[119,209,205], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
 CGErdmStartResp = keyboard.Keyboard()
