@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.1),
-    on September 28, 2023, at 14:46
+    on September 29, 2023, at 02:54
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -107,21 +107,27 @@ wrap = 1.5
 initITIstatic = []
 initITIdynamic = []
 
-#blue
-# PsychoPy RGB -1:1 [-0.0667,0.6392,1]
-# RGB 0:255 [119,209,205]
-### Choice Shape; V, N, and OR text;
-# GREY
-# psychopy RGB -1:1 [0.5216,0.5216,0.5216]
-# RGB 0:255 [194,194,194] 
-### Background; Choice Line
+# Isoluminant Colors Used 
+color1 = [0.5216,0.5216,0.5216]
+color2 = [-0.0667,0.6392,1]
+# BLUE ### Choice Shape; V, N, and OR text
+# PsychoPy RGB -1:1 [-0.0667,0.6392,1] # RGB 0:255 [119,209,205]
+# GREY ### Background; Choice Line
+# psychopy RGB -1:1 [0.5216,0.5216,0.5216] # RGB 0:255 [194,194,194] 
 
-# --- Initialize components for Routine "CGErdmStart" ---
+### Fixed Practice Trial Locations
+circLeftLoc=[-.35,0]
+circRightLoc=[.35,0]
+ORtextLoc=[0,0]
+VleftLoc=[-.35,-.35]
+NrightLoc=[.35,-.35]
+
+# --- Initialize components for Routine "cgeRDMstart" ---
 CGErdmStartText = visual.TextStim(win=win, name='CGErdmStartText',
     text='As discussed in the instructions, you will choose between a gamble and a guaranteed alternative.\n\nYou may press "V" to select the option on the left and "N" to select the option on the right.\n\nPress "enter" to move on to the next screen.',
     font='Arial',
     pos=(0, 0), height=.05, wrapWidth=wrap, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
 CGErdmStartResp = keyboard.Keyboard()
@@ -131,7 +137,7 @@ pracStartText = visual.TextStim(win=win, name='pracStartText',
     text='There will now be 5 practice trials.\n\nWhen you are ready to begin the practice, press "V" or "N".',
     font='Arial',
     pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
 pracStartResp = keyboard.Keyboard()
@@ -139,64 +145,64 @@ pracStartResp = keyboard.Keyboard()
 # --- Initialize components for Routine "pracChoice" ---
 # Run 'Begin Experiment' code from pracChoiceRandLoc
 textHeight = 0.05;
-pracCircleLeft = visual.ShapeStim(
-    win=win, name='pracCircleLeft',
+pracCircLeft = visual.ShapeStim(
+    win=win, name='pracCircLeft',
     size=(.5, .5), vertices='circle',
-    ori=0, pos=(-.4,0), anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[-0.0667,0.6392,1.0000],
+    ori=0, pos=circLeftLoc, anchor='center',
+    lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-1.0, interpolate=True)
-pracCircleRight = visual.ShapeStim(
-    win=win, name='pracCircleRight',
+pracCircRight = visual.ShapeStim(
+    win=win, name='pracCircRight',
     size=(0.5, 0.5), vertices='circle',
-    ori=0, pos=(.4,0), anchor='center',
+    ori=0, pos=circRightLoc, anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor='white', fillColor='white',
     opacity=1, depth=-2.0, interpolate=True)
-pracLineLeft = visual.Rect(
-    win=win, name='pracLineLeft',
+pracRiskLine = visual.Rect(
+    win=win, name='pracRiskLine',
     width=(0.5, 0.01)[0], height=(0.5, 0.01)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=3,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
+    lineWidth=3,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-3.0, interpolate=True)
 pracORtext = visual.TextStim(win=win, name='pracORtext',
     text='OR',
     font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    pos=ORtextLoc, height=0.05, wrapWidth=None, ori=0, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
 pracLossText = visual.TextStim(win=win, name='pracLossText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
+    color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-5.0);
 pracGainText = visual.TextStim(win=win, name='pracGainText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
+    color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-6.0);
 pracSafeText = visual.TextStim(win=win, name='pracSafeText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
+    color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-7.0);
-pracVLeft = visual.TextStim(win=win, name='pracVLeft',
+pracVleft = visual.TextStim(win=win, name='pracVleft',
     text='V-Left',
     font='Arial',
-    pos=(-.4, -.35), height=0.05, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    pos=VleftLoc, height=0.05, wrapWidth=None, ori=0, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-8.0);
-pracNRight = visual.TextStim(win=win, name='pracNRight',
+pracNright = visual.TextStim(win=win, name='pracNright',
     text='N-Right',
     font='Arial',
-    pos=(.4, -.35), height=0.05, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    pos=NrightLoc, height=0.05, wrapWidth=None, ori=0, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-9.0);
 pracChoiceResp = keyboard.Keyboard()
@@ -215,20 +221,20 @@ pracNoRespText = visual.TextStim(win=win, name='pracNoRespText',
     text='You did not respond in time\n',
     font='Arial',
     pos=[0,0], height=textHeight, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-1.0);
 pracRiskOC = visual.ShapeStim(
     win=win, name='pracRiskOC',
     size=(0.5, 0.5), vertices='circle',
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[0.5216,0.5216,0.5216],
+    lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-2.0, interpolate=True)
 pracSafeOC = visual.ShapeStim(
     win=win, name='pracSafeOC',
     size=(0.5, 0.5), vertices='circle',
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[-0.0667,0.6392,1.0000],
+    lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-3.0, interpolate=True)
 pracOCtext = visual.TextStim(win=win, name='pracOCtext',
     text='',
@@ -241,14 +247,8 @@ pracHideRisk = visual.Rect(
     win=win, name='pracHideRisk',
     width=(0.6, 0.3)[0], height=(0.6, 0.3)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
+    lineWidth=1,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-5.0, interpolate=True)
-pracHideLine = visual.Rect(
-    win=win, name='pracHideLine',
-    width=(0.5, 0.005)[0], height=(0.5, 0.005)[1],
-    ori=0, pos=[0,0], anchor='center',
-    lineWidth=3,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
-    opacity=1, depth=-6.0, interpolate=True)
 
 # --- Initialize components for Routine "pracITI" ---
 itiPracFix = visual.TextStim(win=win, name='itiPracFix',
@@ -269,25 +269,25 @@ staticStartText = visual.TextStim(win=win, name='staticStartText',
     depth=0.0);
 staticStartResp = keyboard.Keyboard()
 
-# --- Initialize components for Routine "choiceWindow" ---
+# --- Initialize components for Routine "realChoice" ---
 # Run 'Begin Experiment' code from realChoiceRandLoc
 loc = [];
 
 
-CircleLeft = visual.Rect(
-    win=win, name='CircleLeft',
+realCircLeft = visual.Rect(
+    win=win, name='realCircLeft',
     width=(.5, .5)[0], height=(.5, .5)[1],
-    ori=0, pos=(-.4,0), anchor='center',
+    ori=0, pos=circLeftLoc, anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[-0.0667,0.6392,1.0000],
     opacity=1, depth=-1.0, interpolate=True)
-realCircleRight = visual.Rect(
-    win=win, name='realCircleRight',
+realCircRight = visual.Rect(
+    win=win, name='realCircRight',
     width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
-    ori=0, pos=(.4,0), anchor='center',
+    ori=0, pos=circRightLoc, anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor='white', fillColor='white',
     opacity=1, depth=-2.0, interpolate=True)
-realLineLeft = visual.Rect(
-    win=win, name='realLineLeft',
+realRiskLine = visual.Rect(
+    win=win, name='realRiskLine',
     width=(0.5, 0.01)[0], height=(0.5, 0.01)[1],
     ori=0, pos=[0,0], anchor='center',
     lineWidth=3,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
@@ -295,7 +295,7 @@ realLineLeft = visual.Rect(
 realORtext = visual.TextStim(win=win, name='realORtext',
     text='OR',
     font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
+    pos=ORtextLoc, height=0.05, wrapWidth=None, ori=0, 
     color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
@@ -320,23 +320,23 @@ realSafeText = visual.TextStim(win=win, name='realSafeText',
     color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-7.0);
-realVLeft = visual.TextStim(win=win, name='realVLeft',
+realVleft = visual.TextStim(win=win, name='realVleft',
     text='V-Left',
     font='Arial',
-    pos=(-.4, -.35), height=0.05, wrapWidth=None, ori=0, 
+    pos=VleftLoc, height=0.05, wrapWidth=None, ori=0, 
     color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-8.0);
-realNRight = visual.TextStim(win=win, name='realNRight',
+realNright = visual.TextStim(win=win, name='realNright',
     text='N-Right',
     font='Arial',
-    pos=(.4, -.35), height=0.05, wrapWidth=None, ori=0, 
+    pos=NrightLoc, height=0.05, wrapWidth=None, ori=0, 
     color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-9.0);
 realChoiceResp = keyboard.Keyboard()
 
-# --- Initialize components for Routine "ISI" ---
+# --- Initialize components for Routine "realISI" ---
 isiFix = visual.TextStim(win=win, name='isiFix',
     text='+',
     font='Arial',
@@ -386,7 +386,7 @@ staticHideRisk = visual.Rect(
     lineWidth=1,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
     opacity=1, depth=-5.0, interpolate=True)
 
-# --- Initialize components for Routine "ITI" ---
+# --- Initialize components for Routine "realITI" ---
 itiFix = visual.TextStim(win=win, name='itiFix',
     text='+',
     font='Arial',
@@ -478,25 +478,25 @@ dynamicStartText = visual.TextStim(win=win, name='dynamicStartText',
     depth=0.0);
 dynamicStartResp = keyboard.Keyboard()
 
-# --- Initialize components for Routine "choiceWindow" ---
+# --- Initialize components for Routine "realChoice" ---
 # Run 'Begin Experiment' code from realChoiceRandLoc
 loc = [];
 
 
-CircleLeft = visual.Rect(
-    win=win, name='CircleLeft',
+realCircLeft = visual.Rect(
+    win=win, name='realCircLeft',
     width=(.5, .5)[0], height=(.5, .5)[1],
-    ori=0, pos=(-.4,0), anchor='center',
+    ori=0, pos=circLeftLoc, anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[-0.0667,0.6392,1.0000],
     opacity=1, depth=-1.0, interpolate=True)
-realCircleRight = visual.Rect(
-    win=win, name='realCircleRight',
+realCircRight = visual.Rect(
+    win=win, name='realCircRight',
     width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
-    ori=0, pos=(.4,0), anchor='center',
+    ori=0, pos=circRightLoc, anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor='white', fillColor='white',
     opacity=1, depth=-2.0, interpolate=True)
-realLineLeft = visual.Rect(
-    win=win, name='realLineLeft',
+realRiskLine = visual.Rect(
+    win=win, name='realRiskLine',
     width=(0.5, 0.01)[0], height=(0.5, 0.01)[1],
     ori=0, pos=[0,0], anchor='center',
     lineWidth=3,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
@@ -504,7 +504,7 @@ realLineLeft = visual.Rect(
 realORtext = visual.TextStim(win=win, name='realORtext',
     text='OR',
     font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
+    pos=ORtextLoc, height=0.05, wrapWidth=None, ori=0, 
     color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
@@ -529,23 +529,23 @@ realSafeText = visual.TextStim(win=win, name='realSafeText',
     color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-7.0);
-realVLeft = visual.TextStim(win=win, name='realVLeft',
+realVleft = visual.TextStim(win=win, name='realVleft',
     text='V-Left',
     font='Arial',
-    pos=(-.4, -.35), height=0.05, wrapWidth=None, ori=0, 
+    pos=VleftLoc, height=0.05, wrapWidth=None, ori=0, 
     color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-8.0);
-realNRight = visual.TextStim(win=win, name='realNRight',
+realNright = visual.TextStim(win=win, name='realNright',
     text='N-Right',
     font='Arial',
-    pos=(.4, -.35), height=0.05, wrapWidth=None, ori=0, 
+    pos=NrightLoc, height=0.05, wrapWidth=None, ori=0, 
     color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-9.0);
 realChoiceResp = keyboard.Keyboard()
 
-# --- Initialize components for Routine "ISI" ---
+# --- Initialize components for Routine "realISI" ---
 isiFix = visual.TextStim(win=win, name='isiFix',
     text='+',
     font='Arial',
@@ -594,7 +594,7 @@ dynamicHideRisk = visual.Rect(
     lineWidth=1,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
     opacity=1, depth=-5.0, interpolate=True)
 
-# --- Initialize components for Routine "ITI" ---
+# --- Initialize components for Routine "realITI" ---
 itiFix = visual.TextStim(win=win, name='itiFix',
     text='+',
     font='Arial',
@@ -700,15 +700,15 @@ thisExp.addData('initITIdynamic', initITIdynamic)
 # the Routine "SetUp" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 
-# --- Prepare to start Routine "CGErdmStart" ---
+# --- Prepare to start Routine "cgeRDMstart" ---
 continueRoutine = True
 # update component parameters for each repeat
 CGErdmStartResp.keys = []
 CGErdmStartResp.rt = []
 _CGErdmStartResp_allKeys = []
 # keep track of which components have finished
-CGErdmStartComponents = [CGErdmStartText, CGErdmStartResp]
-for thisComponent in CGErdmStartComponents:
+cgeRDMstartComponents = [CGErdmStartText, CGErdmStartResp]
+for thisComponent in cgeRDMstartComponents:
     thisComponent.tStart = None
     thisComponent.tStop = None
     thisComponent.tStartRefresh = None
@@ -720,7 +720,7 @@ t = 0
 _timeToFirstFrame = win.getFutureFlipTime(clock="now")
 frameN = -1
 
-# --- Run Routine "CGErdmStart" ---
+# --- Run Routine "cgeRDMstart" ---
 while continueRoutine:
     # get current time
     t = routineTimer.getTime()
@@ -772,7 +772,7 @@ while continueRoutine:
     if not continueRoutine:  # a component has requested a forced-end of Routine
         break
     continueRoutine = False  # will revert to True if at least one component still running
-    for thisComponent in CGErdmStartComponents:
+    for thisComponent in cgeRDMstartComponents:
         if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
             continueRoutine = True
             break  # at least one component has not yet finished
@@ -781,8 +781,8 @@ while continueRoutine:
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
 
-# --- Ending Routine "CGErdmStart" ---
-for thisComponent in CGErdmStartComponents:
+# --- Ending Routine "cgeRDMstart" ---
+for thisComponent in cgeRDMstartComponents:
     if hasattr(thisComponent, "setAutoDraw"):
         thisComponent.setAutoDraw(False)
 # check responses
@@ -792,7 +792,7 @@ thisExp.addData('CGErdmStartResp.keys',CGErdmStartResp.keys)
 if CGErdmStartResp.keys != None:  # we had a response
     thisExp.addData('CGErdmStartResp.rt', CGErdmStartResp.rt)
 thisExp.nextEntry()
-# the Routine "CGErdmStart" was not non-slip safe, so reset the non-slip timer
+# the Routine "cgeRDMstart" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 
 # --- Prepare to start Routine "pracStart" ---
@@ -893,7 +893,7 @@ routineTimer.reset()
 # set up handler to look after randomisation of conditions etc
 pracTrials = data.TrialHandler(nReps=1, method='sequential', 
     extraInfo=expInfo, originPath=-1,
-    trialList=data.importConditions('cgtRDMPractice.xlsx', selection='0:2'),
+    trialList=data.importConditions('cgtRDMPractice.xlsx', selection='0:4'),
     seed=None, name='pracTrials')
 thisExp.addLoop(pracTrials)  # add the loop to the experiment
 thisPracTrial = pracTrials.trialList[0]  # so we can initialise stimuli with some values
@@ -913,10 +913,11 @@ for thisPracTrial in pracTrials:
     continueRoutine = True
     # update component parameters for each repeat
     # Run 'Begin Routine' code from pracChoiceRandLoc
+    ### Randomized Practice Trial Locations
     if loc==1:
-        targetPos=[-.35,0]
+        riskLineLoc=[-.35,0] #targetPos
     else:
-        targetPos=[.35,0]
+        riskLineLoc=[.35,0] #targetPos
     
     if loc==1:
         lossLoc=[-.35,-.1]
@@ -927,13 +928,13 @@ for thisPracTrial in pracTrials:
         gainLoc=[.35,.1]
         safeLoc=[-.35,0]
         
-        
+    # Rounding Presentation of Monetary Values    
     pracLossRounded = '$%.0f' % round(riskyLoss,0)
     pracGainRounded = '$%.2f' % round(riskyGain,2)
     pracSafeRounded = '$%.2f' % round(alternative,2)
-    pracCircleRight.setFillColor([-0.0667,0.6392,1.0000])
-    pracCircleRight.setLineColor([-0.0667,0.6392,1.0000])
-    pracLineLeft.setPos(targetPos)
+    pracCircRight.setFillColor(color2)
+    pracCircRight.setLineColor(color2)
+    pracRiskLine.setPos(riskLineLoc)
     pracLossText.setPos(lossLoc)
     pracLossText.setText(pracLossRounded
 
@@ -946,7 +947,7 @@ for thisPracTrial in pracTrials:
     pracChoiceResp.rt = []
     _pracChoiceResp_allKeys = []
     # keep track of which components have finished
-    pracChoiceComponents = [pracCircleLeft, pracCircleRight, pracLineLeft, pracORtext, pracLossText, pracGainText, pracSafeText, pracVLeft, pracNRight, pracChoiceResp]
+    pracChoiceComponents = [pracCircLeft, pracCircRight, pracRiskLine, pracORtext, pracLossText, pracGainText, pracSafeText, pracVleft, pracNright, pracChoiceResp]
     for thisComponent in pracChoiceComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
@@ -968,65 +969,65 @@ for thisPracTrial in pracTrials:
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
         
-        # *pracCircleLeft* updates
-        if pracCircleLeft.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
+        # *pracCircLeft* updates
+        if pracCircLeft.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
             # keep track of start time/frame for later
-            pracCircleLeft.frameNStart = frameN  # exact frame index
-            pracCircleLeft.tStart = t  # local t and not account for scr refresh
-            pracCircleLeft.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(pracCircleLeft, 'tStartRefresh')  # time at next scr refresh
+            pracCircLeft.frameNStart = frameN  # exact frame index
+            pracCircLeft.tStart = t  # local t and not account for scr refresh
+            pracCircLeft.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(pracCircLeft, 'tStartRefresh')  # time at next scr refresh
             # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'pracCircleLeft.started')
-            pracCircleLeft.setAutoDraw(True)
-        if pracCircleLeft.status == STARTED:
+            thisExp.timestampOnFlip(win, 'pracCircLeft.started')
+            pracCircLeft.setAutoDraw(True)
+        if pracCircLeft.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > pracCircleLeft.tStartRefresh + 4-frameTolerance:
+            if tThisFlipGlobal > pracCircLeft.tStartRefresh + 4-frameTolerance:
                 # keep track of stop time/frame for later
-                pracCircleLeft.tStop = t  # not accounting for scr refresh
-                pracCircleLeft.frameNStop = frameN  # exact frame index
+                pracCircLeft.tStop = t  # not accounting for scr refresh
+                pracCircLeft.frameNStop = frameN  # exact frame index
                 # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'pracCircleLeft.stopped')
-                pracCircleLeft.setAutoDraw(False)
+                thisExp.timestampOnFlip(win, 'pracCircLeft.stopped')
+                pracCircLeft.setAutoDraw(False)
         
-        # *pracCircleRight* updates
-        if pracCircleRight.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+        # *pracCircRight* updates
+        if pracCircRight.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
-            pracCircleRight.frameNStart = frameN  # exact frame index
-            pracCircleRight.tStart = t  # local t and not account for scr refresh
-            pracCircleRight.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(pracCircleRight, 'tStartRefresh')  # time at next scr refresh
+            pracCircRight.frameNStart = frameN  # exact frame index
+            pracCircRight.tStart = t  # local t and not account for scr refresh
+            pracCircRight.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(pracCircRight, 'tStartRefresh')  # time at next scr refresh
             # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'pracCircleRight.started')
-            pracCircleRight.setAutoDraw(True)
-        if pracCircleRight.status == STARTED:
+            thisExp.timestampOnFlip(win, 'pracCircRight.started')
+            pracCircRight.setAutoDraw(True)
+        if pracCircRight.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > pracCircleRight.tStartRefresh + 4-frameTolerance:
+            if tThisFlipGlobal > pracCircRight.tStartRefresh + 4-frameTolerance:
                 # keep track of stop time/frame for later
-                pracCircleRight.tStop = t  # not accounting for scr refresh
-                pracCircleRight.frameNStop = frameN  # exact frame index
+                pracCircRight.tStop = t  # not accounting for scr refresh
+                pracCircRight.frameNStop = frameN  # exact frame index
                 # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'pracCircleRight.stopped')
-                pracCircleRight.setAutoDraw(False)
+                thisExp.timestampOnFlip(win, 'pracCircRight.stopped')
+                pracCircRight.setAutoDraw(False)
         
-        # *pracLineLeft* updates
-        if pracLineLeft.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+        # *pracRiskLine* updates
+        if pracRiskLine.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
-            pracLineLeft.frameNStart = frameN  # exact frame index
-            pracLineLeft.tStart = t  # local t and not account for scr refresh
-            pracLineLeft.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(pracLineLeft, 'tStartRefresh')  # time at next scr refresh
+            pracRiskLine.frameNStart = frameN  # exact frame index
+            pracRiskLine.tStart = t  # local t and not account for scr refresh
+            pracRiskLine.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(pracRiskLine, 'tStartRefresh')  # time at next scr refresh
             # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'pracLineLeft.started')
-            pracLineLeft.setAutoDraw(True)
-        if pracLineLeft.status == STARTED:
+            thisExp.timestampOnFlip(win, 'pracRiskLine.started')
+            pracRiskLine.setAutoDraw(True)
+        if pracRiskLine.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > pracLineLeft.tStartRefresh + 4-frameTolerance:
+            if tThisFlipGlobal > pracRiskLine.tStartRefresh + 4-frameTolerance:
                 # keep track of stop time/frame for later
-                pracLineLeft.tStop = t  # not accounting for scr refresh
-                pracLineLeft.frameNStop = frameN  # exact frame index
+                pracRiskLine.tStop = t  # not accounting for scr refresh
+                pracRiskLine.frameNStop = frameN  # exact frame index
                 # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'pracLineLeft.stopped')
-                pracLineLeft.setAutoDraw(False)
+                thisExp.timestampOnFlip(win, 'pracRiskLine.stopped')
+                pracRiskLine.setAutoDraw(False)
         
         # *pracORtext* updates
         if pracORtext.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
@@ -1108,45 +1109,45 @@ for thisPracTrial in pracTrials:
                 thisExp.timestampOnFlip(win, 'pracSafeText.stopped')
                 pracSafeText.setAutoDraw(False)
         
-        # *pracVLeft* updates
-        if pracVLeft.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
+        # *pracVleft* updates
+        if pracVleft.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
             # keep track of start time/frame for later
-            pracVLeft.frameNStart = frameN  # exact frame index
-            pracVLeft.tStart = t  # local t and not account for scr refresh
-            pracVLeft.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(pracVLeft, 'tStartRefresh')  # time at next scr refresh
+            pracVleft.frameNStart = frameN  # exact frame index
+            pracVleft.tStart = t  # local t and not account for scr refresh
+            pracVleft.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(pracVleft, 'tStartRefresh')  # time at next scr refresh
             # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'pracVLeft.started')
-            pracVLeft.setAutoDraw(True)
-        if pracVLeft.status == STARTED:
+            thisExp.timestampOnFlip(win, 'pracVleft.started')
+            pracVleft.setAutoDraw(True)
+        if pracVleft.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > pracVLeft.tStartRefresh + 4-frameTolerance:
+            if tThisFlipGlobal > pracVleft.tStartRefresh + 4-frameTolerance:
                 # keep track of stop time/frame for later
-                pracVLeft.tStop = t  # not accounting for scr refresh
-                pracVLeft.frameNStop = frameN  # exact frame index
+                pracVleft.tStop = t  # not accounting for scr refresh
+                pracVleft.frameNStop = frameN  # exact frame index
                 # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'pracVLeft.stopped')
-                pracVLeft.setAutoDraw(False)
+                thisExp.timestampOnFlip(win, 'pracVleft.stopped')
+                pracVleft.setAutoDraw(False)
         
-        # *pracNRight* updates
-        if pracNRight.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
+        # *pracNright* updates
+        if pracNright.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
             # keep track of start time/frame for later
-            pracNRight.frameNStart = frameN  # exact frame index
-            pracNRight.tStart = t  # local t and not account for scr refresh
-            pracNRight.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(pracNRight, 'tStartRefresh')  # time at next scr refresh
+            pracNright.frameNStart = frameN  # exact frame index
+            pracNright.tStart = t  # local t and not account for scr refresh
+            pracNright.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(pracNright, 'tStartRefresh')  # time at next scr refresh
             # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'pracNRight.started')
-            pracNRight.setAutoDraw(True)
-        if pracNRight.status == STARTED:
+            thisExp.timestampOnFlip(win, 'pracNright.started')
+            pracNright.setAutoDraw(True)
+        if pracNright.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > pracNRight.tStartRefresh + 4-frameTolerance:
+            if tThisFlipGlobal > pracNright.tStartRefresh + 4-frameTolerance:
                 # keep track of stop time/frame for later
-                pracNRight.tStop = t  # not accounting for scr refresh
-                pracNRight.frameNStop = frameN  # exact frame index
+                pracNright.tStop = t  # not accounting for scr refresh
+                pracNright.frameNStop = frameN  # exact frame index
                 # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'pracNRight.stopped')
-                pracNRight.setAutoDraw(False)
+                thisExp.timestampOnFlip(win, 'pracNright.stopped')
+                pracNright.setAutoDraw(False)
         
         # *pracChoiceResp* updates
         waitOnFlip = False
@@ -1294,7 +1295,6 @@ for thisPracTrial in pracTrials:
         ocGambleLoc = [5,5]
         ocSafeLoc = [5,5]
         hideGamLoc = [5,5]
-        hideGamLineLoc = [5,5]
     elif pracChoiceResp.keys == 'v' and loc == 1:
         outcome = random.choice([riskyGain, riskyLoss])
         extraITI = 4-pracChoiceResp.rt
@@ -1303,14 +1303,12 @@ for thisPracTrial in pracTrials:
             ocGambleLoc = [-.35,0]
             ocSafeLoc = [5,5]
             noRespLoc = [5,5]
-            hideGamLoc = [-.35,-.125]
-            hideGamLineLoc = [.35,-.125]
+            hideGamLoc = [-.35,-.15] #.125
         elif outcome == riskyLoss:
              ocLoc = [-.35,-.1]
              ocGambleLoc = [-.35,0]
              ocSafeLoc = [5,5]
-             hideGamLoc = [-.4,.125]
-             hideGamLineLoc = [-.35,.125]
+             hideGamLoc = [-.35,.15]
              noRespLoc = [5,5]
     elif pracChoiceResp.keys == 'v' and loc == 2:
         extraITI = 4-pracChoiceResp.rt
@@ -1319,7 +1317,6 @@ for thisPracTrial in pracTrials:
         ocGambleLoc = [5,5]
         ocSafeLoc = ocLoc
         hideGamLoc = ocGambleLoc
-        hideGamLineLoc = [5,5]
         noRespLoc = [5,5]
     elif pracChoiceResp.keys == 'n' and loc ==1:
         extraITI = 4-pracChoiceResp.rt
@@ -1328,7 +1325,6 @@ for thisPracTrial in pracTrials:
         ocGambleLoc = [5,5]
         ocSafeLoc = ocLoc
         hideGamLoc = ocGambleLoc
-        hideGamLineLoc = [5,5]
         noRespLoc = [5,5]
     elif pracChoiceResp.keys == 'n' and loc ==2:
         outcome = random.choice([riskyGain, riskyLoss])
@@ -1337,15 +1333,13 @@ for thisPracTrial in pracTrials:
             ocLoc = [.35,.1]
             ocGambleLoc = [.35,0]
             ocSafeLoc = [5,5]
-            hideGamLoc = [.35,-.125]
-            hideGamLineLoc = [.35,-.125]
+            hideGamLoc = [.35,-.15]
             noRespLoc = [5,5]
         elif outcome == riskyLoss:
             ocLoc = [.35,-.1]
             ocGambleLoc = [.35,0]
             ocSafeLoc = [5,5]
-            hideGamLoc = [.35,.125]
-            hideGamLineLoc = [.35,.125]
+            hideGamLoc = [.35,.15]
             noRespLoc = [5,5]
     
     if outcome == riskyLoss:
@@ -1355,13 +1349,12 @@ for thisPracTrial in pracTrials:
     pracNoRespText.setPos(noRespLoc)
     pracRiskOC.setPos(ocGambleLoc)
     pracSafeOC.setPos(ocSafeLoc)
-    pracOCtext.setColor([-0.0667,0.6392,1.0000], colorSpace='rgb')
+    pracOCtext.setColor(color1, colorSpace='rgb')
     pracOCtext.setPos(ocLoc)
     pracOCtext.setText(pracFeedbackRounded)
     pracHideRisk.setPos(hideGamLoc)
-    pracHideLine.setPos(hideGamLineLoc)
     # keep track of which components have finished
-    pracOutcomeComponents = [pracNoRespText, pracRiskOC, pracSafeOC, pracOCtext, pracHideRisk, pracHideLine]
+    pracOutcomeComponents = [pracNoRespText, pracRiskOC, pracSafeOC, pracOCtext, pracHideRisk]
     for thisComponent in pracOutcomeComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
@@ -1482,26 +1475,6 @@ for thisPracTrial in pracTrials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'pracHideRisk.stopped')
                 pracHideRisk.setAutoDraw(False)
-        
-        # *pracHideLine* updates
-        if pracHideLine.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            pracHideLine.frameNStart = frameN  # exact frame index
-            pracHideLine.tStart = t  # local t and not account for scr refresh
-            pracHideLine.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(pracHideLine, 'tStartRefresh')  # time at next scr refresh
-            # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'pracHideLine.started')
-            pracHideLine.setAutoDraw(True)
-        if pracHideLine.status == STARTED:
-            # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > pracHideLine.tStartRefresh + 1-frameTolerance:
-                # keep track of stop time/frame for later
-                pracHideLine.tStop = t  # not accounting for scr refresh
-                pracHideLine.frameNStop = frameN  # exact frame index
-                # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'pracHideLine.stopped')
-                pracHideLine.setAutoDraw(False)
         
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -1718,7 +1691,7 @@ for thisStaticTrial in staticTrials:
         for paramName in thisStaticTrial:
             exec('{} = thisStaticTrial[paramName]'.format(paramName))
     
-    # --- Prepare to start Routine "choiceWindow" ---
+    # --- Prepare to start Routine "realChoice" ---
     continueRoutine = True
     # update component parameters for each repeat
     # Run 'Begin Routine' code from realChoiceRandLoc
@@ -1727,9 +1700,9 @@ for thisStaticTrial in staticTrials:
     loc = random.choice([1,2])
     
     if loc==1:
-        targetPos=[-.35,0]
+        riskLineLoc=[-.35,0]
     else:
-        targetPos=[.35,0]
+        riskLineLoc=[.35,0]
     
     if loc==1:
         lossLoc=[-.35,-.1]
@@ -1747,9 +1720,9 @@ for thisStaticTrial in staticTrials:
     #lossRounded = ("$" + str(round(riskyoption2, 2)))
     #gainRounded = ("$" + str(round(riskyoption1, 2)))
     #safeRounded = ("$" + str(round(safeoption, 2)))
-    realCircleRight.setFillColor([-0.0667,0.6392,1.0000])
-    realCircleRight.setLineColor([-0.0667,0.6392,1.0000])
-    realLineLeft.setPos(targetPos)
+    realCircRight.setFillColor([-0.0667,0.6392,1.0000])
+    realCircRight.setLineColor([-0.0667,0.6392,1.0000])
+    realRiskLine.setPos(riskLineLoc)
     realLossText.setPos(lossLoc)
     realLossText.setText(lossRounded)
     realGainText.setPos(gainLoc)
@@ -1760,8 +1733,8 @@ for thisStaticTrial in staticTrials:
     realChoiceResp.rt = []
     _realChoiceResp_allKeys = []
     # keep track of which components have finished
-    choiceWindowComponents = [CircleLeft, realCircleRight, realLineLeft, realORtext, realLossText, realGainText, realSafeText, realVLeft, realNRight, realChoiceResp]
-    for thisComponent in choiceWindowComponents:
+    realChoiceComponents = [realCircLeft, realCircRight, realRiskLine, realORtext, realLossText, realGainText, realSafeText, realVleft, realNright, realChoiceResp]
+    for thisComponent in realChoiceComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
         thisComponent.tStartRefresh = None
@@ -1773,7 +1746,7 @@ for thisStaticTrial in staticTrials:
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
     
-    # --- Run Routine "choiceWindow" ---
+    # --- Run Routine "realChoice" ---
     while continueRoutine and routineTimer.getTime() < 4.0:
         # get current time
         t = routineTimer.getTime()
@@ -1782,65 +1755,65 @@ for thisStaticTrial in staticTrials:
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
         
-        # *CircleLeft* updates
-        if CircleLeft.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
+        # *realCircLeft* updates
+        if realCircLeft.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
             # keep track of start time/frame for later
-            CircleLeft.frameNStart = frameN  # exact frame index
-            CircleLeft.tStart = t  # local t and not account for scr refresh
-            CircleLeft.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(CircleLeft, 'tStartRefresh')  # time at next scr refresh
+            realCircLeft.frameNStart = frameN  # exact frame index
+            realCircLeft.tStart = t  # local t and not account for scr refresh
+            realCircLeft.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(realCircLeft, 'tStartRefresh')  # time at next scr refresh
             # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'CircleLeft.started')
-            CircleLeft.setAutoDraw(True)
-        if CircleLeft.status == STARTED:
+            thisExp.timestampOnFlip(win, 'realCircLeft.started')
+            realCircLeft.setAutoDraw(True)
+        if realCircLeft.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > CircleLeft.tStartRefresh + 4-frameTolerance:
+            if tThisFlipGlobal > realCircLeft.tStartRefresh + 4-frameTolerance:
                 # keep track of stop time/frame for later
-                CircleLeft.tStop = t  # not accounting for scr refresh
-                CircleLeft.frameNStop = frameN  # exact frame index
+                realCircLeft.tStop = t  # not accounting for scr refresh
+                realCircLeft.frameNStop = frameN  # exact frame index
                 # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'CircleLeft.stopped')
-                CircleLeft.setAutoDraw(False)
+                thisExp.timestampOnFlip(win, 'realCircLeft.stopped')
+                realCircLeft.setAutoDraw(False)
         
-        # *realCircleRight* updates
-        if realCircleRight.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+        # *realCircRight* updates
+        if realCircRight.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
-            realCircleRight.frameNStart = frameN  # exact frame index
-            realCircleRight.tStart = t  # local t and not account for scr refresh
-            realCircleRight.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(realCircleRight, 'tStartRefresh')  # time at next scr refresh
+            realCircRight.frameNStart = frameN  # exact frame index
+            realCircRight.tStart = t  # local t and not account for scr refresh
+            realCircRight.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(realCircRight, 'tStartRefresh')  # time at next scr refresh
             # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'realCircleRight.started')
-            realCircleRight.setAutoDraw(True)
-        if realCircleRight.status == STARTED:
+            thisExp.timestampOnFlip(win, 'realCircRight.started')
+            realCircRight.setAutoDraw(True)
+        if realCircRight.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > realCircleRight.tStartRefresh + 4-frameTolerance:
+            if tThisFlipGlobal > realCircRight.tStartRefresh + 4-frameTolerance:
                 # keep track of stop time/frame for later
-                realCircleRight.tStop = t  # not accounting for scr refresh
-                realCircleRight.frameNStop = frameN  # exact frame index
+                realCircRight.tStop = t  # not accounting for scr refresh
+                realCircRight.frameNStop = frameN  # exact frame index
                 # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'realCircleRight.stopped')
-                realCircleRight.setAutoDraw(False)
+                thisExp.timestampOnFlip(win, 'realCircRight.stopped')
+                realCircRight.setAutoDraw(False)
         
-        # *realLineLeft* updates
-        if realLineLeft.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+        # *realRiskLine* updates
+        if realRiskLine.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
-            realLineLeft.frameNStart = frameN  # exact frame index
-            realLineLeft.tStart = t  # local t and not account for scr refresh
-            realLineLeft.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(realLineLeft, 'tStartRefresh')  # time at next scr refresh
+            realRiskLine.frameNStart = frameN  # exact frame index
+            realRiskLine.tStart = t  # local t and not account for scr refresh
+            realRiskLine.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(realRiskLine, 'tStartRefresh')  # time at next scr refresh
             # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'realLineLeft.started')
-            realLineLeft.setAutoDraw(True)
-        if realLineLeft.status == STARTED:
+            thisExp.timestampOnFlip(win, 'realRiskLine.started')
+            realRiskLine.setAutoDraw(True)
+        if realRiskLine.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > realLineLeft.tStartRefresh + 4-frameTolerance:
+            if tThisFlipGlobal > realRiskLine.tStartRefresh + 4-frameTolerance:
                 # keep track of stop time/frame for later
-                realLineLeft.tStop = t  # not accounting for scr refresh
-                realLineLeft.frameNStop = frameN  # exact frame index
+                realRiskLine.tStop = t  # not accounting for scr refresh
+                realRiskLine.frameNStop = frameN  # exact frame index
                 # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'realLineLeft.stopped')
-                realLineLeft.setAutoDraw(False)
+                thisExp.timestampOnFlip(win, 'realRiskLine.stopped')
+                realRiskLine.setAutoDraw(False)
         
         # *realORtext* updates
         if realORtext.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
@@ -1922,45 +1895,45 @@ for thisStaticTrial in staticTrials:
                 thisExp.timestampOnFlip(win, 'realSafeText.stopped')
                 realSafeText.setAutoDraw(False)
         
-        # *realVLeft* updates
-        if realVLeft.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
+        # *realVleft* updates
+        if realVleft.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
             # keep track of start time/frame for later
-            realVLeft.frameNStart = frameN  # exact frame index
-            realVLeft.tStart = t  # local t and not account for scr refresh
-            realVLeft.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(realVLeft, 'tStartRefresh')  # time at next scr refresh
+            realVleft.frameNStart = frameN  # exact frame index
+            realVleft.tStart = t  # local t and not account for scr refresh
+            realVleft.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(realVleft, 'tStartRefresh')  # time at next scr refresh
             # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'realVLeft.started')
-            realVLeft.setAutoDraw(True)
-        if realVLeft.status == STARTED:
+            thisExp.timestampOnFlip(win, 'realVleft.started')
+            realVleft.setAutoDraw(True)
+        if realVleft.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > realVLeft.tStartRefresh + 4-frameTolerance:
+            if tThisFlipGlobal > realVleft.tStartRefresh + 4-frameTolerance:
                 # keep track of stop time/frame for later
-                realVLeft.tStop = t  # not accounting for scr refresh
-                realVLeft.frameNStop = frameN  # exact frame index
+                realVleft.tStop = t  # not accounting for scr refresh
+                realVleft.frameNStop = frameN  # exact frame index
                 # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'realVLeft.stopped')
-                realVLeft.setAutoDraw(False)
+                thisExp.timestampOnFlip(win, 'realVleft.stopped')
+                realVleft.setAutoDraw(False)
         
-        # *realNRight* updates
-        if realNRight.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
+        # *realNright* updates
+        if realNright.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
             # keep track of start time/frame for later
-            realNRight.frameNStart = frameN  # exact frame index
-            realNRight.tStart = t  # local t and not account for scr refresh
-            realNRight.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(realNRight, 'tStartRefresh')  # time at next scr refresh
+            realNright.frameNStart = frameN  # exact frame index
+            realNright.tStart = t  # local t and not account for scr refresh
+            realNright.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(realNright, 'tStartRefresh')  # time at next scr refresh
             # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'realNRight.started')
-            realNRight.setAutoDraw(True)
-        if realNRight.status == STARTED:
+            thisExp.timestampOnFlip(win, 'realNright.started')
+            realNright.setAutoDraw(True)
+        if realNright.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > realNRight.tStartRefresh + 4-frameTolerance:
+            if tThisFlipGlobal > realNright.tStartRefresh + 4-frameTolerance:
                 # keep track of stop time/frame for later
-                realNRight.tStop = t  # not accounting for scr refresh
-                realNRight.frameNStop = frameN  # exact frame index
+                realNright.tStop = t  # not accounting for scr refresh
+                realNright.frameNStop = frameN  # exact frame index
                 # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'realNRight.stopped')
-                realNRight.setAutoDraw(False)
+                thisExp.timestampOnFlip(win, 'realNright.stopped')
+                realNright.setAutoDraw(False)
         
         # *realChoiceResp* updates
         waitOnFlip = False
@@ -2003,7 +1976,7 @@ for thisStaticTrial in staticTrials:
         if not continueRoutine:  # a component has requested a forced-end of Routine
             break
         continueRoutine = False  # will revert to True if at least one component still running
-        for thisComponent in choiceWindowComponents:
+        for thisComponent in realChoiceComponents:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
@@ -2012,8 +1985,8 @@ for thisStaticTrial in staticTrials:
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
     
-    # --- Ending Routine "choiceWindow" ---
-    for thisComponent in choiceWindowComponents:
+    # --- Ending Routine "realChoice" ---
+    for thisComponent in realChoiceComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
     # Run 'End Routine' code from realChoiceRandLoc
@@ -2027,12 +2000,12 @@ for thisStaticTrial in staticTrials:
     # using non-slip timing so subtract the expected duration of this Routine
     routineTimer.addTime(-4.000000)
     
-    # --- Prepare to start Routine "ISI" ---
+    # --- Prepare to start Routine "realISI" ---
     continueRoutine = True
     # update component parameters for each repeat
     # keep track of which components have finished
-    ISIComponents = [isiFix]
-    for thisComponent in ISIComponents:
+    realISIComponents = [isiFix]
+    for thisComponent in realISIComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
         thisComponent.tStartRefresh = None
@@ -2044,7 +2017,7 @@ for thisStaticTrial in staticTrials:
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
     
-    # --- Run Routine "ISI" ---
+    # --- Run Routine "realISI" ---
     while continueRoutine and routineTimer.getTime() < 0.5:
         # get current time
         t = routineTimer.getTime()
@@ -2081,7 +2054,7 @@ for thisStaticTrial in staticTrials:
         if not continueRoutine:  # a component has requested a forced-end of Routine
             break
         continueRoutine = False  # will revert to True if at least one component still running
-        for thisComponent in ISIComponents:
+        for thisComponent in realISIComponents:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
@@ -2090,8 +2063,8 @@ for thisStaticTrial in staticTrials:
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
     
-    # --- Ending Routine "ISI" ---
-    for thisComponent in ISIComponents:
+    # --- Ending Routine "realISI" ---
+    for thisComponent in realISIComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
     # using non-slip timing so subtract the expected duration of this Routine
@@ -2126,12 +2099,12 @@ for thisStaticTrial in staticTrials:
             ocGambleLoc = [-.35,0]
             ocSafeLoc = [5,5]
             noRespLoc = [5,5]
-            hideGamLoc = [-.35,-.125]
+            hideGamLoc = [-.35,-.15]
         elif outcometmp == riskyoption2:
              ocLoc = [-.35,-.1]
              ocGambleLoc = [-.35,0]
              ocSafeLoc = [5,5]
-             hideGamLoc = [-.35,.125]
+             hideGamLoc = [-.35,.15]
              noRespLoc = [5,5]
     elif realChoiceResp.keys == 'v' and loc == 2:
         outcometmp = safeoption
@@ -2168,13 +2141,13 @@ for thisStaticTrial in staticTrials:
             ocLoc = [.35,.1]
             ocGambleLoc = [.35,0]
             ocSafeLoc = [5,5]
-            hideGamLoc = [.35,-.125]
+            hideGamLoc = [.35,-.15]
             noRespLoc = [5,5]
         elif outcometmp == riskyoption2:
             ocLoc = [.35,-.1]
-            ocGambleLoc = [.4,0]
+            ocGambleLoc = [.35,0]
             ocSafeLoc = [5,5]
-            hideGamLoc = [.35,.125]
+            hideGamLoc = [.35,.15]
             noRespLoc = [5,5]
     
     actualITI = initITIstatic[staticTrials.thisN] + extraITI
@@ -2346,12 +2319,12 @@ for thisStaticTrial in staticTrials:
     # using non-slip timing so subtract the expected duration of this Routine
     routineTimer.addTime(-1.000000)
     
-    # --- Prepare to start Routine "ITI" ---
+    # --- Prepare to start Routine "realITI" ---
     continueRoutine = True
     # update component parameters for each repeat
     # keep track of which components have finished
-    ITIComponents = [itiFix]
-    for thisComponent in ITIComponents:
+    realITIComponents = [itiFix]
+    for thisComponent in realITIComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
         thisComponent.tStartRefresh = None
@@ -2363,7 +2336,7 @@ for thisStaticTrial in staticTrials:
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
     
-    # --- Run Routine "ITI" ---
+    # --- Run Routine "realITI" ---
     while continueRoutine:
         # get current time
         t = routineTimer.getTime()
@@ -2400,7 +2373,7 @@ for thisStaticTrial in staticTrials:
         if not continueRoutine:  # a component has requested a forced-end of Routine
             break
         continueRoutine = False  # will revert to True if at least one component still running
-        for thisComponent in ITIComponents:
+        for thisComponent in realITIComponents:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
@@ -2409,11 +2382,11 @@ for thisStaticTrial in staticTrials:
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
     
-    # --- Ending Routine "ITI" ---
-    for thisComponent in ITIComponents:
+    # --- Ending Routine "realITI" ---
+    for thisComponent in realITIComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
-    # the Routine "ITI" was not non-slip safe, so reset the non-slip timer
+    # the Routine "realITI" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
     thisExp.nextEntry()
     
@@ -2760,7 +2733,7 @@ for thisDynamicTrial in dynamicTrials:
         for paramName in thisDynamicTrial:
             exec('{} = thisDynamicTrial[paramName]'.format(paramName))
     
-    # --- Prepare to start Routine "choiceWindow" ---
+    # --- Prepare to start Routine "realChoice" ---
     continueRoutine = True
     # update component parameters for each repeat
     # Run 'Begin Routine' code from realChoiceRandLoc
@@ -2769,9 +2742,9 @@ for thisDynamicTrial in dynamicTrials:
     loc = random.choice([1,2])
     
     if loc==1:
-        targetPos=[-.35,0]
+        riskLineLoc=[-.35,0]
     else:
-        targetPos=[.35,0]
+        riskLineLoc=[.35,0]
     
     if loc==1:
         lossLoc=[-.35,-.1]
@@ -2789,9 +2762,9 @@ for thisDynamicTrial in dynamicTrials:
     #lossRounded = ("$" + str(round(riskyoption2, 2)))
     #gainRounded = ("$" + str(round(riskyoption1, 2)))
     #safeRounded = ("$" + str(round(safeoption, 2)))
-    realCircleRight.setFillColor([-0.0667,0.6392,1.0000])
-    realCircleRight.setLineColor([-0.0667,0.6392,1.0000])
-    realLineLeft.setPos(targetPos)
+    realCircRight.setFillColor([-0.0667,0.6392,1.0000])
+    realCircRight.setLineColor([-0.0667,0.6392,1.0000])
+    realRiskLine.setPos(riskLineLoc)
     realLossText.setPos(lossLoc)
     realLossText.setText(lossRounded)
     realGainText.setPos(gainLoc)
@@ -2802,8 +2775,8 @@ for thisDynamicTrial in dynamicTrials:
     realChoiceResp.rt = []
     _realChoiceResp_allKeys = []
     # keep track of which components have finished
-    choiceWindowComponents = [CircleLeft, realCircleRight, realLineLeft, realORtext, realLossText, realGainText, realSafeText, realVLeft, realNRight, realChoiceResp]
-    for thisComponent in choiceWindowComponents:
+    realChoiceComponents = [realCircLeft, realCircRight, realRiskLine, realORtext, realLossText, realGainText, realSafeText, realVleft, realNright, realChoiceResp]
+    for thisComponent in realChoiceComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
         thisComponent.tStartRefresh = None
@@ -2815,7 +2788,7 @@ for thisDynamicTrial in dynamicTrials:
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
     
-    # --- Run Routine "choiceWindow" ---
+    # --- Run Routine "realChoice" ---
     while continueRoutine and routineTimer.getTime() < 4.0:
         # get current time
         t = routineTimer.getTime()
@@ -2824,65 +2797,65 @@ for thisDynamicTrial in dynamicTrials:
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
         
-        # *CircleLeft* updates
-        if CircleLeft.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
+        # *realCircLeft* updates
+        if realCircLeft.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
             # keep track of start time/frame for later
-            CircleLeft.frameNStart = frameN  # exact frame index
-            CircleLeft.tStart = t  # local t and not account for scr refresh
-            CircleLeft.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(CircleLeft, 'tStartRefresh')  # time at next scr refresh
+            realCircLeft.frameNStart = frameN  # exact frame index
+            realCircLeft.tStart = t  # local t and not account for scr refresh
+            realCircLeft.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(realCircLeft, 'tStartRefresh')  # time at next scr refresh
             # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'CircleLeft.started')
-            CircleLeft.setAutoDraw(True)
-        if CircleLeft.status == STARTED:
+            thisExp.timestampOnFlip(win, 'realCircLeft.started')
+            realCircLeft.setAutoDraw(True)
+        if realCircLeft.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > CircleLeft.tStartRefresh + 4-frameTolerance:
+            if tThisFlipGlobal > realCircLeft.tStartRefresh + 4-frameTolerance:
                 # keep track of stop time/frame for later
-                CircleLeft.tStop = t  # not accounting for scr refresh
-                CircleLeft.frameNStop = frameN  # exact frame index
+                realCircLeft.tStop = t  # not accounting for scr refresh
+                realCircLeft.frameNStop = frameN  # exact frame index
                 # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'CircleLeft.stopped')
-                CircleLeft.setAutoDraw(False)
+                thisExp.timestampOnFlip(win, 'realCircLeft.stopped')
+                realCircLeft.setAutoDraw(False)
         
-        # *realCircleRight* updates
-        if realCircleRight.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+        # *realCircRight* updates
+        if realCircRight.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
-            realCircleRight.frameNStart = frameN  # exact frame index
-            realCircleRight.tStart = t  # local t and not account for scr refresh
-            realCircleRight.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(realCircleRight, 'tStartRefresh')  # time at next scr refresh
+            realCircRight.frameNStart = frameN  # exact frame index
+            realCircRight.tStart = t  # local t and not account for scr refresh
+            realCircRight.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(realCircRight, 'tStartRefresh')  # time at next scr refresh
             # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'realCircleRight.started')
-            realCircleRight.setAutoDraw(True)
-        if realCircleRight.status == STARTED:
+            thisExp.timestampOnFlip(win, 'realCircRight.started')
+            realCircRight.setAutoDraw(True)
+        if realCircRight.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > realCircleRight.tStartRefresh + 4-frameTolerance:
+            if tThisFlipGlobal > realCircRight.tStartRefresh + 4-frameTolerance:
                 # keep track of stop time/frame for later
-                realCircleRight.tStop = t  # not accounting for scr refresh
-                realCircleRight.frameNStop = frameN  # exact frame index
+                realCircRight.tStop = t  # not accounting for scr refresh
+                realCircRight.frameNStop = frameN  # exact frame index
                 # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'realCircleRight.stopped')
-                realCircleRight.setAutoDraw(False)
+                thisExp.timestampOnFlip(win, 'realCircRight.stopped')
+                realCircRight.setAutoDraw(False)
         
-        # *realLineLeft* updates
-        if realLineLeft.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+        # *realRiskLine* updates
+        if realRiskLine.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
-            realLineLeft.frameNStart = frameN  # exact frame index
-            realLineLeft.tStart = t  # local t and not account for scr refresh
-            realLineLeft.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(realLineLeft, 'tStartRefresh')  # time at next scr refresh
+            realRiskLine.frameNStart = frameN  # exact frame index
+            realRiskLine.tStart = t  # local t and not account for scr refresh
+            realRiskLine.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(realRiskLine, 'tStartRefresh')  # time at next scr refresh
             # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'realLineLeft.started')
-            realLineLeft.setAutoDraw(True)
-        if realLineLeft.status == STARTED:
+            thisExp.timestampOnFlip(win, 'realRiskLine.started')
+            realRiskLine.setAutoDraw(True)
+        if realRiskLine.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > realLineLeft.tStartRefresh + 4-frameTolerance:
+            if tThisFlipGlobal > realRiskLine.tStartRefresh + 4-frameTolerance:
                 # keep track of stop time/frame for later
-                realLineLeft.tStop = t  # not accounting for scr refresh
-                realLineLeft.frameNStop = frameN  # exact frame index
+                realRiskLine.tStop = t  # not accounting for scr refresh
+                realRiskLine.frameNStop = frameN  # exact frame index
                 # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'realLineLeft.stopped')
-                realLineLeft.setAutoDraw(False)
+                thisExp.timestampOnFlip(win, 'realRiskLine.stopped')
+                realRiskLine.setAutoDraw(False)
         
         # *realORtext* updates
         if realORtext.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
@@ -2964,45 +2937,45 @@ for thisDynamicTrial in dynamicTrials:
                 thisExp.timestampOnFlip(win, 'realSafeText.stopped')
                 realSafeText.setAutoDraw(False)
         
-        # *realVLeft* updates
-        if realVLeft.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
+        # *realVleft* updates
+        if realVleft.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
             # keep track of start time/frame for later
-            realVLeft.frameNStart = frameN  # exact frame index
-            realVLeft.tStart = t  # local t and not account for scr refresh
-            realVLeft.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(realVLeft, 'tStartRefresh')  # time at next scr refresh
+            realVleft.frameNStart = frameN  # exact frame index
+            realVleft.tStart = t  # local t and not account for scr refresh
+            realVleft.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(realVleft, 'tStartRefresh')  # time at next scr refresh
             # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'realVLeft.started')
-            realVLeft.setAutoDraw(True)
-        if realVLeft.status == STARTED:
+            thisExp.timestampOnFlip(win, 'realVleft.started')
+            realVleft.setAutoDraw(True)
+        if realVleft.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > realVLeft.tStartRefresh + 4-frameTolerance:
+            if tThisFlipGlobal > realVleft.tStartRefresh + 4-frameTolerance:
                 # keep track of stop time/frame for later
-                realVLeft.tStop = t  # not accounting for scr refresh
-                realVLeft.frameNStop = frameN  # exact frame index
+                realVleft.tStop = t  # not accounting for scr refresh
+                realVleft.frameNStop = frameN  # exact frame index
                 # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'realVLeft.stopped')
-                realVLeft.setAutoDraw(False)
+                thisExp.timestampOnFlip(win, 'realVleft.stopped')
+                realVleft.setAutoDraw(False)
         
-        # *realNRight* updates
-        if realNRight.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
+        # *realNright* updates
+        if realNright.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
             # keep track of start time/frame for later
-            realNRight.frameNStart = frameN  # exact frame index
-            realNRight.tStart = t  # local t and not account for scr refresh
-            realNRight.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(realNRight, 'tStartRefresh')  # time at next scr refresh
+            realNright.frameNStart = frameN  # exact frame index
+            realNright.tStart = t  # local t and not account for scr refresh
+            realNright.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(realNright, 'tStartRefresh')  # time at next scr refresh
             # add timestamp to datafile
-            thisExp.timestampOnFlip(win, 'realNRight.started')
-            realNRight.setAutoDraw(True)
-        if realNRight.status == STARTED:
+            thisExp.timestampOnFlip(win, 'realNright.started')
+            realNright.setAutoDraw(True)
+        if realNright.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > realNRight.tStartRefresh + 4-frameTolerance:
+            if tThisFlipGlobal > realNright.tStartRefresh + 4-frameTolerance:
                 # keep track of stop time/frame for later
-                realNRight.tStop = t  # not accounting for scr refresh
-                realNRight.frameNStop = frameN  # exact frame index
+                realNright.tStop = t  # not accounting for scr refresh
+                realNright.frameNStop = frameN  # exact frame index
                 # add timestamp to datafile
-                thisExp.timestampOnFlip(win, 'realNRight.stopped')
-                realNRight.setAutoDraw(False)
+                thisExp.timestampOnFlip(win, 'realNright.stopped')
+                realNright.setAutoDraw(False)
         
         # *realChoiceResp* updates
         waitOnFlip = False
@@ -3045,7 +3018,7 @@ for thisDynamicTrial in dynamicTrials:
         if not continueRoutine:  # a component has requested a forced-end of Routine
             break
         continueRoutine = False  # will revert to True if at least one component still running
-        for thisComponent in choiceWindowComponents:
+        for thisComponent in realChoiceComponents:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
@@ -3054,8 +3027,8 @@ for thisDynamicTrial in dynamicTrials:
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
     
-    # --- Ending Routine "choiceWindow" ---
-    for thisComponent in choiceWindowComponents:
+    # --- Ending Routine "realChoice" ---
+    for thisComponent in realChoiceComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
     # Run 'End Routine' code from realChoiceRandLoc
@@ -3069,12 +3042,12 @@ for thisDynamicTrial in dynamicTrials:
     # using non-slip timing so subtract the expected duration of this Routine
     routineTimer.addTime(-4.000000)
     
-    # --- Prepare to start Routine "ISI" ---
+    # --- Prepare to start Routine "realISI" ---
     continueRoutine = True
     # update component parameters for each repeat
     # keep track of which components have finished
-    ISIComponents = [isiFix]
-    for thisComponent in ISIComponents:
+    realISIComponents = [isiFix]
+    for thisComponent in realISIComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
         thisComponent.tStartRefresh = None
@@ -3086,7 +3059,7 @@ for thisDynamicTrial in dynamicTrials:
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
     
-    # --- Run Routine "ISI" ---
+    # --- Run Routine "realISI" ---
     while continueRoutine and routineTimer.getTime() < 0.5:
         # get current time
         t = routineTimer.getTime()
@@ -3123,7 +3096,7 @@ for thisDynamicTrial in dynamicTrials:
         if not continueRoutine:  # a component has requested a forced-end of Routine
             break
         continueRoutine = False  # will revert to True if at least one component still running
-        for thisComponent in ISIComponents:
+        for thisComponent in realISIComponents:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
@@ -3132,8 +3105,8 @@ for thisDynamicTrial in dynamicTrials:
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
     
-    # --- Ending Routine "ISI" ---
-    for thisComponent in ISIComponents:
+    # --- Ending Routine "realISI" ---
+    for thisComponent in realISIComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
     # using non-slip timing so subtract the expected duration of this Routine
@@ -3168,12 +3141,12 @@ for thisDynamicTrial in dynamicTrials:
             ocGambleLoc = [-.35,0]
             ocSafeLoc = [5,5]
             noRespLoc = [5,5]
-            hideGamLoc = [-.35,-.125]
+            hideGamLoc = [-.35,-.15]
         elif outcometmp == riskyoption2:
              ocLoc = [-.35,-.1]
              ocGambleLoc = [-.35,0]
              ocSafeLoc = [5,5]
-             hideGamLoc = [-.35,.125]
+             hideGamLoc = [-.35,.15]
              noRespLoc = [5,5]
     elif realChoiceResp.keys == 'v' and loc == 2:
         outcometmp = safeoption
@@ -3210,13 +3183,13 @@ for thisDynamicTrial in dynamicTrials:
             ocLoc = [.35,.1]
             ocGambleLoc = [.35,0]
             ocSafeLoc = [5,5]
-            hideGamLoc = [.35,-.125]
+            hideGamLoc = [.35,-.15]
             noRespLoc = [5,5]
         elif outcometmp == riskyoption2:
             ocLoc = [.35,-.1]
             ocGambleLoc = [.35,0]
             ocSafeLoc = [5,5]
-            hideGamLoc = [.35,.125]
+            hideGamLoc = [.35,.15]
             noRespLoc = [5,5]
     
     actualITI = initITIdynamic[dynamicTrials.thisN] + extraITI
@@ -3388,12 +3361,12 @@ for thisDynamicTrial in dynamicTrials:
     # using non-slip timing so subtract the expected duration of this Routine
     routineTimer.addTime(-1.000000)
     
-    # --- Prepare to start Routine "ITI" ---
+    # --- Prepare to start Routine "realITI" ---
     continueRoutine = True
     # update component parameters for each repeat
     # keep track of which components have finished
-    ITIComponents = [itiFix]
-    for thisComponent in ITIComponents:
+    realITIComponents = [itiFix]
+    for thisComponent in realITIComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
         thisComponent.tStartRefresh = None
@@ -3405,7 +3378,7 @@ for thisDynamicTrial in dynamicTrials:
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     frameN = -1
     
-    # --- Run Routine "ITI" ---
+    # --- Run Routine "realITI" ---
     while continueRoutine:
         # get current time
         t = routineTimer.getTime()
@@ -3442,7 +3415,7 @@ for thisDynamicTrial in dynamicTrials:
         if not continueRoutine:  # a component has requested a forced-end of Routine
             break
         continueRoutine = False  # will revert to True if at least one component still running
-        for thisComponent in ITIComponents:
+        for thisComponent in realITIComponents:
             if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
                 continueRoutine = True
                 break  # at least one component has not yet finished
@@ -3451,11 +3424,11 @@ for thisDynamicTrial in dynamicTrials:
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
     
-    # --- Ending Routine "ITI" ---
-    for thisComponent in ITIComponents:
+    # --- Ending Routine "realITI" ---
+    for thisComponent in realITIComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
-    # the Routine "ITI" was not non-slip safe, so reset the non-slip timer
+    # the Routine "realITI" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
     thisExp.nextEntry()
     

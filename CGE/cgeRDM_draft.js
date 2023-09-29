@@ -60,9 +60,9 @@ flowScheduler.add(experimentInit);
 flowScheduler.add(SetUpRoutineBegin());
 flowScheduler.add(SetUpRoutineEachFrame());
 flowScheduler.add(SetUpRoutineEnd());
-flowScheduler.add(CGErdmStartRoutineBegin());
-flowScheduler.add(CGErdmStartRoutineEachFrame());
-flowScheduler.add(CGErdmStartRoutineEnd());
+flowScheduler.add(cgeRDMstartRoutineBegin());
+flowScheduler.add(cgeRDMstartRoutineEachFrame());
+flowScheduler.add(cgeRDMstartRoutineEnd());
 flowScheduler.add(pracStartRoutineBegin());
 flowScheduler.add(pracStartRoutineEachFrame());
 flowScheduler.add(pracStartRoutineEnd());
@@ -144,7 +144,7 @@ var SetUpClock;
 var instructionsTextHeight;
 var lettersTextHeight;
 var wrap;
-var CGErdmStartClock;
+var cgeRDMstartClock;
 var CGErdmStartText;
 var CGErdmStartResp;
 var pracStartClock;
@@ -152,15 +152,15 @@ var pracStartText;
 var pracStartResp;
 var pracChoiceClock;
 var textHeight;
-var pracCircleLeft;
-var pracCircleRight;
-var pracLineLeft;
+var pracCircLeft;
+var pracCircRight;
+var pracRiskLine;
 var pracORtext;
 var pracLossText;
 var pracGainText;
 var pracSafeText;
-var pracVLeft;
-var pracNRight;
+var pracVleft;
+var pracNright;
 var pracChoiceResp;
 var pracISIClock;
 var isiPracFix;
@@ -181,15 +181,15 @@ var staticStartClock;
 var staticStartText;
 var staticStartResp;
 var realChoiceClock;
-var CircleLeft;
-var realCircleRight;
-var realLineLeft;
+var realCircLeft;
+var realCircRight;
+var realRiskLine;
 var realORtext;
 var realLossText;
 var realGainText;
 var realSafeText;
-var realVLeft;
-var realNRight;
+var realVleft;
+var realNright;
 var realChoiceResp;
 var realISIClock;
 var isiFix;
@@ -237,8 +237,8 @@ async function experimentInit() {
   
   
   
-  // Initialize components for Routine "CGErdmStart"
-  CGErdmStartClock = new util.Clock();
+  // Initialize components for Routine "cgeRDMstart"
+  cgeRDMstartClock = new util.Clock();
   CGErdmStartText = new visual.TextStim({
     win: psychoJS.window,
     name: 'CGErdmStartText',
@@ -247,7 +247,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: 0.05,  wrapWidth: wrap, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: 0.0 
   });
   
@@ -263,7 +263,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: instructionsTextHeight,  wrapWidth: wrap, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: 0.0 
   });
   
@@ -274,30 +274,30 @@ async function experimentInit() {
   // Run 'Begin Experiment' code from pracChoiceRandLoc
   textHeight = 0.05;
   
-  pracCircleLeft = new visual.Polygon({
-    win: psychoJS.window, name: 'pracCircleLeft', 
+  pracCircLeft = new visual.Polygon({
+    win: psychoJS.window, name: 'pracCircLeft', 
     edges: 100, size:[0.5, 0.5],
-    ori: 0, pos: [(- 0.4), 0],
-    lineWidth: 1, lineColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
-    fillColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
+    ori: 0, pos: circLeftLoc,
+    lineWidth: 1, lineColor: new util.Color(color2),
+    fillColor: new util.Color(color2),
     opacity: 1, depth: -1, interpolate: true,
   });
   
-  pracCircleRight = new visual.Polygon({
-    win: psychoJS.window, name: 'pracCircleRight', 
+  pracCircRight = new visual.Polygon({
+    win: psychoJS.window, name: 'pracCircRight', 
     edges: 100, size:[0.5, 0.5],
-    ori: 0, pos: [0.4, 0],
+    ori: 0, pos: circRightLoc,
     lineWidth: 1, lineColor: new util.Color('white'),
     fillColor: new util.Color('white'),
     opacity: 1, depth: -2, interpolate: true,
   });
   
-  pracLineLeft = new visual.Rect ({
-    win: psychoJS.window, name: 'pracLineLeft', 
+  pracRiskLine = new visual.Rect ({
+    win: psychoJS.window, name: 'pracRiskLine', 
     width: [0.5, 0.01][0], height: [0.5, 0.01][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 3, lineColor: new util.Color([0.5216, 0.5216, 0.5216]),
-    fillColor: new util.Color([0.5216, 0.5216, 0.5216]),
+    lineWidth: 3, lineColor: new util.Color(color1),
+    fillColor: new util.Color(color1),
     opacity: 1, depth: -3, interpolate: true,
   });
   
@@ -307,9 +307,9 @@ async function experimentInit() {
     text: 'OR',
     font: 'Arial',
     units: undefined, 
-    pos: [0, 0], height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: ORtextLoc, height: 0.05,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: -4.0 
   });
   
@@ -321,7 +321,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([0.5216, 0.5216, 0.5216]),  opacity: 1,
+    color: new util.Color(color1),  opacity: 1,
     depth: -5.0 
   });
   
@@ -333,7 +333,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([0.5216, 0.5216, 0.5216]),  opacity: 1,
+    color: new util.Color(color1),  opacity: 1,
     depth: -6.0 
   });
   
@@ -345,31 +345,31 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([0.5216, 0.5216, 0.5216]),  opacity: 1,
+    color: new util.Color(color1),  opacity: 1,
     depth: -7.0 
   });
   
-  pracVLeft = new visual.TextStim({
+  pracVleft = new visual.TextStim({
     win: psychoJS.window,
-    name: 'pracVLeft',
+    name: 'pracVleft',
     text: 'V-Left',
     font: 'Arial',
     units: undefined, 
-    pos: [(- 0.4), (- 0.35)], height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: VleftLoc, height: 0.05,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: -8.0 
   });
   
-  pracNRight = new visual.TextStim({
+  pracNright = new visual.TextStim({
     win: psychoJS.window,
-    name: 'pracNRight',
+    name: 'pracNright',
     text: 'N-Right',
     font: 'Arial',
     units: undefined, 
-    pos: [0.4, (- 0.35)], height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: NrightLoc, height: 0.05,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: -9.0 
   });
   
@@ -409,7 +409,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: textHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: -1.0 
   });
   
@@ -417,8 +417,8 @@ async function experimentInit() {
     win: psychoJS.window, name: 'pracRiskOC', 
     edges: 100, size:[0.5, 0.5],
     ori: 0, pos: [0, 0],
-    lineWidth: 1, lineColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
-    fillColor: new util.Color([0.5216, 0.5216, 0.5216]),
+    lineWidth: 1, lineColor: new util.Color(color2),
+    fillColor: new util.Color(color2),
     opacity: 1, depth: -2, interpolate: true,
   });
   
@@ -426,8 +426,8 @@ async function experimentInit() {
     win: psychoJS.window, name: 'pracSafeOC', 
     edges: 100, size:[0.5, 0.5],
     ori: 0, pos: [0, 0],
-    lineWidth: 1, lineColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
-    fillColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
+    lineWidth: 1, lineColor: new util.Color(color2),
+    fillColor: new util.Color(color2),
     opacity: 1, depth: -3, interpolate: true,
   });
   
@@ -447,8 +447,8 @@ async function experimentInit() {
     win: psychoJS.window, name: 'pracHideRisk', 
     width: [0.6, 0.3][0], height: [0.6, 0.3][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 1, lineColor: new util.Color([0.5216, 0.5216, 0.5216]),
-    fillColor: new util.Color([0.5216, 0.5216, 0.5216]),
+    lineWidth: 1, lineColor: new util.Color(color1),
+    fillColor: new util.Color(color1),
     opacity: 1, depth: -5, interpolate: true,
   });
   
@@ -486,26 +486,26 @@ async function experimentInit() {
   realChoiceClock = new util.Clock();
   // Run 'Begin Experiment' code from realChoiceRandLoc
   var realloc
-  CircleLeft = new visual.Rect ({
-    win: psychoJS.window, name: 'CircleLeft', 
+  realCircLeft = new visual.Rect ({
+    win: psychoJS.window, name: 'realCircLeft', 
     width: [0.5, 0.5][0], height: [0.5, 0.5][1],
-    ori: 0, pos: [(- 0.4), 0],
+    ori: 0, pos: circLeftLoc,
     lineWidth: 1, lineColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
     fillColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
     opacity: 1, depth: -1, interpolate: true,
   });
   
-  realCircleRight = new visual.Rect ({
-    win: psychoJS.window, name: 'realCircleRight', 
+  realCircRight = new visual.Rect ({
+    win: psychoJS.window, name: 'realCircRight', 
     width: [0.5, 0.5][0], height: [0.5, 0.5][1],
-    ori: 0, pos: [0.4, 0],
+    ori: 0, pos: circRightLoc,
     lineWidth: 1, lineColor: new util.Color('white'),
     fillColor: new util.Color('white'),
     opacity: 1, depth: -2, interpolate: true,
   });
   
-  realLineLeft = new visual.Rect ({
-    win: psychoJS.window, name: 'realLineLeft', 
+  realRiskLine = new visual.Rect ({
+    win: psychoJS.window, name: 'realRiskLine', 
     width: [0.5, 0.01][0], height: [0.5, 0.01][1],
     ori: 0, pos: [0, 0],
     lineWidth: 3, lineColor: new util.Color([0.5216, 0.5216, 0.5216]),
@@ -519,7 +519,7 @@ async function experimentInit() {
     text: 'OR',
     font: 'Arial',
     units: undefined, 
-    pos: [0, 0], height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: ORtextLoc, height: 0.05,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
     depth: -4.0 
@@ -561,25 +561,25 @@ async function experimentInit() {
     depth: -7.0 
   });
   
-  realVLeft = new visual.TextStim({
+  realVleft = new visual.TextStim({
     win: psychoJS.window,
-    name: 'realVLeft',
+    name: 'realVleft',
     text: 'V-Left',
     font: 'Arial',
     units: undefined, 
-    pos: [(- 0.4), (- 0.35)], height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: VleftLoc, height: 0.05,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
     depth: -8.0 
   });
   
-  realNRight = new visual.TextStim({
+  realNright = new visual.TextStim({
     win: psychoJS.window,
-    name: 'realNRight',
+    name: 'realNright',
     text: 'N-Right',
     font: 'Arial',
     units: undefined, 
-    pos: [0.4, (- 0.35)], height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: NrightLoc, height: 0.05,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
     depth: -9.0 
@@ -930,14 +930,14 @@ function SetUpRoutineEnd(snapshot) {
 
 
 var _CGErdmStartResp_allKeys;
-var CGErdmStartComponents;
-function CGErdmStartRoutineBegin(snapshot) {
+var cgeRDMstartComponents;
+function cgeRDMstartRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //--- Prepare to start Routine 'CGErdmStart' ---
+    //--- Prepare to start Routine 'cgeRDMstart' ---
     t = 0;
-    CGErdmStartClock.reset(); // clock
+    cgeRDMstartClock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
@@ -945,11 +945,11 @@ function CGErdmStartRoutineBegin(snapshot) {
     CGErdmStartResp.rt = undefined;
     _CGErdmStartResp_allKeys = [];
     // keep track of which components have finished
-    CGErdmStartComponents = [];
-    CGErdmStartComponents.push(CGErdmStartText);
-    CGErdmStartComponents.push(CGErdmStartResp);
+    cgeRDMstartComponents = [];
+    cgeRDMstartComponents.push(CGErdmStartText);
+    cgeRDMstartComponents.push(CGErdmStartResp);
     
-    for (const thisComponent of CGErdmStartComponents)
+    for (const thisComponent of cgeRDMstartComponents)
       if ('status' in thisComponent)
         thisComponent.status = PsychoJS.Status.NOT_STARTED;
     return Scheduler.Event.NEXT;
@@ -957,11 +957,11 @@ function CGErdmStartRoutineBegin(snapshot) {
 }
 
 
-function CGErdmStartRoutineEachFrame() {
+function cgeRDMstartRoutineEachFrame() {
   return async function () {
-    //--- Loop for each frame of Routine 'CGErdmStart' ---
+    //--- Loop for each frame of Routine 'cgeRDMstart' ---
     // get current time
-    t = CGErdmStartClock.getTime();
+    t = cgeRDMstartClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
@@ -1009,7 +1009,7 @@ function CGErdmStartRoutineEachFrame() {
     }
     
     continueRoutine = false;  // reverts to True if at least one component still running
-    for (const thisComponent of CGErdmStartComponents)
+    for (const thisComponent of cgeRDMstartComponents)
       if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
         continueRoutine = true;
         break;
@@ -1025,10 +1025,10 @@ function CGErdmStartRoutineEachFrame() {
 }
 
 
-function CGErdmStartRoutineEnd(snapshot) {
+function cgeRDMstartRoutineEnd(snapshot) {
   return async function () {
-    //--- Ending Routine 'CGErdmStart' ---
-    for (const thisComponent of CGErdmStartComponents) {
+    //--- Ending Routine 'cgeRDMstart' ---
+    for (const thisComponent of cgeRDMstartComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
@@ -1044,7 +1044,7 @@ function CGErdmStartRoutineEnd(snapshot) {
         }
     
     CGErdmStartResp.stop();
-    // the Routine "CGErdmStart" was not non-slip safe, so reset the non-slip timer
+    // the Routine "cgeRDMstart" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
     // Routines running outside a loop should always advance the datafile row
@@ -1193,7 +1193,7 @@ function pracTrialsLoopBegin(pracTrialsLoopScheduler, snapshot) {
       psychoJS: psychoJS,
       nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
       extraInfo: expInfo, originPath: undefined,
-      trialList: TrialHandler.importConditions(psychoJS.serverManager, 'cgtRDMPractice.xlsx', '0:2'),
+      trialList: TrialHandler.importConditions(psychoJS.serverManager, 'cgtRDMPractice.xlsx', '0:4'),
       seed: undefined, name: 'pracTrials'
     });
     psychoJS.experiment.addLoop(pracTrials); // add the loop to the experiment
@@ -1521,9 +1521,9 @@ function pracChoiceRoutineBegin(snapshot) {
     //console.log(pracLossRounded)
     //console.log(pracGainRounded)
     //console.log(pracSafeRounded)
-    pracCircleRight.setFillColor(new util.Color([(- 0.0667), 0.6392, 1.0]));
-    pracCircleRight.setLineColor(new util.Color([(- 0.0667), 0.6392, 1.0]));
-    pracLineLeft.setPos(targetPos);
+    pracCircRight.setFillColor(new util.Color(color2));
+    pracCircRight.setLineColor(new util.Color(color2));
+    pracRiskLine.setPos(riskLineLoc);
     pracLossText.setPos(lossLoc);
     pracLossText.setText(pracLossRounded);
     pracGainText.setPos(gainLoc);
@@ -1535,15 +1535,15 @@ function pracChoiceRoutineBegin(snapshot) {
     _pracChoiceResp_allKeys = [];
     // keep track of which components have finished
     pracChoiceComponents = [];
-    pracChoiceComponents.push(pracCircleLeft);
-    pracChoiceComponents.push(pracCircleRight);
-    pracChoiceComponents.push(pracLineLeft);
+    pracChoiceComponents.push(pracCircLeft);
+    pracChoiceComponents.push(pracCircRight);
+    pracChoiceComponents.push(pracRiskLine);
     pracChoiceComponents.push(pracORtext);
     pracChoiceComponents.push(pracLossText);
     pracChoiceComponents.push(pracGainText);
     pracChoiceComponents.push(pracSafeText);
-    pracChoiceComponents.push(pracVLeft);
-    pracChoiceComponents.push(pracNRight);
+    pracChoiceComponents.push(pracVleft);
+    pracChoiceComponents.push(pracNright);
     pracChoiceComponents.push(pracChoiceResp);
     
     for (const thisComponent of pracChoiceComponents)
@@ -1563,46 +1563,46 @@ function pracChoiceRoutineEachFrame() {
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
-    // *pracCircleLeft* updates
-    if (t >= 0 && pracCircleLeft.status === PsychoJS.Status.NOT_STARTED) {
+    // *pracCircLeft* updates
+    if (t >= 0 && pracCircLeft.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      pracCircleLeft.tStart = t;  // (not accounting for frame time here)
-      pracCircleLeft.frameNStart = frameN;  // exact frame index
+      pracCircLeft.tStart = t;  // (not accounting for frame time here)
+      pracCircLeft.frameNStart = frameN;  // exact frame index
       
-      pracCircleLeft.setAutoDraw(true);
+      pracCircLeft.setAutoDraw(true);
     }
 
     frameRemains = 0 + 4 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
-    if (pracCircleLeft.status === PsychoJS.Status.STARTED && t >= frameRemains) {
-      pracCircleLeft.setAutoDraw(false);
+    if (pracCircLeft.status === PsychoJS.Status.STARTED && t >= frameRemains) {
+      pracCircLeft.setAutoDraw(false);
     }
     
-    // *pracCircleRight* updates
-    if (t >= 0.0 && pracCircleRight.status === PsychoJS.Status.NOT_STARTED) {
+    // *pracCircRight* updates
+    if (t >= 0.0 && pracCircRight.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      pracCircleRight.tStart = t;  // (not accounting for frame time here)
-      pracCircleRight.frameNStart = frameN;  // exact frame index
+      pracCircRight.tStart = t;  // (not accounting for frame time here)
+      pracCircRight.frameNStart = frameN;  // exact frame index
       
-      pracCircleRight.setAutoDraw(true);
+      pracCircRight.setAutoDraw(true);
     }
 
     frameRemains = 0.0 + 4 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
-    if (pracCircleRight.status === PsychoJS.Status.STARTED && t >= frameRemains) {
-      pracCircleRight.setAutoDraw(false);
+    if (pracCircRight.status === PsychoJS.Status.STARTED && t >= frameRemains) {
+      pracCircRight.setAutoDraw(false);
     }
     
-    // *pracLineLeft* updates
-    if (t >= 0.0 && pracLineLeft.status === PsychoJS.Status.NOT_STARTED) {
+    // *pracRiskLine* updates
+    if (t >= 0.0 && pracRiskLine.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      pracLineLeft.tStart = t;  // (not accounting for frame time here)
-      pracLineLeft.frameNStart = frameN;  // exact frame index
+      pracRiskLine.tStart = t;  // (not accounting for frame time here)
+      pracRiskLine.frameNStart = frameN;  // exact frame index
       
-      pracLineLeft.setAutoDraw(true);
+      pracRiskLine.setAutoDraw(true);
     }
 
     frameRemains = 0.0 + 4 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
-    if (pracLineLeft.status === PsychoJS.Status.STARTED && t >= frameRemains) {
-      pracLineLeft.setAutoDraw(false);
+    if (pracRiskLine.status === PsychoJS.Status.STARTED && t >= frameRemains) {
+      pracRiskLine.setAutoDraw(false);
     }
     
     // *pracORtext* updates
@@ -1661,32 +1661,32 @@ function pracChoiceRoutineEachFrame() {
       pracSafeText.setAutoDraw(false);
     }
     
-    // *pracVLeft* updates
-    if (t >= 0 && pracVLeft.status === PsychoJS.Status.NOT_STARTED) {
+    // *pracVleft* updates
+    if (t >= 0 && pracVleft.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      pracVLeft.tStart = t;  // (not accounting for frame time here)
-      pracVLeft.frameNStart = frameN;  // exact frame index
+      pracVleft.tStart = t;  // (not accounting for frame time here)
+      pracVleft.frameNStart = frameN;  // exact frame index
       
-      pracVLeft.setAutoDraw(true);
+      pracVleft.setAutoDraw(true);
     }
 
     frameRemains = 0 + 4 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
-    if (pracVLeft.status === PsychoJS.Status.STARTED && t >= frameRemains) {
-      pracVLeft.setAutoDraw(false);
+    if (pracVleft.status === PsychoJS.Status.STARTED && t >= frameRemains) {
+      pracVleft.setAutoDraw(false);
     }
     
-    // *pracNRight* updates
-    if (t >= 0 && pracNRight.status === PsychoJS.Status.NOT_STARTED) {
+    // *pracNright* updates
+    if (t >= 0 && pracNright.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      pracNRight.tStart = t;  // (not accounting for frame time here)
-      pracNRight.frameNStart = frameN;  // exact frame index
+      pracNright.tStart = t;  // (not accounting for frame time here)
+      pracNright.frameNStart = frameN;  // exact frame index
       
-      pracNRight.setAutoDraw(true);
+      pracNright.setAutoDraw(true);
     }
 
     frameRemains = 0 + 4 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
-    if (pracNRight.status === PsychoJS.Status.STARTED && t >= frameRemains) {
-      pracNRight.setAutoDraw(false);
+    if (pracNright.status === PsychoJS.Status.STARTED && t >= frameRemains) {
+      pracNright.setAutoDraw(false);
     }
     
     // *pracChoiceResp* updates
@@ -1965,7 +1965,7 @@ function pracOutcomeRoutineBegin(snapshot) {
     pracNoRespText.setPos(noRespLoc);
     pracRiskOC.setPos(ocGambleLoc);
     pracSafeOC.setPos(ocSafeLoc);
-    pracOCtext.setColor(new util.Color([(- 0.0667), 0.6392, 1.0]));
+    pracOCtext.setColor(new util.Color(color1));
     pracOCtext.setPos(ocLoc);
     pracOCtext.setText(pracFeedbackRounded);
     pracHideRisk.setPos(hideGamLoc);
@@ -2384,9 +2384,9 @@ function realChoiceRoutineBegin(snapshot) {
     //gainRounded = `$${Math.round(riskyoption1*100)/100}`;
     //safeRounded = `$${Math.round(safeoption*100)/100}`;
     
-    realCircleRight.setFillColor(new util.Color([(- 0.0667), 0.6392, 1.0]));
-    realCircleRight.setLineColor(new util.Color([(- 0.0667), 0.6392, 1.0]));
-    realLineLeft.setPos(targetPos);
+    realCircRight.setFillColor(new util.Color([(- 0.0667), 0.6392, 1.0]));
+    realCircRight.setLineColor(new util.Color([(- 0.0667), 0.6392, 1.0]));
+    realRiskLine.setPos(riskLineLoc);
     realLossText.setPos(lossLoc);
     realLossText.setText(lossRounded);
     realGainText.setPos(gainLoc);
@@ -2398,15 +2398,15 @@ function realChoiceRoutineBegin(snapshot) {
     _realChoiceResp_allKeys = [];
     // keep track of which components have finished
     realChoiceComponents = [];
-    realChoiceComponents.push(CircleLeft);
-    realChoiceComponents.push(realCircleRight);
-    realChoiceComponents.push(realLineLeft);
+    realChoiceComponents.push(realCircLeft);
+    realChoiceComponents.push(realCircRight);
+    realChoiceComponents.push(realRiskLine);
     realChoiceComponents.push(realORtext);
     realChoiceComponents.push(realLossText);
     realChoiceComponents.push(realGainText);
     realChoiceComponents.push(realSafeText);
-    realChoiceComponents.push(realVLeft);
-    realChoiceComponents.push(realNRight);
+    realChoiceComponents.push(realVleft);
+    realChoiceComponents.push(realNright);
     realChoiceComponents.push(realChoiceResp);
     
     for (const thisComponent of realChoiceComponents)
@@ -2425,46 +2425,46 @@ function realChoiceRoutineEachFrame() {
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
-    // *CircleLeft* updates
-    if (t >= 0 && CircleLeft.status === PsychoJS.Status.NOT_STARTED) {
+    // *realCircLeft* updates
+    if (t >= 0 && realCircLeft.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      CircleLeft.tStart = t;  // (not accounting for frame time here)
-      CircleLeft.frameNStart = frameN;  // exact frame index
+      realCircLeft.tStart = t;  // (not accounting for frame time here)
+      realCircLeft.frameNStart = frameN;  // exact frame index
       
-      CircleLeft.setAutoDraw(true);
+      realCircLeft.setAutoDraw(true);
     }
 
     frameRemains = 0 + 4 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
-    if (CircleLeft.status === PsychoJS.Status.STARTED && t >= frameRemains) {
-      CircleLeft.setAutoDraw(false);
+    if (realCircLeft.status === PsychoJS.Status.STARTED && t >= frameRemains) {
+      realCircLeft.setAutoDraw(false);
     }
     
-    // *realCircleRight* updates
-    if (t >= 0.0 && realCircleRight.status === PsychoJS.Status.NOT_STARTED) {
+    // *realCircRight* updates
+    if (t >= 0.0 && realCircRight.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      realCircleRight.tStart = t;  // (not accounting for frame time here)
-      realCircleRight.frameNStart = frameN;  // exact frame index
+      realCircRight.tStart = t;  // (not accounting for frame time here)
+      realCircRight.frameNStart = frameN;  // exact frame index
       
-      realCircleRight.setAutoDraw(true);
+      realCircRight.setAutoDraw(true);
     }
 
     frameRemains = 0.0 + 4 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
-    if (realCircleRight.status === PsychoJS.Status.STARTED && t >= frameRemains) {
-      realCircleRight.setAutoDraw(false);
+    if (realCircRight.status === PsychoJS.Status.STARTED && t >= frameRemains) {
+      realCircRight.setAutoDraw(false);
     }
     
-    // *realLineLeft* updates
-    if (t >= 0.0 && realLineLeft.status === PsychoJS.Status.NOT_STARTED) {
+    // *realRiskLine* updates
+    if (t >= 0.0 && realRiskLine.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      realLineLeft.tStart = t;  // (not accounting for frame time here)
-      realLineLeft.frameNStart = frameN;  // exact frame index
+      realRiskLine.tStart = t;  // (not accounting for frame time here)
+      realRiskLine.frameNStart = frameN;  // exact frame index
       
-      realLineLeft.setAutoDraw(true);
+      realRiskLine.setAutoDraw(true);
     }
 
     frameRemains = 0.0 + 4 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
-    if (realLineLeft.status === PsychoJS.Status.STARTED && t >= frameRemains) {
-      realLineLeft.setAutoDraw(false);
+    if (realRiskLine.status === PsychoJS.Status.STARTED && t >= frameRemains) {
+      realRiskLine.setAutoDraw(false);
     }
     
     // *realORtext* updates
@@ -2523,32 +2523,32 @@ function realChoiceRoutineEachFrame() {
       realSafeText.setAutoDraw(false);
     }
     
-    // *realVLeft* updates
-    if (t >= 0 && realVLeft.status === PsychoJS.Status.NOT_STARTED) {
+    // *realVleft* updates
+    if (t >= 0 && realVleft.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      realVLeft.tStart = t;  // (not accounting for frame time here)
-      realVLeft.frameNStart = frameN;  // exact frame index
+      realVleft.tStart = t;  // (not accounting for frame time here)
+      realVleft.frameNStart = frameN;  // exact frame index
       
-      realVLeft.setAutoDraw(true);
+      realVleft.setAutoDraw(true);
     }
 
     frameRemains = 0 + 4 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
-    if (realVLeft.status === PsychoJS.Status.STARTED && t >= frameRemains) {
-      realVLeft.setAutoDraw(false);
+    if (realVleft.status === PsychoJS.Status.STARTED && t >= frameRemains) {
+      realVleft.setAutoDraw(false);
     }
     
-    // *realNRight* updates
-    if (t >= 0 && realNRight.status === PsychoJS.Status.NOT_STARTED) {
+    // *realNright* updates
+    if (t >= 0 && realNright.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      realNRight.tStart = t;  // (not accounting for frame time here)
-      realNRight.frameNStart = frameN;  // exact frame index
+      realNright.tStart = t;  // (not accounting for frame time here)
+      realNright.frameNStart = frameN;  // exact frame index
       
-      realNRight.setAutoDraw(true);
+      realNright.setAutoDraw(true);
     }
 
     frameRemains = 0 + 4 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
-    if (realNRight.status === PsychoJS.Status.STARTED && t >= frameRemains) {
-      realNRight.setAutoDraw(false);
+    if (realNright.status === PsychoJS.Status.STARTED && t >= frameRemains) {
+      realNright.setAutoDraw(false);
     }
     
     // *realChoiceResp* updates

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.4),
-    on November 02, 2022, at 13:20
+    on September 29, 2023, at 01:55
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -50,7 +50,7 @@ filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expNa
 # An ExperimentHandler isn't essential but helps with data saving
 thisExp = data.ExperimentHandler(name=expName, version='',
     extraInfo=expInfo, runtimeInfo=None,
-    originPath='C:\\Users\\jvonm\\Documents\\GitHub\\cgt.VM\\cgt.VM\\PyschopyTask\\tasks_RDM_digitSpan\\CGTbothTasks_lastrun.py',
+    originPath='C:\\Users\\jvonm\\Documents\\GitHub\\cge\\Old PyschopyTask\\tasks_RDM_digitSpan\\CGTbothTasks_lastrun.py',
     savePickle=True, saveWideText=True,
     dataFileName=filename)
 # save a log file for detail verbose info
