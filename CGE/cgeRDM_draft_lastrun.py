@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.1),
-    on September 29, 2023, at 02:54
+    on September 29, 2023, at 03:09
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -212,7 +212,7 @@ isiPracFix = visual.TextStim(win=win, name='isiPracFix',
     text='+',
     font='Arial',
     pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
 
@@ -255,7 +255,7 @@ itiPracFix = visual.TextStim(win=win, name='itiPracFix',
     text='+',
     font='Arial',
     pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
 
@@ -264,7 +264,7 @@ staticStartText = visual.TextStim(win=win, name='staticStartText',
     text='Practice complete.\n\nWhen you are ready to start ROUND 1 of the task, press "V" or "N".\n',
     font='Arial',
     pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
 staticStartResp = keyboard.Keyboard()
@@ -278,7 +278,7 @@ realCircLeft = visual.Rect(
     win=win, name='realCircLeft',
     width=(.5, .5)[0], height=(.5, .5)[1],
     ori=0, pos=circLeftLoc, anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[-0.0667,0.6392,1.0000],
+    lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-1.0, interpolate=True)
 realCircRight = visual.Rect(
     win=win, name='realCircRight',
@@ -290,48 +290,48 @@ realRiskLine = visual.Rect(
     win=win, name='realRiskLine',
     width=(0.5, 0.01)[0], height=(0.5, 0.01)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=3,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
+    lineWidth=3,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-3.0, interpolate=True)
 realORtext = visual.TextStim(win=win, name='realORtext',
     text='OR',
     font='Arial',
     pos=ORtextLoc, height=0.05, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
 realLossText = visual.TextStim(win=win, name='realLossText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
+    color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-5.0);
 realGainText = visual.TextStim(win=win, name='realGainText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
+    color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-6.0);
 realSafeText = visual.TextStim(win=win, name='realSafeText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
+    color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-7.0);
 realVleft = visual.TextStim(win=win, name='realVleft',
     text='V-Left',
     font='Arial',
     pos=VleftLoc, height=0.05, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-8.0);
 realNright = visual.TextStim(win=win, name='realNright',
     text='N-Right',
     font='Arial',
     pos=NrightLoc, height=0.05, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-9.0);
 realChoiceResp = keyboard.Keyboard()
@@ -341,7 +341,7 @@ isiFix = visual.TextStim(win=win, name='isiFix',
     text='+',
     font='Arial',
     pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
 
@@ -357,14 +357,14 @@ staticNoRespText = visual.TextStim(win=win, name='staticNoRespText',
     text='You did not respond in time\n',
     font='Arial',
     pos=[0,0], height=0.08, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-1.0);
 staticRiskOC = visual.Rect(
     win=win, name='staticRiskOC',
     width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[-0.0667,0.6392,1.0000],
+    lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-2.0, interpolate=True)
 staticSafeOC = visual.Rect(
     win=win, name='staticSafeOC',
@@ -383,7 +383,7 @@ staticHideRisk = visual.Rect(
     win=win, name='staticHideRisk',
     width=(0.6, 0.3)[0], height=(0.6, 0.3)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
+    lineWidth=1,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-5.0, interpolate=True)
 
 # --- Initialize components for Routine "realITI" ---
@@ -391,7 +391,7 @@ itiFix = visual.TextStim(win=win, name='itiFix',
     text='+',
     font='Arial',
     pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
 
@@ -455,7 +455,7 @@ setupBestFit = visual.TextStim(win=win, name='setupBestFit',
     text='ROUND 1 of the gambling task is complete! \n\nSetting up for the last round of the gambling task.\n\nPlease wait...\n\n\n',
     font='Arial',
     pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=None, 
+    color=color2, colorSpace='rgb', opacity=None, 
     languageStyle='LTR',
     depth=-4.0);
 
@@ -473,7 +473,7 @@ dynamicStartText = visual.TextStim(win=win, name='dynamicStartText',
     text='When you are ready to start ROUND 2 of the task, press "V" or "N".',
     font='Arial',
     pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=None, 
+    color=color2, colorSpace='rgb', opacity=None, 
     languageStyle='LTR',
     depth=0.0);
 dynamicStartResp = keyboard.Keyboard()
@@ -487,7 +487,7 @@ realCircLeft = visual.Rect(
     win=win, name='realCircLeft',
     width=(.5, .5)[0], height=(.5, .5)[1],
     ori=0, pos=circLeftLoc, anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[-0.0667,0.6392,1.0000],
+    lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-1.0, interpolate=True)
 realCircRight = visual.Rect(
     win=win, name='realCircRight',
@@ -499,48 +499,48 @@ realRiskLine = visual.Rect(
     win=win, name='realRiskLine',
     width=(0.5, 0.01)[0], height=(0.5, 0.01)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=3,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
+    lineWidth=3,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-3.0, interpolate=True)
 realORtext = visual.TextStim(win=win, name='realORtext',
     text='OR',
     font='Arial',
     pos=ORtextLoc, height=0.05, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
 realLossText = visual.TextStim(win=win, name='realLossText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
+    color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-5.0);
 realGainText = visual.TextStim(win=win, name='realGainText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
+    color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-6.0);
 realSafeText = visual.TextStim(win=win, name='realSafeText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
+    color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-7.0);
 realVleft = visual.TextStim(win=win, name='realVleft',
     text='V-Left',
     font='Arial',
     pos=VleftLoc, height=0.05, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-8.0);
 realNright = visual.TextStim(win=win, name='realNright',
     text='N-Right',
     font='Arial',
     pos=NrightLoc, height=0.05, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-9.0);
 realChoiceResp = keyboard.Keyboard()
@@ -550,7 +550,7 @@ isiFix = visual.TextStim(win=win, name='isiFix',
     text='+',
     font='Arial',
     pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
 
@@ -565,20 +565,20 @@ dynamicNoRespText = visual.TextStim(win=win, name='dynamicNoRespText',
     text='You did not respond in time\n',
     font='Arial',
     pos=[0,0], height=0.08, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-1.0);
 dynamicRiskOC = visual.Rect(
     win=win, name='dynamicRiskOC',
     width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[-0.0667,0.6392,1.0000],
+    lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-2.0, interpolate=True)
 dynamicSafeOC = visual.Rect(
     win=win, name='dynamicSafeOC',
     width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[-0.0667,0.6392,1.0000],
+    lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-3.0, interpolate=True)
 dynamicOCtext = visual.TextStim(win=win, name='dynamicOCtext',
     text='',
@@ -591,7 +591,7 @@ dynamicHideRisk = visual.Rect(
     win=win, name='dynamicHideRisk',
     width=(0.6, 0.3)[0], height=(0.6, 0.3)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
+    lineWidth=1,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-5.0, interpolate=True)
 
 # --- Initialize components for Routine "realITI" ---
@@ -599,7 +599,7 @@ itiFix = visual.TextStim(win=win, name='itiFix',
     text='+',
     font='Arial',
     pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
+    color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
 
@@ -608,7 +608,7 @@ cgeRDMendText = visual.TextStim(win=win, name='cgeRDMendText',
     text="You have sucessfully completed the first task in this experiment!\n\nPlease take a brief 1 minute break. \n\nYou are welcome to take a longer break, but keep in mind this study should take no longer than 1 hour to complete. \n\nWhen you are ready to move on, press 'enter' to continue.\n",
     font='Arial',
     pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=None, 
+    color=color2, colorSpace='rgb', opacity=None, 
     languageStyle='LTR',
     depth=0.0);
 cgeRDMendResp = keyboard.Keyboard()
@@ -618,7 +618,7 @@ ThankYou = visual.TextStim(win=win, name='ThankYou',
     text='Thank you! You have sucessfully completed the second portion of this study.\n\nYou will now be automatically redirected to Qualtrics.',
     font='Arial',
     pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
-    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=None, 
+    color=color2, colorSpace='rgb', opacity=None, 
     languageStyle='LTR',
     depth=0.0);
 
@@ -1720,8 +1720,8 @@ for thisStaticTrial in staticTrials:
     #lossRounded = ("$" + str(round(riskyoption2, 2)))
     #gainRounded = ("$" + str(round(riskyoption1, 2)))
     #safeRounded = ("$" + str(round(safeoption, 2)))
-    realCircRight.setFillColor([-0.0667,0.6392,1.0000])
-    realCircRight.setLineColor([-0.0667,0.6392,1.0000])
+    realCircRight.setFillColor(color2)
+    realCircRight.setLineColor(color2)
     realRiskLine.setPos(riskLineLoc)
     realLossText.setPos(lossLoc)
     realLossText.setText(lossRounded)
@@ -2165,7 +2165,7 @@ for thisStaticTrial in staticTrials:
     staticNoRespText.setPos(noRespLoc)
     staticRiskOC.setPos(ocGambleLoc)
     staticSafeOC.setPos(ocSafeLoc)
-    staticOCtext.setColor([0.5216,0.5216,0.5216], colorSpace='rgb')
+    staticOCtext.setColor(color1, colorSpace='rgb')
     staticOCtext.setPos(ocLoc)
     staticOCtext.setText(feedbackRounded)
     staticHideRisk.setPos(hideGamLoc)
@@ -2762,8 +2762,8 @@ for thisDynamicTrial in dynamicTrials:
     #lossRounded = ("$" + str(round(riskyoption2, 2)))
     #gainRounded = ("$" + str(round(riskyoption1, 2)))
     #safeRounded = ("$" + str(round(safeoption, 2)))
-    realCircRight.setFillColor([-0.0667,0.6392,1.0000])
-    realCircRight.setLineColor([-0.0667,0.6392,1.0000])
+    realCircRight.setFillColor(color2)
+    realCircRight.setLineColor(color2)
     realRiskLine.setPos(riskLineLoc)
     realLossText.setPos(lossLoc)
     realLossText.setText(lossRounded)
@@ -3207,7 +3207,7 @@ for thisDynamicTrial in dynamicTrials:
     dynamicNoRespText.setPos(noRespLoc)
     dynamicRiskOC.setPos(ocGambleLoc)
     dynamicSafeOC.setPos(ocSafeLoc)
-    dynamicOCtext.setColor([0.5216,0.5216,0.5216], colorSpace='rgb')
+    dynamicOCtext.setColor(color1, colorSpace='rgb')
     dynamicOCtext.setPos(ocLoc)
     dynamicOCtext.setText(feedbackRounded)
     dynamicHideRisk.setPos(hideGamLoc)

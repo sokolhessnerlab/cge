@@ -106,8 +106,8 @@ psychoJS.start({
   expName: expName,
   expInfo: expInfo,
   resources: [
-    {'name': 'cgtRDMPractice.xlsx', 'path': 'cgtRDMPractice.xlsx'},
-    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'}
+    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'},
+    {'name': 'cgtRDMPractice.xlsx', 'path': 'cgtRDMPractice.xlsx'}
   ]
 });
 
@@ -385,7 +385,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: 0.05,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: 0.0 
   });
   
@@ -462,7 +462,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: 0.05,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: 0.0 
   });
   
@@ -476,7 +476,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: instructionsTextHeight,  wrapWidth: wrap, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: 0.0 
   });
   
@@ -490,8 +490,8 @@ async function experimentInit() {
     win: psychoJS.window, name: 'realCircLeft', 
     width: [0.5, 0.5][0], height: [0.5, 0.5][1],
     ori: 0, pos: circLeftLoc,
-    lineWidth: 1, lineColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
-    fillColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
+    lineWidth: 1, lineColor: new util.Color(color2),
+    fillColor: new util.Color(color2),
     opacity: 1, depth: -1, interpolate: true,
   });
   
@@ -508,8 +508,8 @@ async function experimentInit() {
     win: psychoJS.window, name: 'realRiskLine', 
     width: [0.5, 0.01][0], height: [0.5, 0.01][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 3, lineColor: new util.Color([0.5216, 0.5216, 0.5216]),
-    fillColor: new util.Color([0.5216, 0.5216, 0.5216]),
+    lineWidth: 3, lineColor: new util.Color(color1),
+    fillColor: new util.Color(color1),
     opacity: 1, depth: -3, interpolate: true,
   });
   
@@ -521,7 +521,7 @@ async function experimentInit() {
     units: undefined, 
     pos: ORtextLoc, height: 0.05,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: -4.0 
   });
   
@@ -533,7 +533,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([0.5216, 0.5216, 0.5216]),  opacity: 1,
+    color: new util.Color(color1),  opacity: 1,
     depth: -5.0 
   });
   
@@ -545,7 +545,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([0.5216, 0.5216, 0.5216]),  opacity: 1,
+    color: new util.Color(color1),  opacity: 1,
     depth: -6.0 
   });
   
@@ -557,7 +557,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([0.5216, 0.5216, 0.5216]),  opacity: 1,
+    color: new util.Color(color1),  opacity: 1,
     depth: -7.0 
   });
   
@@ -569,7 +569,7 @@ async function experimentInit() {
     units: undefined, 
     pos: VleftLoc, height: 0.05,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: -8.0 
   });
   
@@ -581,7 +581,7 @@ async function experimentInit() {
     units: undefined, 
     pos: NrightLoc, height: 0.05,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: -9.0 
   });
   
@@ -597,7 +597,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: 0.05,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: 0.0 
   });
   
@@ -617,7 +617,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: 0.08,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: -1.0 
   });
   
@@ -625,8 +625,8 @@ async function experimentInit() {
     win: psychoJS.window, name: 'staticRiskOC', 
     width: [0.5, 0.5][0], height: [0.5, 0.5][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 1, lineColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
-    fillColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
+    lineWidth: 1, lineColor: new util.Color(color2),
+    fillColor: new util.Color(color2),
     opacity: 1, depth: -2, interpolate: true,
   });
   
@@ -655,8 +655,8 @@ async function experimentInit() {
     win: psychoJS.window, name: 'staticHideRisk', 
     width: [0.6, 0.3][0], height: [0.6, 0.3][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 1, lineColor: new util.Color([0.5216, 0.5216, 0.5216]),
-    fillColor: new util.Color([0.5216, 0.5216, 0.5216]),
+    lineWidth: 1, lineColor: new util.Color(color1),
+    fillColor: new util.Color(color1),
     opacity: 1, depth: -5, interpolate: true,
   });
   
@@ -670,7 +670,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: 0.05,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: 0.0 
   });
   
@@ -684,7 +684,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: instructionsTextHeight,  wrapWidth: wrap, ori: 0.0,
     languageStyle: 'LTR',
-    color: new util.Color([-0.0667,0.6392,1.0000]),  opacity: undefined,
+    color: new util.Color(color2),  opacity: undefined,
     depth: -1.0 
   });
   
@@ -715,7 +715,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: instructionsTextHeight,  wrapWidth: wrap, ori: 0.0,
     languageStyle: 'LTR',
-    color: new util.Color([-0.0667,0.6392,1.0000]),  opacity: undefined,
+    color: new util.Color(color2),  opacity: undefined,
     depth: 0.0 
   });
   
@@ -736,7 +736,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: 0.08,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
-    color: new util.Color([(- 0.0667), 0.6392, 1.0]),  opacity: 1,
+    color: new util.Color(color2),  opacity: 1,
     depth: -1.0 
   });
   
@@ -744,8 +744,8 @@ async function experimentInit() {
     win: psychoJS.window, name: 'dynamicRiskOC', 
     width: [0.5, 0.5][0], height: [0.5, 0.5][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 1, lineColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
-    fillColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
+    lineWidth: 1, lineColor: new util.Color(color2),
+    fillColor: new util.Color(color2),
     opacity: 1, depth: -2, interpolate: true,
   });
   
@@ -753,8 +753,8 @@ async function experimentInit() {
     win: psychoJS.window, name: 'dynamicSafeOC', 
     width: [0.5, 0.5][0], height: [0.5, 0.5][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 1, lineColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
-    fillColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
+    lineWidth: 1, lineColor: new util.Color(color2),
+    fillColor: new util.Color(color2),
     opacity: 1, depth: -3, interpolate: true,
   });
   
@@ -774,8 +774,8 @@ async function experimentInit() {
     win: psychoJS.window, name: 'dynamicHideRisk', 
     width: [0.6, 0.3][0], height: [0.6, 0.3][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 1, lineColor: new util.Color([0.5216, 0.5216, 0.5216]),
-    fillColor: new util.Color([0.5216, 0.5216, 0.5216]),
+    lineWidth: 1, lineColor: new util.Color(color1),
+    fillColor: new util.Color(color1),
     opacity: 1, depth: -5, interpolate: true,
   });
   
@@ -789,7 +789,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: instructionsTextHeight,  wrapWidth: wrap, ori: 0.0,
     languageStyle: 'LTR',
-    color: new util.Color([-0.0667,0.6392,1.0000]),  opacity: undefined,
+    color: new util.Color(color2),  opacity: undefined,
     depth: 0.0 
   });
   
@@ -805,7 +805,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0, 0], height: instructionsTextHeight,  wrapWidth: wrap, ori: 0.0,
     languageStyle: 'LTR',
-    color: new util.Color([-0.0667,0.6392,1.0000]),  opacity: undefined,
+    color: new util.Color(color2),  opacity: undefined,
     depth: 0.0 
   });
   
@@ -2384,8 +2384,8 @@ function realChoiceRoutineBegin(snapshot) {
     //gainRounded = `$${Math.round(riskyoption1*100)/100}`;
     //safeRounded = `$${Math.round(safeoption*100)/100}`;
     
-    realCircRight.setFillColor(new util.Color([(- 0.0667), 0.6392, 1.0]));
-    realCircRight.setLineColor(new util.Color([(- 0.0667), 0.6392, 1.0]));
+    realCircRight.setFillColor(new util.Color(color2));
+    realCircRight.setLineColor(new util.Color(color2));
     realRiskLine.setPos(riskLineLoc);
     realLossText.setPos(lossLoc);
     realLossText.setText(lossRounded);
@@ -2845,7 +2845,7 @@ function staticOutcomeRoutineBegin(snapshot) {
     staticNoRespText.setPos(noRespLoc);
     staticRiskOC.setPos(ocGambleLoc);
     staticSafeOC.setPos(ocSafeLoc);
-    staticOCtext.setColor(new util.Color([0.5216, 0.5216, 0.5216]));
+    staticOCtext.setColor(new util.Color(color1));
     staticOCtext.setPos(ocLoc);
     staticOCtext.setText(feedbackRounded);
     staticHideRisk.setPos(hideGamLoc);
@@ -3703,7 +3703,7 @@ function dynamicOutcomeRoutineBegin(snapshot) {
     dynamicNoRespText.setPos(noRespLoc);
     dynamicRiskOC.setPos(ocGambleLoc);
     dynamicSafeOC.setPos(ocSafeLoc);
-    dynamicOCtext.setColor(new util.Color([0.5216, 0.5216, 0.5216]));
+    dynamicOCtext.setColor(new util.Color(color1));
     dynamicOCtext.setPos(ocLoc);
     dynamicOCtext.setText(feedbackRounded);
     dynamicHideRisk.setPos(hideGamLoc);
