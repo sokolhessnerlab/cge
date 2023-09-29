@@ -106,8 +106,8 @@ psychoJS.start({
   expName: expName,
   expInfo: expInfo,
   resources: [
-    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'},
-    {'name': 'cgtRDMPractice.xlsx', 'path': 'cgtRDMPractice.xlsx'}
+    {'name': 'cgeRDMPractice.xlsx', 'path': 'cgeRDMPractice.xlsx'},
+    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'}
   ]
 });
 
@@ -274,27 +274,27 @@ async function experimentInit() {
   // Run 'Begin Experiment' code from pracChoiceRandLoc
   textHeight = 0.05;
   
-  pracCircLeft = new visual.Polygon({
+  pracCircLeft = new visual.Polygon ({
     win: psychoJS.window, name: 'pracCircLeft', 
-    edges: 100, size:[0.5, 0.5],
+    edges: leftShape, size:[0.5, 0.5],
     ori: 0, pos: circLeftLoc,
     lineWidth: 1, lineColor: new util.Color(color2),
     fillColor: new util.Color(color2),
     opacity: 1, depth: -1, interpolate: true,
   });
   
-  pracCircRight = new visual.Polygon({
+  pracCircRight = new visual.Polygon ({
     win: psychoJS.window, name: 'pracCircRight', 
-    edges: 100, size:[0.5, 0.5],
+    edges: rightShape, size:[0.5, 0.5],
     ori: 0, pos: circRightLoc,
     lineWidth: 1, lineColor: new util.Color('white'),
     fillColor: new util.Color('white'),
     opacity: 1, depth: -2, interpolate: true,
   });
   
-  pracRiskLine = new visual.Rect ({
+  pracRiskLine = new visual.Polygon ({
     win: psychoJS.window, name: 'pracRiskLine', 
-    width: [0.5, 0.01][0], height: [0.5, 0.01][1],
+    edges: 4, size:[0.5, 0.01],
     ori: 0, pos: [0, 0],
     lineWidth: 3, lineColor: new util.Color(color1),
     fillColor: new util.Color(color1),
@@ -443,9 +443,9 @@ async function experimentInit() {
     depth: -4.0 
   });
   
-  pracHideRisk = new visual.Rect ({
+  pracHideRisk = new visual.Polygon ({
     win: psychoJS.window, name: 'pracHideRisk', 
-    width: [0.6, 0.3][0], height: [0.6, 0.3][1],
+    edges: 4, size:[0.6, 0.3],
     ori: 0, pos: [0, 0],
     lineWidth: 1, lineColor: new util.Color(color1),
     fillColor: new util.Color(color1),
@@ -1193,7 +1193,7 @@ function pracTrialsLoopBegin(pracTrialsLoopScheduler, snapshot) {
       psychoJS: psychoJS,
       nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
       extraInfo: expInfo, originPath: undefined,
-      trialList: TrialHandler.importConditions(psychoJS.serverManager, 'cgtRDMPractice.xlsx', '0:4'),
+      trialList: TrialHandler.importConditions(psychoJS.serverManager, 'cgeRDMPractice.xlsx', '0:2'),
       seed: undefined, name: 'pracTrials'
     });
     psychoJS.experiment.addLoop(pracTrials); // add the loop to the experiment
@@ -2149,7 +2149,7 @@ function pracITIRoutineEachFrame() {
       itiPracFix.setAutoDraw(true);
     }
 
-    frameRemains = 0.0 + (iti + extraITI) - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
+    frameRemains = 0.0 + iti - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
     if (itiPracFix.status === PsychoJS.Status.STARTED && t >= frameRemains) {
       itiPracFix.setAutoDraw(false);
     }
@@ -2647,7 +2647,7 @@ function realISIRoutineBegin(snapshot) {
     realISIClock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
-    routineTimer.add(0.500000);
+    routineTimer.add(1.000000);
     // update component parameters for each repeat
     // keep track of which components have finished
     realISIComponents = [];
@@ -2678,7 +2678,7 @@ function realISIRoutineEachFrame() {
       isiFix.setAutoDraw(true);
     }
 
-    frameRemains = 0.0 + 0.5 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
+    frameRemains = 0.0 + 1 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
     if (isiFix.status === PsychoJS.Status.STARTED && t >= frameRemains) {
       isiFix.setAutoDraw(false);
     }
