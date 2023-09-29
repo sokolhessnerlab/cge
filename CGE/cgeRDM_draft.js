@@ -106,8 +106,8 @@ psychoJS.start({
   expName: expName,
   expInfo: expInfo,
   resources: [
-    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'},
-    {'name': 'cgtRDMPractice.xlsx', 'path': 'cgtRDMPractice.xlsx'}
+    {'name': 'cgtRDMPractice.xlsx', 'path': 'cgtRDMPractice.xlsx'},
+    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'}
   ]
 });
 
@@ -180,7 +180,7 @@ var itiPracFix;
 var staticStartClock;
 var staticStartText;
 var staticStartResp;
-var choiceWindowClock;
+var realChoiceClock;
 var CircleLeft;
 var realCircleRight;
 var realLineLeft;
@@ -191,7 +191,7 @@ var realSafeText;
 var realVLeft;
 var realNRight;
 var realChoiceResp;
-var ISIClock;
+var realISIClock;
 var isiFix;
 var staticOutcomeClock;
 var choices;
@@ -201,7 +201,7 @@ var staticRiskOC;
 var staticSafeOC;
 var staticOCtext;
 var staticHideRisk;
-var ITIClock;
+var realITIClock;
 var itiFix;
 var computeBestFitClock;
 var setupBestFit;
@@ -418,7 +418,7 @@ async function experimentInit() {
     edges: 100, size:[0.5, 0.5],
     ori: 0, pos: [0, 0],
     lineWidth: 1, lineColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
-    fillColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
+    fillColor: new util.Color([0.5216, 0.5216, 0.5216]),
     opacity: 1, depth: -2, interpolate: true,
   });
   
@@ -482,8 +482,8 @@ async function experimentInit() {
   
   staticStartResp = new core.Keyboard({psychoJS: psychoJS, clock: new util.Clock(), waitForStart: true});
   
-  // Initialize components for Routine "choiceWindow"
-  choiceWindowClock = new util.Clock();
+  // Initialize components for Routine "realChoice"
+  realChoiceClock = new util.Clock();
   // Run 'Begin Experiment' code from realChoiceRandLoc
   var realloc
   CircleLeft = new visual.Rect ({
@@ -587,8 +587,8 @@ async function experimentInit() {
   
   realChoiceResp = new core.Keyboard({psychoJS: psychoJS, clock: new util.Clock(), waitForStart: true});
   
-  // Initialize components for Routine "ISI"
-  ISIClock = new util.Clock();
+  // Initialize components for Routine "realISI"
+  realISIClock = new util.Clock();
   isiFix = new visual.TextStim({
     win: psychoJS.window,
     name: 'isiFix',
@@ -634,8 +634,8 @@ async function experimentInit() {
     win: psychoJS.window, name: 'staticSafeOC', 
     width: [0.5, 0.5][0], height: [0.5, 0.5][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 1, lineColor: new util.Color([1, 1, 1]),
-    fillColor: new util.Color([1, 1, 1]),
+    lineWidth: 1, lineColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
+    fillColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
     opacity: 1, depth: -3, interpolate: true,
   });
   
@@ -660,8 +660,8 @@ async function experimentInit() {
     opacity: 1, depth: -5, interpolate: true,
   });
   
-  // Initialize components for Routine "ITI"
-  ITIClock = new util.Clock();
+  // Initialize components for Routine "realITI"
+  realITIClock = new util.Clock();
   itiFix = new visual.TextStim({
     win: psychoJS.window,
     name: 'itiFix',
@@ -1275,18 +1275,18 @@ function staticTrialsLoopBegin(staticTrialsLoopScheduler, snapshot) {
     for (const thisStaticTrial of staticTrials) {
       snapshot = staticTrials.getSnapshot();
       staticTrialsLoopScheduler.add(importConditions(snapshot));
-      staticTrialsLoopScheduler.add(choiceWindowRoutineBegin(snapshot));
-      staticTrialsLoopScheduler.add(choiceWindowRoutineEachFrame());
-      staticTrialsLoopScheduler.add(choiceWindowRoutineEnd(snapshot));
-      staticTrialsLoopScheduler.add(ISIRoutineBegin(snapshot));
-      staticTrialsLoopScheduler.add(ISIRoutineEachFrame());
-      staticTrialsLoopScheduler.add(ISIRoutineEnd(snapshot));
+      staticTrialsLoopScheduler.add(realChoiceRoutineBegin(snapshot));
+      staticTrialsLoopScheduler.add(realChoiceRoutineEachFrame());
+      staticTrialsLoopScheduler.add(realChoiceRoutineEnd(snapshot));
+      staticTrialsLoopScheduler.add(realISIRoutineBegin(snapshot));
+      staticTrialsLoopScheduler.add(realISIRoutineEachFrame());
+      staticTrialsLoopScheduler.add(realISIRoutineEnd(snapshot));
       staticTrialsLoopScheduler.add(staticOutcomeRoutineBegin(snapshot));
       staticTrialsLoopScheduler.add(staticOutcomeRoutineEachFrame());
       staticTrialsLoopScheduler.add(staticOutcomeRoutineEnd(snapshot));
-      staticTrialsLoopScheduler.add(ITIRoutineBegin(snapshot));
-      staticTrialsLoopScheduler.add(ITIRoutineEachFrame());
-      staticTrialsLoopScheduler.add(ITIRoutineEnd(snapshot));
+      staticTrialsLoopScheduler.add(realITIRoutineBegin(snapshot));
+      staticTrialsLoopScheduler.add(realITIRoutineEachFrame());
+      staticTrialsLoopScheduler.add(realITIRoutineEnd(snapshot));
       staticTrialsLoopScheduler.add(staticTrialsLoopEndIteration(staticTrialsLoopScheduler, snapshot));
     }
     
@@ -1410,18 +1410,18 @@ function dynamicTrialsLoopBegin(dynamicTrialsLoopScheduler, snapshot) {
     for (const thisDynamicTrial of dynamicTrials) {
       snapshot = dynamicTrials.getSnapshot();
       dynamicTrialsLoopScheduler.add(importConditions(snapshot));
-      dynamicTrialsLoopScheduler.add(choiceWindowRoutineBegin(snapshot));
-      dynamicTrialsLoopScheduler.add(choiceWindowRoutineEachFrame());
-      dynamicTrialsLoopScheduler.add(choiceWindowRoutineEnd(snapshot));
-      dynamicTrialsLoopScheduler.add(ISIRoutineBegin(snapshot));
-      dynamicTrialsLoopScheduler.add(ISIRoutineEachFrame());
-      dynamicTrialsLoopScheduler.add(ISIRoutineEnd(snapshot));
+      dynamicTrialsLoopScheduler.add(realChoiceRoutineBegin(snapshot));
+      dynamicTrialsLoopScheduler.add(realChoiceRoutineEachFrame());
+      dynamicTrialsLoopScheduler.add(realChoiceRoutineEnd(snapshot));
+      dynamicTrialsLoopScheduler.add(realISIRoutineBegin(snapshot));
+      dynamicTrialsLoopScheduler.add(realISIRoutineEachFrame());
+      dynamicTrialsLoopScheduler.add(realISIRoutineEnd(snapshot));
       dynamicTrialsLoopScheduler.add(dynamicOutcomeRoutineBegin(snapshot));
       dynamicTrialsLoopScheduler.add(dynamicOutcomeRoutineEachFrame());
       dynamicTrialsLoopScheduler.add(dynamicOutcomeRoutineEnd(snapshot));
-      dynamicTrialsLoopScheduler.add(ITIRoutineBegin(snapshot));
-      dynamicTrialsLoopScheduler.add(ITIRoutineEachFrame());
-      dynamicTrialsLoopScheduler.add(ITIRoutineEnd(snapshot));
+      dynamicTrialsLoopScheduler.add(realITIRoutineBegin(snapshot));
+      dynamicTrialsLoopScheduler.add(realITIRoutineEachFrame());
+      dynamicTrialsLoopScheduler.add(realITIRoutineEnd(snapshot));
       dynamicTrialsLoopScheduler.add(dynamicTrialsLoopEndIteration(dynamicTrialsLoopScheduler, snapshot));
     }
     
@@ -1965,7 +1965,7 @@ function pracOutcomeRoutineBegin(snapshot) {
     pracNoRespText.setPos(noRespLoc);
     pracRiskOC.setPos(ocGambleLoc);
     pracSafeOC.setPos(ocSafeLoc);
-    pracOCtext.setColor(new util.Color([0.5216, 0.5216, 0.5216]));
+    pracOCtext.setColor(new util.Color([(- 0.0667), 0.6392, 1.0]));
     pracOCtext.setPos(ocLoc);
     pracOCtext.setText(pracFeedbackRounded);
     pracHideRisk.setPos(hideGamLoc);
@@ -2332,14 +2332,14 @@ var lossRounded;
 var gainRounded;
 var safeRounded;
 var _realChoiceResp_allKeys;
-var choiceWindowComponents;
-function choiceWindowRoutineBegin(snapshot) {
+var realChoiceComponents;
+function realChoiceRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //--- Prepare to start Routine 'choiceWindow' ---
+    //--- Prepare to start Routine 'realChoice' ---
     t = 0;
-    choiceWindowClock.reset(); // clock
+    realChoiceClock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     routineTimer.add(4.000000);
@@ -2397,19 +2397,19 @@ function choiceWindowRoutineBegin(snapshot) {
     realChoiceResp.rt = undefined;
     _realChoiceResp_allKeys = [];
     // keep track of which components have finished
-    choiceWindowComponents = [];
-    choiceWindowComponents.push(CircleLeft);
-    choiceWindowComponents.push(realCircleRight);
-    choiceWindowComponents.push(realLineLeft);
-    choiceWindowComponents.push(realORtext);
-    choiceWindowComponents.push(realLossText);
-    choiceWindowComponents.push(realGainText);
-    choiceWindowComponents.push(realSafeText);
-    choiceWindowComponents.push(realVLeft);
-    choiceWindowComponents.push(realNRight);
-    choiceWindowComponents.push(realChoiceResp);
+    realChoiceComponents = [];
+    realChoiceComponents.push(CircleLeft);
+    realChoiceComponents.push(realCircleRight);
+    realChoiceComponents.push(realLineLeft);
+    realChoiceComponents.push(realORtext);
+    realChoiceComponents.push(realLossText);
+    realChoiceComponents.push(realGainText);
+    realChoiceComponents.push(realSafeText);
+    realChoiceComponents.push(realVLeft);
+    realChoiceComponents.push(realNRight);
+    realChoiceComponents.push(realChoiceResp);
     
-    for (const thisComponent of choiceWindowComponents)
+    for (const thisComponent of realChoiceComponents)
       if ('status' in thisComponent)
         thisComponent.status = PsychoJS.Status.NOT_STARTED;
     return Scheduler.Event.NEXT;
@@ -2417,11 +2417,11 @@ function choiceWindowRoutineBegin(snapshot) {
 }
 
 
-function choiceWindowRoutineEachFrame() {
+function realChoiceRoutineEachFrame() {
   return async function () {
-    //--- Loop for each frame of Routine 'choiceWindow' ---
+    //--- Loop for each frame of Routine 'realChoice' ---
     // get current time
-    t = choiceWindowClock.getTime();
+    t = realChoiceClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
@@ -2590,7 +2590,7 @@ function choiceWindowRoutineEachFrame() {
     }
     
     continueRoutine = false;  // reverts to True if at least one component still running
-    for (const thisComponent of choiceWindowComponents)
+    for (const thisComponent of realChoiceComponents)
       if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
         continueRoutine = true;
         break;
@@ -2606,10 +2606,10 @@ function choiceWindowRoutineEachFrame() {
 }
 
 
-function choiceWindowRoutineEnd(snapshot) {
+function realChoiceRoutineEnd(snapshot) {
   return async function () {
-    //--- Ending Routine 'choiceWindow' ---
-    for (const thisComponent of choiceWindowComponents) {
+    //--- Ending Routine 'realChoice' ---
+    for (const thisComponent of realChoiceComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
@@ -2637,23 +2637,23 @@ function choiceWindowRoutineEnd(snapshot) {
 }
 
 
-var ISIComponents;
-function ISIRoutineBegin(snapshot) {
+var realISIComponents;
+function realISIRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //--- Prepare to start Routine 'ISI' ---
+    //--- Prepare to start Routine 'realISI' ---
     t = 0;
-    ISIClock.reset(); // clock
+    realISIClock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     routineTimer.add(0.500000);
     // update component parameters for each repeat
     // keep track of which components have finished
-    ISIComponents = [];
-    ISIComponents.push(isiFix);
+    realISIComponents = [];
+    realISIComponents.push(isiFix);
     
-    for (const thisComponent of ISIComponents)
+    for (const thisComponent of realISIComponents)
       if ('status' in thisComponent)
         thisComponent.status = PsychoJS.Status.NOT_STARTED;
     return Scheduler.Event.NEXT;
@@ -2661,11 +2661,11 @@ function ISIRoutineBegin(snapshot) {
 }
 
 
-function ISIRoutineEachFrame() {
+function realISIRoutineEachFrame() {
   return async function () {
-    //--- Loop for each frame of Routine 'ISI' ---
+    //--- Loop for each frame of Routine 'realISI' ---
     // get current time
-    t = ISIClock.getTime();
+    t = realISIClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
@@ -2693,7 +2693,7 @@ function ISIRoutineEachFrame() {
     }
     
     continueRoutine = false;  // reverts to True if at least one component still running
-    for (const thisComponent of ISIComponents)
+    for (const thisComponent of realISIComponents)
       if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
         continueRoutine = true;
         break;
@@ -2709,10 +2709,10 @@ function ISIRoutineEachFrame() {
 }
 
 
-function ISIRoutineEnd(snapshot) {
+function realISIRoutineEnd(snapshot) {
   return async function () {
-    //--- Ending Routine 'ISI' ---
-    for (const thisComponent of ISIComponents) {
+    //--- Ending Routine 'realISI' ---
+    for (const thisComponent of realISIComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
@@ -2993,22 +2993,22 @@ function staticOutcomeRoutineEnd(snapshot) {
 }
 
 
-var ITIComponents;
-function ITIRoutineBegin(snapshot) {
+var realITIComponents;
+function realITIRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //--- Prepare to start Routine 'ITI' ---
+    //--- Prepare to start Routine 'realITI' ---
     t = 0;
-    ITIClock.reset(); // clock
+    realITIClock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
     // keep track of which components have finished
-    ITIComponents = [];
-    ITIComponents.push(itiFix);
+    realITIComponents = [];
+    realITIComponents.push(itiFix);
     
-    for (const thisComponent of ITIComponents)
+    for (const thisComponent of realITIComponents)
       if ('status' in thisComponent)
         thisComponent.status = PsychoJS.Status.NOT_STARTED;
     return Scheduler.Event.NEXT;
@@ -3016,11 +3016,11 @@ function ITIRoutineBegin(snapshot) {
 }
 
 
-function ITIRoutineEachFrame() {
+function realITIRoutineEachFrame() {
   return async function () {
-    //--- Loop for each frame of Routine 'ITI' ---
+    //--- Loop for each frame of Routine 'realITI' ---
     // get current time
-    t = ITIClock.getTime();
+    t = realITIClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
@@ -3048,7 +3048,7 @@ function ITIRoutineEachFrame() {
     }
     
     continueRoutine = false;  // reverts to True if at least one component still running
-    for (const thisComponent of ITIComponents)
+    for (const thisComponent of realITIComponents)
       if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
         continueRoutine = true;
         break;
@@ -3064,15 +3064,15 @@ function ITIRoutineEachFrame() {
 }
 
 
-function ITIRoutineEnd(snapshot) {
+function realITIRoutineEnd(snapshot) {
   return async function () {
-    //--- Ending Routine 'ITI' ---
-    for (const thisComponent of ITIComponents) {
+    //--- Ending Routine 'realITI' ---
+    for (const thisComponent of realITIComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     }
-    // the Routine "ITI" was not non-slip safe, so reset the non-slip timer
+    // the Routine "realITI" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
     // Routines running outside a loop should always advance the datafile row

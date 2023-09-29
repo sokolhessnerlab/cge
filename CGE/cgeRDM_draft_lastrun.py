@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.1),
-    on September 28, 2023, at 14:07
+    on September 28, 2023, at 14:46
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -222,7 +222,7 @@ pracRiskOC = visual.ShapeStim(
     win=win, name='pracRiskOC',
     size=(0.5, 0.5), vertices='circle',
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[-0.0667,0.6392,1.0000],
+    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[0.5216,0.5216,0.5216],
     opacity=1, depth=-2.0, interpolate=True)
 pracSafeOC = visual.ShapeStim(
     win=win, name='pracSafeOC',
@@ -243,6 +243,12 @@ pracHideRisk = visual.Rect(
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
     opacity=1, depth=-5.0, interpolate=True)
+pracHideLine = visual.Rect(
+    win=win, name='pracHideLine',
+    width=(0.5, 0.005)[0], height=(0.5, 0.005)[1],
+    ori=0, pos=[0,0], anchor='center',
+    lineWidth=3,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
+    opacity=1, depth=-6.0, interpolate=True)
 
 # --- Initialize components for Routine "pracITI" ---
 itiPracFix = visual.TextStim(win=win, name='itiPracFix',
@@ -284,7 +290,7 @@ realLineLeft = visual.Rect(
     win=win, name='realLineLeft',
     width=(0.5, 0.01)[0], height=(0.5, 0.01)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=3,     colorSpace='rgb',  lineColor=[-1,-1,-1], fillColor=[-1,-1,-1],
+    lineWidth=3,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
     opacity=1, depth=-3.0, interpolate=True)
 realORtext = visual.TextStim(win=win, name='realORtext',
     text='OR',
@@ -297,21 +303,21 @@ realLossText = visual.TextStim(win=win, name='realLossText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color=[194,194,194] , colorSpace='rgb', opacity=1, 
+    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-5.0);
 realGainText = visual.TextStim(win=win, name='realGainText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color=[194,194,194] , colorSpace='rgb', opacity=1, 
+    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-6.0);
 realSafeText = visual.TextStim(win=win, name='realSafeText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color=[194,194,194] , colorSpace='rgb', opacity=1, 
+    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-7.0);
 realVLeft = visual.TextStim(win=win, name='realVLeft',
@@ -351,20 +357,20 @@ staticNoRespText = visual.TextStim(win=win, name='staticNoRespText',
     text='You did not respond in time\n',
     font='Arial',
     pos=[0,0], height=0.08, wrapWidth=None, ori=0, 
-    color='white', colorSpace='rgb', opacity=1, 
+    color=[-0.0667,0.6392,1.0000], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-1.0);
 staticRiskOC = visual.Rect(
     win=win, name='staticRiskOC',
     width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[1,1,1], fillColor=[1,1,1],
+    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[-0.0667,0.6392,1.0000],
     opacity=1, depth=-2.0, interpolate=True)
 staticSafeOC = visual.Rect(
     win=win, name='staticSafeOC',
     width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[1,1,1], fillColor=[1,1,1],
+    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[-0.0667,0.6392,1.0000],
     opacity=1, depth=-3.0, interpolate=True)
 staticOCtext = visual.TextStim(win=win, name='staticOCtext',
     text='',
@@ -377,7 +383,7 @@ staticHideRisk = visual.Rect(
     win=win, name='staticHideRisk',
     width=(0.6, 0.3)[0], height=(0.6, 0.3)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-1,-1,-1], fillColor=[-1,-1,-1],
+    lineWidth=1,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
     opacity=1, depth=-5.0, interpolate=True)
 
 # --- Initialize components for Routine "ITI" ---
@@ -493,7 +499,7 @@ realLineLeft = visual.Rect(
     win=win, name='realLineLeft',
     width=(0.5, 0.01)[0], height=(0.5, 0.01)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=3,     colorSpace='rgb',  lineColor=[-1,-1,-1], fillColor=[-1,-1,-1],
+    lineWidth=3,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
     opacity=1, depth=-3.0, interpolate=True)
 realORtext = visual.TextStim(win=win, name='realORtext',
     text='OR',
@@ -506,21 +512,21 @@ realLossText = visual.TextStim(win=win, name='realLossText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color=[194,194,194] , colorSpace='rgb', opacity=1, 
+    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-5.0);
 realGainText = visual.TextStim(win=win, name='realGainText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color=[194,194,194] , colorSpace='rgb', opacity=1, 
+    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-6.0);
 realSafeText = visual.TextStim(win=win, name='realSafeText',
     text='',
     font='Arial',
     pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
-    color=[194,194,194] , colorSpace='rgb', opacity=1, 
+    color=[0.5216,0.5216,0.5216], colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-7.0);
 realVLeft = visual.TextStim(win=win, name='realVLeft',
@@ -585,7 +591,7 @@ dynamicHideRisk = visual.Rect(
     win=win, name='dynamicHideRisk',
     width=(0.6, 0.3)[0], height=(0.6, 0.3)[1],
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-1,-1,-1], fillColor=[-1,-1,-1],
+    lineWidth=1,     colorSpace='rgb',  lineColor=[0.5216,0.5216,0.5216], fillColor=[0.5216,0.5216,0.5216],
     opacity=1, depth=-5.0, interpolate=True)
 
 # --- Initialize components for Routine "ITI" ---
@@ -1288,6 +1294,7 @@ for thisPracTrial in pracTrials:
         ocGambleLoc = [5,5]
         ocSafeLoc = [5,5]
         hideGamLoc = [5,5]
+        hideGamLineLoc = [5,5]
     elif pracChoiceResp.keys == 'v' and loc == 1:
         outcome = random.choice([riskyGain, riskyLoss])
         extraITI = 4-pracChoiceResp.rt
@@ -1297,11 +1304,13 @@ for thisPracTrial in pracTrials:
             ocSafeLoc = [5,5]
             noRespLoc = [5,5]
             hideGamLoc = [-.35,-.125]
+            hideGamLineLoc = [.35,-.125]
         elif outcome == riskyLoss:
              ocLoc = [-.35,-.1]
              ocGambleLoc = [-.35,0]
              ocSafeLoc = [5,5]
              hideGamLoc = [-.4,.125]
+             hideGamLineLoc = [-.35,.125]
              noRespLoc = [5,5]
     elif pracChoiceResp.keys == 'v' and loc == 2:
         extraITI = 4-pracChoiceResp.rt
@@ -1310,6 +1319,7 @@ for thisPracTrial in pracTrials:
         ocGambleLoc = [5,5]
         ocSafeLoc = ocLoc
         hideGamLoc = ocGambleLoc
+        hideGamLineLoc = [5,5]
         noRespLoc = [5,5]
     elif pracChoiceResp.keys == 'n' and loc ==1:
         extraITI = 4-pracChoiceResp.rt
@@ -1318,6 +1328,7 @@ for thisPracTrial in pracTrials:
         ocGambleLoc = [5,5]
         ocSafeLoc = ocLoc
         hideGamLoc = ocGambleLoc
+        hideGamLineLoc = [5,5]
         noRespLoc = [5,5]
     elif pracChoiceResp.keys == 'n' and loc ==2:
         outcome = random.choice([riskyGain, riskyLoss])
@@ -1327,12 +1338,14 @@ for thisPracTrial in pracTrials:
             ocGambleLoc = [.35,0]
             ocSafeLoc = [5,5]
             hideGamLoc = [.35,-.125]
+            hideGamLineLoc = [.35,-.125]
             noRespLoc = [5,5]
         elif outcome == riskyLoss:
             ocLoc = [.35,-.1]
             ocGambleLoc = [.35,0]
             ocSafeLoc = [5,5]
             hideGamLoc = [.35,.125]
+            hideGamLineLoc = [.35,.125]
             noRespLoc = [5,5]
     
     if outcome == riskyLoss:
@@ -1342,12 +1355,13 @@ for thisPracTrial in pracTrials:
     pracNoRespText.setPos(noRespLoc)
     pracRiskOC.setPos(ocGambleLoc)
     pracSafeOC.setPos(ocSafeLoc)
-    pracOCtext.setColor([0.5216,0.5216,0.5216], colorSpace='rgb')
+    pracOCtext.setColor([-0.0667,0.6392,1.0000], colorSpace='rgb')
     pracOCtext.setPos(ocLoc)
     pracOCtext.setText(pracFeedbackRounded)
     pracHideRisk.setPos(hideGamLoc)
+    pracHideLine.setPos(hideGamLineLoc)
     # keep track of which components have finished
-    pracOutcomeComponents = [pracNoRespText, pracRiskOC, pracSafeOC, pracOCtext, pracHideRisk]
+    pracOutcomeComponents = [pracNoRespText, pracRiskOC, pracSafeOC, pracOCtext, pracHideRisk, pracHideLine]
     for thisComponent in pracOutcomeComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
@@ -1468,6 +1482,26 @@ for thisPracTrial in pracTrials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'pracHideRisk.stopped')
                 pracHideRisk.setAutoDraw(False)
+        
+        # *pracHideLine* updates
+        if pracHideLine.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+            # keep track of start time/frame for later
+            pracHideLine.frameNStart = frameN  # exact frame index
+            pracHideLine.tStart = t  # local t and not account for scr refresh
+            pracHideLine.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(pracHideLine, 'tStartRefresh')  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, 'pracHideLine.started')
+            pracHideLine.setAutoDraw(True)
+        if pracHideLine.status == STARTED:
+            # is it time to stop? (based on global clock, using actual start)
+            if tThisFlipGlobal > pracHideLine.tStartRefresh + 1-frameTolerance:
+                # keep track of stop time/frame for later
+                pracHideLine.tStop = t  # not accounting for scr refresh
+                pracHideLine.frameNStop = frameN  # exact frame index
+                # add timestamp to datafile
+                thisExp.timestampOnFlip(win, 'pracHideLine.stopped')
+                pracHideLine.setAutoDraw(False)
         
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -2158,7 +2192,7 @@ for thisStaticTrial in staticTrials:
     staticNoRespText.setPos(noRespLoc)
     staticRiskOC.setPos(ocGambleLoc)
     staticSafeOC.setPos(ocSafeLoc)
-    staticOCtext.setColor([194,194,194] , colorSpace='rgb')
+    staticOCtext.setColor([0.5216,0.5216,0.5216], colorSpace='rgb')
     staticOCtext.setPos(ocLoc)
     staticOCtext.setText(feedbackRounded)
     staticHideRisk.setPos(hideGamLoc)
@@ -3200,7 +3234,7 @@ for thisDynamicTrial in dynamicTrials:
     dynamicNoRespText.setPos(noRespLoc)
     dynamicRiskOC.setPos(ocGambleLoc)
     dynamicSafeOC.setPos(ocSafeLoc)
-    dynamicOCtext.setColor([194,194,194] , colorSpace='rgb')
+    dynamicOCtext.setColor([0.5216,0.5216,0.5216], colorSpace='rgb')
     dynamicOCtext.setPos(ocLoc)
     dynamicOCtext.setText(feedbackRounded)
     dynamicHideRisk.setPos(hideGamLoc)
