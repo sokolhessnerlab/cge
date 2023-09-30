@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.1),
-    on September 29, 2023, at 04:19
+    on September 29, 2023, at 17:48
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -98,8 +98,8 @@ eyetracker = None
 # create a default keyboard (e.g. to check for escape)
 defaultKeyboard = keyboard.Keyboard(backend='iohub')
 
-# --- Initialize components for Routine "SetUp" ---
-# Run 'Begin Experiment' code from setupCode
+# --- Initialize components for Routine "cgeRDMstart" ---
+# Run 'Begin Experiment' code from cgeRDMsetup
 ### Dimensions
 instructionsTextHeight = .05
 lettersTextHeight = .1
@@ -118,7 +118,7 @@ color2 = [-0.0667,0.6392,1]
 # psychopy RGB -1:1 [0.5216,0.5216,0.5216] # RGB 0:255 [194,194,194] 
 
 ### Shapes 'circle' 'rectangle' 'star.7' etc.
-leftShape = 'cross'
+leftShape = 'circle'
 rightShape = 'circle'
 riskShape = 'rectangle'
 hideShape = 'rectangle'
@@ -129,15 +129,13 @@ circRightLoc=[.35,0]
 ORtextLoc=[0,0]
 VleftLoc=[-.35,-.35]
 NrightLoc=[.35,-.35]
-
-# --- Initialize components for Routine "cgeRDMstart" ---
 CGErdmStartText = visual.TextStim(win=win, name='CGErdmStartText',
     text='As discussed in the instructions, you will choose between a gamble and a guaranteed alternative.\n\nYou may press "V" to select the option on the left and "N" to select the option on the right.\n\nPress "enter" to move on to the next screen.',
     font='Arial',
     pos=(0, 0), height=.05, wrapWidth=wrap, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=0.0);
+    depth=-1.0);
 CGErdmStartResp = keyboard.Keyboard()
 
 # --- Initialize components for Routine "pracStart" ---
@@ -233,14 +231,14 @@ pracNoRespText = visual.TextStim(win=win, name='pracNoRespText',
     languageStyle='LTR',
     depth=-1.0);
 pracRiskOC = visual.ShapeStim(
-    win=win, name='pracRiskOC',
-    size=(0.5, 0.5), vertices='circle',
+    win=win, name='pracRiskOC', vertices=leftShape,
+    size=(0.5, 0.5),
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-2.0, interpolate=True)
 pracSafeOC = visual.ShapeStim(
-    win=win, name='pracSafeOC',
-    size=(0.5, 0.5), vertices='circle',
+    win=win, name='pracSafeOC', vertices=rightShape,
+    size=(0.5, 0.5),
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-3.0, interpolate=True)
@@ -282,21 +280,21 @@ staticStartResp = keyboard.Keyboard()
 loc = [];
 
 
-realCircLeft = visual.Rect(
-    win=win, name='realCircLeft',
-    width=(.5, .5)[0], height=(.5, .5)[1],
+realCircLeft = visual.ShapeStim(
+    win=win, name='realCircLeft', vertices=rightShape,
+    size=(.5, .5),
     ori=0, pos=circLeftLoc, anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-1.0, interpolate=True)
-realCircRight = visual.Rect(
-    win=win, name='realCircRight',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
+realCircRight = visual.ShapeStim(
+    win=win, name='realCircRight', vertices=leftShape,
+    size=(0.5, 0.5),
     ori=0, pos=circRightLoc, anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor='white', fillColor='white',
     opacity=1, depth=-2.0, interpolate=True)
-realRiskLine = visual.Rect(
-    win=win, name='realRiskLine',
-    width=(0.5, 0.01)[0], height=(0.5, 0.01)[1],
+realRiskLine = visual.ShapeStim(
+    win=win, name='realRiskLine', vertices=riskShape,
+    size=(0.5, 0.01),
     ori=0, pos=[0,0], anchor='center',
     lineWidth=3,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-3.0, interpolate=True)
@@ -368,15 +366,15 @@ staticNoRespText = visual.TextStim(win=win, name='staticNoRespText',
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-1.0);
-staticRiskOC = visual.Rect(
-    win=win, name='staticRiskOC',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
+staticRiskOC = visual.ShapeStim(
+    win=win, name='staticRiskOC', vertices=leftShape,
+    size=(0.5, 0.5),
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-2.0, interpolate=True)
-staticSafeOC = visual.Rect(
-    win=win, name='staticSafeOC',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
+staticSafeOC = visual.ShapeStim(
+    win=win, name='staticSafeOC', vertices=rightShape,
+    size=(0.5, 0.5),
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[-0.0667,0.6392,1.0000],
     opacity=1, depth=-3.0, interpolate=True)
@@ -387,9 +385,9 @@ staticOCtext = visual.TextStim(win=win, name='staticOCtext',
     color='white', colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
-staticHideRisk = visual.Rect(
-    win=win, name='staticHideRisk',
-    width=(0.6, 0.3)[0], height=(0.6, 0.3)[1],
+staticHideRisk = visual.ShapeStim(
+    win=win, name='staticHideRisk', vertices=hideShape,
+    size=(0.6, 0.3),
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-5.0, interpolate=True)
@@ -491,21 +489,21 @@ dynamicStartResp = keyboard.Keyboard()
 loc = [];
 
 
-realCircLeft = visual.Rect(
-    win=win, name='realCircLeft',
-    width=(.5, .5)[0], height=(.5, .5)[1],
+realCircLeft = visual.ShapeStim(
+    win=win, name='realCircLeft', vertices=rightShape,
+    size=(.5, .5),
     ori=0, pos=circLeftLoc, anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-1.0, interpolate=True)
-realCircRight = visual.Rect(
-    win=win, name='realCircRight',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
+realCircRight = visual.ShapeStim(
+    win=win, name='realCircRight', vertices=leftShape,
+    size=(0.5, 0.5),
     ori=0, pos=circRightLoc, anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor='white', fillColor='white',
     opacity=1, depth=-2.0, interpolate=True)
-realRiskLine = visual.Rect(
-    win=win, name='realRiskLine',
-    width=(0.5, 0.01)[0], height=(0.5, 0.01)[1],
+realRiskLine = visual.ShapeStim(
+    win=win, name='realRiskLine', vertices=riskShape,
+    size=(0.5, 0.01),
     ori=0, pos=[0,0], anchor='center',
     lineWidth=3,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-3.0, interpolate=True)
@@ -576,15 +574,15 @@ dynamicNoRespText = visual.TextStim(win=win, name='dynamicNoRespText',
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-1.0);
-dynamicRiskOC = visual.Rect(
-    win=win, name='dynamicRiskOC',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
+dynamicRiskOC = visual.ShapeStim(
+    win=win, name='dynamicRiskOC', vertices=rightShape,
+    size=(0.5, 0.5),
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-2.0, interpolate=True)
-dynamicSafeOC = visual.Rect(
-    win=win, name='dynamicSafeOC',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
+dynamicSafeOC = visual.ShapeStim(
+    win=win, name='dynamicSafeOC', vertices=leftShape,
+    size=(0.5, 0.5),
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-3.0, interpolate=True)
@@ -595,9 +593,9 @@ dynamicOCtext = visual.TextStim(win=win, name='dynamicOCtext',
     color='white', colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
-dynamicHideRisk = visual.Rect(
-    win=win, name='dynamicHideRisk',
-    width=(0.6, 0.3)[0], height=(0.6, 0.3)[1],
+dynamicHideRisk = visual.ShapeStim(
+    win=win, name='dynamicHideRisk', vertices=hideShape,
+    size=(0.6, 0.3),
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-5.0, interpolate=True)
@@ -633,80 +631,6 @@ ThankYou = visual.TextStim(win=win, name='ThankYou',
 # Create some handy timers
 globalClock = core.Clock()  # to track the time since experiment started
 routineTimer = core.Clock()  # to track time remaining of each (possibly non-slip) routine 
-
-# --- Prepare to start Routine "SetUp" ---
-continueRoutine = True
-# update component parameters for each repeat
-# keep track of which components have finished
-SetUpComponents = []
-for thisComponent in SetUpComponents:
-    thisComponent.tStart = None
-    thisComponent.tStop = None
-    thisComponent.tStartRefresh = None
-    thisComponent.tStopRefresh = None
-    if hasattr(thisComponent, 'status'):
-        thisComponent.status = NOT_STARTED
-# reset timers
-t = 0
-_timeToFirstFrame = win.getFutureFlipTime(clock="now")
-frameN = -1
-
-# --- Run Routine "SetUp" ---
-while continueRoutine:
-    # get current time
-    t = routineTimer.getTime()
-    tThisFlip = win.getFutureFlipTime(clock=routineTimer)
-    tThisFlipGlobal = win.getFutureFlipTime(clock=None)
-    frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
-    # update/draw components on each frame
-    
-    # check for quit (typically the Esc key)
-    if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
-        core.quit()
-    
-    # check if all components have finished
-    if not continueRoutine:  # a component has requested a forced-end of Routine
-        break
-    continueRoutine = False  # will revert to True if at least one component still running
-    for thisComponent in SetUpComponents:
-        if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
-            continueRoutine = True
-            break  # at least one component has not yet finished
-    
-    # refresh the screen
-    if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
-        win.flip()
-
-# --- Ending Routine "SetUp" ---
-for thisComponent in SetUpComponents:
-    if hasattr(thisComponent, "setAutoDraw"):
-        thisComponent.setAutoDraw(False)
-# Run 'End Routine' code from setupCode
-# Getting random module
-import random
-
-# Define the shuffle function (equivalent to the JavaScript version)
-def shuffle(array):
-    currentIndex = len(array)
-    while currentIndex != 0:
-        randomIndex = random.randint(0, currentIndex - 1)
-        currentIndex -= 1
-        array[currentIndex], array[randomIndex] = array[randomIndex], array[currentIndex]
-
-# Initialize ITIs
-initITIstatic = [1, 1.5] * 25
-initITIdynamic = [1, 1.5] * 60
-
-# Shuffle the ITIs using the shuffle function
-shuffle(initITIstatic)
-shuffle(initITIdynamic)
-
-# Save the ITIs as experiment data
-thisExp.addData('initITIstatic', initITIstatic)
-thisExp.addData('initITIdynamic', initITIdynamic)
-
-# the Routine "SetUp" was not non-slip safe, so reset the non-slip timer
-routineTimer.reset()
 
 # --- Prepare to start Routine "cgeRDMstart" ---
 continueRoutine = True
@@ -769,8 +693,6 @@ while continueRoutine:
         if len(_CGErdmStartResp_allKeys):
             CGErdmStartResp.keys = _CGErdmStartResp_allKeys[-1].name  # just the last key pressed
             CGErdmStartResp.rt = _CGErdmStartResp_allKeys[-1].rt
-            # a response ends the routine
-            continueRoutine = False
     
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -793,6 +715,30 @@ while continueRoutine:
 for thisComponent in cgeRDMstartComponents:
     if hasattr(thisComponent, "setAutoDraw"):
         thisComponent.setAutoDraw(False)
+# Run 'End Routine' code from cgeRDMsetup
+# Getting random module
+import random
+
+# Define the shuffle function (equivalent to the JavaScript version)
+def shuffle(array):
+    currentIndex = len(array)
+    while currentIndex != 0:
+        randomIndex = random.randint(0, currentIndex - 1)
+        currentIndex -= 1
+        array[currentIndex], array[randomIndex] = array[randomIndex], array[currentIndex]
+
+# Initialize ITIs
+initITIstatic = [3, 3.5] * 25 #1, 1.5
+initITIdynamic = [3, 3.5] * 60 #1, 1.5
+
+# Shuffle the ITIs using the shuffle function
+shuffle(initITIstatic)
+shuffle(initITIdynamic)
+
+# Save the ITIs as experiment data
+thisExp.addData('initITIstatic', initITIstatic)
+thisExp.addData('initITIdynamic', initITIdynamic)
+
 # check responses
 if CGErdmStartResp.keys in ['', [], None]:  # No response was made
     CGErdmStartResp.keys = None
@@ -864,8 +810,6 @@ while continueRoutine:
         if len(_pracStartResp_allKeys):
             pracStartResp.keys = _pracStartResp_allKeys[-1].name  # just the last key pressed
             pracStartResp.rt = _pracStartResp_allKeys[-1].rt
-            # a response ends the routine
-            continueRoutine = False
     
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -901,7 +845,7 @@ routineTimer.reset()
 # set up handler to look after randomisation of conditions etc
 pracTrials = data.TrialHandler(nReps=1, method='sequential', 
     extraInfo=expInfo, originPath=-1,
-    trialList=data.importConditions('cgtRDMPractice.xlsx', selection='0:2'),
+    trialList=data.importConditions('cgeRDMPractice.xlsx', selection='0:2'),
     seed=None, name='pracTrials')
 thisExp.addLoop(pracTrials)  # add the loop to the experiment
 thisPracTrial = pracTrials.trialList[0]  # so we can initialise stimuli with some values
@@ -1187,8 +1131,6 @@ for thisPracTrial in pracTrials:
             if len(_pracChoiceResp_allKeys):
                 pracChoiceResp.keys = _pracChoiceResp_allKeys[-1].name  # just the last key pressed
                 pracChoiceResp.rt = _pracChoiceResp_allKeys[-1].rt
-                # a response ends the routine
-                continueRoutine = False
         
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -1350,6 +1292,8 @@ for thisPracTrial in pracTrials:
             ocSafeLoc = [5,5]
             hideGamLoc = [.35,.15]
             noRespLoc = [5,5]
+    
+    # $iti + extraITI was the original variable version of ITI
     
     if outcome == riskyLoss:
         pracFeedbackRounded = "$%.0f" % round(outcome,0)
@@ -1550,7 +1494,7 @@ for thisPracTrial in pracTrials:
             itiPracFix.setAutoDraw(True)
         if itiPracFix.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > itiPracFix.tStartRefresh + iti + extraITI-frameTolerance:
+            if tThisFlipGlobal > itiPracFix.tStartRefresh + iti-frameTolerance:
                 # keep track of stop time/frame for later
                 itiPracFix.tStop = t  # not accounting for scr refresh
                 itiPracFix.frameNStop = frameN  # exact frame index
@@ -1974,8 +1918,6 @@ for thisStaticTrial in staticTrials:
             if len(_realChoiceResp_allKeys):
                 realChoiceResp.keys = _realChoiceResp_allKeys[-1].name  # just the last key pressed
                 realChoiceResp.rt = _realChoiceResp_allKeys[-1].rt
-                # a response ends the routine
-                continueRoutine = False
         
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -2027,7 +1969,7 @@ for thisStaticTrial in staticTrials:
     frameN = -1
     
     # --- Run Routine "realISI" ---
-    while continueRoutine and routineTimer.getTime() < 0.5:
+    while continueRoutine and routineTimer.getTime() < 1.0:
         # get current time
         t = routineTimer.getTime()
         tThisFlip = win.getFutureFlipTime(clock=routineTimer)
@@ -2047,7 +1989,7 @@ for thisStaticTrial in staticTrials:
             isiFix.setAutoDraw(True)
         if isiFix.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > isiFix.tStartRefresh + .5-frameTolerance:
+            if tThisFlipGlobal > isiFix.tStartRefresh + 1-frameTolerance:
                 # keep track of stop time/frame for later
                 isiFix.tStop = t  # not accounting for scr refresh
                 isiFix.frameNStop = frameN  # exact frame index
@@ -2077,7 +2019,7 @@ for thisStaticTrial in staticTrials:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
     # using non-slip timing so subtract the expected duration of this Routine
-    routineTimer.addTime(-0.500000)
+    routineTimer.addTime(-1.000000)
     
     # --- Prepare to start Routine "staticOutcome" ---
     continueRoutine = True
@@ -2160,7 +2102,7 @@ for thisStaticTrial in staticTrials:
             hideGamLoc = [.35,.15]
             noRespLoc = [5,5]
     
-    actualITI = initITIstatic[staticTrials.thisN] + extraITI
+    actualITI = initITIstatic[staticTrials.thisN] #+ extraITI
     
     if outcometmp == riskyoption2:
         feedbackRounded = "$%.0f" % round(outcometmp,0)
@@ -2690,8 +2632,6 @@ while continueRoutine:
         if len(_dynamicStartResp_allKeys):
             dynamicStartResp.keys = _dynamicStartResp_allKeys[-1].name  # just the last key pressed
             dynamicStartResp.rt = _dynamicStartResp_allKeys[-1].rt
-            # a response ends the routine
-            continueRoutine = False
     
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -3017,8 +2957,6 @@ for thisDynamicTrial in dynamicTrials:
             if len(_realChoiceResp_allKeys):
                 realChoiceResp.keys = _realChoiceResp_allKeys[-1].name  # just the last key pressed
                 realChoiceResp.rt = _realChoiceResp_allKeys[-1].rt
-                # a response ends the routine
-                continueRoutine = False
         
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -3070,7 +3008,7 @@ for thisDynamicTrial in dynamicTrials:
     frameN = -1
     
     # --- Run Routine "realISI" ---
-    while continueRoutine and routineTimer.getTime() < 0.5:
+    while continueRoutine and routineTimer.getTime() < 1.0:
         # get current time
         t = routineTimer.getTime()
         tThisFlip = win.getFutureFlipTime(clock=routineTimer)
@@ -3090,7 +3028,7 @@ for thisDynamicTrial in dynamicTrials:
             isiFix.setAutoDraw(True)
         if isiFix.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > isiFix.tStartRefresh + .5-frameTolerance:
+            if tThisFlipGlobal > isiFix.tStartRefresh + 1-frameTolerance:
                 # keep track of stop time/frame for later
                 isiFix.tStop = t  # not accounting for scr refresh
                 isiFix.frameNStop = frameN  # exact frame index
@@ -3120,7 +3058,7 @@ for thisDynamicTrial in dynamicTrials:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
     # using non-slip timing so subtract the expected duration of this Routine
-    routineTimer.addTime(-0.500000)
+    routineTimer.addTime(-1.000000)
     
     # --- Prepare to start Routine "dynamicOutcome" ---
     continueRoutine = True
@@ -3203,7 +3141,7 @@ for thisDynamicTrial in dynamicTrials:
             hideGamLoc = [.35,.15]
             noRespLoc = [5,5]
     
-    actualITI = initITIdynamic[dynamicTrials.thisN] + extraITI
+    actualITI = initITIdynamic[dynamicTrials.thisN] #+ extraITI
     
     if outcometmp == riskyoption2:
         feedbackRounded = "$%.0f" % round(outcometmp,0)
@@ -3507,8 +3445,6 @@ while continueRoutine:
         if len(_cgeRDMendResp_allKeys):
             cgeRDMendResp.keys = _cgeRDMendResp_allKeys[-1].name  # just the last key pressed
             cgeRDMendResp.rt = _cgeRDMendResp_allKeys[-1].rt
-            # a response ends the routine
-            continueRoutine = False
     
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
