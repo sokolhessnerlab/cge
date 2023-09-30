@@ -235,9 +235,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'cgeRDMstartTxt',
     text: 'As discussed in the instructions, you will choose between a gamble and a guaranteed alternative.\n\nYou may press "V" to select the option on the left and "N" to select the option on the right.\n\nPress "enter" to move on to the next screen.',
-    font: 'Arial',
+    font: instructionsFont,
     units: undefined, 
-    pos: [0, 0], height: 0.05,  wrapWidth: wrap, ori: 0,
+    pos: instructLoc, height: instructionsTextHeight,  wrapWidth: wrap, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: 0.0 
@@ -251,9 +251,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'pracStartTxt',
     text: 'There will now be 5 practice trials.\n\nWhen you are ready to begin the practice, press "V" or "N".',
-    font: 'Arial',
+    font: instructionsFont,
     units: undefined, 
-    pos: [0, 0], height: instructionsTextHeight,  wrapWidth: wrap, ori: 0,
+    pos: instructLoc, height: instructionsTextHeight,  wrapWidth: wrap, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: 0.0 
@@ -268,7 +268,7 @@ async function experimentInit() {
   
   pracCircLeft = new visual.Polygon ({
     win: psychoJS.window, name: 'pracCircLeft', 
-    edges: leftShape, size:[0.5, 0.5],
+    edges: leftShape, size:circLeft,
     ori: 0, pos: circLeftLoc,
     lineWidth: 1, 
     colorSpace: 'rgb',
@@ -279,7 +279,7 @@ async function experimentInit() {
   
   pracCircRight = new visual.Polygon ({
     win: psychoJS.window, name: 'pracCircRight', 
-    edges: rightShape, size:[0.5, 0.5],
+    edges: rightShape, size:circRight,
     ori: 0, pos: circRightLoc,
     lineWidth: 1, 
     colorSpace: 'rgb',
@@ -290,7 +290,7 @@ async function experimentInit() {
   
   pracRiskLine = new visual.Polygon ({
     win: psychoJS.window, name: 'pracRiskLine', 
-    edges: 4, size:[0.5, 0.01],
+    edges: 4, size:riskLine,
     ori: 0, pos: [0, 0],
     lineWidth: 3, 
     colorSpace: 'rgb',
@@ -303,9 +303,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'pracORtxt',
     text: 'OR',
-    font: 'Arial',
+    font: choiceFont,
     units: undefined, 
-    pos: ORtextLoc, height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: ORtextLoc, height: choiceTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: -4.0 
@@ -315,9 +315,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'pracLossTxt',
     text: '',
-    font: 'Arial',
+    font: choiceValueFont,
     units: undefined, 
-    pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
+    pos: [0, 0], height: choiceValuesTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color1),  opacity: 1,
     depth: -5.0 
@@ -327,9 +327,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'pracGainTxt',
     text: '',
-    font: 'Arial',
+    font: choiceValueFont,
     units: undefined, 
-    pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
+    pos: [0, 0], height: choiceValuesTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color1),  opacity: 1,
     depth: -6.0 
@@ -339,9 +339,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'pracSafeTxt',
     text: '',
-    font: 'Arial',
+    font: choiceValueFont,
     units: undefined, 
-    pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
+    pos: [0, 0], height: choiceValuesTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color1),  opacity: 1,
     depth: -7.0 
@@ -351,9 +351,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'pracVleft',
     text: 'V-Left',
-    font: 'Arial',
+    font: choiceFont,
     units: undefined, 
-    pos: VleftLoc, height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: VleftLoc, height: choiceTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: -8.0 
@@ -363,9 +363,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'pracNright',
     text: 'N-Right',
-    font: 'Arial',
+    font: choiceFont,
     units: undefined, 
-    pos: NrightLoc, height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: NrightLoc, height: choiceTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: -9.0 
@@ -379,9 +379,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'isiPracFix',
     text: '+',
-    font: 'Arial',
+    font: fixCrossFont,
     units: undefined, 
-    pos: [0, 0], height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: fixCrossLoc, height: FixCrossHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: 0.0 
@@ -403,9 +403,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'pracNoRespTxt',
     text: 'You did not respond in time\n',
-    font: 'Arial',
+    font: NoRespFont,
     units: undefined, 
-    pos: [0, 0], height: textHeight,  wrapWidth: undefined, ori: 0,
+    pos: [0, 0], height: NoRespTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: -1.0 
@@ -413,7 +413,7 @@ async function experimentInit() {
   
   pracRiskOC = new visual.Polygon ({
     win: psychoJS.window, name: 'pracRiskOC', 
-    edges: 130, size:[0.5, 0.5],
+    edges: 130, size:circLeft,
     ori: 0, pos: [0, 0],
     lineWidth: 1, 
     colorSpace: 'rgb',
@@ -424,7 +424,7 @@ async function experimentInit() {
   
   pracSafeOC = new visual.Polygon ({
     win: psychoJS.window, name: 'pracSafeOC', 
-    edges: 130, size:[0.5, 0.5],
+    edges: 130, size:circRight,
     ori: 0, pos: [0, 0],
     lineWidth: 1, 
     colorSpace: 'rgb',
@@ -437,9 +437,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'pracOCtxt',
     text: '',
-    font: 'Arial',
+    font: ocFont,
     units: undefined, 
-    pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
+    pos: [0, 0], height: ocTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color('white'),  opacity: 1,
     depth: -4.0 
@@ -447,7 +447,7 @@ async function experimentInit() {
   
   pracHideRisk = new visual.Polygon ({
     win: psychoJS.window, name: 'pracHideRisk', 
-    edges: 4, size:[0.6, 0.3],
+    edges: 4, size:riskHide,
     ori: 0, pos: [0, 0],
     lineWidth: 1, 
     colorSpace: 'rgb',
@@ -462,9 +462,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'itiPracFix',
     text: '+',
-    font: 'Arial',
+    font: fixCrossFont,
     units: undefined, 
-    pos: [0, 0], height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: fixCrossLoc, height: FixCrossHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: 0.0 
@@ -476,9 +476,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'statStartTxt',
     text: 'Practice complete.\n\nWhen you are ready to start ROUND 1 of the task, press "V" or "N".\n',
-    font: 'Arial',
+    font: instructionsFont,
     units: undefined, 
-    pos: [0, 0], height: instructionsTextHeight,  wrapWidth: wrap, ori: 0,
+    pos: instructLoc, height: instructionsTextHeight,  wrapWidth: wrap, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: 0.0 
@@ -492,7 +492,7 @@ async function experimentInit() {
   var realloc
   realCircLeft = new visual.Polygon ({
     win: psychoJS.window, name: 'realCircLeft', 
-    edges: 130, size:[0.5, 0.5],
+    edges: 130, size:circLeft,
     ori: 0, pos: circLeftLoc,
     lineWidth: 1, 
     colorSpace: 'rgb',
@@ -503,7 +503,7 @@ async function experimentInit() {
   
   realCircRight = new visual.Polygon ({
     win: psychoJS.window, name: 'realCircRight', 
-    edges: 130, size:[0.5, 0.5],
+    edges: 130, size:circRight,
     ori: 0, pos: circRightLoc,
     lineWidth: 1, 
     colorSpace: 'rgb',
@@ -514,7 +514,7 @@ async function experimentInit() {
   
   realRiskLine = new visual.Polygon ({
     win: psychoJS.window, name: 'realRiskLine', 
-    edges: 4, size:[0.5, 0.01],
+    edges: 4, size:riskLine,
     ori: 0, pos: [0, 0],
     lineWidth: 3, 
     colorSpace: 'rgb',
@@ -527,9 +527,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'realORtxt',
     text: 'OR',
-    font: 'Arial',
+    font: choiceFont,
     units: undefined, 
-    pos: ORtextLoc, height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: ORtextLoc, height: choiceTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: -4.0 
@@ -539,9 +539,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'realLossTxt',
     text: '',
-    font: 'Arial',
+    font: choiceValueFont,
     units: undefined, 
-    pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
+    pos: [0, 0], height: choiceValuesTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color1),  opacity: 1,
     depth: -5.0 
@@ -551,9 +551,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'realGainTxt',
     text: '',
-    font: 'Arial',
+    font: choiceValueFont,
     units: undefined, 
-    pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
+    pos: [0, 0], height: choiceValuesTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color1),  opacity: 1,
     depth: -6.0 
@@ -563,9 +563,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'realSafeTxt',
     text: '',
-    font: 'Arial',
+    font: choiceValueFont,
     units: undefined, 
-    pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
+    pos: [0, 0], height: choiceValuesTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color1),  opacity: 1,
     depth: -7.0 
@@ -575,9 +575,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'realVleft',
     text: 'V-Left',
-    font: 'Arial',
+    font: choiceFont,
     units: undefined, 
-    pos: VleftLoc, height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: VleftLoc, height: choiceTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: -8.0 
@@ -587,9 +587,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'realNright',
     text: 'N-Right',
-    font: 'Arial',
+    font: choiceFont,
     units: undefined, 
-    pos: NrightLoc, height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: NrightLoc, height: choiceTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: -9.0 
@@ -603,9 +603,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'isiRealFix',
     text: '+',
-    font: 'Arial',
+    font: fixCrossFont,
     units: undefined, 
-    pos: [0, 0], height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: fixCrossLoc, height: FixCrossHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: 0.0 
@@ -623,9 +623,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'statNoRespTxt',
     text: 'You did not respond in time\n',
-    font: 'Arial',
+    font: NoRespFont,
     units: undefined, 
-    pos: [0, 0], height: 0.08,  wrapWidth: undefined, ori: 0,
+    pos: [0, 0], height: NoRespTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: -1.0 
@@ -633,7 +633,7 @@ async function experimentInit() {
   
   statRiskOC = new visual.Polygon ({
     win: psychoJS.window, name: 'statRiskOC', 
-    edges: 130, size:[0.5, 0.5],
+    edges: 130, size:circLeft,
     ori: 0, pos: [0, 0],
     lineWidth: 1, 
     colorSpace: 'rgb',
@@ -644,12 +644,12 @@ async function experimentInit() {
   
   statSafeOC = new visual.Polygon ({
     win: psychoJS.window, name: 'statSafeOC', 
-    edges: 130, size:[0.5, 0.5],
+    edges: 130, size:circRight,
     ori: 0, pos: [0, 0],
     lineWidth: 1, 
     colorSpace: 'rgb',
-    lineColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
-    fillColor: new util.Color([(- 0.0667), 0.6392, 1.0]),
+    lineColor: new util.Color(color2),
+    fillColor: new util.Color(color2),
     opacity: 1, depth: -3, interpolate: true,
   });
   
@@ -657,9 +657,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'statOCtxt',
     text: '',
-    font: 'Arial',
+    font: ocFont,
     units: undefined, 
-    pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
+    pos: [0, 0], height: ocTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color('white'),  opacity: 1,
     depth: -4.0 
@@ -667,7 +667,7 @@ async function experimentInit() {
   
   statHideRisk = new visual.Polygon ({
     win: psychoJS.window, name: 'statHideRisk', 
-    edges: 4, size:[0.6, 0.3],
+    edges: 4, size:riskHide,
     ori: 0, pos: [0, 0],
     lineWidth: 1, 
     colorSpace: 'rgb',
@@ -682,9 +682,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'itiRealFix',
     text: '+',
-    font: 'Arial',
+    font: fixCrossFont,
     units: undefined, 
-    pos: [0, 0], height: 0.05,  wrapWidth: undefined, ori: 0,
+    pos: fixCrossLoc, height: FixCrossHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: 0.0 
@@ -696,9 +696,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'setupBestFitTxt',
     text: 'ROUND 1 of the gambling task is complete! \n\nSetting up for the last round of the gambling task.\n\nPlease wait...\n\n\n',
-    font: 'Arial',
+    font: instructionsFont,
     units: undefined, 
-    pos: [0, 0], height: instructionsTextHeight,  wrapWidth: wrap, ori: 0.0,
+    pos: instructLoc, height: instructionsTextHeight,  wrapWidth: wrap, ori: 0.0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: undefined,
     depth: -1.0 
@@ -727,9 +727,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'dynaStartTxt',
     text: 'When you are ready to start ROUND 2 of the task, press "V" or "N".',
-    font: 'Arial',
+    font: instructionsFont,
     units: undefined, 
-    pos: [0, 0], height: instructionsTextHeight,  wrapWidth: wrap, ori: 0.0,
+    pos: instructLoc, height: instructionsTextHeight,  wrapWidth: wrap, ori: 0.0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: undefined,
     depth: 0.0 
@@ -748,9 +748,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'dynaNoRespTxt',
     text: 'You did not respond in time\n',
-    font: 'Arial',
+    font: NoRespFont,
     units: undefined, 
-    pos: [0, 0], height: 0.08,  wrapWidth: undefined, ori: 0,
+    pos: [0, 0], height: NoRespTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
     depth: -1.0 
@@ -758,7 +758,7 @@ async function experimentInit() {
   
   dynaRiskOC = new visual.Polygon ({
     win: psychoJS.window, name: 'dynaRiskOC', 
-    edges: 130, size:[0.5, 0.5],
+    edges: 130, size:circLeft,
     ori: 0, pos: [0, 0],
     lineWidth: 1, 
     colorSpace: 'rgb',
@@ -769,7 +769,7 @@ async function experimentInit() {
   
   dynaSafeOC = new visual.Polygon ({
     win: psychoJS.window, name: 'dynaSafeOC', 
-    edges: 130, size:[0.5, 0.5],
+    edges: 130, size:circRight,
     ori: 0, pos: [0, 0],
     lineWidth: 1, 
     colorSpace: 'rgb',
@@ -782,9 +782,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'dynaOCtxt',
     text: '',
-    font: 'Arial',
+    font: ocFont,
     units: undefined, 
-    pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
+    pos: [0, 0], height: ocTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color('white'),  opacity: 1,
     depth: -4.0 
@@ -792,7 +792,7 @@ async function experimentInit() {
   
   dynaHideRisk = new visual.Polygon ({
     win: psychoJS.window, name: 'dynaHideRisk', 
-    edges: 4, size:[0.6, 0.3],
+    edges: 4, size:riskHide,
     ori: 0, pos: [0, 0],
     lineWidth: 1, 
     colorSpace: 'rgb',
@@ -807,9 +807,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'cgeRDMendTxt',
     text: "You have sucessfully completed the first task in this experiment!\n\nPlease take a brief 1 minute break. \n\nYou are welcome to take a longer break, but keep in mind this study should take no longer than 1 hour to complete. \n\nWhen you are ready to move on, press 'enter' to continue.\n",
-    font: 'Arial',
+    font: instructionsFont,
     units: undefined, 
-    pos: [0, 0], height: instructionsTextHeight,  wrapWidth: wrap, ori: 0.0,
+    pos: instructLoc, height: instructionsTextHeight,  wrapWidth: wrap, ori: 0.0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: undefined,
     depth: 0.0 
@@ -823,9 +823,9 @@ async function experimentInit() {
     win: psychoJS.window,
     name: 'ThankYou',
     text: 'Thank you! You have sucessfully completed the second portion of this study.\n\nYou will now be automatically redirected to Qualtrics.',
-    font: 'Arial',
+    font: instructionsFont,
     units: undefined, 
-    pos: [0, 0], height: instructionsTextHeight,  wrapWidth: wrap, ori: 0.0,
+    pos: instructLoc, height: instructionsTextHeight,  wrapWidth: wrap, ori: 0.0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: undefined,
     depth: 0.0 

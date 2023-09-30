@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.4),
-    on September 30, 2023, at 04:19
+    on September 30, 2023, at 14:09
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -100,15 +100,6 @@ defaultKeyboard = keyboard.Keyboard(backend='iohub')
 
 # --- Initialize components for Routine "cgeRDMsetup" ---
 # Run 'Begin Experiment' code from cgeRDMsetupCode
-### Dimensions
-instructionsTextHeight = .05
-lettersTextHeight = .1
-wrap = 1.5
-
-### ITIs
-initITIstatic = []
-initITIdynamic = []
-
 ### Isoluminant Colors Used 
 color1 = [0.5216,0.5216,0.5216]
 color2 = [-0.0667,0.6392,1]
@@ -117,23 +108,54 @@ color2 = [-0.0667,0.6392,1]
 # GREY ### Background; Choice Line
 # psychopy RGB -1:1 [0.5216,0.5216,0.5216] # RGB 0:255 [194,194,194] 
 
+### Text Fonts
+instructionsFont = 'Arial'
+choiceFont = 'Arial'
+choiceValueFont = 'Arial'
+fixCrossFont = 'Arial'
+NoRespFont = 'Arial'
+ocFont = 'Arial'
+
+### Text Dimensions
+wrap = 1.5
+instructionsTextHeight = .05
+choiceTextHeight = .05
+choiceValuesTextHeight = .1
+FixCrossHeight = .05
+NoRespTextHeight = .08
+ocTextHeight = .1
+
+### Instructions Location
+instructLoc = [0,0]
+
 ### Shapes 'circle' 'rectangle' 'star.7' etc.
 leftShape = 'circle'
 rightShape = 'circle'
 riskShape = 'rectangle'
 hideShape = 'rectangle'
 
-### Fixed Practice Trial Locations
+### Shape Dimensions
+circLeft = [.5,.5]
+circRight = [.5,.5]
+riskLine = [.5,.01]
+riskHide = [.6,.3]
+
+### Fixed Trial Locations
 circLeftLoc=[-.35,0]
 circRightLoc=[.35,0]
 ORtextLoc=[0,0]
 VleftLoc=[-.35,-.35]
 NrightLoc=[.35,-.35]
+fixCrossLoc=[0,0]
 
 ### Number of Trials per Choice Sets
 pracChoices = '0:4'
 statChoices = '0:4'
 dynaChoices = '0:4'
+
+### ITIs
+initITIstatic = []
+initITIdynamic = []
 
 
 
@@ -141,8 +163,8 @@ dynaChoices = '0:4'
 # --- Initialize components for Routine "cgeRDMstart" ---
 cgeRDMstartTxt = visual.TextStim(win=win, name='cgeRDMstartTxt',
     text='As discussed in the instructions, you will choose between a gamble and a guaranteed alternative.\n\nYou may press "V" to select the option on the left and "N" to select the option on the right.\n\nPress "enter" to move on to the next screen.',
-    font='Arial',
-    pos=(0, 0), height=.05, wrapWidth=wrap, ori=0, 
+    font=instructionsFont,
+    pos=instructLoc, height=instructionsTextHeight, wrapWidth=wrap, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
@@ -151,8 +173,8 @@ cgeRDMstartResp = keyboard.Keyboard()
 # --- Initialize components for Routine "practiceStart" ---
 pracStartTxt = visual.TextStim(win=win, name='pracStartTxt',
     text='There will now be 5 practice trials.\n\nWhen you are ready to begin the practice, press "V" or "N".',
-    font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0, 
+    font=instructionsFont,
+    pos=instructLoc, height=instructionsTextHeight, wrapWidth=wrap, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
@@ -160,65 +182,65 @@ pracStartResp = keyboard.Keyboard()
 
 # --- Initialize components for Routine "pracChoices" ---
 # Run 'Begin Experiment' code from pracChoiceRandLoc
-textHeight = 0.05
+
 
 pracCircLeft = visual.ShapeStim(
     win=win, name='pracCircLeft', vertices=leftShape,
-    size=(.5, .5),
+    size=circLeft,
     ori=0, pos=circLeftLoc, anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-1.0, interpolate=True)
 pracCircRight = visual.ShapeStim(
     win=win, name='pracCircRight', vertices=rightShape,
-    size=(0.5, 0.5),
+    size=circRight,
     ori=0, pos=circRightLoc, anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor='white', fillColor='white',
     opacity=1, depth=-2.0, interpolate=True)
 pracRiskLine = visual.ShapeStim(
     win=win, name='pracRiskLine', vertices=riskShape,
-    size=(0.5, 0.01),
+    size=riskLine,
     ori=0, pos=[0,0], anchor='center',
     lineWidth=3,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-3.0, interpolate=True)
 pracORtxt = visual.TextStim(win=win, name='pracORtxt',
     text='OR',
-    font='Arial',
-    pos=ORtextLoc, height=0.05, wrapWidth=None, ori=0, 
+    font=choiceFont,
+    pos=ORtextLoc, height=choiceTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
 pracLossTxt = visual.TextStim(win=win, name='pracLossTxt',
     text='',
     font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
+    pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-5.0);
 pracGainTxt = visual.TextStim(win=win, name='pracGainTxt',
     text='',
     font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
+    pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-6.0);
 pracSafeTxt = visual.TextStim(win=win, name='pracSafeTxt',
     text='',
     font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
+    pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-7.0);
 pracVleft = visual.TextStim(win=win, name='pracVleft',
     text='V-Left',
-    font='Arial',
-    pos=VleftLoc, height=0.05, wrapWidth=None, ori=0, 
+    font=choiceFont,
+    pos=VleftLoc, height=choiceTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-8.0);
 pracNright = visual.TextStim(win=win, name='pracNright',
     text='N-Right',
-    font='Arial',
-    pos=NrightLoc, height=0.05, wrapWidth=None, ori=0, 
+    font=choiceFont,
+    pos=NrightLoc, height=choiceTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-9.0);
@@ -227,8 +249,8 @@ pracChoiceResp = keyboard.Keyboard()
 # --- Initialize components for Routine "pracISI" ---
 isiPracFix = visual.TextStim(win=win, name='isiPracFix',
     text='+',
-    font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
+    font=fixCrossFont,
+    pos=fixCrossLoc, height=FixCrossHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
@@ -236,33 +258,33 @@ isiPracFix = visual.TextStim(win=win, name='isiPracFix',
 # --- Initialize components for Routine "pracOutcome" ---
 pracNoRespTxt = visual.TextStim(win=win, name='pracNoRespTxt',
     text='You did not respond in time\n',
-    font='Arial',
-    pos=[0,0], height=textHeight, wrapWidth=None, ori=0, 
+    font=NoRespFont,
+    pos=[0,0], height=NoRespTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-1.0);
 pracRiskOC = visual.ShapeStim(
     win=win, name='pracRiskOC', vertices=leftShape,
-    size=(0.5, 0.5),
+    size=circLeft,
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-2.0, interpolate=True)
 pracSafeOC = visual.ShapeStim(
     win=win, name='pracSafeOC', vertices=rightShape,
-    size=(0.5, 0.5),
+    size=circRight,
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-3.0, interpolate=True)
 pracOCtxt = visual.TextStim(win=win, name='pracOCtxt',
     text='',
-    font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
+    font=ocFont,
+    pos=[0,0], height=ocTextHeight, wrapWidth=None, ori=0, 
     color='white', colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
 pracHideRisk = visual.ShapeStim(
     win=win, name='pracHideRisk', vertices=hideShape,
-    size=(0.6, 0.3),
+    size=riskHide,
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-5.0, interpolate=True)
@@ -270,8 +292,8 @@ pracHideRisk = visual.ShapeStim(
 # --- Initialize components for Routine "pracITI" ---
 itiPracFix = visual.TextStim(win=win, name='itiPracFix',
     text='+',
-    font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
+    font=fixCrossFont,
+    pos=fixCrossLoc, height=FixCrossHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
@@ -279,8 +301,8 @@ itiPracFix = visual.TextStim(win=win, name='itiPracFix',
 # --- Initialize components for Routine "staticStart" ---
 statStartTxt = visual.TextStim(win=win, name='statStartTxt',
     text='Practice complete.\n\nWhen you are ready to start ROUND 1 of the task, press "V" or "N".\n',
-    font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0, 
+    font=instructionsFont,
+    pos=instructLoc, height=instructionsTextHeight, wrapWidth=wrap, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
@@ -312,43 +334,43 @@ realRiskLine = visual.ShapeStim(
     opacity=1, depth=-3.0, interpolate=True)
 realORtxt = visual.TextStim(win=win, name='realORtxt',
     text='OR',
-    font='Arial',
-    pos=ORtextLoc, height=0.05, wrapWidth=None, ori=0, 
+    font=choiceFont,
+    pos=ORtextLoc, height=choiceTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
 realLossTxt = visual.TextStim(win=win, name='realLossTxt',
     text='',
-    font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
+    font=choiceValueFont,
+    pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-5.0);
 realGainTxt = visual.TextStim(win=win, name='realGainTxt',
     text='',
-    font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
+    font=choiceValueFont,
+    pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-6.0);
 realSafeTxt = visual.TextStim(win=win, name='realSafeTxt',
     text='',
-    font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
+    font=choiceValueFont,
+    pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-7.0);
 realVleft = visual.TextStim(win=win, name='realVleft',
     text='V-Left',
-    font='Arial',
-    pos=VleftLoc, height=0.05, wrapWidth=None, ori=0, 
+    font=choiceFont,
+    pos=VleftLoc, height=choiceTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-8.0);
 realNright = visual.TextStim(win=win, name='realNright',
     text='N-Right',
-    font='Arial',
-    pos=NrightLoc, height=0.05, wrapWidth=None, ori=0, 
+    font=choiceFont,
+    pos=NrightLoc, height=choiceTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-9.0);
@@ -357,8 +379,8 @@ realChoiceResp = keyboard.Keyboard()
 # --- Initialize components for Routine "realISI" ---
 isiRealFix = visual.TextStim(win=win, name='isiRealFix',
     text='+',
-    font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
+    font=fixCrossFont,
+    pos=fixCrossLoc, height=FixCrossHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
@@ -376,8 +398,8 @@ outcomes = []
 
 statNoRespTxt = visual.TextStim(win=win, name='statNoRespTxt',
     text='You did not respond in time\n',
-    font='Arial',
-    pos=[0,0], height=0.08, wrapWidth=None, ori=0, 
+    font=NoRespFont,
+    pos=[0,0], height=NoRespTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-1.0);
@@ -395,8 +417,8 @@ statSafeOC = visual.ShapeStim(
     opacity=1, depth=-3.0, interpolate=True)
 statOCtxt = visual.TextStim(win=win, name='statOCtxt',
     text='',
-    font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
+    font=ocFont,
+    pos=[0,0], height=ocTextHeight, wrapWidth=None, ori=0, 
     color='white', colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
@@ -410,8 +432,8 @@ statHideRisk = visual.ShapeStim(
 # --- Initialize components for Routine "realITI" ---
 itiRealFix = visual.TextStim(win=win, name='itiRealFix',
     text='+',
-    font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
+    font=fixCrossFont,
+    pos=fixCrossLoc, height=FixCrossHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
@@ -473,8 +495,8 @@ bestMu = ''
 bestMuContainer = []
 setupBestFitTxt = visual.TextStim(win=win, name='setupBestFitTxt',
     text='ROUND 1 of the gambling task is complete! \n\nSetting up for the last round of the gambling task.\n\nPlease wait...\n\n\n',
-    font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
+    font=instructionsFont,
+    pos=instructLoc, height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
     color=color2, colorSpace='rgb', opacity=None, 
     languageStyle='LTR',
     depth=-4.0);
@@ -491,8 +513,8 @@ loadDynaChoicesTxt = visual.TextStim(win=win, name='loadDynaChoicesTxt',
 # --- Initialize components for Routine "dynamicStart" ---
 dynaStartTxt = visual.TextStim(win=win, name='dynaStartTxt',
     text='When you are ready to start ROUND 2 of the task, press "V" or "N".',
-    font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
+    font=instructionsFont,
+    pos=instructLoc, height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
     color=color2, colorSpace='rgb', opacity=None, 
     languageStyle='LTR',
     depth=0.0);
@@ -524,43 +546,43 @@ realRiskLine = visual.ShapeStim(
     opacity=1, depth=-3.0, interpolate=True)
 realORtxt = visual.TextStim(win=win, name='realORtxt',
     text='OR',
-    font='Arial',
-    pos=ORtextLoc, height=0.05, wrapWidth=None, ori=0, 
+    font=choiceFont,
+    pos=ORtextLoc, height=choiceTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
 realLossTxt = visual.TextStim(win=win, name='realLossTxt',
     text='',
-    font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
+    font=choiceValueFont,
+    pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-5.0);
 realGainTxt = visual.TextStim(win=win, name='realGainTxt',
     text='',
-    font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
+    font=choiceValueFont,
+    pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-6.0);
 realSafeTxt = visual.TextStim(win=win, name='realSafeTxt',
     text='',
-    font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
+    font=choiceValueFont,
+    pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-7.0);
 realVleft = visual.TextStim(win=win, name='realVleft',
     text='V-Left',
-    font='Arial',
-    pos=VleftLoc, height=0.05, wrapWidth=None, ori=0, 
+    font=choiceFont,
+    pos=VleftLoc, height=choiceTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-8.0);
 realNright = visual.TextStim(win=win, name='realNright',
     text='N-Right',
-    font='Arial',
-    pos=NrightLoc, height=0.05, wrapWidth=None, ori=0, 
+    font=choiceFont,
+    pos=NrightLoc, height=choiceTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-9.0);
@@ -569,8 +591,8 @@ realChoiceResp = keyboard.Keyboard()
 # --- Initialize components for Routine "realISI" ---
 isiRealFix = visual.TextStim(win=win, name='isiRealFix',
     text='+',
-    font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
+    font=fixCrossFont,
+    pos=fixCrossLoc, height=FixCrossHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
@@ -587,8 +609,8 @@ outcomes = []
 
 dynaNoRespTxt = visual.TextStim(win=win, name='dynaNoRespTxt',
     text='You did not respond in time\n',
-    font='Arial',
-    pos=[0,0], height=0.08, wrapWidth=None, ori=0, 
+    font=NoRespFont,
+    pos=[0,0], height=NoRespTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-1.0);
@@ -606,8 +628,8 @@ dynaSafeOC = visual.ShapeStim(
     opacity=1, depth=-3.0, interpolate=True)
 dynaOCtxt = visual.TextStim(win=win, name='dynaOCtxt',
     text='',
-    font='Arial',
-    pos=[0,0], height=0.1, wrapWidth=None, ori=0, 
+    font=ocFont,
+    pos=[0,0], height=ocTextHeight, wrapWidth=None, ori=0, 
     color='white', colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
@@ -621,8 +643,8 @@ dynaHideRisk = visual.ShapeStim(
 # --- Initialize components for Routine "realITI" ---
 itiRealFix = visual.TextStim(win=win, name='itiRealFix',
     text='+',
-    font='Arial',
-    pos=(0, 0), height=0.05, wrapWidth=None, ori=0, 
+    font=fixCrossFont,
+    pos=fixCrossLoc, height=FixCrossHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=0.0);
@@ -630,8 +652,8 @@ itiRealFix = visual.TextStim(win=win, name='itiRealFix',
 # --- Initialize components for Routine "cgeRDMend" ---
 cgeRDMendTxt = visual.TextStim(win=win, name='cgeRDMendTxt',
     text="You have sucessfully completed the first task in this experiment!\n\nPlease take a brief 1 minute break. \n\nYou are welcome to take a longer break, but keep in mind this study should take no longer than 1 hour to complete. \n\nWhen you are ready to move on, press 'enter' to continue.\n",
-    font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
+    font=instructionsFont,
+    pos=instructLoc, height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
     color=color2, colorSpace='rgb', opacity=None, 
     languageStyle='LTR',
     depth=0.0);
@@ -640,8 +662,8 @@ cgeRDMendResp = keyboard.Keyboard()
 # --- Initialize components for Routine "END" ---
 ThankYou = visual.TextStim(win=win, name='ThankYou',
     text='Thank you! You have sucessfully completed the second portion of this study.\n\nYou will now be automatically redirected to Qualtrics.',
-    font='Arial',
-    pos=(0, 0), height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
+    font=instructionsFont,
+    pos=instructLoc, height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
     color=color2, colorSpace='rgb', opacity=None, 
     languageStyle='LTR',
     depth=0.0);

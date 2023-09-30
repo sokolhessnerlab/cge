@@ -2473,13 +2473,13 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="None" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$instructionsFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
         <Param val="instructionsTextHeight" valType="num" updates="constant" name="letterHeight"/>
         <Param val="ThankYou" valType="code" updates="None" name="name"/>
         <Param val="" valType="num" updates="constant" name="opacity"/>
         <Param val="0" valType="num" updates="constant" name="ori"/>
-        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="instructLoc" valType="list" updates="constant" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
@@ -2635,13 +2635,13 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$fixCrossFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.05" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="FixCrossHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="isiPracFix" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
-        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="fixCrossLoc" valType="list" updates="constant" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
@@ -2679,9 +2679,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$NoRespFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="textHeight" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="NoRespTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="pracNoRespTxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -2716,7 +2716,7 @@
         <Param val="ocGambleLoc" valType="list" updates="set every repeat" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="custom polygon..." valType="str" updates="constant" name="shape"/>
-        <Param val="(0.5, 0.5)" valType="list" updates="constant" name="size"/>
+        <Param val="circLeft" valType="list" updates="constant" name="size"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0.0" valType="code" updates="None" name="startVal"/>
@@ -2745,7 +2745,7 @@
         <Param val="ocSafeLoc" valType="list" updates="set every repeat" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="custom polygon..." valType="str" updates="constant" name="shape"/>
-        <Param val="(0.5, 0.5)" valType="list" updates="constant" name="size"/>
+        <Param val="circRight" valType="list" updates="constant" name="size"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0.0" valType="code" updates="None" name="startVal"/>
@@ -2762,9 +2762,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$ocFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.1" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="ocTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="pracOCtxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -2799,7 +2799,7 @@
         <Param val="hideGamLoc" valType="list" updates="set every repeat" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="custom polygon..." valType="str" updates="constant" name="shape"/>
-        <Param val="(0.6, 0.3)" valType="list" updates="constant" name="size"/>
+        <Param val="riskHide" valType="list" updates="constant" name="size"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0.0" valType="code" updates="None" name="startVal"/>
@@ -2818,13 +2818,13 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$fixCrossFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.05" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="FixCrossHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="itiPracFix" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
-        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="fixCrossLoc" valType="list" updates="constant" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
@@ -2845,13 +2845,13 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$instructionsFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
         <Param val="instructionsTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="statStartTxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
-        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="instructLoc" valType="list" updates="constant" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
@@ -2967,13 +2967,13 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="None" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$instructionsFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
         <Param val="instructionsTextHeight" valType="num" updates="constant" name="letterHeight"/>
         <Param val="setupBestFitTxt" valType="code" updates="None" name="name"/>
         <Param val="" valType="num" updates="constant" name="opacity"/>
         <Param val="0" valType="num" updates="constant" name="ori"/>
-        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="instructLoc" valType="list" updates="constant" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
@@ -3013,13 +3013,13 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="None" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$instructionsFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
         <Param val="instructionsTextHeight" valType="num" updates="constant" name="letterHeight"/>
         <Param val="dynaStartTxt" valType="code" updates="None" name="name"/>
         <Param val="" valType="num" updates="constant" name="opacity"/>
         <Param val="0" valType="num" updates="constant" name="ori"/>
-        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="instructLoc" valType="list" updates="constant" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
@@ -3077,13 +3077,13 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="None" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$instructionsFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
         <Param val="instructionsTextHeight" valType="num" updates="constant" name="letterHeight"/>
         <Param val="cgeRDMendTxt" valType="code" updates="None" name="name"/>
         <Param val="" valType="num" updates="constant" name="opacity"/>
         <Param val="0" valType="num" updates="constant" name="ori"/>
-        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="instructLoc" valType="list" updates="constant" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
@@ -3163,13 +3163,13 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$fixCrossFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.05" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="FixCrossHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="isiRealFix" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
-        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="fixCrossLoc" valType="list" updates="constant" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
@@ -3190,13 +3190,13 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$fixCrossFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.05" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="FixCrossHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="itiRealFix" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
-        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="fixCrossLoc" valType="list" updates="constant" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
@@ -3217,13 +3217,13 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$instructionsFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val=".05" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="instructionsTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="cgeRDMstartTxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
-        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="instructLoc" valType="list" updates="constant" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
@@ -3258,7 +3258,7 @@
       <CodeComponent name="pracChoiceRandLoc">
         <Param val="" valType="extendedCode" updates="constant" name="Before Experiment"/>
         <Param val="" valType="extendedCode" updates="constant" name="Before JS Experiment"/>
-        <Param val="textHeight = 0.05&amp;#10;" valType="extendedCode" updates="constant" name="Begin Experiment"/>
+        <Param val="&amp;#10;" valType="extendedCode" updates="constant" name="Begin Experiment"/>
         <Param val="textHeight = 0.05;&amp;#10;" valType="extendedCode" updates="constant" name="Begin JS Experiment"/>
         <Param val="var pracLossRounded, pracGainRounded, pracSafeRounded&amp;#10;&amp;#10;if ((loc === 1)) {&amp;#10;    targetPos = [(- 0.35), 0];&amp;#10;} else {&amp;#10;    targetPos = [0.35, 0];&amp;#10;}&amp;#10;if ((loc === 1)) {&amp;#10;    lossLoc = [(- 0.35), (- 0.1)];&amp;#10;    gainLoc = [(- 0.35), 0.1];&amp;#10;    safeLoc = [0.35, 0];&amp;#10;} else {&amp;#10;    lossLoc = [0.35, (- 0.1)];&amp;#10;    gainLoc = [0.35, 0.1];&amp;#10;    safeLoc = [(- 0.35), 0];&amp;#10;}&amp;#10;&amp;#10;&amp;#10;//pracLossRounded = riskyLoss&amp;#10;//pracGainRounded = riskyGain&amp;#10;//pracSafeRounded = alternative&amp;#10;&amp;#10;/*&amp;#10; function roundToTwo(num) {    &amp;#10;        return +(Math.round(num + &quot;e+2&quot;)  + &quot;e-2&quot;);&amp;#10; }&amp;#10;*/&amp;#10;&amp;#10;pracLossRounded = `$${Math.round(riskyLoss)}`;&amp;#10;//pracGainRounded = `$${roundToTwo(riskyGain*100)/100}`;&amp;#10;//pracSafeRounded = `$${roundToTwo(alternative*100)/100}`;&amp;#10;&amp;#10;pracGainRounded = `$${Math.round(riskyGain*100)/100}`;&amp;#10;pracSafeRounded = `$${Math.round(alternative*100)/100}`;&amp;#10;&amp;#10;//console.log(pracLossRounded)&amp;#10;//console.log(pracGainRounded)&amp;#10;//console.log(pracSafeRounded)" valType="extendedCode" updates="constant" name="Begin JS Routine"/>
         <Param val="### Randomized Practice Trial Locations&amp;#10;if loc==1:&amp;#10;    riskLineLoc=[-.35,0] #targetPos&amp;#10;else:&amp;#10;    riskLineLoc=[.35,0] #targetPos&amp;#10;&amp;#10;if loc==1:&amp;#10;    lossLoc=[-.35,-.1]&amp;#10;    gainLoc=[-.35,.1]&amp;#10;    safeLoc=[.35,0]&amp;#10;else:&amp;#10;    lossLoc=[.35,-.1]&amp;#10;    gainLoc=[.35,.1]&amp;#10;    safeLoc=[-.35,0]&amp;#10;    &amp;#10;# Rounding Presentation of Monetary Values    &amp;#10;pracLossRounded = '$%.0f' % round(riskyLoss,0)&amp;#10;pracGainRounded = '$%.2f' % round(riskyGain,2)&amp;#10;pracSafeRounded = '$%.2f' % round(alternative,2)&amp;#10;&amp;#10;&amp;#10;" valType="extendedCode" updates="constant" name="Begin Routine"/>
@@ -3291,7 +3291,7 @@
         <Param val="circLeftLoc" valType="list" updates="constant" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="custom polygon..." valType="str" updates="constant" name="shape"/>
-        <Param val="(.5, .5)" valType="list" updates="constant" name="size"/>
+        <Param val="circLeft" valType="list" updates="constant" name="size"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0" valType="code" updates="None" name="startVal"/>
@@ -3320,7 +3320,7 @@
         <Param val="circRightLoc" valType="list" updates="constant" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="custom polygon..." valType="str" updates="constant" name="shape"/>
-        <Param val="(0.5, 0.5)" valType="list" updates="constant" name="size"/>
+        <Param val="circRight" valType="list" updates="constant" name="size"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0.0" valType="code" updates="None" name="startVal"/>
@@ -3349,7 +3349,7 @@
         <Param val="riskLineLoc" valType="list" updates="set every repeat" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="custom polygon..." valType="str" updates="constant" name="shape"/>
-        <Param val="(0.5, 0.01)" valType="list" updates="constant" name="size"/>
+        <Param val="riskLine" valType="list" updates="constant" name="size"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0.0" valType="code" updates="None" name="startVal"/>
@@ -3366,9 +3366,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$choiceFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.05" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="choiceTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="pracORtxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -3391,9 +3391,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$choiceValueFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.1" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="choiceValuesTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="pracLossTxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -3416,9 +3416,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$choiceValueFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.1" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="choiceValuesTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="pracGainTxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -3441,9 +3441,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$choiceValueFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.1" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="choiceValuesTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="pracSafeTxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -3466,9 +3466,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$choiceFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.05" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="choiceTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="pracVleft" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -3491,9 +3491,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$choiceFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.05" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="choiceTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="pracNright" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -3565,7 +3565,7 @@
         <Param val="circLeftLoc" valType="list" updates="constant" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="custom polygon..." valType="str" updates="constant" name="shape"/>
-        <Param val="(.5, .5)" valType="list" updates="constant" name="size"/>
+        <Param val="circLeft" valType="list" updates="constant" name="size"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0" valType="code" updates="None" name="startVal"/>
@@ -3573,7 +3573,7 @@
         <Param val="4" valType="code" updates="constant" name="stopVal"/>
         <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
         <Param val="from exp settings" valType="str" updates="None" name="units"/>
-        <Param val="rightShape" valType="list" updates="constant" name="vertices"/>
+        <Param val="leftShape" valType="list" updates="constant" name="vertices"/>
       </PolygonComponent>
       <PolygonComponent name="realCircRight">
         <Param val="center" valType="str" updates="constant" name="anchor"/>
@@ -3594,7 +3594,7 @@
         <Param val="circRightLoc" valType="list" updates="constant" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="custom polygon..." valType="str" updates="constant" name="shape"/>
-        <Param val="(0.5, 0.5)" valType="list" updates="constant" name="size"/>
+        <Param val="circRight" valType="list" updates="constant" name="size"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0.0" valType="code" updates="None" name="startVal"/>
@@ -3602,7 +3602,7 @@
         <Param val="4" valType="code" updates="constant" name="stopVal"/>
         <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
         <Param val="from exp settings" valType="str" updates="None" name="units"/>
-        <Param val="leftShape" valType="list" updates="constant" name="vertices"/>
+        <Param val="rightShape" valType="list" updates="constant" name="vertices"/>
       </PolygonComponent>
       <PolygonComponent name="realRiskLine">
         <Param val="center" valType="str" updates="constant" name="anchor"/>
@@ -3623,7 +3623,7 @@
         <Param val="riskLineLoc" valType="list" updates="set every repeat" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="custom polygon..." valType="str" updates="constant" name="shape"/>
-        <Param val="(0.5, 0.01)" valType="list" updates="constant" name="size"/>
+        <Param val="riskLine" valType="list" updates="constant" name="size"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0.0" valType="code" updates="None" name="startVal"/>
@@ -3640,9 +3640,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$choiceFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.05" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="choiceTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="realORtxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -3665,9 +3665,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$choiceValueFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.1" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="choiceValuesTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="realLossTxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -3690,9 +3690,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$choiceValueFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.1" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="choiceValuesTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="realGainTxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -3715,9 +3715,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$choiceValueFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.1" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="choiceValuesTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="realSafeTxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -3740,9 +3740,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$choiceFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.05" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="choiceTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="realVleft" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -3765,9 +3765,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$choiceFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.05" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="choiceTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="realNright" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -3827,9 +3827,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$NoRespFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.08" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="NoRespTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="statNoRespTxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -3864,7 +3864,7 @@
         <Param val="ocGambleLoc" valType="list" updates="set every repeat" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="custom polygon..." valType="str" updates="constant" name="shape"/>
-        <Param val="(0.5, 0.5)" valType="list" updates="constant" name="size"/>
+        <Param val="circLeft" valType="list" updates="constant" name="size"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0.0" valType="code" updates="None" name="startVal"/>
@@ -3880,10 +3880,10 @@
         <Param val="1" valType="num" updates="constant" name="contrast"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
-        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="fillColor"/>
+        <Param val="$color2" valType="str" updates="constant" name="fillColor"/>
         <Param val="rgb" valType="str" updates="constant" name="fillColorSpace"/>
         <Param val="linear" valType="str" updates="constant" name="interpolate"/>
-        <Param val="$[-0.0667,0.6392,1.0000]" valType="str" updates="constant" name="lineColor"/>
+        <Param val="$color2" valType="str" updates="constant" name="lineColor"/>
         <Param val="rgb" valType="str" updates="constant" name="lineColorSpace"/>
         <Param val="1" valType="code" updates="constant" name="lineWidth"/>
         <Param val="130" valType="int" updates="constant" name="nVertices"/>
@@ -3893,7 +3893,7 @@
         <Param val="ocSafeLoc" valType="list" updates="set every repeat" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="custom polygon..." valType="str" updates="constant" name="shape"/>
-        <Param val="(0.5, 0.5)" valType="list" updates="constant" name="size"/>
+        <Param val="circRight" valType="list" updates="constant" name="size"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0.0" valType="code" updates="None" name="startVal"/>
@@ -3910,9 +3910,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$ocFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.1" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="ocTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="statOCtxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -3947,7 +3947,7 @@
         <Param val="hideGamLoc" valType="list" updates="set every repeat" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="custom polygon..." valType="str" updates="constant" name="shape"/>
-        <Param val="(0.6, 0.3)" valType="list" updates="constant" name="size"/>
+        <Param val="riskHide" valType="list" updates="constant" name="size"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0.0" valType="code" updates="None" name="startVal"/>
@@ -3983,9 +3983,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$NoRespFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.08" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="NoRespTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="dynaNoRespTxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -4020,7 +4020,7 @@
         <Param val="ocGambleLoc" valType="list" updates="set every repeat" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="custom polygon..." valType="str" updates="constant" name="shape"/>
-        <Param val="(0.5, 0.5)" valType="list" updates="constant" name="size"/>
+        <Param val="circLeft" valType="list" updates="constant" name="size"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0.0" valType="code" updates="None" name="startVal"/>
@@ -4028,7 +4028,7 @@
         <Param val="1.0" valType="code" updates="constant" name="stopVal"/>
         <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
         <Param val="from exp settings" valType="str" updates="None" name="units"/>
-        <Param val="rightShape" valType="list" updates="constant" name="vertices"/>
+        <Param val="leftShape" valType="list" updates="constant" name="vertices"/>
       </PolygonComponent>
       <PolygonComponent name="dynaSafeOC">
         <Param val="center" valType="str" updates="constant" name="anchor"/>
@@ -4049,7 +4049,7 @@
         <Param val="ocSafeLoc" valType="list" updates="set every repeat" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="custom polygon..." valType="str" updates="constant" name="shape"/>
-        <Param val="(0.5, 0.5)" valType="list" updates="constant" name="size"/>
+        <Param val="circRight" valType="list" updates="constant" name="size"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0.0" valType="code" updates="None" name="startVal"/>
@@ -4057,7 +4057,7 @@
         <Param val="1.0" valType="code" updates="constant" name="stopVal"/>
         <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
         <Param val="from exp settings" valType="str" updates="None" name="units"/>
-        <Param val="leftShape" valType="list" updates="constant" name="vertices"/>
+        <Param val="rightShape" valType="list" updates="constant" name="vertices"/>
       </PolygonComponent>
       <TextComponent name="dynaOCtxt">
         <Param val="$color1" valType="str" updates="set every repeat" name="color"/>
@@ -4066,9 +4066,9 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$ocFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
-        <Param val="0.1" valType="code" updates="constant" name="letterHeight"/>
+        <Param val="ocTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="dynaOCtxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
@@ -4103,7 +4103,7 @@
         <Param val="hideGamLoc" valType="list" updates="set every repeat" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="custom polygon..." valType="str" updates="constant" name="shape"/>
-        <Param val="(0.6, 0.3)" valType="list" updates="constant" name="size"/>
+        <Param val="riskHide" valType="list" updates="constant" name="size"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0.0" valType="code" updates="None" name="startVal"/>
@@ -4122,13 +4122,13 @@
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
         <Param val="" valType="str" updates="constant" name="flip"/>
-        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="$instructionsFont" valType="str" updates="constant" name="font"/>
         <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
         <Param val="instructionsTextHeight" valType="code" updates="constant" name="letterHeight"/>
         <Param val="pracStartTxt" valType="code" updates="None" name="name"/>
         <Param val="1" valType="code" updates="constant" name="opacity"/>
         <Param val="0" valType="code" updates="constant" name="ori"/>
-        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="instructLoc" valType="list" updates="constant" name="pos"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
@@ -4163,7 +4163,7 @@
       <CodeComponent name="cgeRDMsetupCode">
         <Param val="" valType="extendedCode" updates="constant" name="Before Experiment"/>
         <Param val="psychoJS.start({&amp;#10;  expName,&amp;#10;  expInfo,&amp;#10;  resources: [&amp;#10;    // relative path to index.html&amp;#10;    { name: 'digitSpanTrialNumber.xlsx', path: 'digitSpanTrialNumber.xlsx' },&amp;#10;    { name: 'CGT-choice-set.csv', path: 'CGT-choice-set.csv' },&amp;#10;    { name: 'cgtRDMPractice.xlsx', path: 'cgtRDMPractice.xlsx' },&amp;#10;    { name: 'continue.png', path: 'continue.png' },&amp;#10;    { name: 'digitSpanPractice.xlsx', path: 'digitSpanPractice.xlsx' },&amp;#10;    // absolute path:&amp;#10;    //{ name: 'trialTypes_B.xls', path: 'http://a.website.org/a.path/trialTypes_B.xls' }&amp;#10;  ]&amp;#10;});" valType="extendedCode" updates="constant" name="Before JS Experiment"/>
-        <Param val="### Dimensions&amp;#10;instructionsTextHeight = .05&amp;#10;lettersTextHeight = .1&amp;#10;wrap = 1.5&amp;#10;&amp;#10;### ITIs&amp;#10;initITIstatic = []&amp;#10;initITIdynamic = []&amp;#10;&amp;#10;### Isoluminant Colors Used &amp;#10;color1 = [0.5216,0.5216,0.5216]&amp;#10;color2 = [-0.0667,0.6392,1]&amp;#10;# BLUE ### Choice Shape; V, N, and OR text&amp;#10;# PsychoPy RGB -1:1 [-0.0667,0.6392,1] # RGB 0:255 [119,209,205]&amp;#10;# GREY ### Background; Choice Line&amp;#10;# psychopy RGB -1:1 [0.5216,0.5216,0.5216] # RGB 0:255 [194,194,194] &amp;#10;&amp;#10;### Shapes 'circle' 'rectangle' 'star.7' etc.&amp;#10;leftShape = 'circle'&amp;#10;rightShape = 'circle'&amp;#10;riskShape = 'rectangle'&amp;#10;hideShape = 'rectangle'&amp;#10;&amp;#10;### Fixed Practice Trial Locations&amp;#10;circLeftLoc=[-.35,0]&amp;#10;circRightLoc=[.35,0]&amp;#10;ORtextLoc=[0,0]&amp;#10;VleftLoc=[-.35,-.35]&amp;#10;NrightLoc=[.35,-.35]&amp;#10;&amp;#10;### Number of Trials per Choice Sets&amp;#10;pracChoices = '0:4'&amp;#10;statChoices = '0:4'&amp;#10;dynaChoices = '0:4'&amp;#10;&amp;#10;&amp;#10;" valType="extendedCode" updates="constant" name="Begin Experiment"/>
+        <Param val="### Isoluminant Colors Used &amp;#10;color1 = [0.5216,0.5216,0.5216]&amp;#10;color2 = [-0.0667,0.6392,1]&amp;#10;# BLUE ### Choice Shape; V, N, and OR text&amp;#10;# PsychoPy RGB -1:1 [-0.0667,0.6392,1] # RGB 0:255 [119,209,205]&amp;#10;# GREY ### Background; Choice Line&amp;#10;# psychopy RGB -1:1 [0.5216,0.5216,0.5216] # RGB 0:255 [194,194,194] &amp;#10;&amp;#10;### Text Fonts&amp;#10;instructionsFont = 'Arial'&amp;#10;choiceFont = 'Arial'&amp;#10;choiceValueFont = 'Arial'&amp;#10;fixCrossFont = 'Arial'&amp;#10;NoRespFont = 'Arial'&amp;#10;ocFont = 'Arial'&amp;#10;&amp;#10;### Text Dimensions&amp;#10;wrap = 1.5&amp;#10;instructionsTextHeight = .05&amp;#10;choiceTextHeight = .05&amp;#10;choiceValuesTextHeight = .1&amp;#10;FixCrossHeight = .05&amp;#10;NoRespTextHeight = .08&amp;#10;ocTextHeight = .1&amp;#10;&amp;#10;### Instructions Location&amp;#10;instructLoc = [0,0]&amp;#10;&amp;#10;### Shapes 'circle' 'rectangle' 'star.7' etc.&amp;#10;leftShape = 'circle'&amp;#10;rightShape = 'circle'&amp;#10;riskShape = 'rectangle'&amp;#10;hideShape = 'rectangle'&amp;#10;&amp;#10;### Shape Dimensions&amp;#10;circLeft = [.5,.5]&amp;#10;circRight = [.5,.5]&amp;#10;riskLine = [.5,.01]&amp;#10;riskHide = [.6,.3]&amp;#10;&amp;#10;### Fixed Trial Locations&amp;#10;circLeftLoc=[-.35,0]&amp;#10;circRightLoc=[.35,0]&amp;#10;ORtextLoc=[0,0]&amp;#10;VleftLoc=[-.35,-.35]&amp;#10;NrightLoc=[.35,-.35]&amp;#10;fixCrossLoc=[0,0]&amp;#10;&amp;#10;### Number of Trials per Choice Sets&amp;#10;pracChoices = '0:4'&amp;#10;statChoices = '0:4'&amp;#10;dynaChoices = '0:4'&amp;#10;&amp;#10;### ITIs&amp;#10;initITIstatic = []&amp;#10;initITIdynamic = []&amp;#10;&amp;#10;&amp;#10;" valType="extendedCode" updates="constant" name="Begin Experiment"/>
         <Param val="instructionsTextHeight = 0.05;&amp;#10;lettersTextHeight = 0.1;&amp;#10;wrap = 1.5;&amp;#10;&amp;#10;var initITIstatic&amp;#10;var initITIdynamic&amp;#10;&amp;#10;&amp;#10;" valType="extendedCode" updates="constant" name="Begin JS Experiment"/>
         <Param val="" valType="extendedCode" updates="constant" name="Begin JS Routine"/>
         <Param val="" valType="extendedCode" updates="constant" name="Begin Routine"/>
