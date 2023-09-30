@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.4),
-    on September 30, 2023, at 14:09
+    on September 30, 2023, at 14:47
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -211,21 +211,21 @@ pracORtxt = visual.TextStim(win=win, name='pracORtxt',
     depth=-4.0);
 pracLossTxt = visual.TextStim(win=win, name='pracLossTxt',
     text='',
-    font='Arial',
+    font=choiceValueFont,
     pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-5.0);
 pracGainTxt = visual.TextStim(win=win, name='pracGainTxt',
     text='',
-    font='Arial',
+    font=choiceValueFont,
     pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-6.0);
 pracSafeTxt = visual.TextStim(win=win, name='pracSafeTxt',
     text='',
-    font='Arial',
+    font=choiceValueFont,
     pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
@@ -315,20 +315,20 @@ loc = [];
 
 
 realCircLeft = visual.ShapeStim(
-    win=win, name='realCircLeft', vertices=rightShape,
-    size=(.5, .5),
+    win=win, name='realCircLeft', vertices=leftShape,
+    size=circLeft,
     ori=0, pos=circLeftLoc, anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-1.0, interpolate=True)
 realCircRight = visual.ShapeStim(
-    win=win, name='realCircRight', vertices=leftShape,
-    size=(0.5, 0.5),
+    win=win, name='realCircRight', vertices=rightShape,
+    size=circRight,
     ori=0, pos=circRightLoc, anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor='white', fillColor='white',
     opacity=1, depth=-2.0, interpolate=True)
 realRiskLine = visual.ShapeStim(
     win=win, name='realRiskLine', vertices=riskShape,
-    size=(0.5, 0.01),
+    size=riskLine,
     ori=0, pos=[0,0], anchor='center',
     lineWidth=3,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-3.0, interpolate=True)
@@ -405,15 +405,15 @@ statNoRespTxt = visual.TextStim(win=win, name='statNoRespTxt',
     depth=-1.0);
 statRiskOC = visual.ShapeStim(
     win=win, name='statRiskOC', vertices=leftShape,
-    size=(0.5, 0.5),
+    size=circLeft,
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-2.0, interpolate=True)
 statSafeOC = visual.ShapeStim(
     win=win, name='statSafeOC', vertices=rightShape,
-    size=(0.5, 0.5),
+    size=circRight,
     ori=0, pos=[0,0], anchor='center',
-    lineWidth=1,     colorSpace='rgb',  lineColor=[-0.0667,0.6392,1.0000], fillColor=[-0.0667,0.6392,1.0000],
+    lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-3.0, interpolate=True)
 statOCtxt = visual.TextStim(win=win, name='statOCtxt',
     text='',
@@ -424,7 +424,7 @@ statOCtxt = visual.TextStim(win=win, name='statOCtxt',
     depth=-4.0);
 statHideRisk = visual.ShapeStim(
     win=win, name='statHideRisk', vertices=hideShape,
-    size=(0.6, 0.3),
+    size=riskHide,
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-5.0, interpolate=True)
@@ -527,20 +527,20 @@ loc = [];
 
 
 realCircLeft = visual.ShapeStim(
-    win=win, name='realCircLeft', vertices=rightShape,
-    size=(.5, .5),
+    win=win, name='realCircLeft', vertices=leftShape,
+    size=circLeft,
     ori=0, pos=circLeftLoc, anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-1.0, interpolate=True)
 realCircRight = visual.ShapeStim(
-    win=win, name='realCircRight', vertices=leftShape,
-    size=(0.5, 0.5),
+    win=win, name='realCircRight', vertices=rightShape,
+    size=circRight,
     ori=0, pos=circRightLoc, anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor='white', fillColor='white',
     opacity=1, depth=-2.0, interpolate=True)
 realRiskLine = visual.ShapeStim(
     win=win, name='realRiskLine', vertices=riskShape,
-    size=(0.5, 0.01),
+    size=riskLine,
     ori=0, pos=[0,0], anchor='center',
     lineWidth=3,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-3.0, interpolate=True)
@@ -615,14 +615,14 @@ dynaNoRespTxt = visual.TextStim(win=win, name='dynaNoRespTxt',
     languageStyle='LTR',
     depth=-1.0);
 dynaRiskOC = visual.ShapeStim(
-    win=win, name='dynaRiskOC', vertices=rightShape,
-    size=(0.5, 0.5),
+    win=win, name='dynaRiskOC', vertices=leftShape,
+    size=circLeft,
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-2.0, interpolate=True)
 dynaSafeOC = visual.ShapeStim(
-    win=win, name='dynaSafeOC', vertices=leftShape,
-    size=(0.5, 0.5),
+    win=win, name='dynaSafeOC', vertices=rightShape,
+    size=circRight,
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color2, fillColor=color2,
     opacity=1, depth=-3.0, interpolate=True)
@@ -635,7 +635,7 @@ dynaOCtxt = visual.TextStim(win=win, name='dynaOCtxt',
     depth=-4.0);
 dynaHideRisk = visual.ShapeStim(
     win=win, name='dynaHideRisk', vertices=hideShape,
-    size=(0.6, 0.3),
+    size=riskHide,
     ori=0, pos=[0,0], anchor='center',
     lineWidth=1,     colorSpace='rgb',  lineColor=color1, fillColor=color1,
     opacity=1, depth=-5.0, interpolate=True)
@@ -1262,8 +1262,6 @@ for thisPracticeTrial in practiceTrials:
     for thisComponent in pracChoicesComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
-    # Run 'End Routine' code from pracChoiceRandLoc
-    thisExp.addData('loc', loc) # Von added
     # check responses
     if pracChoiceResp.keys in ['', [], None]:  # No response was made
         pracChoiceResp.keys = None
