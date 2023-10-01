@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.4),
-    on October 01, 2023, at 13:05
+    on October 01, 2023, at 12:26
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -32,7 +32,7 @@ import sys  # to get file system encoding
 import psychopy.iohub as io
 from psychopy.hardware import keyboard
 
-# Run 'Before Experiment' code from etCameraSetupCode
+# Run 'Before Experiment' code from etSetupCode
 
 ### Setting up eye-tracker
 
@@ -93,7 +93,7 @@ filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expNa
 # An ExperimentHandler isn't essential but helps with data saving
 thisExp = data.ExperimentHandler(name=expName, version='',
     extraInfo=expInfo, runtimeInfo=None,
-    originPath='C:\\Users\\jvonm\\Documents\\GitHub\\cge\\CGE\\cgeRDMdraftET.py',
+    originPath='C:\\Users\\jvonm\\Documents\\GitHub\\cge\\CGE\\cgeRDMdraftET_lastrun.py',
     savePickle=True, saveWideText=True,
     dataFileName=filename)
 # save a log file for detail verbose info
@@ -134,16 +134,16 @@ eyetracker = None
 # create a default keyboard (e.g. to check for escape)
 defaultKeyboard = keyboard.Keyboard(backend='iohub')
 
-# --- Initialize components for Routine "etCameraSetup" ---
+# --- Initialize components for Routine "etSetup" ---
 etSetupInstText = visual.TextStim(win=win, name='etSetupInstText',
-    text='Press any \'Enter" twice to start Camera Setup',
+    text='Press any key to start Camera Setup',
     font='Arial',
     pos=(0, 0), height=0.05, wrapWidth=None, ori=0.0, 
     color=[-0.0667,0.6392,1], colorSpace='rgb', opacity=None, 
     languageStyle='LTR',
     depth=0.0);
 etSetupInstResp = keyboard.Keyboard()
-# Run 'Begin Experiment' code from etCameraSetupCode
+# Run 'Begin Experiment' code from etSetupCode
 
 ### This Begin Experiment tab of the elConnect component gets graphic 
 # information from Psychopy, sets the screen_pixel_coords on the Host PC based
@@ -156,7 +156,7 @@ if doET:
     # Pass the display pixel coordinates (left, top, right, bottom) to the tracker
     # see the EyeLink Installation Guide, "Customizing Screen Settings"
     et_coords = "screen_pixel_coords = 0 0 %d %d" % (scn_width - 1, scn_height - 1)
-    et.sendCommand(et_coords)
+    et.sendCommand(el_coords)
 
     # Write a DISPLAY_COORDS message to the EDF file
     # Data Viewer needs this piece of info for proper visualization, see Data
@@ -166,6 +166,8 @@ if doET:
     
     
     
+
+# --- Initialize components for Routine "etStartRecording" ---
 
 # --- Initialize components for Routine "cgeRDMsetup" ---
 # Run 'Begin Experiment' code from cgeRDMsetupCode
@@ -258,8 +260,6 @@ cgeRDMstartTxt = visual.TextStim(win=win, name='cgeRDMstartTxt',
     languageStyle='LTR',
     depth=0.0);
 cgeRDMstartResp = keyboard.Keyboard()
-
-# --- Initialize components for Routine "etStartRecording" ---
 
 # --- Initialize components for Routine "practiceStart" ---
 pracStartTxt = visual.TextStim(win=win, name='pracStartTxt',
@@ -795,7 +795,7 @@ ThankYou = visual.TextStim(win=win, name='ThankYou',
 globalClock = core.Clock()  # to track the time since experiment started
 routineTimer = core.Clock()  # to track time remaining of each (possibly non-slip) routine 
 
-# --- Prepare to start Routine "etCameraSetup" ---
+# --- Prepare to start Routine "etSetup" ---
 continueRoutine = True
 routineForceEnded = False
 # update component parameters for each repeat
@@ -803,8 +803,8 @@ etSetupInstResp.keys = []
 etSetupInstResp.rt = []
 _etSetupInstResp_allKeys = []
 # keep track of which components have finished
-etCameraSetupComponents = [etSetupInstText, etSetupInstResp]
-for thisComponent in etCameraSetupComponents:
+etSetupComponents = [etSetupInstText, etSetupInstResp]
+for thisComponent in etSetupComponents:
     thisComponent.tStart = None
     thisComponent.tStop = None
     thisComponent.tStartRefresh = None
@@ -816,7 +816,7 @@ t = 0
 _timeToFirstFrame = win.getFutureFlipTime(clock="now")
 frameN = -1
 
-# --- Run Routine "etCameraSetup" ---
+# --- Run Routine "etSetup" ---
 while continueRoutine:
     # get current time
     t = routineTimer.getTime()
@@ -852,7 +852,7 @@ while continueRoutine:
         win.callOnFlip(etSetupInstResp.clock.reset)  # t=0 on next screen flip
         win.callOnFlip(etSetupInstResp.clearEvents, eventType='keyboard')  # clear events on next screen flip
     if etSetupInstResp.status == STARTED and not waitOnFlip:
-        theseKeys = etSetupInstResp.getKeys(keyList=["return"], waitRelease=False)
+        theseKeys = etSetupInstResp.getKeys(keyList=None, waitRelease=False)
         _etSetupInstResp_allKeys.extend(theseKeys)
         if len(_etSetupInstResp_allKeys):
             etSetupInstResp.keys = _etSetupInstResp_allKeys[-1].name  # just the last key pressed
@@ -869,7 +869,7 @@ while continueRoutine:
         routineForceEnded = True
         break
     continueRoutine = False  # will revert to True if at least one component still running
-    for thisComponent in etCameraSetupComponents:
+    for thisComponent in etSetupComponents:
         if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
             continueRoutine = True
             break  # at least one component has not yet finished
@@ -878,8 +878,8 @@ while continueRoutine:
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
 
-# --- Ending Routine "etCameraSetup" ---
-for thisComponent in etCameraSetupComponents:
+# --- Ending Routine "etSetup" ---
+for thisComponent in etSetupComponents:
     if hasattr(thisComponent, "setAutoDraw"):
         thisComponent.setAutoDraw(False)
 # check responses
@@ -889,7 +889,7 @@ thisExp.addData('etSetupInstResp.keys',etSetupInstResp.keys)
 if etSetupInstResp.keys != None:  # we had a response
     thisExp.addData('etSetupInstResp.rt', etSetupInstResp.rt)
 thisExp.nextEntry()
-# Run 'End Routine' code from etCameraSetupCode
+# Run 'End Routine' code from etSetupCode
 
 ### This End Routine tab sets up graphics options for calibration, and then performs a camera setup
 # so that you can set up the eye tracker and calibrate/validate the participant
@@ -898,10 +898,9 @@ if doET:
     genv = EyeLinkCoreGraphicsPsychoPy(et, win)
     print(genv)  # print out the version number of the CoreGraphics library
     # Set up the calibration target # genv.setTargetType to "circle", "picture", "movie", or "spiral", e.g.,
-    genv.setTargetType('circle')
     # Use a picture as the calibration target
-    #genv.setTargetType('picture') ### The picture doesn't show the second time around
-    #genv.setPictureTarget(os.path.join('images', 'fixTarget.bmp'))
+    genv.setTargetType('picture')
+    genv.setPictureTarget(os.path.join('images', 'fixTarget.bmp'))
     # Beeps to play during calibration, validation and drift correction # parameters: target, good, error
     # Each parameter could be ''--default sound, 'off'--no sound, or a wav file
     genv.setCalibrationSounds('', '', '')
@@ -911,7 +910,75 @@ if doET:
 
 
 
-# the Routine "etCameraSetup" was not non-slip safe, so reset the non-slip timer
+# the Routine "etSetup" was not non-slip safe, so reset the non-slip timer
+routineTimer.reset()
+
+# --- Prepare to start Routine "etStartRecording" ---
+continueRoutine = True
+routineForceEnded = False
+# update component parameters for each repeat
+# Run 'Begin Routine' code from etStartRecCode
+
+#### This Begin Routine tab sets up recording of the eye-tracker
+
+if doET:
+    # Put tracker in idle/offline mode before recording
+    et.setOfflineMode()
+    et.startRecording(1, 0, 0, 0)
+    # Allocate some time for the tracker to cache some samples
+    et.sendMessage('pre 100 pause')
+    pylink.pumpDelay(100)
+    # Send message that recording has started
+    et.sendMessage('cgeRDM Recording Started')
+
+
+
+# keep track of which components have finished
+etStartRecordingComponents = []
+for thisComponent in etStartRecordingComponents:
+    thisComponent.tStart = None
+    thisComponent.tStop = None
+    thisComponent.tStartRefresh = None
+    thisComponent.tStopRefresh = None
+    if hasattr(thisComponent, 'status'):
+        thisComponent.status = NOT_STARTED
+# reset timers
+t = 0
+_timeToFirstFrame = win.getFutureFlipTime(clock="now")
+frameN = -1
+
+# --- Run Routine "etStartRecording" ---
+while continueRoutine:
+    # get current time
+    t = routineTimer.getTime()
+    tThisFlip = win.getFutureFlipTime(clock=routineTimer)
+    tThisFlipGlobal = win.getFutureFlipTime(clock=None)
+    frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
+    # update/draw components on each frame
+    
+    # check for quit (typically the Esc key)
+    if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
+        core.quit()
+    
+    # check if all components have finished
+    if not continueRoutine:  # a component has requested a forced-end of Routine
+        routineForceEnded = True
+        break
+    continueRoutine = False  # will revert to True if at least one component still running
+    for thisComponent in etStartRecordingComponents:
+        if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
+            continueRoutine = True
+            break  # at least one component has not yet finished
+    
+    # refresh the screen
+    if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
+        win.flip()
+
+# --- Ending Routine "etStartRecording" ---
+for thisComponent in etStartRecordingComponents:
+    if hasattr(thisComponent, "setAutoDraw"):
+        thisComponent.setAutoDraw(False)
+# the Routine "etStartRecording" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 
 # --- Prepare to start Routine "cgeRDMsetup" ---
@@ -1088,74 +1155,6 @@ if cgeRDMstartResp.keys != None:  # we had a response
     thisExp.addData('cgeRDMstartResp.rt', cgeRDMstartResp.rt)
 thisExp.nextEntry()
 # the Routine "cgeRDMstart" was not non-slip safe, so reset the non-slip timer
-routineTimer.reset()
-
-# --- Prepare to start Routine "etStartRecording" ---
-continueRoutine = True
-routineForceEnded = False
-# update component parameters for each repeat
-# Run 'Begin Routine' code from etStartRecCode
-
-#### This Begin Routine tab sets up recording of the eye-tracker
-
-if doET:
-    # Put tracker in idle/offline mode before recording
-    et.setOfflineMode()
-    et.startRecording(1, 0, 0, 0)
-    # Allocate some time for the tracker to cache some samples
-    et.sendMessage('pre 100 pause')
-    pylink.pumpDelay(100)
-    # Send message that recording has started
-    et.sendMessage('cgeRDM Recording Started')
-
-
-
-# keep track of which components have finished
-etStartRecordingComponents = []
-for thisComponent in etStartRecordingComponents:
-    thisComponent.tStart = None
-    thisComponent.tStop = None
-    thisComponent.tStartRefresh = None
-    thisComponent.tStopRefresh = None
-    if hasattr(thisComponent, 'status'):
-        thisComponent.status = NOT_STARTED
-# reset timers
-t = 0
-_timeToFirstFrame = win.getFutureFlipTime(clock="now")
-frameN = -1
-
-# --- Run Routine "etStartRecording" ---
-while continueRoutine:
-    # get current time
-    t = routineTimer.getTime()
-    tThisFlip = win.getFutureFlipTime(clock=routineTimer)
-    tThisFlipGlobal = win.getFutureFlipTime(clock=None)
-    frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
-    # update/draw components on each frame
-    
-    # check for quit (typically the Esc key)
-    if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
-        core.quit()
-    
-    # check if all components have finished
-    if not continueRoutine:  # a component has requested a forced-end of Routine
-        routineForceEnded = True
-        break
-    continueRoutine = False  # will revert to True if at least one component still running
-    for thisComponent in etStartRecordingComponents:
-        if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
-            continueRoutine = True
-            break  # at least one component has not yet finished
-    
-    # refresh the screen
-    if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
-        win.flip()
-
-# --- Ending Routine "etStartRecording" ---
-for thisComponent in etStartRecordingComponents:
-    if hasattr(thisComponent, "setAutoDraw"):
-        thisComponent.setAutoDraw(False)
-# the Routine "etStartRecording" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 
 # --- Prepare to start Routine "practiceStart" ---
@@ -4231,7 +4230,7 @@ if routineForceEnded:
     routineTimer.reset()
 else:
     routineTimer.addTime(-2.000000)
-# Run 'End Experiment' code from etCameraSetupCode
+# Run 'End Experiment' code from etSetupCode
 
 ### Creating ASC file from EDF
 if doET:

@@ -1,0 +1,649 @@
+3.2861 	WARNING 	We strongly recommend you activate the PTB sound engine in PsychoPy prefs as the preferred audio engine. Its timing is vastly superior. Your prefs are currently set to use ['sounddevice', 'PTB', 'pyo', 'pygame'] (in that order).
+12.9701 	EXP 	Created window1 = Window(allowGUI=True, allowStencil=False, autoLog=True, backendConf=UNKNOWN, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([0.5216, 0.5216, 0.5216]), colorSpace='rgb', depthBits=8, fullscr=<method-wrapper '__getattribute__' of attributeSetter object at 0x00000279551BD0D0>, gamma=None, gammaErrorPolicy='raise', lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x000002795A0A29A0>, multiSample=False, name='window1', numSamples=2, pos=(320, 28), screen=0, size=array([1280, 1024]), stencilBits=0, stereo=False, units='height', useFBO=True, useRetina=False, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+12.9704 	EXP 	window1: mouseVisible = True
+12.9705 	EXP 	window1: mouseVisible = True
+12.9706 	EXP 	window1: Attempting to measure frame rate of screen (0) ...
+12.9706 	EXP 	window1: recordFrameIntervals = False
+13.2038 	EXP 	window1: recordFrameIntervals = True
+13.7751 	EXP 	Screen (0) actual frame rate measured at 29.93Hz
+13.7753 	EXP 	window1: recordFrameIntervals = False
+13.8756 	WARNING 	launchHubServer: If using the iohub mouse or eyetracker devices, fullScr should be True.
+17.5358 	EXP 	Created etSetupInstText = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='etSetupInstText', opacity=1.0, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text='Press any key to start Camera Setup', units='height', win=Window(...), wrapWidth=1)
+17.6411 	EXP 	Created cgeRDMstartTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='cgeRDMstartTxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1.1)
+17.6650 	EXP 	Created pracStartTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='pracStartTxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1.1)
+17.6990 	EXP 	Created pracCircLeft = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-1.0, fillColor=array([-0.0667,  0.6392,  1.    ]), fillColorSpace='rgb', fillRGB=array([-0.0667,  0.6392,  1.    ]), interpolate=True, lineColor=array([-0.0667,  0.6392,  1.    ]), lineColorSpace='rgb', lineRGB=array([-0.0667,  0.6392,  1.    ]), lineWidth=1, name='pracCircLeft', opacity=1.0, ori=0.0, pos=array([-0.35,  0.  ]), size=array([0.5, 0.5]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.7089 	EXP 	Created pracCircRight = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-2.0, fillColor=array([1, 1, 1]), fillColorSpace='rgb', fillRGB=array([1, 1, 1]), interpolate=True, lineColor=array([1, 1, 1]), lineColorSpace='rgb', lineRGB=array([1, 1, 1]), lineWidth=1, name='pracCircRight', opacity=1.0, ori=0.0, pos=array([0.35, 0.  ]), size=array([0.5, 0.5]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.7122 	EXP 	Created pracRiskLine = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-3.0, fillColor=array([0.5216, 0.5216, 0.5216]), fillColorSpace='rgb', fillRGB=array([0.5216, 0.5216, 0.5216]), interpolate=True, lineColor=array([0.5216, 0.5216, 0.5216]), lineColorSpace='rgb', lineRGB=array([0.5216, 0.5216, 0.5216]), lineWidth=3, name='pracRiskLine', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([0.5 , 0.01]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.7231 	EXP 	Created pracORtxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-4.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='pracORtxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='OR', units='height', win=Window(...), wrapWidth=1)
+17.7254 	EXP 	Created pracTriNum = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-5.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='pracTriNum', opacity=1.0, ori=0.0, pos=array([ 0.  , -0.35]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1.1)
+17.7268 	EXP 	Created pracLossTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([0.5216, 0.5216, 0.5216]), colorSpace='rgb', contrast=1.0, depth=-6.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='pracLossTxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+17.7283 	EXP 	Created pracGainTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([0.5216, 0.5216, 0.5216]), colorSpace='rgb', contrast=1.0, depth=-7.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='pracGainTxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+17.7297 	EXP 	Created pracSafeTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([0.5216, 0.5216, 0.5216]), colorSpace='rgb', contrast=1.0, depth=-8.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='pracSafeTxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+17.7416 	EXP 	Created pracVleft = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-9.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='pracVleft', opacity=1.0, ori=0, pos=array([-0.35, -0.35]), rgb=UNKNOWN, text='V-Left', units='height', win=Window(...), wrapWidth=1)
+17.7491 	EXP 	Created pracNright = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-10.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='pracNright', opacity=1.0, ori=0, pos=array([ 0.35, -0.35]), rgb=UNKNOWN, text='N-Right', units='height', win=Window(...), wrapWidth=1)
+17.7585 	EXP 	Created isiPracFix = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='isiPracFix', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='+', units='height', win=Window(...), wrapWidth=1)
+17.7962 	EXP 	Created pracNoRespTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-1.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.08, italic=False, languageStyle='LTR', name='pracNoRespTxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='You did not respond in time\n', units='height', win=Window(...), wrapWidth=1)
+17.8097 	EXP 	Created pracRiskOC = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-2.0, fillColor=array([-0.0667,  0.6392,  1.    ]), fillColorSpace='rgb', fillRGB=array([-0.0667,  0.6392,  1.    ]), interpolate=True, lineColor=array([-0.0667,  0.6392,  1.    ]), lineColorSpace='rgb', lineRGB=array([-0.0667,  0.6392,  1.    ]), lineWidth=1, name='pracRiskOC', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([0.5, 0.5]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.8232 	EXP 	Created pracSafeOC = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-3.0, fillColor=array([-0.0667,  0.6392,  1.    ]), fillColorSpace='rgb', fillRGB=array([-0.0667,  0.6392,  1.    ]), interpolate=True, lineColor=array([-0.0667,  0.6392,  1.    ]), lineColorSpace='rgb', lineRGB=array([-0.0667,  0.6392,  1.    ]), lineWidth=1, name='pracSafeOC', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([0.5, 0.5]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.8257 	EXP 	Created pracOCtxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1, 1, 1]), colorSpace='rgb', contrast=1.0, depth=-4.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='pracOCtxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+17.8301 	EXP 	Created pracHideRisk = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-5.0, fillColor=array([0.5216, 0.5216, 0.5216]), fillColorSpace='rgb', fillRGB=array([0.5216, 0.5216, 0.5216]), interpolate=True, lineColor=array([0.5216, 0.5216, 0.5216]), lineColorSpace='rgb', lineRGB=array([0.5216, 0.5216, 0.5216]), lineWidth=1, name='pracHideRisk', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([0.6, 0.3]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.8431 	EXP 	Created itiPracFix = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='itiPracFix', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='+', units='height', win=Window(...), wrapWidth=1)
+17.8855 	EXP 	Created statStartTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='statStartTxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1.1)
+17.8905 	EXP 	Created realCircLeft = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-1.0, fillColor=array([-0.0667,  0.6392,  1.    ]), fillColorSpace='rgb', fillRGB=array([-0.0667,  0.6392,  1.    ]), interpolate=True, lineColor=array([-0.0667,  0.6392,  1.    ]), lineColorSpace='rgb', lineRGB=array([-0.0667,  0.6392,  1.    ]), lineWidth=1, name='realCircLeft', opacity=1.0, ori=0.0, pos=array([-0.35,  0.  ]), size=array([0.5, 0.5]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.8948 	EXP 	Created realCircRight = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-2.0, fillColor=array([1, 1, 1]), fillColorSpace='rgb', fillRGB=array([1, 1, 1]), interpolate=True, lineColor=array([1, 1, 1]), lineColorSpace='rgb', lineRGB=array([1, 1, 1]), lineWidth=1, name='realCircRight', opacity=1.0, ori=0.0, pos=array([0.35, 0.  ]), size=array([0.5, 0.5]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.8962 	EXP 	Created realRiskLine = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-3.0, fillColor=array([0.5216, 0.5216, 0.5216]), fillColorSpace='rgb', fillRGB=array([0.5216, 0.5216, 0.5216]), interpolate=True, lineColor=array([0.5216, 0.5216, 0.5216]), lineColorSpace='rgb', lineRGB=array([0.5216, 0.5216, 0.5216]), lineWidth=3, name='realRiskLine', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([0.5 , 0.01]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.8984 	EXP 	Created realORtxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-4.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='realORtxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='OR', units='height', win=Window(...), wrapWidth=1)
+17.8990 	EXP 	Created realPracNum = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-5.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='realPracNum', opacity=1.0, ori=0.0, pos=array([ 0.  , -0.35]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1.1)
+17.8995 	EXP 	Created realLossTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([0.5216, 0.5216, 0.5216]), colorSpace='rgb', contrast=1.0, depth=-6.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='realLossTxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+17.9000 	EXP 	Created realGainTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([0.5216, 0.5216, 0.5216]), colorSpace='rgb', contrast=1.0, depth=-7.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='realGainTxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+17.9006 	EXP 	Created realSafeTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([0.5216, 0.5216, 0.5216]), colorSpace='rgb', contrast=1.0, depth=-8.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='realSafeTxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+17.9043 	EXP 	Created realVleft = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-9.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='realVleft', opacity=1.0, ori=0, pos=array([-0.35, -0.35]), rgb=UNKNOWN, text='V-Left', units='height', win=Window(...), wrapWidth=1)
+17.9075 	EXP 	Created realNright = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-10.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='realNright', opacity=1.0, ori=0, pos=array([ 0.35, -0.35]), rgb=UNKNOWN, text='N-Right', units='height', win=Window(...), wrapWidth=1)
+17.9092 	EXP 	Created isiRealFix = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='isiRealFix', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='+', units='height', win=Window(...), wrapWidth=1)
+17.9124 	EXP 	Created statNoRespTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-1.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.08, italic=False, languageStyle='LTR', name='statNoRespTxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='You did not respond in time\n', units='height', win=Window(...), wrapWidth=1)
+17.9166 	EXP 	Created statRiskOC = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-2.0, fillColor=array([-0.0667,  0.6392,  1.    ]), fillColorSpace='rgb', fillRGB=array([-0.0667,  0.6392,  1.    ]), interpolate=True, lineColor=array([-0.0667,  0.6392,  1.    ]), lineColorSpace='rgb', lineRGB=array([-0.0667,  0.6392,  1.    ]), lineWidth=1, name='statRiskOC', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([0.5, 0.5]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.9200 	EXP 	Created statSafeOC = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-3.0, fillColor=array([-0.0667,  0.6392,  1.    ]), fillColorSpace='rgb', fillRGB=array([-0.0667,  0.6392,  1.    ]), interpolate=True, lineColor=array([-0.0667,  0.6392,  1.    ]), lineColorSpace='rgb', lineRGB=array([-0.0667,  0.6392,  1.    ]), lineWidth=1, name='statSafeOC', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([0.5, 0.5]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.9206 	EXP 	Created statOCtxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1, 1, 1]), colorSpace='rgb', contrast=1.0, depth=-4.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='statOCtxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+17.9217 	EXP 	Created statHideRisk = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-5.0, fillColor=array([0.5216, 0.5216, 0.5216]), fillColorSpace='rgb', fillRGB=array([0.5216, 0.5216, 0.5216]), interpolate=True, lineColor=array([0.5216, 0.5216, 0.5216]), lineColorSpace='rgb', lineRGB=array([0.5216, 0.5216, 0.5216]), lineWidth=1, name='statHideRisk', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([0.6, 0.3]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.9235 	EXP 	Created itiRealFix = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='itiRealFix', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='+', units='height', win=Window(...), wrapWidth=1)
+17.9325 	EXP 	Created setupBestFitTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-4.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='setupBestFitTxt', opacity=1.0, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1.1)
+17.9444 	EXP 	Created loadDynaChoicesTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1, 1, 1]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='loadDynaChoicesTxt', opacity=1.0, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+17.9505 	EXP 	Created dynaStartTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='dynaStartTxt', opacity=1.0, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1.1)
+17.9543 	EXP 	Created realCircLeft = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-1.0, fillColor=array([-0.0667,  0.6392,  1.    ]), fillColorSpace='rgb', fillRGB=array([-0.0667,  0.6392,  1.    ]), interpolate=True, lineColor=array([-0.0667,  0.6392,  1.    ]), lineColorSpace='rgb', lineRGB=array([-0.0667,  0.6392,  1.    ]), lineWidth=1, name='realCircLeft', opacity=1.0, ori=0.0, pos=array([-0.35,  0.  ]), size=array([0.5, 0.5]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.9582 	EXP 	Created realCircRight = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-2.0, fillColor=array([1, 1, 1]), fillColorSpace='rgb', fillRGB=array([1, 1, 1]), interpolate=True, lineColor=array([1, 1, 1]), lineColorSpace='rgb', lineRGB=array([1, 1, 1]), lineWidth=1, name='realCircRight', opacity=1.0, ori=0.0, pos=array([0.35, 0.  ]), size=array([0.5, 0.5]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.9594 	EXP 	Created realRiskLine = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-3.0, fillColor=array([0.5216, 0.5216, 0.5216]), fillColorSpace='rgb', fillRGB=array([0.5216, 0.5216, 0.5216]), interpolate=True, lineColor=array([0.5216, 0.5216, 0.5216]), lineColorSpace='rgb', lineRGB=array([0.5216, 0.5216, 0.5216]), lineWidth=3, name='realRiskLine', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([0.5 , 0.01]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.9614 	EXP 	Created realORtxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-4.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='realORtxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='OR', units='height', win=Window(...), wrapWidth=1)
+17.9621 	EXP 	Created realPracNum = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-5.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='realPracNum', opacity=1.0, ori=0.0, pos=array([ 0.  , -0.35]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1.1)
+17.9626 	EXP 	Created realLossTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([0.5216, 0.5216, 0.5216]), colorSpace='rgb', contrast=1.0, depth=-6.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='realLossTxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+17.9632 	EXP 	Created realGainTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([0.5216, 0.5216, 0.5216]), colorSpace='rgb', contrast=1.0, depth=-7.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='realGainTxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+17.9637 	EXP 	Created realSafeTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([0.5216, 0.5216, 0.5216]), colorSpace='rgb', contrast=1.0, depth=-8.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='realSafeTxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+17.9662 	EXP 	Created realVleft = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-9.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='realVleft', opacity=1.0, ori=0, pos=array([-0.35, -0.35]), rgb=UNKNOWN, text='V-Left', units='height', win=Window(...), wrapWidth=1)
+17.9689 	EXP 	Created realNright = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-10.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='realNright', opacity=1.0, ori=0, pos=array([ 0.35, -0.35]), rgb=UNKNOWN, text='N-Right', units='height', win=Window(...), wrapWidth=1)
+17.9709 	EXP 	Created isiRealFix = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='isiRealFix', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='+', units='height', win=Window(...), wrapWidth=1)
+17.9740 	EXP 	Created dynaNoRespTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=-1.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.08, italic=False, languageStyle='LTR', name='dynaNoRespTxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='You did not respond in time\n', units='height', win=Window(...), wrapWidth=1)
+17.9779 	EXP 	Created dynaRiskOC = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-2.0, fillColor=array([-0.0667,  0.6392,  1.    ]), fillColorSpace='rgb', fillRGB=array([-0.0667,  0.6392,  1.    ]), interpolate=True, lineColor=array([-0.0667,  0.6392,  1.    ]), lineColorSpace='rgb', lineRGB=array([-0.0667,  0.6392,  1.    ]), lineWidth=1, name='dynaRiskOC', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([0.5, 0.5]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.9815 	EXP 	Created dynaSafeOC = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-3.0, fillColor=array([-0.0667,  0.6392,  1.    ]), fillColorSpace='rgb', fillRGB=array([-0.0667,  0.6392,  1.    ]), interpolate=True, lineColor=array([-0.0667,  0.6392,  1.    ]), lineColorSpace='rgb', lineRGB=array([-0.0667,  0.6392,  1.    ]), lineWidth=1, name='dynaSafeOC', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([0.5, 0.5]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.9822 	EXP 	Created dynaOCtxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1, 1, 1]), colorSpace='rgb', contrast=1.0, depth=-4.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='dynaOCtxt', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+17.9835 	EXP 	Created dynaHideRisk = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-5.0, fillColor=array([0.5216, 0.5216, 0.5216]), fillColorSpace='rgb', fillRGB=array([0.5216, 0.5216, 0.5216]), interpolate=True, lineColor=array([0.5216, 0.5216, 0.5216]), lineColorSpace='rgb', lineRGB=array([0.5216, 0.5216, 0.5216]), lineWidth=1, name='dynaHideRisk', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([0.6, 0.3]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.9853 	EXP 	Created itiRealFix = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='itiRealFix', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=UNKNOWN, text='+', units='height', win=Window(...), wrapWidth=1)
+17.9993 	EXP 	Created cgeRDMendTxt = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='cgeRDMendTxt', opacity=1.0, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1.1)
+18.0097 	EXP 	Created ThankYou = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([-0.0667,  0.6392,  1.    ]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='ThankYou', opacity=1.0, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1.1)
+18.0277 	EXP 	etSetupInstText: autoDraw = True
+25.1849 	EXP 	etSetupInstText: autoDraw = False
+25.1849 	EXP 	cgeRDMstartTxt: autoDraw = True
+25.1864 	DATA 	Keypress: return
+33.0553 	EXP 	cgeRDMstartTxt: autoDraw = False
+33.0553 	EXP 	pracStartTxt: autoDraw = True
+33.0569 	DATA 	Keypress: return
+36.1850 	EXP 	Imported cgeRDMPractice.xlsx as conditions, 3 conditions, 6 params
+36.1876 	EXP 	Created sequence: sequential, trialTypes=3, nReps=1, seed=None
+36.1881 	EXP 	New trial (rep=0, index=0): {'riskyGain': 18.23, 'riskyLoss': 0, 'alternative': 9.45, 'isi': 1, 'iti': 3, 'loc': 1}
+36.2337 	EXP 	pracStartTxt: autoDraw = False
+36.2337 	EXP 	pracCircRight: fillColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+36.2337 	EXP 	pracCircRight: borderColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+36.2337 	EXP 	pracTriNum: height = 0.1
+36.2337 	EXP 	pracTriNum: height = 0.1
+36.2337 	EXP 	pracTriNum: height = 0.1
+36.2337 	EXP 	pracTriNum: text = 1
+36.2337 	EXP 	pracLossTxt: height = 0.1
+36.2337 	EXP 	pracLossTxt: height = 0.1
+36.2337 	EXP 	pracLossTxt: height = 0.1
+36.2337 	EXP 	pracLossTxt: text = '$0'
+36.2337 	EXP 	pracGainTxt: height = 0.1
+36.2337 	EXP 	pracGainTxt: height = 0.1
+36.2337 	EXP 	pracGainTxt: height = 0.1
+36.2337 	EXP 	pracGainTxt: text = '$18.23'
+36.2337 	EXP 	pracSafeTxt: height = 0.1
+36.2337 	EXP 	pracSafeTxt: height = 0.1
+36.2337 	EXP 	pracSafeTxt: height = 0.1
+36.2337 	EXP 	pracSafeTxt: text = '$9.45'
+36.2337 	EXP 	pracCircLeft: autoDraw = True
+36.2337 	EXP 	pracCircRight: autoDraw = True
+36.2337 	EXP 	pracRiskLine: autoDraw = True
+36.2337 	EXP 	pracORtxt: autoDraw = True
+36.2337 	EXP 	pracTriNum: autoDraw = True
+36.2337 	EXP 	pracLossTxt: autoDraw = True
+36.2337 	EXP 	pracGainTxt: autoDraw = True
+36.2337 	EXP 	pracSafeTxt: autoDraw = True
+36.2337 	EXP 	pracVleft: autoDraw = True
+36.2337 	EXP 	pracNright: autoDraw = True
+36.2372 	DATA 	Keypress: v
+40.2366 	EXP 	pracCircLeft: autoDraw = False
+40.2366 	EXP 	pracCircRight: autoDraw = False
+40.2366 	EXP 	pracRiskLine: autoDraw = False
+40.2366 	EXP 	pracORtxt: autoDraw = False
+40.2366 	EXP 	pracTriNum: autoDraw = False
+40.2366 	EXP 	pracLossTxt: autoDraw = False
+40.2366 	EXP 	pracGainTxt: autoDraw = False
+40.2366 	EXP 	pracSafeTxt: autoDraw = False
+40.2366 	EXP 	pracVleft: autoDraw = False
+40.2366 	EXP 	pracNright: autoDraw = False
+40.2366 	EXP 	isiPracFix: autoDraw = True
+41.2362 	EXP 	isiPracFix: autoDraw = False
+41.2362 	EXP 	isiPracFix: autoDraw = False
+41.2362 	EXP 	pracOCtxt: foreColor = <psychopy.colors.Color: (0.52, 0.52, 0.52, 1.0)>
+41.2362 	EXP 	pracOCtxt: height = 0.1
+41.2362 	EXP 	pracOCtxt: height = 0.1
+41.2362 	EXP 	pracOCtxt: height = 0.1
+41.2362 	EXP 	pracOCtxt: text = '$nan'
+41.2362 	EXP 	pracNoRespTxt: autoDraw = True
+41.2362 	EXP 	pracRiskOC: autoDraw = True
+41.2362 	EXP 	pracSafeOC: autoDraw = True
+41.2362 	EXP 	pracOCtxt: autoDraw = True
+41.2362 	EXP 	pracHideRisk: autoDraw = True
+42.2395 	EXP 	pracNoRespTxt: autoDraw = False
+42.2395 	EXP 	pracRiskOC: autoDraw = False
+42.2395 	EXP 	pracSafeOC: autoDraw = False
+42.2395 	EXP 	pracOCtxt: autoDraw = False
+42.2395 	EXP 	pracHideRisk: autoDraw = False
+42.2395 	EXP 	pracNoRespTxt: autoDraw = False
+42.2395 	EXP 	pracRiskOC: autoDraw = False
+42.2395 	EXP 	pracSafeOC: autoDraw = False
+42.2395 	EXP 	pracOCtxt: autoDraw = False
+42.2395 	EXP 	pracHideRisk: autoDraw = False
+42.2395 	EXP 	itiPracFix: autoDraw = True
+45.2091 	EXP 	New trial (rep=0, index=1): {'riskyGain': 53.27, 'riskyLoss': 0, 'alternative': 35.16, 'isi': 1, 'iti': 3.5, 'loc': 1}
+45.2727 	EXP 	itiPracFix: autoDraw = False
+45.2727 	EXP 	itiPracFix: autoDraw = False
+45.2727 	EXP 	pracCircRight: fillColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+45.2727 	EXP 	pracCircRight: borderColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+45.2727 	EXP 	pracTriNum: height = 0.1
+45.2727 	EXP 	pracTriNum: height = 0.1
+45.2727 	EXP 	pracTriNum: height = 0.1
+45.2727 	EXP 	pracTriNum: text = 2
+45.2727 	EXP 	pracLossTxt: text = '$0'
+45.2727 	EXP 	pracGainTxt: height = 0.1
+45.2727 	EXP 	pracGainTxt: height = 0.1
+45.2727 	EXP 	pracGainTxt: height = 0.1
+45.2727 	EXP 	pracGainTxt: text = '$53.27'
+45.2727 	EXP 	pracSafeTxt: height = 0.1
+45.2727 	EXP 	pracSafeTxt: height = 0.1
+45.2727 	EXP 	pracSafeTxt: height = 0.1
+45.2727 	EXP 	pracSafeTxt: text = '$35.16'
+45.2727 	EXP 	pracCircLeft: autoDraw = True
+45.2727 	EXP 	pracCircRight: autoDraw = True
+45.2727 	EXP 	pracRiskLine: autoDraw = True
+45.2727 	EXP 	pracORtxt: autoDraw = True
+45.2727 	EXP 	pracTriNum: autoDraw = True
+45.2727 	EXP 	pracLossTxt: autoDraw = True
+45.2727 	EXP 	pracGainTxt: autoDraw = True
+45.2727 	EXP 	pracSafeTxt: autoDraw = True
+45.2727 	EXP 	pracVleft: autoDraw = True
+45.2727 	EXP 	pracNright: autoDraw = True
+49.2232 	EXP 	pracCircLeft: autoDraw = False
+49.2232 	EXP 	pracCircRight: autoDraw = False
+49.2232 	EXP 	pracRiskLine: autoDraw = False
+49.2232 	EXP 	pracORtxt: autoDraw = False
+49.2232 	EXP 	pracTriNum: autoDraw = False
+49.2232 	EXP 	pracLossTxt: autoDraw = False
+49.2232 	EXP 	pracGainTxt: autoDraw = False
+49.2232 	EXP 	pracSafeTxt: autoDraw = False
+49.2232 	EXP 	pracVleft: autoDraw = False
+49.2232 	EXP 	pracNright: autoDraw = False
+49.2232 	EXP 	isiPracFix: autoDraw = True
+49.2247 	DATA 	Keypress: v
+50.2241 	EXP 	isiPracFix: autoDraw = False
+50.2241 	EXP 	isiPracFix: autoDraw = False
+50.2241 	EXP 	pracOCtxt: foreColor = <psychopy.colors.Color: (0.52, 0.52, 0.52, 1.0)>
+50.2241 	EXP 	pracOCtxt: height = 0.1
+50.2241 	EXP 	pracOCtxt: height = 0.1
+50.2241 	EXP 	pracOCtxt: height = 0.1
+50.2241 	EXP 	pracOCtxt: text = '$0'
+50.2241 	EXP 	pracNoRespTxt: autoDraw = True
+50.2241 	EXP 	pracRiskOC: autoDraw = True
+50.2241 	EXP 	pracSafeOC: autoDraw = True
+50.2241 	EXP 	pracOCtxt: autoDraw = True
+50.2241 	EXP 	pracHideRisk: autoDraw = True
+51.2440 	EXP 	pracNoRespTxt: autoDraw = False
+51.2440 	EXP 	pracRiskOC: autoDraw = False
+51.2440 	EXP 	pracSafeOC: autoDraw = False
+51.2440 	EXP 	pracOCtxt: autoDraw = False
+51.2440 	EXP 	pracHideRisk: autoDraw = False
+51.2440 	EXP 	itiPracFix: autoDraw = True
+54.7174 	EXP 	New trial (rep=0, index=2): {'riskyGain': 8.27, 'riskyLoss': 0, 'alternative': 1.15, 'isi': 1, 'iti': 3, 'loc': 2}
+54.7430 	EXP 	itiPracFix: autoDraw = False
+54.7430 	EXP 	itiPracFix: autoDraw = False
+54.7430 	EXP 	pracCircRight: fillColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+54.7430 	EXP 	pracCircRight: borderColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+54.7430 	EXP 	pracTriNum: height = 0.1
+54.7430 	EXP 	pracTriNum: height = 0.1
+54.7430 	EXP 	pracTriNum: height = 0.1
+54.7430 	EXP 	pracTriNum: text = 3
+54.7430 	EXP 	pracLossTxt: text = '$0'
+54.7430 	EXP 	pracGainTxt: height = 0.1
+54.7430 	EXP 	pracGainTxt: height = 0.1
+54.7430 	EXP 	pracGainTxt: height = 0.1
+54.7430 	EXP 	pracGainTxt: text = '$8.27'
+54.7430 	EXP 	pracSafeTxt: height = 0.1
+54.7430 	EXP 	pracSafeTxt: height = 0.1
+54.7430 	EXP 	pracSafeTxt: height = 0.1
+54.7430 	EXP 	pracSafeTxt: text = '$1.15'
+54.7430 	EXP 	pracCircLeft: autoDraw = True
+54.7430 	EXP 	pracCircRight: autoDraw = True
+54.7430 	EXP 	pracRiskLine: autoDraw = True
+54.7430 	EXP 	pracORtxt: autoDraw = True
+54.7430 	EXP 	pracTriNum: autoDraw = True
+54.7430 	EXP 	pracLossTxt: autoDraw = True
+54.7430 	EXP 	pracGainTxt: autoDraw = True
+54.7430 	EXP 	pracSafeTxt: autoDraw = True
+54.7430 	EXP 	pracVleft: autoDraw = True
+54.7430 	EXP 	pracNright: autoDraw = True
+56.5118 	EXP 	pracCircLeft: autoDraw = False
+56.5118 	EXP 	pracCircRight: autoDraw = False
+56.5118 	EXP 	pracRiskLine: autoDraw = False
+56.5118 	EXP 	pracORtxt: autoDraw = False
+56.5118 	EXP 	pracTriNum: autoDraw = False
+56.5118 	EXP 	pracLossTxt: autoDraw = False
+56.5118 	EXP 	pracGainTxt: autoDraw = False
+56.5118 	EXP 	pracSafeTxt: autoDraw = False
+56.5118 	EXP 	pracVleft: autoDraw = False
+56.5118 	EXP 	pracNright: autoDraw = False
+56.5118 	EXP 	isiPracFix: autoDraw = True
+56.5151 	DATA 	Keypress: v
+57.5114 	EXP 	isiPracFix: autoDraw = False
+57.5114 	EXP 	isiPracFix: autoDraw = False
+57.5114 	EXP 	pracOCtxt: foreColor = <psychopy.colors.Color: (0.52, 0.52, 0.52, 1.0)>
+57.5114 	EXP 	pracOCtxt: height = 0.1
+57.5114 	EXP 	pracOCtxt: height = 0.1
+57.5114 	EXP 	pracOCtxt: height = 0.1
+57.5114 	EXP 	pracOCtxt: text = '$1.15'
+57.5114 	EXP 	pracNoRespTxt: autoDraw = True
+57.5114 	EXP 	pracRiskOC: autoDraw = True
+57.5114 	EXP 	pracSafeOC: autoDraw = True
+57.5114 	EXP 	pracOCtxt: autoDraw = True
+57.5114 	EXP 	pracHideRisk: autoDraw = True
+58.5138 	EXP 	pracNoRespTxt: autoDraw = False
+58.5138 	EXP 	pracRiskOC: autoDraw = False
+58.5138 	EXP 	pracSafeOC: autoDraw = False
+58.5138 	EXP 	pracOCtxt: autoDraw = False
+58.5138 	EXP 	pracHideRisk: autoDraw = False
+58.5138 	EXP 	pracNoRespTxt: autoDraw = False
+58.5138 	EXP 	pracRiskOC: autoDraw = False
+58.5138 	EXP 	pracSafeOC: autoDraw = False
+58.5138 	EXP 	pracOCtxt: autoDraw = False
+58.5138 	EXP 	pracHideRisk: autoDraw = False
+58.5138 	EXP 	itiPracFix: autoDraw = True
+61.5304 	EXP 	itiPracFix: autoDraw = False
+61.5304 	EXP 	itiPracFix: autoDraw = False
+61.5304 	EXP 	statStartTxt: autoDraw = True
+66.8624 	EXP 	Imported CGT-choice-set.csv as conditions, 3 conditions, 4 params
+66.8636 	EXP 	Created sequence: random, trialTypes=3, nReps=1, seed=None
+66.8639 	EXP 	New trial (rep=0, index=0): OrderedDict([('riskyoption1', 20.03), ('riskyoption2', 0.0), ('safeoption', 1.99), ('ischecktrial', 0)])
+66.8987 	EXP 	statStartTxt: autoDraw = False
+66.8987 	EXP 	realCircRight: fillColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+66.8987 	EXP 	realCircRight: borderColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+66.8987 	EXP 	realPracNum: height = 0.1
+66.8987 	EXP 	realPracNum: height = 0.1
+66.8987 	EXP 	realPracNum: height = 0.1
+66.8987 	EXP 	realPracNum: text = 1
+66.8987 	EXP 	realLossTxt: height = 0.1
+66.8987 	EXP 	realLossTxt: height = 0.1
+66.8987 	EXP 	realLossTxt: height = 0.1
+66.8987 	EXP 	realLossTxt: text = '$0'
+66.8987 	EXP 	realGainTxt: height = 0.1
+66.8987 	EXP 	realGainTxt: height = 0.1
+66.8987 	EXP 	realGainTxt: height = 0.1
+66.8987 	EXP 	realGainTxt: text = '$20.03'
+66.8987 	EXP 	realSafeTxt: height = 0.1
+66.8987 	EXP 	realSafeTxt: height = 0.1
+66.8987 	EXP 	realSafeTxt: height = 0.1
+66.8987 	EXP 	realSafeTxt: text = '$1.99'
+66.8987 	EXP 	realCircLeft: autoDraw = True
+66.8987 	EXP 	realCircRight: autoDraw = True
+66.8987 	EXP 	realRiskLine: autoDraw = True
+66.8987 	EXP 	realORtxt: autoDraw = True
+66.8987 	EXP 	realPracNum: autoDraw = True
+66.8987 	EXP 	realLossTxt: autoDraw = True
+66.8987 	EXP 	realGainTxt: autoDraw = True
+66.8987 	EXP 	realSafeTxt: autoDraw = True
+66.8987 	EXP 	realVleft: autoDraw = True
+66.8987 	EXP 	realNright: autoDraw = True
+66.9034 	DATA 	Keypress: v
+68.2386 	EXP 	realCircLeft: autoDraw = False
+68.2386 	EXP 	realCircRight: autoDraw = False
+68.2386 	EXP 	realRiskLine: autoDraw = False
+68.2386 	EXP 	realORtxt: autoDraw = False
+68.2386 	EXP 	realPracNum: autoDraw = False
+68.2386 	EXP 	realLossTxt: autoDraw = False
+68.2386 	EXP 	realGainTxt: autoDraw = False
+68.2386 	EXP 	realSafeTxt: autoDraw = False
+68.2386 	EXP 	realVleft: autoDraw = False
+68.2386 	EXP 	realNright: autoDraw = False
+68.2386 	EXP 	isiRealFix: autoDraw = True
+68.2401 	DATA 	Keypress: v
+69.2664 	EXP 	isiRealFix: autoDraw = False
+69.2664 	EXP 	statOCtxt: foreColor = <psychopy.colors.Color: (0.52, 0.52, 0.52, 1.0)>
+69.2664 	EXP 	statOCtxt: height = 0.1
+69.2664 	EXP 	statOCtxt: height = 0.1
+69.2664 	EXP 	statOCtxt: height = 0.1
+69.2664 	EXP 	statOCtxt: text = '$0'
+69.2664 	EXP 	statNoRespTxt: autoDraw = True
+69.2664 	EXP 	statRiskOC: autoDraw = True
+69.2664 	EXP 	statSafeOC: autoDraw = True
+69.2664 	EXP 	statOCtxt: autoDraw = True
+69.2664 	EXP 	statHideRisk: autoDraw = True
+70.2862 	EXP 	statNoRespTxt: autoDraw = False
+70.2862 	EXP 	statRiskOC: autoDraw = False
+70.2862 	EXP 	statSafeOC: autoDraw = False
+70.2862 	EXP 	statOCtxt: autoDraw = False
+70.2862 	EXP 	statHideRisk: autoDraw = False
+70.2862 	EXP 	itiRealFix: autoDraw = True
+73.2609 	EXP 	New trial (rep=0, index=1): OrderedDict([('riskyoption1', 28.21), ('riskyoption2', 0.0), ('safeoption', 3.89), ('ischecktrial', 0)])
+73.2853 	EXP 	itiRealFix: autoDraw = False
+73.2853 	EXP 	itiRealFix: autoDraw = False
+73.2853 	EXP 	realCircRight: fillColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+73.2853 	EXP 	realCircRight: borderColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+73.2853 	EXP 	realPracNum: height = 0.1
+73.2853 	EXP 	realPracNum: height = 0.1
+73.2853 	EXP 	realPracNum: height = 0.1
+73.2853 	EXP 	realPracNum: text = 2
+73.2853 	EXP 	realLossTxt: text = '$0'
+73.2853 	EXP 	realGainTxt: height = 0.1
+73.2853 	EXP 	realGainTxt: height = 0.1
+73.2853 	EXP 	realGainTxt: height = 0.1
+73.2853 	EXP 	realGainTxt: text = '$28.21'
+73.2853 	EXP 	realSafeTxt: height = 0.1
+73.2853 	EXP 	realSafeTxt: height = 0.1
+73.2853 	EXP 	realSafeTxt: height = 0.1
+73.2853 	EXP 	realSafeTxt: text = '$3.89'
+73.2853 	EXP 	realCircLeft: autoDraw = True
+73.2853 	EXP 	realCircRight: autoDraw = True
+73.2853 	EXP 	realRiskLine: autoDraw = True
+73.2853 	EXP 	realORtxt: autoDraw = True
+73.2853 	EXP 	realPracNum: autoDraw = True
+73.2853 	EXP 	realLossTxt: autoDraw = True
+73.2853 	EXP 	realGainTxt: autoDraw = True
+73.2853 	EXP 	realSafeTxt: autoDraw = True
+73.2853 	EXP 	realVleft: autoDraw = True
+73.2853 	EXP 	realNright: autoDraw = True
+75.4227 	EXP 	realCircLeft: autoDraw = False
+75.4227 	EXP 	realCircRight: autoDraw = False
+75.4227 	EXP 	realRiskLine: autoDraw = False
+75.4227 	EXP 	realORtxt: autoDraw = False
+75.4227 	EXP 	realPracNum: autoDraw = False
+75.4227 	EXP 	realLossTxt: autoDraw = False
+75.4227 	EXP 	realGainTxt: autoDraw = False
+75.4227 	EXP 	realSafeTxt: autoDraw = False
+75.4227 	EXP 	realVleft: autoDraw = False
+75.4227 	EXP 	realNright: autoDraw = False
+75.4227 	EXP 	isiRealFix: autoDraw = True
+75.4262 	DATA 	Keypress: v
+76.4199 	EXP 	isiRealFix: autoDraw = False
+76.4199 	EXP 	isiRealFix: autoDraw = False
+76.4199 	EXP 	statOCtxt: foreColor = <psychopy.colors.Color: (0.52, 0.52, 0.52, 1.0)>
+76.4199 	EXP 	statOCtxt: height = 0.1
+76.4199 	EXP 	statOCtxt: height = 0.1
+76.4199 	EXP 	statOCtxt: height = 0.1
+76.4199 	EXP 	statOCtxt: text = '$3.89'
+76.4199 	EXP 	statNoRespTxt: autoDraw = True
+76.4199 	EXP 	statRiskOC: autoDraw = True
+76.4199 	EXP 	statSafeOC: autoDraw = True
+76.4199 	EXP 	statOCtxt: autoDraw = True
+76.4199 	EXP 	statHideRisk: autoDraw = True
+77.4395 	EXP 	statNoRespTxt: autoDraw = False
+77.4395 	EXP 	statRiskOC: autoDraw = False
+77.4395 	EXP 	statSafeOC: autoDraw = False
+77.4395 	EXP 	statOCtxt: autoDraw = False
+77.4395 	EXP 	statHideRisk: autoDraw = False
+77.4395 	EXP 	itiRealFix: autoDraw = True
+80.9146 	EXP 	New trial (rep=0, index=2): OrderedDict([('riskyoption1', 17.73), ('riskyoption2', 0.0), ('safeoption', 3.13), ('ischecktrial', 0)])
+80.9389 	EXP 	itiRealFix: autoDraw = False
+80.9389 	EXP 	itiRealFix: autoDraw = False
+80.9389 	EXP 	realCircRight: fillColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+80.9389 	EXP 	realCircRight: borderColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+80.9389 	EXP 	realPracNum: height = 0.1
+80.9389 	EXP 	realPracNum: height = 0.1
+80.9389 	EXP 	realPracNum: height = 0.1
+80.9389 	EXP 	realPracNum: text = 3
+80.9389 	EXP 	realLossTxt: text = '$0'
+80.9389 	EXP 	realGainTxt: height = 0.1
+80.9389 	EXP 	realGainTxt: height = 0.1
+80.9389 	EXP 	realGainTxt: height = 0.1
+80.9389 	EXP 	realGainTxt: text = '$17.73'
+80.9389 	EXP 	realSafeTxt: height = 0.1
+80.9389 	EXP 	realSafeTxt: height = 0.1
+80.9389 	EXP 	realSafeTxt: height = 0.1
+80.9389 	EXP 	realSafeTxt: text = '$3.13'
+80.9389 	EXP 	realCircLeft: autoDraw = True
+80.9389 	EXP 	realCircRight: autoDraw = True
+80.9389 	EXP 	realRiskLine: autoDraw = True
+80.9389 	EXP 	realORtxt: autoDraw = True
+80.9389 	EXP 	realPracNum: autoDraw = True
+80.9389 	EXP 	realLossTxt: autoDraw = True
+80.9389 	EXP 	realGainTxt: autoDraw = True
+80.9389 	EXP 	realSafeTxt: autoDraw = True
+80.9389 	EXP 	realVleft: autoDraw = True
+80.9389 	EXP 	realNright: autoDraw = True
+81.5632 	DATA 	Keypress: v
+81.5900 	EXP 	realCircLeft: autoDraw = False
+81.5900 	EXP 	realCircRight: autoDraw = False
+81.5900 	EXP 	realRiskLine: autoDraw = False
+81.5900 	EXP 	realORtxt: autoDraw = False
+81.5900 	EXP 	realPracNum: autoDraw = False
+81.5900 	EXP 	realLossTxt: autoDraw = False
+81.5900 	EXP 	realGainTxt: autoDraw = False
+81.5900 	EXP 	realSafeTxt: autoDraw = False
+81.5900 	EXP 	realVleft: autoDraw = False
+81.5900 	EXP 	realNright: autoDraw = False
+81.5900 	EXP 	isiRealFix: autoDraw = True
+82.5900 	EXP 	isiRealFix: autoDraw = False
+82.5900 	EXP 	statOCtxt: foreColor = <psychopy.colors.Color: (0.52, 0.52, 0.52, 1.0)>
+82.5900 	EXP 	statOCtxt: height = 0.1
+82.5900 	EXP 	statOCtxt: height = 0.1
+82.5900 	EXP 	statOCtxt: height = 0.1
+82.5900 	EXP 	statOCtxt: text = '$3.13'
+82.5900 	EXP 	statNoRespTxt: autoDraw = True
+82.5900 	EXP 	statRiskOC: autoDraw = True
+82.5900 	EXP 	statSafeOC: autoDraw = True
+82.5900 	EXP 	statOCtxt: autoDraw = True
+82.5900 	EXP 	statHideRisk: autoDraw = True
+83.5903 	EXP 	statNoRespTxt: autoDraw = False
+83.5903 	EXP 	statRiskOC: autoDraw = False
+83.5903 	EXP 	statSafeOC: autoDraw = False
+83.5903 	EXP 	statOCtxt: autoDraw = False
+83.5903 	EXP 	statHideRisk: autoDraw = False
+83.5903 	EXP 	statNoRespTxt: autoDraw = False
+83.5903 	EXP 	statRiskOC: autoDraw = False
+83.5903 	EXP 	statSafeOC: autoDraw = False
+83.5903 	EXP 	statOCtxt: autoDraw = False
+83.5903 	EXP 	statHideRisk: autoDraw = False
+83.5903 	EXP 	itiRealFix: autoDraw = True
+87.0803 	EXP 	Created sequence: random, trialTypes=1, nReps=1, seed=None
+87.0809 	EXP 	New trial (rep=0, index=0): None
+87.4918 	EXP 	itiRealFix: autoDraw = False
+87.4918 	EXP 	itiRealFix: autoDraw = False
+87.4918 	EXP 	setupBestFitTxt: autoDraw = True
+91.5134 	EXP 	setupBestFitTxt: autoDraw = False
+91.5134 	EXP 	setupBestFitTxt: autoDraw = False
+91.5134 	EXP 	loadDynaChoicesTxt: autoDraw = True
+93.5306 	EXP 	loadDynaChoicesTxt: autoDraw = False
+93.5306 	EXP 	dynaStartTxt: autoDraw = True
+97.2027 	EXP 	Imported ../CGE/bespoke_choicesets/bespoke_choiceset_rhoInd004_muInd201.csv as conditions, 3 conditions, 5 params
+97.2033 	EXP 	Created sequence: random, trialTypes=3, nReps=1, seed=None
+97.2038 	EXP 	New trial (rep=0, index=0): OrderedDict([('riskyoption1', 15.4418135024724), ('riskyoption2', 0), ('safeoption', 7.81946189777227), ('choiceP', 3.89439206292843e-11), ('easy0difficult1', 0)])
+97.2298 	EXP 	dynaStartTxt: autoDraw = False
+97.2298 	EXP 	realCircRight: fillColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+97.2298 	EXP 	realCircRight: borderColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+97.2298 	EXP 	realPracNum: height = 0.1
+97.2298 	EXP 	realPracNum: height = 0.1
+97.2298 	EXP 	realPracNum: height = 0.1
+97.2298 	EXP 	realPracNum: text = 1
+97.2298 	EXP 	realLossTxt: text = '$0'
+97.2298 	EXP 	realGainTxt: height = 0.1
+97.2298 	EXP 	realGainTxt: height = 0.1
+97.2298 	EXP 	realGainTxt: height = 0.1
+97.2298 	EXP 	realGainTxt: text = '$15.44'
+97.2298 	EXP 	realSafeTxt: height = 0.1
+97.2298 	EXP 	realSafeTxt: height = 0.1
+97.2298 	EXP 	realSafeTxt: height = 0.1
+97.2298 	EXP 	realSafeTxt: text = '$7.82'
+97.2298 	EXP 	realCircLeft: autoDraw = True
+97.2298 	EXP 	realCircRight: autoDraw = True
+97.2298 	EXP 	realRiskLine: autoDraw = True
+97.2298 	EXP 	realORtxt: autoDraw = True
+97.2298 	EXP 	realPracNum: autoDraw = True
+97.2298 	EXP 	realLossTxt: autoDraw = True
+97.2298 	EXP 	realGainTxt: autoDraw = True
+97.2298 	EXP 	realSafeTxt: autoDraw = True
+97.2298 	EXP 	realVleft: autoDraw = True
+97.2298 	EXP 	realNright: autoDraw = True
+97.2335 	DATA 	Keypress: v
+98.5221 	DATA 	Keypress: v
+98.5487 	EXP 	realCircLeft: autoDraw = False
+98.5487 	EXP 	realCircRight: autoDraw = False
+98.5487 	EXP 	realRiskLine: autoDraw = False
+98.5487 	EXP 	realORtxt: autoDraw = False
+98.5487 	EXP 	realPracNum: autoDraw = False
+98.5487 	EXP 	realLossTxt: autoDraw = False
+98.5487 	EXP 	realGainTxt: autoDraw = False
+98.5487 	EXP 	realSafeTxt: autoDraw = False
+98.5487 	EXP 	realVleft: autoDraw = False
+98.5487 	EXP 	realNright: autoDraw = False
+98.5487 	EXP 	isiRealFix: autoDraw = True
+99.5480 	EXP 	isiRealFix: autoDraw = False
+99.5480 	EXP 	dynaOCtxt: foreColor = <psychopy.colors.Color: (0.52, 0.52, 0.52, 1.0)>
+99.5480 	EXP 	dynaOCtxt: height = 0.1
+99.5480 	EXP 	dynaOCtxt: height = 0.1
+99.5480 	EXP 	dynaOCtxt: height = 0.1
+99.5480 	EXP 	dynaOCtxt: text = '$15.44'
+99.5480 	EXP 	dynaNoRespTxt: autoDraw = True
+99.5480 	EXP 	dynaRiskOC: autoDraw = True
+99.5480 	EXP 	dynaSafeOC: autoDraw = True
+99.5480 	EXP 	dynaOCtxt: autoDraw = True
+99.5480 	EXP 	dynaHideRisk: autoDraw = True
+100.5654 	EXP 	dynaNoRespTxt: autoDraw = False
+100.5654 	EXP 	dynaRiskOC: autoDraw = False
+100.5654 	EXP 	dynaSafeOC: autoDraw = False
+100.5654 	EXP 	dynaOCtxt: autoDraw = False
+100.5654 	EXP 	dynaHideRisk: autoDraw = False
+100.5654 	EXP 	itiRealFix: autoDraw = True
+103.5486 	EXP 	New trial (rep=0, index=1): OrderedDict([('riskyoption1', 25.9734879862634), ('riskyoption2', 0), ('safeoption', 2.44698572214693), ('choiceP', 0.960554362159569), ('easy0difficult1', 0)])
+103.5837 	EXP 	itiRealFix: autoDraw = False
+103.5837 	EXP 	itiRealFix: autoDraw = False
+103.5837 	EXP 	realCircRight: fillColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+103.5837 	EXP 	realCircRight: borderColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+103.5837 	EXP 	realPracNum: height = 0.1
+103.5837 	EXP 	realPracNum: height = 0.1
+103.5837 	EXP 	realPracNum: height = 0.1
+103.5837 	EXP 	realPracNum: text = 2
+103.5837 	EXP 	realLossTxt: text = '$0'
+103.5837 	EXP 	realGainTxt: height = 0.1
+103.5837 	EXP 	realGainTxt: height = 0.1
+103.5837 	EXP 	realGainTxt: height = 0.1
+103.5837 	EXP 	realGainTxt: text = '$25.97'
+103.5837 	EXP 	realSafeTxt: height = 0.1
+103.5837 	EXP 	realSafeTxt: height = 0.1
+103.5837 	EXP 	realSafeTxt: height = 0.1
+103.5837 	EXP 	realSafeTxt: text = '$2.45'
+103.5837 	EXP 	realCircLeft: autoDraw = True
+103.5837 	EXP 	realCircRight: autoDraw = True
+103.5837 	EXP 	realRiskLine: autoDraw = True
+103.5837 	EXP 	realORtxt: autoDraw = True
+103.5837 	EXP 	realPracNum: autoDraw = True
+103.5837 	EXP 	realLossTxt: autoDraw = True
+103.5837 	EXP 	realGainTxt: autoDraw = True
+103.5837 	EXP 	realSafeTxt: autoDraw = True
+103.5837 	EXP 	realVleft: autoDraw = True
+103.5837 	EXP 	realNright: autoDraw = True
+104.5526 	EXP 	realCircLeft: autoDraw = False
+104.5526 	EXP 	realCircRight: autoDraw = False
+104.5526 	EXP 	realRiskLine: autoDraw = False
+104.5526 	EXP 	realORtxt: autoDraw = False
+104.5526 	EXP 	realPracNum: autoDraw = False
+104.5526 	EXP 	realLossTxt: autoDraw = False
+104.5526 	EXP 	realGainTxt: autoDraw = False
+104.5526 	EXP 	realSafeTxt: autoDraw = False
+104.5526 	EXP 	realVleft: autoDraw = False
+104.5526 	EXP 	realNright: autoDraw = False
+104.5526 	EXP 	isiRealFix: autoDraw = True
+104.5561 	DATA 	Keypress: n
+105.5508 	EXP 	isiRealFix: autoDraw = False
+105.5508 	EXP 	isiRealFix: autoDraw = False
+105.5508 	EXP 	dynaOCtxt: foreColor = <psychopy.colors.Color: (0.52, 0.52, 0.52, 1.0)>
+105.5508 	EXP 	dynaOCtxt: height = 0.1
+105.5508 	EXP 	dynaOCtxt: height = 0.1
+105.5508 	EXP 	dynaOCtxt: height = 0.1
+105.5508 	EXP 	dynaOCtxt: text = '$25.97'
+105.5508 	EXP 	dynaNoRespTxt: autoDraw = True
+105.5508 	EXP 	dynaRiskOC: autoDraw = True
+105.5508 	EXP 	dynaSafeOC: autoDraw = True
+105.5508 	EXP 	dynaOCtxt: autoDraw = True
+105.5508 	EXP 	dynaHideRisk: autoDraw = True
+106.5506 	EXP 	dynaNoRespTxt: autoDraw = False
+106.5506 	EXP 	dynaRiskOC: autoDraw = False
+106.5506 	EXP 	dynaSafeOC: autoDraw = False
+106.5506 	EXP 	dynaOCtxt: autoDraw = False
+106.5506 	EXP 	dynaHideRisk: autoDraw = False
+106.5506 	EXP 	dynaNoRespTxt: autoDraw = False
+106.5506 	EXP 	dynaRiskOC: autoDraw = False
+106.5506 	EXP 	dynaSafeOC: autoDraw = False
+106.5506 	EXP 	dynaOCtxt: autoDraw = False
+106.5506 	EXP 	dynaHideRisk: autoDraw = False
+106.5506 	EXP 	itiRealFix: autoDraw = True
+110.0280 	EXP 	New trial (rep=0, index=2): OrderedDict([('riskyoption1', 27.5773200138472), ('riskyoption2', 0), ('safeoption', 3.31451794458553), ('choiceP', 0.53134072638187), ('easy0difficult1', 1)])
+110.0531 	EXP 	itiRealFix: autoDraw = False
+110.0531 	EXP 	itiRealFix: autoDraw = False
+110.0531 	EXP 	realCircRight: fillColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+110.0531 	EXP 	realCircRight: borderColor = <psychopy.colors.Color: (-0.07, 0.64, 1.0, 1.0)>
+110.0531 	EXP 	realPracNum: height = 0.1
+110.0531 	EXP 	realPracNum: height = 0.1
+110.0531 	EXP 	realPracNum: height = 0.1
+110.0531 	EXP 	realPracNum: text = 3
+110.0531 	EXP 	realLossTxt: text = '$0'
+110.0531 	EXP 	realGainTxt: height = 0.1
+110.0531 	EXP 	realGainTxt: height = 0.1
+110.0531 	EXP 	realGainTxt: height = 0.1
+110.0531 	EXP 	realGainTxt: text = '$27.58'
+110.0531 	EXP 	realSafeTxt: height = 0.1
+110.0531 	EXP 	realSafeTxt: height = 0.1
+110.0531 	EXP 	realSafeTxt: height = 0.1
+110.0531 	EXP 	realSafeTxt: text = '$3.31'
+110.0531 	EXP 	realCircLeft: autoDraw = True
+110.0531 	EXP 	realCircRight: autoDraw = True
+110.0531 	EXP 	realRiskLine: autoDraw = True
+110.0531 	EXP 	realORtxt: autoDraw = True
+110.0531 	EXP 	realPracNum: autoDraw = True
+110.0531 	EXP 	realLossTxt: autoDraw = True
+110.0531 	EXP 	realGainTxt: autoDraw = True
+110.0531 	EXP 	realSafeTxt: autoDraw = True
+110.0531 	EXP 	realVleft: autoDraw = True
+110.0531 	EXP 	realNright: autoDraw = True
+111.0114 	DATA 	Keypress: v
+111.0382 	EXP 	realCircLeft: autoDraw = False
+111.0382 	EXP 	realCircRight: autoDraw = False
+111.0382 	EXP 	realRiskLine: autoDraw = False
+111.0382 	EXP 	realORtxt: autoDraw = False
+111.0382 	EXP 	realPracNum: autoDraw = False
+111.0382 	EXP 	realLossTxt: autoDraw = False
+111.0382 	EXP 	realGainTxt: autoDraw = False
+111.0382 	EXP 	realSafeTxt: autoDraw = False
+111.0382 	EXP 	realVleft: autoDraw = False
+111.0382 	EXP 	realNright: autoDraw = False
+111.0382 	EXP 	isiRealFix: autoDraw = True
+112.0398 	EXP 	isiRealFix: autoDraw = False
+112.0398 	EXP 	isiRealFix: autoDraw = False
+112.0398 	EXP 	dynaOCtxt: foreColor = <psychopy.colors.Color: (0.52, 0.52, 0.52, 1.0)>
+112.0398 	EXP 	dynaOCtxt: height = 0.1
+112.0398 	EXP 	dynaOCtxt: height = 0.1
+112.0398 	EXP 	dynaOCtxt: height = 0.1
+112.0398 	EXP 	dynaOCtxt: text = '$3.31'
+112.0398 	EXP 	dynaNoRespTxt: autoDraw = True
+112.0398 	EXP 	dynaRiskOC: autoDraw = True
+112.0398 	EXP 	dynaSafeOC: autoDraw = True
+112.0398 	EXP 	dynaOCtxt: autoDraw = True
+112.0398 	EXP 	dynaHideRisk: autoDraw = True
+113.0292 	EXP 	dynaNoRespTxt: autoDraw = False
+113.0292 	EXP 	dynaRiskOC: autoDraw = False
+113.0292 	EXP 	dynaSafeOC: autoDraw = False
+113.0292 	EXP 	dynaOCtxt: autoDraw = False
+113.0292 	EXP 	dynaHideRisk: autoDraw = False
+113.0292 	EXP 	itiRealFix: autoDraw = True
+116.5405 	EXP 	itiRealFix: autoDraw = False
+116.5405 	EXP 	itiRealFix: autoDraw = False
+116.5405 	EXP 	cgeRDMendTxt: autoDraw = True
+119.8143 	EXP 	cgeRDMendTxt: autoDraw = False
+119.8143 	EXP 	ThankYou: autoDraw = True
+119.8157 	DATA 	Keypress: return
+121.8252 	EXP 	ThankYou: autoDraw = False
+121.8252 	EXP 	ThankYou: autoDraw = False
+121.9048 	EXP 	window1: mouseVisible = True

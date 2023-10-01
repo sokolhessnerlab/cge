@@ -18,14 +18,15 @@ let expInfo = {
 };
 
 // Start code blocks for 'Before Experiment'
-// Run 'Before Experiment' code from etSetupCode
-import * as pylink from 'pylink';
-import * as time from 'time';
-import * as subprocess from 'subprocess';
-var doET, edf_fname, et, file_sample_flags, subID;
-doET = 1;
+// Run 'Before Experiment' code from etCameraSetupCode
+doET = 0;
 subID = "";
 if (doET) {
+    import * as pylink from 'pylink';
+    import * as time from 'time';
+    import {Image} from 'PIL';
+    import {EyeLinkCoreGraphicsPsychoPy} from 'EyeLinkCoreGraphicsPsychoPy';
+    import * as subprocess from 'subprocess';
     et = new pylink.EyeLink("100.1.1.1");
     edf_fname = `CGE${subID}`;
     et.openDataFile((edf_fname + ".edf"));
@@ -57,7 +58,7 @@ const psychoJS = new PsychoJS({
 
 // open window:
 psychoJS.openWindow({
-  fullscr: true,
+  fullscr: false,
   color: new util.Color([0.5216, 0.5216, 0.5216]),
   units: 'height',
   waitBlanking: true
@@ -75,18 +76,18 @@ psychoJS.scheduleCondition(function() { return (psychoJS.gui.dialogComponent.but
 // flowScheduler gets run if the participants presses OK
 flowScheduler.add(updateInfo); // add timeStamp
 flowScheduler.add(experimentInit);
-flowScheduler.add(etSetupRoutineBegin());
-flowScheduler.add(etSetupRoutineEachFrame());
-flowScheduler.add(etSetupRoutineEnd());
-flowScheduler.add(etStartRecordingRoutineBegin());
-flowScheduler.add(etStartRecordingRoutineEachFrame());
-flowScheduler.add(etStartRecordingRoutineEnd());
+flowScheduler.add(etCameraSetupRoutineBegin());
+flowScheduler.add(etCameraSetupRoutineEachFrame());
+flowScheduler.add(etCameraSetupRoutineEnd());
 flowScheduler.add(cgeRDMsetupRoutineBegin());
 flowScheduler.add(cgeRDMsetupRoutineEachFrame());
 flowScheduler.add(cgeRDMsetupRoutineEnd());
 flowScheduler.add(cgeRDMstartRoutineBegin());
 flowScheduler.add(cgeRDMstartRoutineEachFrame());
 flowScheduler.add(cgeRDMstartRoutineEnd());
+flowScheduler.add(etStartRecordingRoutineBegin());
+flowScheduler.add(etStartRecordingRoutineEachFrame());
+flowScheduler.add(etStartRecordingRoutineEnd());
 flowScheduler.add(practiceStartRoutineBegin());
 flowScheduler.add(practiceStartRoutineEachFrame());
 flowScheduler.add(practiceStartRoutineEnd());
@@ -133,8 +134,8 @@ psychoJS.start({
   expName: expName,
   expInfo: expInfo,
   resources: [
-    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'},
-    {'name': 'cgeRDMPractice.xlsx', 'path': 'cgeRDMPractice.xlsx'}
+    {'name': 'cgeRDMPractice.xlsx', 'path': 'cgeRDMPractice.xlsx'},
+    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'}
   ]
 });
 
@@ -167,10 +168,11 @@ async function updateInfo() {
 }
 
 
-var etSetupClock;
+var etCameraSetupClock;
 var etSetupInstText;
 var etSetupInstResp;
-var etStartRecordingClock;
+var et_coords;
+var dv_coords;
 var cgeRDMsetupClock;
 var instructionsTextHeight;
 var lettersTextHeight;
@@ -178,6 +180,7 @@ var wrap;
 var cgeRDMstartClock;
 var cgeRDMstartTxt;
 var cgeRDMstartResp;
+var etStartRecordingClock;
 var practiceStartClock;
 var pracStartTxt;
 var pracStartResp;
@@ -259,12 +262,12 @@ var ThankYou;
 var globalClock;
 var routineTimer;
 async function experimentInit() {
-  // Initialize components for Routine "etSetup"
-  etSetupClock = new util.Clock();
+  // Initialize components for Routine "etCameraSetup"
+  etCameraSetupClock = new util.Clock();
   etSetupInstText = new visual.TextStim({
     win: psychoJS.window,
     name: 'etSetupInstText',
-    text: 'Press any key to start Camera Setup',
+    text: 'Press any \'Enter" twice to start Camera Setup',
     font: 'Arial',
     units: undefined, 
     pos: [0, 0], height: 0.05,  wrapWidth: undefined, ori: 0.0,
@@ -275,8 +278,15 @@ async function experimentInit() {
   
   etSetupInstResp = new core.Keyboard({psychoJS: psychoJS, clock: new util.Clock(), waitForStart: true});
   
-  // Initialize components for Routine "etStartRecording"
-  etStartRecordingClock = new util.Clock();
+  // Run 'Begin Experiment' code from etCameraSetupCode
+  if (doET) {
+      [scn_width, scn_height] = psychoJS.window.size;
+      et_coords = `screen_pixel_coords = 0 0 ${(scn_width - 1)} ${(scn_height - 1)}`;
+      et.sendCommand(et_coords);
+      dv_coords = `DISPLAY_COORDS  0 0 ${(scn_width - 1)} ${(scn_height - 1)}`;
+      et.sendMessage(dv_coords);
+  }
+  
   // Initialize components for Routine "cgeRDMsetup"
   cgeRDMsetupClock = new util.Clock();
   // Run 'Begin Experiment' code from cgeRDMsetupCode
@@ -305,6 +315,8 @@ async function experimentInit() {
   
   cgeRDMstartResp = new core.Keyboard({psychoJS: psychoJS, clock: new util.Clock(), waitForStart: true});
   
+  // Initialize components for Routine "etStartRecording"
+  etStartRecordingClock = new util.Clock();
   // Initialize components for Routine "practiceStart"
   practiceStartClock = new util.Clock();
   pracStartTxt = new visual.TextStim({
@@ -928,14 +940,14 @@ var t;
 var frameN;
 var continueRoutine;
 var _etSetupInstResp_allKeys;
-var etSetupComponents;
-function etSetupRoutineBegin(snapshot) {
+var etCameraSetupComponents;
+function etCameraSetupRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //--- Prepare to start Routine 'etSetup' ---
+    //--- Prepare to start Routine 'etCameraSetup' ---
     t = 0;
-    etSetupClock.reset(); // clock
+    etCameraSetupClock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
@@ -943,11 +955,11 @@ function etSetupRoutineBegin(snapshot) {
     etSetupInstResp.rt = undefined;
     _etSetupInstResp_allKeys = [];
     // keep track of which components have finished
-    etSetupComponents = [];
-    etSetupComponents.push(etSetupInstText);
-    etSetupComponents.push(etSetupInstResp);
+    etCameraSetupComponents = [];
+    etCameraSetupComponents.push(etSetupInstText);
+    etCameraSetupComponents.push(etSetupInstResp);
     
-    for (const thisComponent of etSetupComponents)
+    for (const thisComponent of etCameraSetupComponents)
       if ('status' in thisComponent)
         thisComponent.status = PsychoJS.Status.NOT_STARTED;
     return Scheduler.Event.NEXT;
@@ -955,12 +967,11 @@ function etSetupRoutineBegin(snapshot) {
 }
 
 
-var frameRemains;
-function etSetupRoutineEachFrame() {
+function etCameraSetupRoutineEachFrame() {
   return async function () {
-    //--- Loop for each frame of Routine 'etSetup' ---
+    //--- Loop for each frame of Routine 'etCameraSetup' ---
     // get current time
-    t = etSetupClock.getTime();
+    t = etCameraSetupClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
@@ -973,10 +984,6 @@ function etSetupRoutineEachFrame() {
       etSetupInstText.setAutoDraw(true);
     }
 
-    frameRemains = 0.0 + 0.0 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
-    if (etSetupInstText.status === PsychoJS.Status.STARTED && t >= frameRemains) {
-      etSetupInstText.setAutoDraw(false);
-    }
     
     // *etSetupInstResp* updates
     if (t >= 0.0 && etSetupInstResp.status === PsychoJS.Status.NOT_STARTED) {
@@ -991,7 +998,7 @@ function etSetupRoutineEachFrame() {
     }
 
     if (etSetupInstResp.status === PsychoJS.Status.STARTED) {
-      let theseKeys = etSetupInstResp.getKeys({keyList: [], waitRelease: false});
+      let theseKeys = etSetupInstResp.getKeys({keyList: ['return'], waitRelease: false});
       _etSetupInstResp_allKeys = _etSetupInstResp_allKeys.concat(theseKeys);
       if (_etSetupInstResp_allKeys.length > 0) {
         etSetupInstResp.keys = _etSetupInstResp_allKeys[_etSetupInstResp_allKeys.length - 1].name;  // just the last key pressed
@@ -1012,7 +1019,7 @@ function etSetupRoutineEachFrame() {
     }
     
     continueRoutine = false;  // reverts to True if at least one component still running
-    for (const thisComponent of etSetupComponents)
+    for (const thisComponent of etCameraSetupComponents)
       if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
         continueRoutine = true;
         break;
@@ -1029,10 +1036,10 @@ function etSetupRoutineEachFrame() {
 
 
 var genv;
-function etSetupRoutineEnd(snapshot) {
+function etCameraSetupRoutineEnd(snapshot) {
   return async function () {
-    //--- Ending Routine 'etSetup' ---
-    for (const thisComponent of etSetupComponents) {
+    //--- Ending Routine 'etCameraSetup' ---
+    for (const thisComponent of etCameraSetupComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
@@ -1048,9 +1055,9 @@ function etSetupRoutineEnd(snapshot) {
         }
     
     etSetupInstResp.stop();
-    // Run 'End Routine' code from etSetupCode
+    // Run 'End Routine' code from etCameraSetupCode
     if (doET) {
-        genv = [et, psychoJS.window];
+        genv = new EyeLinkCoreGraphicsPsychoPy(et, psychoJS.window);
         console.log(genv);
         genv.setTargetType("circle");
         genv.setCalibrationSounds("", "", "");
@@ -1058,92 +1065,7 @@ function etSetupRoutineEnd(snapshot) {
         et.doTrackerSetup();
     }
     
-    // the Routine "etSetup" was not non-slip safe, so reset the non-slip timer
-    routineTimer.reset();
-    
-    // Routines running outside a loop should always advance the datafile row
-    if (currentLoop === psychoJS.experiment) {
-      psychoJS.experiment.nextEntry(snapshot);
-    }
-    return Scheduler.Event.NEXT;
-  }
-}
-
-
-var etStartRecordingComponents;
-function etStartRecordingRoutineBegin(snapshot) {
-  return async function () {
-    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
-    
-    //--- Prepare to start Routine 'etStartRecording' ---
-    t = 0;
-    etStartRecordingClock.reset(); // clock
-    frameN = -1;
-    continueRoutine = true; // until we're told otherwise
-    // update component parameters for each repeat
-    // Run 'Begin Routine' code from etStartRecCode
-    if (doET) {
-        et.setOfflineMode();
-        et.startRecording(1, 0, 0, 0);
-        et.sendMessage("pre 100 pause");
-        pylink.pumpDelay(100);
-        et.sendMessage("cgeRDM Recording Started");
-    }
-    
-    // keep track of which components have finished
-    etStartRecordingComponents = [];
-    
-    for (const thisComponent of etStartRecordingComponents)
-      if ('status' in thisComponent)
-        thisComponent.status = PsychoJS.Status.NOT_STARTED;
-    return Scheduler.Event.NEXT;
-  }
-}
-
-
-function etStartRecordingRoutineEachFrame() {
-  return async function () {
-    //--- Loop for each frame of Routine 'etStartRecording' ---
-    // get current time
-    t = etStartRecordingClock.getTime();
-    frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
-    // update/draw components on each frame
-    // check for quit (typically the Esc key)
-    if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
-      return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
-    }
-    
-    // check if the Routine should terminate
-    if (!continueRoutine) {  // a component has requested a forced-end of Routine
-      return Scheduler.Event.NEXT;
-    }
-    
-    continueRoutine = false;  // reverts to True if at least one component still running
-    for (const thisComponent of etStartRecordingComponents)
-      if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
-        continueRoutine = true;
-        break;
-      }
-    
-    // refresh the screen if continuing
-    if (continueRoutine) {
-      return Scheduler.Event.FLIP_REPEAT;
-    } else {
-      return Scheduler.Event.NEXT;
-    }
-  };
-}
-
-
-function etStartRecordingRoutineEnd(snapshot) {
-  return async function () {
-    //--- Ending Routine 'etStartRecording' ---
-    for (const thisComponent of etStartRecordingComponents) {
-      if (typeof thisComponent.setAutoDraw === 'function') {
-        thisComponent.setAutoDraw(false);
-      }
-    }
-    // the Routine "etStartRecording" was not non-slip safe, so reset the non-slip timer
+    // the Routine "etCameraSetup" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
     // Routines running outside a loop should always advance the datafile row
@@ -1380,6 +1302,91 @@ function cgeRDMstartRoutineEnd(snapshot) {
     
     cgeRDMstartResp.stop();
     // the Routine "cgeRDMstart" was not non-slip safe, so reset the non-slip timer
+    routineTimer.reset();
+    
+    // Routines running outside a loop should always advance the datafile row
+    if (currentLoop === psychoJS.experiment) {
+      psychoJS.experiment.nextEntry(snapshot);
+    }
+    return Scheduler.Event.NEXT;
+  }
+}
+
+
+var etStartRecordingComponents;
+function etStartRecordingRoutineBegin(snapshot) {
+  return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
+    //--- Prepare to start Routine 'etStartRecording' ---
+    t = 0;
+    etStartRecordingClock.reset(); // clock
+    frameN = -1;
+    continueRoutine = true; // until we're told otherwise
+    // update component parameters for each repeat
+    // Run 'Begin Routine' code from etStartRecCode
+    if (doET) {
+        et.setOfflineMode();
+        et.startRecording(1, 0, 0, 0);
+        et.sendMessage("pre 100 pause");
+        pylink.pumpDelay(100);
+        et.sendMessage("cgeRDM Recording Started");
+    }
+    
+    // keep track of which components have finished
+    etStartRecordingComponents = [];
+    
+    for (const thisComponent of etStartRecordingComponents)
+      if ('status' in thisComponent)
+        thisComponent.status = PsychoJS.Status.NOT_STARTED;
+    return Scheduler.Event.NEXT;
+  }
+}
+
+
+function etStartRecordingRoutineEachFrame() {
+  return async function () {
+    //--- Loop for each frame of Routine 'etStartRecording' ---
+    // get current time
+    t = etStartRecordingClock.getTime();
+    frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
+    // update/draw components on each frame
+    // check for quit (typically the Esc key)
+    if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
+      return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+    }
+    
+    // check if the Routine should terminate
+    if (!continueRoutine) {  // a component has requested a forced-end of Routine
+      return Scheduler.Event.NEXT;
+    }
+    
+    continueRoutine = false;  // reverts to True if at least one component still running
+    for (const thisComponent of etStartRecordingComponents)
+      if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
+        continueRoutine = true;
+        break;
+      }
+    
+    // refresh the screen if continuing
+    if (continueRoutine) {
+      return Scheduler.Event.FLIP_REPEAT;
+    } else {
+      return Scheduler.Event.NEXT;
+    }
+  };
+}
+
+
+function etStartRecordingRoutineEnd(snapshot) {
+  return async function () {
+    //--- Ending Routine 'etStartRecording' ---
+    for (const thisComponent of etStartRecordingComponents) {
+      if (typeof thisComponent.setAutoDraw === 'function') {
+        thisComponent.setAutoDraw(false);
+      }
+    }
+    // the Routine "etStartRecording" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
     // Routines running outside a loop should always advance the datafile row
@@ -1891,6 +1898,7 @@ function pracChoicesRoutineBegin(snapshot) {
 }
 
 
+var frameRemains;
 function pracChoicesRoutineEachFrame() {
   return async function () {
     //--- Loop for each frame of Routine 'pracChoices' ---
@@ -4600,7 +4608,7 @@ async function quitPsychoJS(message, isCompleted) {
   
   
   
-  // Run 'End Experiment' code from etSetupCode
+  // Run 'End Experiment' code from etCameraSetupCode
   if (doET) {
       subprocess.run(["edf2asc.exe", os.path.join("/Users/Display/Desktop/Github/cge/CGE/RawData/", (session_identifier + ".edf"))]);
   }
