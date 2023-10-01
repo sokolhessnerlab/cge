@@ -2487,7 +2487,7 @@
         <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
         <Param val="2" valType="code" updates="constant" name="stopVal"/>
         <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
-        <Param val="Thank you! You have sucessfully completed the second portion of this study.&amp;#10;&amp;#10;You will now be automatically redirected to Qualtrics." valType="str" updates="constant" name="text"/>
+        <Param val="Thank you! You have sucessfully completed the second portion of this study.&amp;#10;&amp;#10;If you have not already done so, &amp;#10;please notify the experimenter with by pressing the white doorbell button." valType="str" updates="constant" name="text"/>
         <Param val="from exp settings" valType="str" updates="None" name="units"/>
         <Param val="wrap" valType="num" updates="constant" name="wrapWidth"/>
       </TextComponent>
@@ -3258,10 +3258,10 @@
       <CodeComponent name="pracChoiceRandLoc">
         <Param val="" valType="extendedCode" updates="constant" name="Before Experiment"/>
         <Param val="" valType="extendedCode" updates="constant" name="Before JS Experiment"/>
-        <Param val="&amp;#10;" valType="extendedCode" updates="constant" name="Begin Experiment"/>
+        <Param val="" valType="extendedCode" updates="constant" name="Begin Experiment"/>
         <Param val="textHeight = 0.05;&amp;#10;" valType="extendedCode" updates="constant" name="Begin JS Experiment"/>
         <Param val="var pracLossRounded, pracGainRounded, pracSafeRounded&amp;#10;&amp;#10;if ((loc === 1)) {&amp;#10;    targetPos = [(- 0.35), 0];&amp;#10;} else {&amp;#10;    targetPos = [0.35, 0];&amp;#10;}&amp;#10;if ((loc === 1)) {&amp;#10;    lossLoc = [(- 0.35), (- 0.1)];&amp;#10;    gainLoc = [(- 0.35), 0.1];&amp;#10;    safeLoc = [0.35, 0];&amp;#10;} else {&amp;#10;    lossLoc = [0.35, (- 0.1)];&amp;#10;    gainLoc = [0.35, 0.1];&amp;#10;    safeLoc = [(- 0.35), 0];&amp;#10;}&amp;#10;&amp;#10;&amp;#10;//pracLossRounded = riskyLoss&amp;#10;//pracGainRounded = riskyGain&amp;#10;//pracSafeRounded = alternative&amp;#10;&amp;#10;/*&amp;#10; function roundToTwo(num) {    &amp;#10;        return +(Math.round(num + &quot;e+2&quot;)  + &quot;e-2&quot;);&amp;#10; }&amp;#10;*/&amp;#10;&amp;#10;pracLossRounded = `$${Math.round(riskyLoss)}`;&amp;#10;//pracGainRounded = `$${roundToTwo(riskyGain*100)/100}`;&amp;#10;//pracSafeRounded = `$${roundToTwo(alternative*100)/100}`;&amp;#10;&amp;#10;pracGainRounded = `$${Math.round(riskyGain*100)/100}`;&amp;#10;pracSafeRounded = `$${Math.round(alternative*100)/100}`;&amp;#10;&amp;#10;//console.log(pracLossRounded)&amp;#10;//console.log(pracGainRounded)&amp;#10;//console.log(pracSafeRounded)" valType="extendedCode" updates="constant" name="Begin JS Routine"/>
-        <Param val="### Randomized Practice Trial Locations&amp;#10;if loc==1:&amp;#10;    riskLineLoc=[-.35,0] #targetPos&amp;#10;else:&amp;#10;    riskLineLoc=[.35,0] #targetPos&amp;#10;&amp;#10;if loc==1:&amp;#10;    lossLoc=[-.35,-.1]&amp;#10;    gainLoc=[-.35,.1]&amp;#10;    safeLoc=[.35,0]&amp;#10;else:&amp;#10;    lossLoc=[.35,-.1]&amp;#10;    gainLoc=[.35,.1]&amp;#10;    safeLoc=[-.35,0]&amp;#10;    &amp;#10;# Rounding Presentation of Monetary Values    &amp;#10;pracLossRounded = '$%.0f' % round(riskyLoss,0)&amp;#10;pracGainRounded = '$%.2f' % round(riskyGain,2)&amp;#10;pracSafeRounded = '$%.2f' % round(alternative,2)&amp;#10;&amp;#10;&amp;#10;" valType="extendedCode" updates="constant" name="Begin Routine"/>
+        <Param val="# Randomized Practice Trial Locations&amp;#10;if loc==1:&amp;#10;    riskLineLoc=[-.35,0] #targetPos&amp;#10;else:&amp;#10;    riskLineLoc=[.35,0] #targetPos&amp;#10;&amp;#10;if loc==1:&amp;#10;    lossLoc=[-.35,-.1]&amp;#10;    gainLoc=[-.35,.1]&amp;#10;    safeLoc=[.35,0]&amp;#10;else:&amp;#10;    lossLoc=[.35,-.1]&amp;#10;    gainLoc=[.35,.1]&amp;#10;    safeLoc=[-.35,0]&amp;#10;&amp;#10;# Rounding Presentation of Monetary Values    &amp;#10;pracLossRounded = '$%.0f' % round(riskyLoss,0)&amp;#10;pracGainRounded = '$%.2f' % round(riskyGain,2)&amp;#10;pracSafeRounded = '$%.2f' % round(alternative,2)&amp;#10;&amp;#10;pracNum = practiceTrials.thisN + 1&amp;#10;&amp;#10;&amp;#10;" valType="extendedCode" updates="constant" name="Begin Routine"/>
         <Param val="Both" valType="str" updates="None" name="Code Type"/>
         <Param val="" valType="extendedCode" updates="constant" name="Each Frame"/>
         <Param val="" valType="extendedCode" updates="constant" name="Each JS Frame"/>
@@ -3383,6 +3383,31 @@
         <Param val="OR" valType="str" updates="constant" name="text"/>
         <Param val="from exp settings" valType="str" updates="None" name="units"/>
         <Param val="" valType="code" updates="constant" name="wrapWidth"/>
+      </TextComponent>
+      <TextComponent name="pracTriNum">
+        <Param val="$trialNumColor" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="None" valType="str" updates="constant" name="flip"/>
+        <Param val="$trialNumFont" valType="str" updates="constant" name="font"/>
+        <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
+        <Param val="trialNumHeight" valType="num" updates="constant" name="letterHeight"/>
+        <Param val="pracTriNum" valType="code" updates="None" name="name"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="trialNumLoc" valType="list" updates="constant" name="pos"/>
+        <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="4.0" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="$pracNum" valType="str" updates="set every repeat" name="text"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="wrap" valType="num" updates="constant" name="wrapWidth"/>
       </TextComponent>
       <TextComponent name="pracLossTxt">
         <Param val="$color1" valType="str" updates="constant" name="color"/>
@@ -3532,10 +3557,10 @@
       <CodeComponent name="realChoiceRandLoc">
         <Param val="" valType="extendedCode" updates="constant" name="Before Experiment"/>
         <Param val="" valType="extendedCode" updates="constant" name="Before JS Experiment"/>
-        <Param val="loc = [];&amp;#10;&amp;#10;&amp;#10;" valType="extendedCode" updates="constant" name="Begin Experiment"/>
+        <Param val="loc = []&amp;#10;staticTrials = []&amp;#10;# primarily for displaying trial number during dynamic trials because this code section gets called before actual dynamic trials&amp;#10;dynamicTrials = [] &amp;#10;&amp;#10;&amp;#10;" valType="extendedCode" updates="constant" name="Begin Experiment"/>
         <Param val="var realloc" valType="extendedCode" updates="constant" name="Begin JS Experiment"/>
         <Param val="var gainLoc, gainRounded, lossLoc, lossRounded, safeLoc, safeRounded, targetPos;&amp;#10;&amp;#10;function random_item(items){ &amp;#10;    return items[Math.floor(Math.random()*items.length)]; &amp;#10;}&amp;#10;&amp;#10;realloc = random_item([1, 2]);&amp;#10;&amp;#10;if ((realloc === 1)) {&amp;#10;    targetPos = [(- 0.35), 0];&amp;#10;} else {&amp;#10;    targetPos = [0.35, 0];&amp;#10;}&amp;#10;if ((realloc === 1)) {&amp;#10;    lossLoc = [(- 0.35), (- 0.1)];&amp;#10;    gainLoc = [(- 0.35), 0.1];&amp;#10;    safeLoc = [0.35, 0];&amp;#10;} else {&amp;#10;    lossLoc = [0.35, (- 0.1)];&amp;#10;    gainLoc = [0.35, 0.1];&amp;#10;    safeLoc = [(- 0.35), 0];&amp;#10;}&amp;#10;&amp;#10;//console.log(realloc)&amp;#10;&amp;#10;/*&amp;#10; function roundToTwo(num) {    &amp;#10;        return +(Math.round(num + &quot;e+2&quot;)  + &quot;e-2&quot;);&amp;#10; }&amp;#10;*/&amp;#10;&amp;#10;lossRounded = `$${Math.round(riskyoption2)}`;&amp;#10;gainRounded = `$${(Math.round(riskyoption1*100)/100).toFixed(2)}`;&amp;#10;safeRounded = `$${(Math.round(safeoption*100)/100).toFixed(2)}`;&amp;#10;&amp;#10;//lossRounded = `$${Math.round(riskyoption2)}`;&amp;#10;//gainRounded = `$${Math.round(riskyoption1*100)/100}`;&amp;#10;//safeRounded = `$${Math.round(safeoption*100)/100}`;&amp;#10;" valType="extendedCode" updates="constant" name="Begin JS Routine"/>
-        <Param val="# Randomizing locations of reacl choice trials &amp;#10;import random&amp;#10;&amp;#10;loc = random.choice([1,2])&amp;#10;&amp;#10;if loc==1:&amp;#10;    riskLineLoc=[-.35,0]&amp;#10;else:&amp;#10;    riskLineLoc=[.35,0]&amp;#10;&amp;#10;if loc==1:&amp;#10;    lossLoc=[-.35,-.1]&amp;#10;    gainLoc=[-.35,.1]&amp;#10;    safeLoc=[.35,0]&amp;#10;else:&amp;#10;    lossLoc=[.35,-.1]&amp;#10;    gainLoc=[.35,.1]&amp;#10;    safeLoc=[-.35,0]&amp;#10;&amp;#10;lossRounded = &quot;$%.0f&quot; % round(riskyoption2,0)&amp;#10;gainRounded = &quot;$%.2f&quot; % round(riskyoption1,2)&amp;#10;safeRounded = &quot;$%.2f&quot; % round(safeoption,2)&amp;#10;&amp;#10;#lossRounded = (&quot;$&quot; + str(round(riskyoption2, 2)))&amp;#10;#gainRounded = (&quot;$&quot; + str(round(riskyoption1, 2)))&amp;#10;#safeRounded = (&quot;$&quot; + str(round(safeoption, 2)))&amp;#10;&amp;#10;&amp;#10;" valType="extendedCode" updates="constant" name="Begin Routine"/>
+        <Param val="### Randomized Practice Trial Locations&amp;#10;import random&amp;#10;loc = random.choice([1,2])&amp;#10;&amp;#10;if loc==1:&amp;#10;    riskLineLoc=[-.35,0] #targetPos&amp;#10;else:&amp;#10;    riskLineLoc=[.35,0] #targetPos&amp;#10;&amp;#10;if loc==1:&amp;#10;    lossLoc=[-.35,-.1]&amp;#10;    gainLoc=[-.35,.1]&amp;#10;    safeLoc=[.35,0]&amp;#10;else:&amp;#10;    lossLoc=[.35,-.1]&amp;#10;    gainLoc=[.35,.1]&amp;#10;    safeLoc=[-.35,0]&amp;#10;&amp;#10;lossRounded = &quot;$%.0f&quot; % round(riskyoption2,0)&amp;#10;gainRounded = &quot;$%.2f&quot; % round(riskyoption1,2)&amp;#10;safeRounded = &quot;$%.2f&quot; % round(safeoption,2)&amp;#10;&amp;#10;#lossRounded = (&quot;$&quot; + str(round(riskyoption2, 2)))&amp;#10;#gainRounded = (&quot;$&quot; + str(round(riskyoption1, 2)))&amp;#10;#safeRounded = (&quot;$&quot; + str(round(safeoption, 2)))&amp;#10;&amp;#10;if staticTrials:&amp;#10;    realNum = staticTrials.thisN + 1&amp;#10;    &amp;#10;if dynamicTrials:&amp;#10;    realNum = dynamicTrials.thisN + 1&amp;#10;    &amp;#10;    &amp;#10;    " valType="extendedCode" updates="constant" name="Begin Routine"/>
         <Param val="Both" valType="str" updates="None" name="Code Type"/>
         <Param val="" valType="extendedCode" updates="constant" name="Each Frame"/>
         <Param val="" valType="extendedCode" updates="constant" name="Each JS Frame"/>
@@ -3657,6 +3682,31 @@
         <Param val="OR" valType="str" updates="constant" name="text"/>
         <Param val="from exp settings" valType="str" updates="None" name="units"/>
         <Param val="" valType="code" updates="constant" name="wrapWidth"/>
+      </TextComponent>
+      <TextComponent name="realPracNum">
+        <Param val="$trialNumColor" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="None" valType="str" updates="constant" name="flip"/>
+        <Param val="$trialNumFont" valType="str" updates="constant" name="font"/>
+        <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
+        <Param val="trialNumHeight" valType="num" updates="constant" name="letterHeight"/>
+        <Param val="realPracNum" valType="code" updates="None" name="name"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="trialNumLoc" valType="list" updates="constant" name="pos"/>
+        <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="4.0" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="$realNum" valType="str" updates="set every repeat" name="text"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="wrap" valType="num" updates="constant" name="wrapWidth"/>
       </TextComponent>
       <TextComponent name="realLossTxt">
         <Param val="$color1" valType="str" updates="constant" name="color"/>
@@ -4163,7 +4213,7 @@
       <CodeComponent name="cgeRDMsetupCode">
         <Param val="" valType="extendedCode" updates="constant" name="Before Experiment"/>
         <Param val="psychoJS.start({&amp;#10;  expName,&amp;#10;  expInfo,&amp;#10;  resources: [&amp;#10;    // relative path to index.html&amp;#10;    { name: 'digitSpanTrialNumber.xlsx', path: 'digitSpanTrialNumber.xlsx' },&amp;#10;    { name: 'CGT-choice-set.csv', path: 'CGT-choice-set.csv' },&amp;#10;    { name: 'cgtRDMPractice.xlsx', path: 'cgtRDMPractice.xlsx' },&amp;#10;    { name: 'continue.png', path: 'continue.png' },&amp;#10;    { name: 'digitSpanPractice.xlsx', path: 'digitSpanPractice.xlsx' },&amp;#10;    // absolute path:&amp;#10;    //{ name: 'trialTypes_B.xls', path: 'http://a.website.org/a.path/trialTypes_B.xls' }&amp;#10;  ]&amp;#10;});" valType="extendedCode" updates="constant" name="Before JS Experiment"/>
-        <Param val="### Isoluminant Colors Used &amp;#10;color1 = [0.5216,0.5216,0.5216]&amp;#10;color2 = [-0.0667,0.6392,1]&amp;#10;# BLUE ### Choice Shape; V, N, and OR text&amp;#10;# PsychoPy RGB -1:1 [-0.0667,0.6392,1] # RGB 0:255 [119,209,205]&amp;#10;# GREY ### Background; Choice Line&amp;#10;# psychopy RGB -1:1 [0.5216,0.5216,0.5216] # RGB 0:255 [194,194,194] &amp;#10;&amp;#10;### Text Fonts&amp;#10;instructionsFont = 'Arial'&amp;#10;choiceFont = 'Arial'&amp;#10;choiceValueFont = 'Arial'&amp;#10;fixCrossFont = 'Arial'&amp;#10;NoRespFont = 'Arial'&amp;#10;ocFont = 'Arial'&amp;#10;&amp;#10;### Text Dimensions&amp;#10;wrap = 1.5&amp;#10;instructionsTextHeight = .05&amp;#10;choiceTextHeight = .05&amp;#10;choiceValuesTextHeight = .1&amp;#10;FixCrossHeight = .05&amp;#10;NoRespTextHeight = .08&amp;#10;ocTextHeight = .1&amp;#10;&amp;#10;### Instructions Location&amp;#10;instructLoc = [0,0]&amp;#10;&amp;#10;### Shapes 'circle' 'rectangle' 'star.7' etc.&amp;#10;leftShape = 'circle'&amp;#10;rightShape = 'circle'&amp;#10;riskShape = 'rectangle'&amp;#10;hideShape = 'rectangle'&amp;#10;&amp;#10;### Shape Dimensions&amp;#10;circLeft = [.5,.5]&amp;#10;circRight = [.5,.5]&amp;#10;riskLine = [.5,.01]&amp;#10;riskHide = [.6,.3]&amp;#10;&amp;#10;### Fixed Trial Locations&amp;#10;circLeftLoc=[-.35,0]&amp;#10;circRightLoc=[.35,0]&amp;#10;ORtextLoc=[0,0]&amp;#10;VleftLoc=[-.35,-.35]&amp;#10;NrightLoc=[.35,-.35]&amp;#10;fixCrossLoc=[0,0]&amp;#10;&amp;#10;### Number of Trials per Choice Sets&amp;#10;pracChoices = '0:4'&amp;#10;statChoices = '0:4'&amp;#10;dynaChoices = '0:4'&amp;#10;&amp;#10;### ITIs&amp;#10;initITIstatic = []&amp;#10;initITIdynamic = []&amp;#10;&amp;#10;&amp;#10;" valType="extendedCode" updates="constant" name="Begin Experiment"/>
+        <Param val="### Real or Practice&amp;#10;isReal = 0&amp;#10;isHide = 0&amp;#10;&amp;#10;### Isoluminant Colors Used &amp;#10;color1 = [0.5216,0.5216,0.5216]&amp;#10;color2 = [-0.0667,0.6392,1]&amp;#10;# BLUE ### Choice Shape; V, N, and OR text&amp;#10;# PsychoPy RGB -1:1 [-0.0667,0.6392,1] # RGB 0:255 [119,209,205]&amp;#10;# GREY ### Background; Choice Line&amp;#10;# psychopy RGB -1:1 [0.5216,0.5216,0.5216] # RGB 0:255 [194,194,194] &amp;#10;&amp;#10;### Text Fonts&amp;#10;instructionsFont = 'Arial'&amp;#10;choiceFont = 'Arial'&amp;#10;choiceValueFont = 'Arial'&amp;#10;fixCrossFont = 'Arial'&amp;#10;NoRespFont = 'Arial'&amp;#10;ocFont = 'Arial'&amp;#10;trialNumFont = 'Arial'&amp;#10;&amp;#10;### Text Dimensions&amp;#10;wrap = 1.5&amp;#10;instructionsTextHeight = .05&amp;#10;choiceTextHeight = .05&amp;#10;choiceValuesTextHeight = .1&amp;#10;FixCrossHeight = .05&amp;#10;NoRespTextHeight = .08&amp;#10;ocTextHeight = .1&amp;#10;trialNumHeight = .1&amp;#10;&amp;#10;### Instructions Location&amp;#10;instructLoc = [0,0]&amp;#10;&amp;#10;### Shapes 'circle' 'rectangle' 'star.7' etc.&amp;#10;leftShape = 'circle'&amp;#10;rightShape = 'circle'&amp;#10;riskShape = 'rectangle'&amp;#10;hideShape = 'rectangle'&amp;#10;&amp;#10;### Shape Dimensions&amp;#10;circLeft = [.5,.5]&amp;#10;circRight = [.5,.5]&amp;#10;riskLine = [.5,.01]&amp;#10;riskHide = [.6,.3]&amp;#10;&amp;#10;### Fixed Trial Locations&amp;#10;circLeftLoc=[-.35,0]&amp;#10;circRightLoc=[.35,0]&amp;#10;ORtextLoc=[0,0]&amp;#10;VleftLoc=[-.35,-.35]&amp;#10;NrightLoc=[.35,-.35]&amp;#10;fixCrossLoc=[0,0]&amp;#10;trialNumLoc=[0,-.35]&amp;#10;&amp;#10;### Number of Trials per Choice Sets&amp;#10;if isReal == 1:&amp;#10;    pracChoices = '0:5'&amp;#10;    statChoices = '0:50'&amp;#10;    dynaChoices = '0:120'&amp;#10;else:&amp;#10;    # 3 trials to choose: A risky, A safe, and A no respond&amp;#10;    pracChoices = '0:3'&amp;#10;    statChoices = '0:3'&amp;#10;    dynaChoices = '0:3'&amp;#10;    &amp;#10;### Trial Number Appearance &amp;#10;if isHide == 1:&amp;#10;    trialNumColor = [0.5216,0.5216,0.5216]&amp;#10;else:&amp;#10;    trialNumColor = [-0.0667,0.6392,1]&amp;#10;&amp;#10;### ITIs&amp;#10;initITIstatic = []&amp;#10;initITIdynamic = []&amp;#10;&amp;#10;&amp;#10;" valType="extendedCode" updates="constant" name="Begin Experiment"/>
         <Param val="instructionsTextHeight = 0.05;&amp;#10;lettersTextHeight = 0.1;&amp;#10;wrap = 1.5;&amp;#10;&amp;#10;var initITIstatic&amp;#10;var initITIdynamic&amp;#10;&amp;#10;&amp;#10;" valType="extendedCode" updates="constant" name="Begin JS Experiment"/>
         <Param val="" valType="extendedCode" updates="constant" name="Begin JS Routine"/>
         <Param val="" valType="extendedCode" updates="constant" name="Begin Routine"/>

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.4),
-    on September 30, 2023, at 14:47
+    on September 30, 2023, at 21:11
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -100,6 +100,10 @@ defaultKeyboard = keyboard.Keyboard(backend='iohub')
 
 # --- Initialize components for Routine "cgeRDMsetup" ---
 # Run 'Begin Experiment' code from cgeRDMsetupCode
+### Real or Practice
+isReal = 0
+isHide = 0
+
 ### Isoluminant Colors Used 
 color1 = [0.5216,0.5216,0.5216]
 color2 = [-0.0667,0.6392,1]
@@ -115,6 +119,7 @@ choiceValueFont = 'Arial'
 fixCrossFont = 'Arial'
 NoRespFont = 'Arial'
 ocFont = 'Arial'
+trialNumFont = 'Arial'
 
 ### Text Dimensions
 wrap = 1.5
@@ -124,6 +129,7 @@ choiceValuesTextHeight = .1
 FixCrossHeight = .05
 NoRespTextHeight = .08
 ocTextHeight = .1
+trialNumHeight = .1
 
 ### Instructions Location
 instructLoc = [0,0]
@@ -147,11 +153,24 @@ ORtextLoc=[0,0]
 VleftLoc=[-.35,-.35]
 NrightLoc=[.35,-.35]
 fixCrossLoc=[0,0]
+trialNumLoc=[0,-.35]
 
 ### Number of Trials per Choice Sets
-pracChoices = '0:4'
-statChoices = '0:4'
-dynaChoices = '0:4'
+if isReal == 1:
+    pracChoices = '0:5'
+    statChoices = '0:50'
+    dynaChoices = '0:120'
+else:
+    # 3 trials to choose: A risky, A safe, and A no respond
+    pracChoices = '0:3'
+    statChoices = '0:3'
+    dynaChoices = '0:3'
+    
+### Trial Number Appearance 
+if isHide == 1:
+    trialNumColor = [0.5216,0.5216,0.5216]
+else:
+    trialNumColor = [-0.0667,0.6392,1]
 
 ### ITIs
 initITIstatic = []
@@ -181,9 +200,6 @@ pracStartTxt = visual.TextStim(win=win, name='pracStartTxt',
 pracStartResp = keyboard.Keyboard()
 
 # --- Initialize components for Routine "pracChoices" ---
-# Run 'Begin Experiment' code from pracChoiceRandLoc
-
-
 pracCircLeft = visual.ShapeStim(
     win=win, name='pracCircLeft', vertices=leftShape,
     size=circLeft,
@@ -209,41 +225,48 @@ pracORtxt = visual.TextStim(win=win, name='pracORtxt',
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
+pracTriNum = visual.TextStim(win=win, name='pracTriNum',
+    text='',
+    font=trialNumFont,
+    pos=trialNumLoc, height=trialNumHeight, wrapWidth=wrap, ori=0.0, 
+    color=trialNumColor, colorSpace='rgb', opacity=None, 
+    languageStyle='LTR',
+    depth=-5.0);
 pracLossTxt = visual.TextStim(win=win, name='pracLossTxt',
     text='',
     font=choiceValueFont,
     pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=-5.0);
+    depth=-6.0);
 pracGainTxt = visual.TextStim(win=win, name='pracGainTxt',
     text='',
     font=choiceValueFont,
     pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=-6.0);
+    depth=-7.0);
 pracSafeTxt = visual.TextStim(win=win, name='pracSafeTxt',
     text='',
     font=choiceValueFont,
     pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=-7.0);
+    depth=-8.0);
 pracVleft = visual.TextStim(win=win, name='pracVleft',
     text='V-Left',
     font=choiceFont,
     pos=VleftLoc, height=choiceTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=-8.0);
+    depth=-9.0);
 pracNright = visual.TextStim(win=win, name='pracNright',
     text='N-Right',
     font=choiceFont,
     pos=NrightLoc, height=choiceTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=-9.0);
+    depth=-10.0);
 pracChoiceResp = keyboard.Keyboard()
 
 # --- Initialize components for Routine "pracISI" ---
@@ -310,7 +333,9 @@ statStartResp = keyboard.Keyboard()
 
 # --- Initialize components for Routine "realChoices" ---
 # Run 'Begin Experiment' code from realChoiceRandLoc
-loc = [];
+loc = []
+staticTrials = []
+dynamicTrials = [] # primarily for displaying trial number during dynamic trials because this code section gets called before actual dynamic trials
 
 
 
@@ -339,41 +364,48 @@ realORtxt = visual.TextStim(win=win, name='realORtxt',
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
+realPracNum = visual.TextStim(win=win, name='realPracNum',
+    text='',
+    font=trialNumFont,
+    pos=trialNumLoc, height=trialNumHeight, wrapWidth=wrap, ori=0.0, 
+    color=trialNumColor, colorSpace='rgb', opacity=None, 
+    languageStyle='LTR',
+    depth=-5.0);
 realLossTxt = visual.TextStim(win=win, name='realLossTxt',
     text='',
     font=choiceValueFont,
     pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=-5.0);
+    depth=-6.0);
 realGainTxt = visual.TextStim(win=win, name='realGainTxt',
     text='',
     font=choiceValueFont,
     pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=-6.0);
+    depth=-7.0);
 realSafeTxt = visual.TextStim(win=win, name='realSafeTxt',
     text='',
     font=choiceValueFont,
     pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=-7.0);
+    depth=-8.0);
 realVleft = visual.TextStim(win=win, name='realVleft',
     text='V-Left',
     font=choiceFont,
     pos=VleftLoc, height=choiceTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=-8.0);
+    depth=-9.0);
 realNright = visual.TextStim(win=win, name='realNright',
     text='N-Right',
     font=choiceFont,
     pos=NrightLoc, height=choiceTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=-9.0);
+    depth=-10.0);
 realChoiceResp = keyboard.Keyboard()
 
 # --- Initialize components for Routine "realISI" ---
@@ -522,7 +554,9 @@ dynaStartResp = keyboard.Keyboard()
 
 # --- Initialize components for Routine "realChoices" ---
 # Run 'Begin Experiment' code from realChoiceRandLoc
-loc = [];
+loc = []
+staticTrials = []
+dynamicTrials = [] # primarily for displaying trial number during dynamic trials because this code section gets called before actual dynamic trials
 
 
 
@@ -551,41 +585,48 @@ realORtxt = visual.TextStim(win=win, name='realORtxt',
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-4.0);
+realPracNum = visual.TextStim(win=win, name='realPracNum',
+    text='',
+    font=trialNumFont,
+    pos=trialNumLoc, height=trialNumHeight, wrapWidth=wrap, ori=0.0, 
+    color=trialNumColor, colorSpace='rgb', opacity=None, 
+    languageStyle='LTR',
+    depth=-5.0);
 realLossTxt = visual.TextStim(win=win, name='realLossTxt',
     text='',
     font=choiceValueFont,
     pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=-5.0);
+    depth=-6.0);
 realGainTxt = visual.TextStim(win=win, name='realGainTxt',
     text='',
     font=choiceValueFont,
     pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=-6.0);
+    depth=-7.0);
 realSafeTxt = visual.TextStim(win=win, name='realSafeTxt',
     text='',
     font=choiceValueFont,
     pos=[0,0], height=choiceValuesTextHeight, wrapWidth=None, ori=0, 
     color=color1, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=-7.0);
+    depth=-8.0);
 realVleft = visual.TextStim(win=win, name='realVleft',
     text='V-Left',
     font=choiceFont,
     pos=VleftLoc, height=choiceTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=-8.0);
+    depth=-9.0);
 realNright = visual.TextStim(win=win, name='realNright',
     text='N-Right',
     font=choiceFont,
     pos=NrightLoc, height=choiceTextHeight, wrapWidth=None, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
-    depth=-9.0);
+    depth=-10.0);
 realChoiceResp = keyboard.Keyboard()
 
 # --- Initialize components for Routine "realISI" ---
@@ -661,7 +702,7 @@ cgeRDMendResp = keyboard.Keyboard()
 
 # --- Initialize components for Routine "END" ---
 ThankYou = visual.TextStim(win=win, name='ThankYou',
-    text='Thank you! You have sucessfully completed the second portion of this study.\n\nYou will now be automatically redirected to Qualtrics.',
+    text="Thank you! You have sucessfully completed the second portion of this study.\n\nIf you haven't already, \nplease notify the experimenter with by pressing the white doorbell button.",
     font=instructionsFont,
     pos=instructLoc, height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
     color=color2, colorSpace='rgb', opacity=None, 
@@ -968,7 +1009,7 @@ for thisPracticeTrial in practiceTrials:
     routineForceEnded = False
     # update component parameters for each repeat
     # Run 'Begin Routine' code from pracChoiceRandLoc
-    ### Randomized Practice Trial Locations
+    # Randomized Practice Trial Locations
     if loc==1:
         riskLineLoc=[-.35,0] #targetPos
     else:
@@ -982,17 +1023,20 @@ for thisPracticeTrial in practiceTrials:
         lossLoc=[.35,-.1]
         gainLoc=[.35,.1]
         safeLoc=[-.35,0]
-        
+    
     # Rounding Presentation of Monetary Values    
     pracLossRounded = '$%.0f' % round(riskyLoss,0)
     pracGainRounded = '$%.2f' % round(riskyGain,2)
     pracSafeRounded = '$%.2f' % round(alternative,2)
+    
+    pracNum = practiceTrials.thisN + 1
     
     
     
     pracCircRight.setFillColor(color2)
     pracCircRight.setLineColor(color2)
     pracRiskLine.setPos(riskLineLoc)
+    pracTriNum.setText(pracNum)
     pracLossTxt.setPos(lossLoc)
     pracLossTxt.setText(pracLossRounded
 
@@ -1005,7 +1049,7 @@ for thisPracticeTrial in practiceTrials:
     pracChoiceResp.rt = []
     _pracChoiceResp_allKeys = []
     # keep track of which components have finished
-    pracChoicesComponents = [pracCircLeft, pracCircRight, pracRiskLine, pracORtxt, pracLossTxt, pracGainTxt, pracSafeTxt, pracVleft, pracNright, pracChoiceResp]
+    pracChoicesComponents = [pracCircLeft, pracCircRight, pracRiskLine, pracORtxt, pracTriNum, pracLossTxt, pracGainTxt, pracSafeTxt, pracVleft, pracNright, pracChoiceResp]
     for thisComponent in pracChoicesComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
@@ -1106,6 +1150,26 @@ for thisPracticeTrial in practiceTrials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'pracORtxt.stopped')
                 pracORtxt.setAutoDraw(False)
+        
+        # *pracTriNum* updates
+        if pracTriNum.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+            # keep track of start time/frame for later
+            pracTriNum.frameNStart = frameN  # exact frame index
+            pracTriNum.tStart = t  # local t and not account for scr refresh
+            pracTriNum.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(pracTriNum, 'tStartRefresh')  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, 'pracTriNum.started')
+            pracTriNum.setAutoDraw(True)
+        if pracTriNum.status == STARTED:
+            # is it time to stop? (based on global clock, using actual start)
+            if tThisFlipGlobal > pracTriNum.tStartRefresh + 4.0-frameTolerance:
+                # keep track of stop time/frame for later
+                pracTriNum.tStop = t  # not accounting for scr refresh
+                pracTriNum.frameNStop = frameN  # exact frame index
+                # add timestamp to datafile
+                thisExp.timestampOnFlip(win, 'pracTriNum.stopped')
+                pracTriNum.setAutoDraw(False)
         
         # *pracLossTxt* updates
         if pracLossTxt.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
@@ -1777,15 +1841,14 @@ for thisStaticTrial in staticTrials:
     routineForceEnded = False
     # update component parameters for each repeat
     # Run 'Begin Routine' code from realChoiceRandLoc
-    # Randomizing locations of reacl choice trials 
+    ### Randomized Practice Trial Locations
     import random
-    
     loc = random.choice([1,2])
     
     if loc==1:
-        riskLineLoc=[-.35,0]
+        riskLineLoc=[-.35,0] #targetPos
     else:
-        riskLineLoc=[.35,0]
+        riskLineLoc=[.35,0] #targetPos
     
     if loc==1:
         lossLoc=[-.35,-.1]
@@ -1804,11 +1867,18 @@ for thisStaticTrial in staticTrials:
     #gainRounded = ("$" + str(round(riskyoption1, 2)))
     #safeRounded = ("$" + str(round(safeoption, 2)))
     
-    
-    
+    if staticTrials:
+        realNum = staticTrials.thisN + 1
+        
+    if dynamicTrials:
+        realNum = dynamicTrials.thisN + 1
+        
+        
+        
     realCircRight.setFillColor(color2)
     realCircRight.setLineColor(color2)
     realRiskLine.setPos(riskLineLoc)
+    realPracNum.setText(realNum)
     realLossTxt.setPos(lossLoc)
     realLossTxt.setText(lossRounded)
     realGainTxt.setPos(gainLoc)
@@ -1819,7 +1889,7 @@ for thisStaticTrial in staticTrials:
     realChoiceResp.rt = []
     _realChoiceResp_allKeys = []
     # keep track of which components have finished
-    realChoicesComponents = [realCircLeft, realCircRight, realRiskLine, realORtxt, realLossTxt, realGainTxt, realSafeTxt, realVleft, realNright, realChoiceResp]
+    realChoicesComponents = [realCircLeft, realCircRight, realRiskLine, realORtxt, realPracNum, realLossTxt, realGainTxt, realSafeTxt, realVleft, realNright, realChoiceResp]
     for thisComponent in realChoicesComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
@@ -1920,6 +1990,26 @@ for thisStaticTrial in staticTrials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'realORtxt.stopped')
                 realORtxt.setAutoDraw(False)
+        
+        # *realPracNum* updates
+        if realPracNum.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+            # keep track of start time/frame for later
+            realPracNum.frameNStart = frameN  # exact frame index
+            realPracNum.tStart = t  # local t and not account for scr refresh
+            realPracNum.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(realPracNum, 'tStartRefresh')  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, 'realPracNum.started')
+            realPracNum.setAutoDraw(True)
+        if realPracNum.status == STARTED:
+            # is it time to stop? (based on global clock, using actual start)
+            if tThisFlipGlobal > realPracNum.tStartRefresh + 4.0-frameTolerance:
+                # keep track of stop time/frame for later
+                realPracNum.tStop = t  # not accounting for scr refresh
+                realPracNum.frameNStop = frameN  # exact frame index
+                # add timestamp to datafile
+                thisExp.timestampOnFlip(win, 'realPracNum.stopped')
+                realPracNum.setAutoDraw(False)
         
         # *realLossTxt* updates
         if realLossTxt.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
@@ -2860,15 +2950,14 @@ for thisDynamicTrial in dynamicTrials:
     routineForceEnded = False
     # update component parameters for each repeat
     # Run 'Begin Routine' code from realChoiceRandLoc
-    # Randomizing locations of reacl choice trials 
+    ### Randomized Practice Trial Locations
     import random
-    
     loc = random.choice([1,2])
     
     if loc==1:
-        riskLineLoc=[-.35,0]
+        riskLineLoc=[-.35,0] #targetPos
     else:
-        riskLineLoc=[.35,0]
+        riskLineLoc=[.35,0] #targetPos
     
     if loc==1:
         lossLoc=[-.35,-.1]
@@ -2887,11 +2976,18 @@ for thisDynamicTrial in dynamicTrials:
     #gainRounded = ("$" + str(round(riskyoption1, 2)))
     #safeRounded = ("$" + str(round(safeoption, 2)))
     
-    
-    
+    if staticTrials:
+        realNum = staticTrials.thisN + 1
+        
+    if dynamicTrials:
+        realNum = dynamicTrials.thisN + 1
+        
+        
+        
     realCircRight.setFillColor(color2)
     realCircRight.setLineColor(color2)
     realRiskLine.setPos(riskLineLoc)
+    realPracNum.setText(realNum)
     realLossTxt.setPos(lossLoc)
     realLossTxt.setText(lossRounded)
     realGainTxt.setPos(gainLoc)
@@ -2902,7 +2998,7 @@ for thisDynamicTrial in dynamicTrials:
     realChoiceResp.rt = []
     _realChoiceResp_allKeys = []
     # keep track of which components have finished
-    realChoicesComponents = [realCircLeft, realCircRight, realRiskLine, realORtxt, realLossTxt, realGainTxt, realSafeTxt, realVleft, realNright, realChoiceResp]
+    realChoicesComponents = [realCircLeft, realCircRight, realRiskLine, realORtxt, realPracNum, realLossTxt, realGainTxt, realSafeTxt, realVleft, realNright, realChoiceResp]
     for thisComponent in realChoicesComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
@@ -3003,6 +3099,26 @@ for thisDynamicTrial in dynamicTrials:
                 # add timestamp to datafile
                 thisExp.timestampOnFlip(win, 'realORtxt.stopped')
                 realORtxt.setAutoDraw(False)
+        
+        # *realPracNum* updates
+        if realPracNum.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+            # keep track of start time/frame for later
+            realPracNum.frameNStart = frameN  # exact frame index
+            realPracNum.tStart = t  # local t and not account for scr refresh
+            realPracNum.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(realPracNum, 'tStartRefresh')  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, 'realPracNum.started')
+            realPracNum.setAutoDraw(True)
+        if realPracNum.status == STARTED:
+            # is it time to stop? (based on global clock, using actual start)
+            if tThisFlipGlobal > realPracNum.tStartRefresh + 4.0-frameTolerance:
+                # keep track of stop time/frame for later
+                realPracNum.tStop = t  # not accounting for scr refresh
+                realPracNum.frameNStop = frameN  # exact frame index
+                # add timestamp to datafile
+                thisExp.timestampOnFlip(win, 'realPracNum.stopped')
+                realPracNum.setAutoDraw(False)
         
         # *realLossTxt* updates
         if realLossTxt.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:

@@ -148,6 +148,7 @@ var pracCircLeft;
 var pracCircRight;
 var pracRiskLine;
 var pracORtxt;
+var pracTriNum;
 var pracLossTxt;
 var pracGainTxt;
 var pracSafeTxt;
@@ -177,6 +178,7 @@ var realCircLeft;
 var realCircRight;
 var realRiskLine;
 var realORtxt;
+var realPracNum;
 var realLossTxt;
 var realGainTxt;
 var realSafeTxt;
@@ -263,7 +265,6 @@ async function experimentInit() {
   
   // Initialize components for Routine "pracChoices"
   pracChoicesClock = new util.Clock();
-  // Run 'Begin Experiment' code from pracChoiceRandLoc
   textHeight = 0.05;
   
   pracCircLeft = new visual.Polygon ({
@@ -311,6 +312,18 @@ async function experimentInit() {
     depth: -4.0 
   });
   
+  pracTriNum = new visual.TextStim({
+    win: psychoJS.window,
+    name: 'pracTriNum',
+    text: '',
+    font: trialNumFont,
+    units: undefined, 
+    pos: trialNumLoc, height: trialNumHeight,  wrapWidth: wrap, ori: 0.0,
+    languageStyle: 'LTR',
+    color: new util.Color(trialNumColor),  opacity: undefined,
+    depth: -5.0 
+  });
+  
   pracLossTxt = new visual.TextStim({
     win: psychoJS.window,
     name: 'pracLossTxt',
@@ -320,7 +333,7 @@ async function experimentInit() {
     pos: [0, 0], height: choiceValuesTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color1),  opacity: 1,
-    depth: -5.0 
+    depth: -6.0 
   });
   
   pracGainTxt = new visual.TextStim({
@@ -332,7 +345,7 @@ async function experimentInit() {
     pos: [0, 0], height: choiceValuesTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color1),  opacity: 1,
-    depth: -6.0 
+    depth: -7.0 
   });
   
   pracSafeTxt = new visual.TextStim({
@@ -344,7 +357,7 @@ async function experimentInit() {
     pos: [0, 0], height: choiceValuesTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color1),  opacity: 1,
-    depth: -7.0 
+    depth: -8.0 
   });
   
   pracVleft = new visual.TextStim({
@@ -356,7 +369,7 @@ async function experimentInit() {
     pos: VleftLoc, height: choiceTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
-    depth: -8.0 
+    depth: -9.0 
   });
   
   pracNright = new visual.TextStim({
@@ -368,7 +381,7 @@ async function experimentInit() {
     pos: NrightLoc, height: choiceTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
-    depth: -9.0 
+    depth: -10.0 
   });
   
   pracChoiceResp = new core.Keyboard({psychoJS: psychoJS, clock: new util.Clock(), waitForStart: true});
@@ -535,6 +548,18 @@ async function experimentInit() {
     depth: -4.0 
   });
   
+  realPracNum = new visual.TextStim({
+    win: psychoJS.window,
+    name: 'realPracNum',
+    text: '',
+    font: trialNumFont,
+    units: undefined, 
+    pos: trialNumLoc, height: trialNumHeight,  wrapWidth: wrap, ori: 0.0,
+    languageStyle: 'LTR',
+    color: new util.Color(trialNumColor),  opacity: undefined,
+    depth: -5.0 
+  });
+  
   realLossTxt = new visual.TextStim({
     win: psychoJS.window,
     name: 'realLossTxt',
@@ -544,7 +569,7 @@ async function experimentInit() {
     pos: [0, 0], height: choiceValuesTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color1),  opacity: 1,
-    depth: -5.0 
+    depth: -6.0 
   });
   
   realGainTxt = new visual.TextStim({
@@ -556,7 +581,7 @@ async function experimentInit() {
     pos: [0, 0], height: choiceValuesTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color1),  opacity: 1,
-    depth: -6.0 
+    depth: -7.0 
   });
   
   realSafeTxt = new visual.TextStim({
@@ -568,7 +593,7 @@ async function experimentInit() {
     pos: [0, 0], height: choiceValuesTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color1),  opacity: 1,
-    depth: -7.0 
+    depth: -8.0 
   });
   
   realVleft = new visual.TextStim({
@@ -580,7 +605,7 @@ async function experimentInit() {
     pos: VleftLoc, height: choiceTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
-    depth: -8.0 
+    depth: -9.0 
   });
   
   realNright = new visual.TextStim({
@@ -592,7 +617,7 @@ async function experimentInit() {
     pos: NrightLoc, height: choiceTextHeight,  wrapWidth: undefined, ori: 0,
     languageStyle: 'LTR',
     color: new util.Color(color2),  opacity: 1,
-    depth: -9.0 
+    depth: -10.0 
   });
   
   realChoiceResp = new core.Keyboard({psychoJS: psychoJS, clock: new util.Clock(), waitForStart: true});
@@ -822,7 +847,7 @@ async function experimentInit() {
   ThankYou = new visual.TextStim({
     win: psychoJS.window,
     name: 'ThankYou',
-    text: 'Thank you! You have sucessfully completed the second portion of this study.\n\nYou will now be automatically redirected to Qualtrics.',
+    text: 'Thank you! You have sucessfully completed the second portion of this study.\n\nIf you have not already done so, \nplease notify the experimenter with by pressing the white doorbell button.',
     font: instructionsFont,
     units: undefined, 
     pos: instructLoc, height: instructionsTextHeight,  wrapWidth: wrap, ori: 0.0,
@@ -1553,6 +1578,7 @@ function pracChoicesRoutineBegin(snapshot) {
     pracCircRight.setFillColor(new util.Color(color2));
     pracCircRight.setLineColor(new util.Color(color2));
     pracRiskLine.setPos(riskLineLoc);
+    pracTriNum.setText(pracNum);
     pracLossTxt.setPos(lossLoc);
     pracLossTxt.setText(pracLossRounded);
     pracGainTxt.setPos(gainLoc);
@@ -1568,6 +1594,7 @@ function pracChoicesRoutineBegin(snapshot) {
     pracChoicesComponents.push(pracCircRight);
     pracChoicesComponents.push(pracRiskLine);
     pracChoicesComponents.push(pracORtxt);
+    pracChoicesComponents.push(pracTriNum);
     pracChoicesComponents.push(pracLossTxt);
     pracChoicesComponents.push(pracGainTxt);
     pracChoicesComponents.push(pracSafeTxt);
@@ -1647,6 +1674,20 @@ function pracChoicesRoutineEachFrame() {
     frameRemains = 0.0 + 4 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
     if (pracORtxt.status === PsychoJS.Status.STARTED && t >= frameRemains) {
       pracORtxt.setAutoDraw(false);
+    }
+    
+    // *pracTriNum* updates
+    if (t >= 0.0 && pracTriNum.status === PsychoJS.Status.NOT_STARTED) {
+      // keep track of start time/frame for later
+      pracTriNum.tStart = t;  // (not accounting for frame time here)
+      pracTriNum.frameNStart = frameN;  // exact frame index
+      
+      pracTriNum.setAutoDraw(true);
+    }
+
+    frameRemains = 0.0 + 4.0 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
+    if (pracTriNum.status === PsychoJS.Status.STARTED && t >= frameRemains) {
+      pracTriNum.setAutoDraw(false);
     }
     
     // *pracLossTxt* updates
@@ -2421,6 +2462,7 @@ function realChoicesRoutineBegin(snapshot) {
     realCircRight.setFillColor(new util.Color(color2));
     realCircRight.setLineColor(new util.Color(color2));
     realRiskLine.setPos(riskLineLoc);
+    realPracNum.setText(realNum);
     realLossTxt.setPos(lossLoc);
     realLossTxt.setText(lossRounded);
     realGainTxt.setPos(gainLoc);
@@ -2436,6 +2478,7 @@ function realChoicesRoutineBegin(snapshot) {
     realChoicesComponents.push(realCircRight);
     realChoicesComponents.push(realRiskLine);
     realChoicesComponents.push(realORtxt);
+    realChoicesComponents.push(realPracNum);
     realChoicesComponents.push(realLossTxt);
     realChoicesComponents.push(realGainTxt);
     realChoicesComponents.push(realSafeTxt);
@@ -2514,6 +2557,20 @@ function realChoicesRoutineEachFrame() {
     frameRemains = 0.0 + 4 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
     if (realORtxt.status === PsychoJS.Status.STARTED && t >= frameRemains) {
       realORtxt.setAutoDraw(false);
+    }
+    
+    // *realPracNum* updates
+    if (t >= 0.0 && realPracNum.status === PsychoJS.Status.NOT_STARTED) {
+      // keep track of start time/frame for later
+      realPracNum.tStart = t;  // (not accounting for frame time here)
+      realPracNum.frameNStart = frameN;  // exact frame index
+      
+      realPracNum.setAutoDraw(true);
+    }
+
+    frameRemains = 0.0 + 4.0 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
+    if (realPracNum.status === PsychoJS.Status.STARTED && t >= frameRemains) {
+      realPracNum.setAutoDraw(false);
     }
     
     // *realLossTxt* updates
