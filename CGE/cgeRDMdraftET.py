@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.4),
-    on October 01, 2023, at 13:05
+    on October 03, 2023, at 08:53
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -263,7 +263,7 @@ cgeRDMstartResp = keyboard.Keyboard()
 
 # --- Initialize components for Routine "practiceStart" ---
 pracStartTxt = visual.TextStim(win=win, name='pracStartTxt',
-    text='There will now be 5 practice trials.\n\nWhen you are ready to begin the practice, press "V" or "N".',
+    text='There will now be 5 practice trials.\n\nThe structure in the practice round is identical to what you will encounter in the real rounds. The goal of the practice round is to practice timing of decision-making within the four (4) second response window.\n\nWhen you are ready to begin the practice, press "V" or "N".',
     font=instructionsFont,
     pos=instructLoc, height=instructionsTextHeight, wrapWidth=wrap, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
@@ -395,7 +395,7 @@ itiPracFix = visual.TextStim(win=win, name='itiPracFix',
 
 # --- Initialize components for Routine "staticStart" ---
 statStartTxt = visual.TextStim(win=win, name='statStartTxt',
-    text='Practice complete.\n\nWhen you are ready to start ROUND 1 of the task, press "V" or "N".\n',
+    text='Practice complete.\n\nKeep in mind that responding quickly in this task will not speed up the task. Please take enough time to view and consider each choice option before you make a choice within the 4-second response window.\n\nWhen you are ready to start ROUND 1 of the task, press "V" or "N".\n',
     font=instructionsFont,
     pos=instructLoc, height=instructionsTextHeight, wrapWidth=wrap, ori=0, 
     color=color2, colorSpace='rgb', opacity=1, 
@@ -621,7 +621,7 @@ loadDynaChoicesTxt = visual.TextStim(win=win, name='loadDynaChoicesTxt',
 
 # --- Initialize components for Routine "dynamicStart" ---
 dynaStartTxt = visual.TextStim(win=win, name='dynaStartTxt',
-    text='When you are ready to start ROUND 2 of the task, press "V" or "N".',
+    text='Keep in mind that responding quickly in this task will not speed up the task. Please take enough time to view and consider each choice option before you make a choice within the 4-second response window.\n\nWhen you are ready to start ROUND 2 of the task, press "V" or "N".',
     font=instructionsFont,
     pos=instructLoc, height=instructionsTextHeight, wrapWidth=wrap, ori=0.0, 
     color=color2, colorSpace='rgb', opacity=None, 

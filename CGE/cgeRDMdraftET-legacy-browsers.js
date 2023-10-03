@@ -126,8 +126,8 @@ psychoJS.start({
   expName: expName,
   expInfo: expInfo,
   resources: [
-    {'name': 'cgeRDMPractice.xlsx', 'path': 'cgeRDMPractice.xlsx'},
-    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'}
+    {'name': 'CGT-choice-set.csv', 'path': 'CGT-choice-set.csv'},
+    {'name': 'cgeRDMPractice.xlsx', 'path': 'cgeRDMPractice.xlsx'}
   ]
 });
 
@@ -314,7 +314,7 @@ async function experimentInit() {
   pracStartTxt = new visual.TextStim({
     win: psychoJS.window,
     name: 'pracStartTxt',
-    text: 'There will now be 5 practice trials.\n\nWhen you are ready to begin the practice, press "V" or "N".',
+    text: 'There will now be 5 practice trials.\n\nThe structure in the practice round is identical to what you will encounter in the real rounds. The goal of the practice round is to practice timing of decision-making within the four (4) second response window.\n\nWhen you are ready to begin the practice, press "V" or "N".',
     font: instructionsFont,
     units: undefined, 
     pos: instructLoc, height: instructionsTextHeight,  wrapWidth: wrap, ori: 0,
@@ -550,7 +550,7 @@ async function experimentInit() {
   statStartTxt = new visual.TextStim({
     win: psychoJS.window,
     name: 'statStartTxt',
-    text: 'Practice complete.\n\nWhen you are ready to start ROUND 1 of the task, press "V" or "N".\n',
+    text: 'Practice complete.\n\nKeep in mind that responding quickly in this task will not speed up the task. Please take enough time to view and consider each choice option before you make a choice within the 4-second response window.\n\nWhen you are ready to start ROUND 1 of the task, press "V" or "N".\n',
     font: instructionsFont,
     units: undefined, 
     pos: instructLoc, height: instructionsTextHeight,  wrapWidth: wrap, ori: 0,
@@ -813,7 +813,7 @@ async function experimentInit() {
   dynaStartTxt = new visual.TextStim({
     win: psychoJS.window,
     name: 'dynaStartTxt',
-    text: 'When you are ready to start ROUND 2 of the task, press "V" or "N".',
+    text: 'Keep in mind that responding quickly in this task will not speed up the task. Please take enough time to view and consider each choice option before you make a choice within the 4-second response window.\n\nWhen you are ready to start ROUND 2 of the task, press "V" or "N".',
     font: instructionsFont,
     units: undefined, 
     pos: instructLoc, height: instructionsTextHeight,  wrapWidth: wrap, ori: 0.0,
