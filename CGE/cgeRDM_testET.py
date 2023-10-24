@@ -81,7 +81,7 @@ def cgeRDM(subID, isReal, doET):
     expInfo = {
         'participant': '',
     }
-    expInfo['subID'] = subID
+    #expInfo['subID'] = subID
     # --- Show participant info dialog --
     #dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=False, title=expName)
     #if dlg.OK == False:
@@ -91,8 +91,8 @@ def cgeRDM(subID, isReal, doET):
     expInfo['psychopyVersion'] = psychopyVersion
 
     # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
-    #filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date'])
-    filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expName, expInfo['subID'], expInfo['date'])
+    filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date'])
+    #filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expName, expInfo['subID'], expInfo['date'])
 
     # An ExperimentHandler isn't essential but helps with data saving
     thisExp = data.ExperimentHandler(name=expName, version='',
@@ -111,7 +111,7 @@ def cgeRDM(subID, isReal, doET):
 
     # --- Setup the Window ---
     win = visual.Window(
-        size=[1280, 1024], fullscr=True, screen=0, 
+        size=[1280, 1024], fullscr=False, screen=0, 
         winType='pyglet', allowStencil=False,
         monitor='testMonitor', color=[0.5216,0.5216,0.5216], colorSpace='rgb',
         blendMode='avg', useFBO=True, 
@@ -1301,7 +1301,7 @@ def cgeRDM(subID, isReal, doET):
             gainLoc=[.35,.1]
             safeLoc=[-.35,0]
         
-        riskyLoss = [] ### 10.3.23
+        #riskyLoss = [] ### 10.3.23
         
         # Rounding Presentation of Monetary Values    
         pracLossRounded = '$%.0f' % round(riskyLoss,0)
