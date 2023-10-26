@@ -57,7 +57,7 @@ def cge(subID, isReal, compNum, taskSet, doET): # define the function and specif
     # IMPORT TASK SCRIPTS #
     # cgeRDM
     #from cgeRDMdraftET_test import cgeRDM 
-    import cgeRDM_testET
+    import cgeRDM_noWrap
     # OSpan
     from ospan.ospanTaskModule import ospanTask
     # SymSpan
@@ -67,7 +67,7 @@ def cge(subID, isReal, compNum, taskSet, doET): # define the function and specif
     if taskSet ==1:
         
         # risky decision-making task (input arguments determined above) 
-        cgeRDM_testET
+        cgeRDM_noWrap
         #cgeRDM(subID, isReal, doET)
         
         # ospan instructions + instructions quiz + practice + task
