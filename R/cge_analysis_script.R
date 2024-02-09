@@ -7,21 +7,21 @@
 rm(list=ls()); # Clear the workspace
 
 # identify the working directory paths
-main_wd = '/Volumes/shlab/Projects/CGT/CGT_study2/';
-processeddata_wd = paste0(main_wd,'processeddata_study2/');
+main_wd = '/Volumes/shlab/Projects/CGE/data/';
+processeddata_wd = paste0(main_wd,'preprocessed/')
 
 #### Loading Data ####
 setwd(processeddata_wd);
 
 # Load Decision-Making Data
-fn = dir(pattern = glob2rx('cgt_processed_decisionmaking*.csv'),full.names = T);
+fn = dir(pattern = glob2rx('cge_processed_decisionmaking*.csv'),full.names = T);
 number_of_files = length(fn) # ASSUMES YOU WANT THE MOST-RECENT PROCESSED DATA
 data_dm = read.csv(fn[number_of_files]) # decision-making data
 
 # Load Working Memory Data
-fn = dir(pattern = glob2rx('cgt_processed_workingmemory*.csv'),full.names = T);
+fn = dir(pattern = glob2rx('cge_processed_complexspan_data_*.csv'),full.names = T);
 number_of_files = length(fn) # ASSUMES YOU WANT THE MOST-RECENT PROCESSED DATA
-data_wm = read.csv(fn[number_of_files]) # working memory data 
+complexSpanScores = read.csv(fn[number_of_files]) # working memory data 
 
 number_of_subjects = length(unique(data_dm$subjectnumber));
 
@@ -31,14 +31,14 @@ number_of_subjects = length(unique(data_dm$subjectnumber));
 # (using... check trials, RTs, choices)
 
 # EXCLUSION: Check Trials
-check_trial_failure = array(dim = c(number_of_subjects,1));
+check_trial_failurerate = array(dim = c(number_of_subjects,1));
 
 for (subj in 1:number_of_subjects){
   tmpdata = data_dm[data_dm$subjectnumber == subj,];
   check_trial_index = which(tmpdata$ischecktrial==1);
   correct_answers = (0.5 * tmpdata$riskyopt1[check_trial_index] +
                        0.5 * tmpdata$riskyopt2[check_trial_index]) > tmpdata$safe[check_trial_index];
-  check_trial_failure[subj] = length(which(!tmpdata$choice[check_trial_index] == correct_answers))/length(check_trial_index);
+  check_trial_failurerate[subj] = length(which(!tmpdata$choice[check_trial_index] == correct_answers))/length(check_trial_index);
   
   # Plot the choice data
   plot(tmpdata$riskyopt1[tmpdata$choice == 1],tmpdata$safe[tmpdata$choice == 1], col = 'green', 
@@ -47,11 +47,11 @@ for (subj in 1:number_of_subjects){
   points(tmpdata$riskyopt1[tmpdata$choice == 0],tmpdata$safe[tmpdata$choice == 0], col = 'red')
 }
 
-check_trial_criterion = 0.1; # The maximum percent of check trials that can be missed
+check_trial_criterion = 0.2; # The maximum percent of check trials that can be missed
 # (there were 10 check trials)
 # chance is 0.5, perfect is 0.0.
 
-keep_check_trial = check_trial_failure <= check_trial_criterion;
+keep_check_trial = check_trial_failurerate <= check_trial_criterion;
 
 # EXCLUSION: RTs
 
@@ -67,7 +67,7 @@ keep_dm_rt = mean_rts > 0.85;
 
 mean_rts[keep_dm_rt]
 hist(mean_rts[keep_dm_rt]) # histogram of mean rts
-mean(mean_rts[keep_dm_rt]) # new mean rt 1.40 seconds
+mean(mean_rts[keep_dm_rt]) # mean rt 1.60 seconds (as of CGE048 on 2/9/24)
 
 
 #### Create clean data frames ####
@@ -76,7 +76,7 @@ keep_participants = which(keep_check_trial & keep_dm_rt);
 
 # Create clean data frames for data!
 clean_data_dm = data_dm[data_dm$subjectnumber %in% keep_participants,]
-clean_data_wm = data_wm[data_wm$subjectnumber %in% keep_participants,]
+clean_data_complexspan = complexSpanScores[complexSpanScores$subjectnumber %in% keep_participants,]
 
 number_of_clean_subjects = length(keep_participants);
 
