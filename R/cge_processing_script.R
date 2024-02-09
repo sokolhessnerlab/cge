@@ -40,7 +40,10 @@ column_names_dm = c(
   'easyP1difficultN1',
   'choiceP',
   'bestRho',
-  'bestMu'
+  'bestMu',
+  'ospan',
+  'symspan',
+  'complexspan'
 );
 
 data_dm = array(data = NA, dim = c(0, length(column_names_dm)));
@@ -66,6 +69,43 @@ complexSpanScores$subjectnumber= 1:number_of_subjects
 
 # Loop
 for(s in 1:number_of_subjects){
+  
+  ### OSPAN DATA ###
+  
+  ospantmpdata = read.csv(ospfn[s]);
+  ospantmpdata$subid = as.integer(substr(ospfn[s],6,8));
+  
+  if (any(ospantmpdata$percentCorrectMath[is.finite(ospantmpdata$percentCorrectMath)]<85)){
+    ospanExclude = c(ospanExclude,ospantmpdata$subid[1]);
+    complexSpanExclude$ospanExclude[s] = 1;
+  } else {
+    correctIndospan = which(ospantmpdata$correctCount == ospantmpdata$setSize)
+    complexSpanScores$ospanScore[s] = sum(ospantmpdata$correctCount[correctIndospan])/number_of_ospan_trials_per_person;
+  }
+  
+  ### SYMSPAN DATA ###
+  sspantmpdata = read.csv(sspfn[s]);
+  sspantmpdata$subid = as.integer(substr(sspfn[s],6,8));
+  
+  if (any(sspantmpdata$percentCorrectSym[is.finite(sspantmpdata$percentCorrectSym)]<85)){
+    sspanExclude = c(sspanExclude,sspantmpdata$subid[1]);
+    complexSpanExclude$symspanExclude[s] = 1;
+  } else {
+    correctIndsymspan = which(sspantmpdata$squareCorrectCount == sspantmpdata$setSize)
+    complexSpanScores$symspanScore[s] = sum(sspantmpdata$squareCorrectCount[correctIndsymspan])/number_of_sspan_trials_per_person;
+  }
+  
+  
+  ### COMPOSITE SPAN ###
+  if ((complexSpanExclude$ospanExclude[s] == 0) & (complexSpanExclude$symspanExclude[s] == 0)){ # if both scores available
+    complexSpanScores$compositeSpanScore[s] = mean(c((complexSpanScores$ospanScore[s]),(complexSpanScores$symspanScore[s]))); # average the two scores
+  } else if ((complexSpanExclude$ospanExclude[s] == 1) & (complexSpanExclude$symspanExclude[s] == 0)){ # if only SymSpan
+    complexSpanScores$compositeSpanScore[s] = complexSpanScores$symspanScore[s];
+  } else if ((complexSpanExclude$ospanExclude[s] == 0) & (complexSpanExclude$symspanExclude[s] == 1)){ # if only OSpan
+    complexSpanScores$compositeSpanScore[s] = complexSpanScores$ospanScore[s];
+  }; # ... else, leave it NA
+  
+  
   
   ### RDM Data ###
   # Load in the data
@@ -115,46 +155,13 @@ for(s in 1:number_of_subjects){
 
   dm_data_to_add[,13] = tmpdata$bestRho[is.finite(tmpdata$bestRho)];
   dm_data_to_add[,14] = tmpdata$bestMu[is.finite(tmpdata$bestMu)];
-
+  
+  dm_data_to_add[,15] = complexSpanScores$ospanScore[s];
+  dm_data_to_add[,16] = complexSpanScores$symspanScore[s];
+  dm_data_to_add[,17] = complexSpanScores$compositeSpanScore[s];
 
   # Add this person's DM data to the total DM data.
   data_dm = rbind(data_dm,dm_data_to_add);
-  
-  ### OSPAN DATA ###
-  
-  ospantmpdata = read.csv(ospfn[s]);
-  ospantmpdata$subid = as.integer(substr(ospfn[s],6,8));
-  
-  if (any(ospantmpdata$percentCorrectMath[is.finite(ospantmpdata$percentCorrectMath)]<85)){
-    ospanExclude = c(ospanExclude,ospantmpdata$subid[1]);
-    complexSpanExclude$ospanExclude[s] = 1;
-  } else {
-    correctIndospan = which(ospantmpdata$correctCount == ospantmpdata$setSize)
-    complexSpanScores$ospanScore[s] = sum(ospantmpdata$correctCount[correctIndospan])
-  }
-  
-  ### SYMSPAN DATA ###
-  sspantmpdata = read.csv(sspfn[s]);
-  sspantmpdata$subid = as.integer(substr(sspfn[s],6,8));
-  
-  if (any(sspantmpdata$percentCorrectSym[is.finite(sspantmpdata$percentCorrectSym)]<85)){
-    sspanExclude = c(sspanExclude,sspantmpdata$subid[1]);
-    complexSpanExclude$symspanExclude[s] = 1;
-  } else {
-    correctIndsymspan = which(sspantmpdata$squareCorrectCount == sspantmpdata$setSize)
-    complexSpanScores$symspanScore[s] = sum(sspantmpdata$squareCorrectCount[correctIndsymspan])
-  }
-
-  
-  ### COMPOSITE SPAN ###
-  if ((complexSpanExclude$ospanExclude[s] == 0) & (complexSpanExclude$symspanExclude[s] == 0)){ # if both scores available
-    complexSpanScores$compositeSpanScore[s] = mean(c((complexSpanScores$ospanScore[s]/25),(complexSpanScores$symspanScore[s]/14))); # average the two scores
-  } else if ((complexSpanExclude$ospanExclude[s] == 1) & (complexSpanExclude$symspanExclude[s] == 0)){ # if only SymSpan
-    complexSpanScores$compositeSpanScore[s] = complexSpanScores$symspanScore[s]/14;
-  } else if ((complexSpanExclude$ospanExclude[s] == 0) & (complexSpanExclude$symspanExclude[s] == 1)){ # if only OSpan
-    complexSpanScores$compositeSpanScore[s] = complexSpanScores$ospanScore[s]/25;
-  }; # ... else, leave it NA
-  
 }
 
 # complexSpanExclude[is.na(complexSpanExclude[,])]=0
