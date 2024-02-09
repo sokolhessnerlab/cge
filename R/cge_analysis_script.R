@@ -176,7 +176,7 @@ lines(x = c(0,1), y = c(0,1), col = 'blue')
 # Statistically test relative difficulty observed in easy ACC vs. easy REJ
 t.test(abs(easyACC_mean_pgamble-.5), abs(easyREJ_mean_pgamble-.5), paired = T)
 
-# A: Yes, we can treat all easy trials as similarly easy (whether easy ACC or REJ), not sig different 3/7/23
+# A: Yes, we can treat all easy trials as similarly easy (whether easy ACC or REJ), not sig different 2/9/24
 
 
 #### Optimization Function Creation ####
@@ -218,7 +218,7 @@ choice_probability <- function(parameters, choiceset) {
 }
 
 # Likelihood function
-negLLprospect_cgt <- function(parameters,choiceset,choices) {
+negLLprospect_cge <- function(parameters,choiceset,choices) {
   # A negative log likelihood function for a prospect-theory estimation.
   # Assumes parameters are [rho, mu] as used in S-H 2009, 2013, 2015, etc.
   # Assumes choiceset has columns riskyoption1, riskyoption2, and safeoption
@@ -276,7 +276,7 @@ for (subj in 1:number_of_clean_subjects){
     
     initial_values = runif(number_of_parameters, min = lower_bounds, max = upper_bounds)
     
-    temp_output = optim(initial_values, negLLprospect_cgt,
+    temp_output = optim(initial_values, negLLprospect_cge,
                         choiceset = choiceset,
                         choices = tmpdata$choice,
                         lower = lower_bounds,
@@ -338,7 +338,7 @@ for (subj in 1:number_of_clean_subjects){
   
   for(r in 1:n_rho_values){
     for(m in 1:n_mu_values){
-      grid_nll_values[r,m] = negLLprospect_cgt(c(rho_values[r],mu_values[m]), choiceset, tmpdata$choice)
+      grid_nll_values[r,m] = negLLprospect_cge(c(rho_values[r],mu_values[m]), choiceset, tmpdata$choice)
     }
   }
   
@@ -390,7 +390,7 @@ hist(grid_bestMu - estimated_parameters[,2], xlim = c(-100,100),
      breaks = seq(from = -100, to = 100, by = 1), main = 'Difference in Mu Estimates',
      ylab = 'Participants', xlab = 'Grid estimate - MLE estimate')
 # This is supposed to look silly! Should cluster around 0
-# ... and it does, as of 3/7/23!
+# ... and it does, as of 2/9/23!
 
 t.test(grid_bestRho, estimated_parameters[,1], paired = T) # no sig. diff (rho)... 4/2/23
 t.test(grid_bestMu, estimated_parameters[,2], paired = T) # no sig. diff (mu)... 4/2/23
