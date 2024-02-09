@@ -13,10 +13,12 @@ processeddata_wd = paste0(main_wd,'preprocessed/')
 setwd(rawdata_wd);
 
 # List all the data files
-fn = dir(pattern = glob2rx('cgeRDM_*.csv'),full.names = T, recursive = T);
+rdmfn = dir(pattern = glob2rx('cgeRDM_*.csv'),full.names = T, recursive = T);
+sspfn = dir(pattern = glob2rx('cgeSYMSPANbothReal_*.csv'), full.names = T, recursive = T);
+ospfn = dir(pattern = glob2rx('cgeOSPANbothReal_*.csv'), full.names = T, recursive = T);
 
 # Identify the number of participants from the file listing
-number_of_subjects = length(fn);
+number_of_subjects = length(rdmfn);
 
 # Store some basic information about size of the decision-making task
 num_static_trials = 50;
@@ -45,34 +47,29 @@ data_dm = array(data = NA, dim = c(0, length(column_names_dm)));
 colnames(data_dm) <- column_names_dm
 
 # Set up variables to hold working memory data
-# number_of_wm_trials_per_person = 28; # 14 forward, 14 backward
-# 
-# column_names_rawdata_wm = c(
-#   'digitsForTrial', #both FS & BS digits
-#   'textbox.text', #FS response
-#   'textboxBS.text', #BS response
-#   'trialNumber', #both trial number
-#   'digitLoop.thisRepN', #FS number of digits
-#   'digitLoopBS.thisRepN', #BS number of digits
-#   'correct' #both FS & BS
-# );
-# 
-# # this will have trials in rows, these will be col. names
-# column_names_wm = c(
-#   'trialnumber',
-#   'subjectnumber',
-#   'number_digits',
-#   'forward1backward0',
-#   'correct'
-# );
-# 
-# data_wm = array(data = NA, dim = c(0, length(column_names_wm)));
-# colnames(data_wm) <- column_names_wm
+number_of_ospan_trials_per_person = 25;
+number_of_sspan_trials_per_person = 14;
+
+ospanExclude = c();
+sspanExclude = c();
+complexSpanExclude = as.data.frame(matrix(data=0, 
+                                          nrow = number_of_subjects, 
+                                          ncol=3, 
+                                          dimnames=list(c(NULL), c("subjectnumber", "ospanExclude", "symspanExclude"))));
+complexSpanExclude$subjectnumber = 1:number_of_subjects;
+
+complexSpanScores = as.data.frame(matrix(data=NA, 
+                                         nrow = number_of_subjects, 
+                                         ncol=4, 
+                                         dimnames=list(c(NULL), c("subjectnumber", "ospanScore", "symspanScore", "compositeSpanScore"))));
+complexSpanScores$subjectnumber= 1:number_of_subjects
 
 # Loop
 for(s in 1:number_of_subjects){
+  
+  ### RDM Data ###
   # Load in the data
-  tmpdata = read.csv(fn[s]);
+  tmpdata = read.csv(rdmfn[s]);
   
   # DECISION-MAKING DATA
   dm_data_to_add = array(data = NA, dim = c(number_of_dm_trials_per_person,length(column_names_dm)));
@@ -123,34 +120,54 @@ for(s in 1:number_of_subjects){
   # Add this person's DM data to the total DM data.
   data_dm = rbind(data_dm,dm_data_to_add);
   
-  # WORKING MEMORY
-  # wm_data_to_add = array(data = NA, dim = c(number_of_wm_trials_per_person,length(column_names_wm)));
-  # 
-  # wm_trial_indices = which(!is.na(tmpdata$trialNumber));
-  # 
-  # wm_data_to_add[,1] = 1:number_of_wm_trials_per_person; # trial numbers
-  # wm_data_to_add[,2] = s; # subject number
-  # 
-  # wm_data_to_add[,3] = (nchar(tmpdata$digitsForTrial[wm_trial_indices-1])-1)/2; # number of digits on the trial
-  # 
-  # wm_data_to_add[1:14,4] = 1; # forward is always first
-  # wm_data_to_add[15:28,4] = 0; # backward is always second
-  # 
-  # wm_data_to_add[,5] = tmpdata$correct[wm_trial_indices]; # correct = 1, incorrect = 0
-  # 
-  # data_wm = rbind(data_wm,wm_data_to_add);
+  ### OSPAN DATA ###
+  
+  ospantmpdata = read.csv(ospfn[s]);
+  ospantmpdata$subid = as.integer(substr(ospfn[s],6,8));
+  
+  if (any(ospantmpdata$percentCorrectMath[is.finite(ospantmpdata$percentCorrectMath)]<85)){
+    ospanExclude = c(ospanExclude,ospantmpdata$subid[1]);
+    complexSpanExclude$ospanExclude[s] = 1;
+  } else {
+    correctIndospan = which(ospantmpdata$correctCount == ospantmpdata$setSize)
+    complexSpanScores$ospanScore[s] = sum(ospantmpdata$correctCount[correctIndospan])
+  }
+  
+  ### SYMSPAN DATA ###
+  sspantmpdata = read.csv(sspfn[s]);
+  sspantmpdata$subid = as.integer(substr(sspfn[s],6,8));
+  
+  if (any(sspantmpdata$percentCorrectSym[is.finite(sspantmpdata$percentCorrectSym)]<85)){
+    sspanExclude = c(sspanExclude,sspantmpdata$subid[1]);
+    complexSpanExclude$symspanExclude[s] = 1;
+  } else {
+    correctIndsymspan = which(sspantmpdata$squareCorrectCount == sspantmpdata$setSize)
+    complexSpanScores$symspanScore[s] = sum(sspantmpdata$squareCorrectCount[correctIndsymspan])
+  }
+
+  
+  ### COMPOSITE SPAN ###
+  if ((complexSpanExclude$ospanExclude[s] == 0) & (complexSpanExclude$symspanExclude[s] == 0)){ # if both scores available
+    complexSpanScores$compositeSpanScore[s] = mean(c((complexSpanScores$ospanScore[s]/25),(complexSpanScores$symspanScore[s]/14))); # average the two scores
+  } else if ((complexSpanExclude$ospanExclude[s] == 1) & (complexSpanExclude$symspanExclude[s] == 0)){ # if only SymSpan
+    complexSpanScores$compositeSpanScore[s] = complexSpanScores$symspanScore[s]/14;
+  } else if ((complexSpanExclude$ospanExclude[s] == 0) & (complexSpanExclude$symspanExclude[s] == 1)){ # if only OSpan
+    complexSpanScores$compositeSpanScore[s] = complexSpanScores$ospanScore[s]/25;
+  }; # ... else, leave it NA
+  
 }
 
+# complexSpanExclude[is.na(complexSpanExclude[,])]=0
+
 data_dm = as.data.frame(data_dm) # make it a data frame so it plays nice
-# data_wm = as.data.frame(data_wm)
 
 # save out CSVs with the clean, compiled data!
 setwd(processeddata_wd);
 
 write.csv(data_dm, file=sprintf('cge_processed_decisionmaking_data_%s.csv',format(Sys.Date(), format="%Y%m%d")),
           row.names = F);
-# write.csv(data_wm, file=sprintf('cge_processed_workingmemory_data_%s.csv',format(Sys.Date(), format="%Y%m%d")),
-          # row.names = F);
+write.csv(complexSpanScores, file=sprintf('cge_processed_complexspan_data_%s.csv',format(Sys.Date(), format="%Y%m%d")),
+          row.names = F);
 
 # all done!
 
