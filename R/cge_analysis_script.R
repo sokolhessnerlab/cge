@@ -603,7 +603,37 @@ t.test(diff_diff_mean_pgamble, easy_easy_mean_pgamble, paired = T); # not sig di
 
 complexSpanScores
 
+# Mean, Median, and Variance of ospan, symspan, and compositespan
+mean_ospan = mean(complexSpanScores$ospanScore, na.rm = T)
+mean_symspan = mean(complexSpanScores$symspanScore, na.rm = T)
+mean_compositespan = mean(complexSpanScores$compositeSpanScore, na.rm = T)
 
+median_ospan = median(complexSpanScores$ospanScore, na.rm = T)
+median_symspan = median(complexSpanScores$symspanScore, na.rm = T)
+median_compositespan = median(complexSpanScores$compositeSpanScore, na.rm = T)
+
+variance_ospan = var(complexSpanScores$ospanScore, na.rm = T)
+variance_symspan = var(complexSpanScores$symspanScore, na.rm = T)
+variance_compositespan = var(complexSpanScores$compositeSpanScore, na.rm = T)
+
+var.test(ospanScores, symspanScores)
+
+# Include in the processing - Correlation between OSpan and SymSpan
+ospanScores = complexSpanScores$ospanScore
+symspanScores = complexSpanScores$symspanScore
+compositespanScores = complexSpanScores$compositeSpanScore
+
+cor.test(ospanScores, symspanScores)
+
+plot(ospanScores, symspanScores, 
+     pch = 19, col = rgb(.5, .5, .5, .3), 
+     xlim = c(0, 12.5), ylim = c(0, 12.5), cex = 2.5,
+     xlab = 'OSpan Scores', ylab = 'SymSpan Scores', 
+     main = 'Complex Span Scores')
+lines(x = c(0, 12), y = c(0, 12))
+
+
+capacity_HighP1_lowN1 = (compositespanScores > median_compositespan)*2-1;
 
 
 
