@@ -589,24 +589,22 @@ t.test(diff_diff_mean_pgamble, easy_easy_mean_pgamble, paired = T); # not sig di
 #A: it looks like pgamble based upon subsequent trials is not significantly differnt, difficulty doesnt show effect on p gamble.
 
 
+### WORKING MEMORY BASIC ANALYSIS ###
 
-
-
-
-
-
-
-
-
-
-####### NEED TO REDO BELOW THIS #######
-
-complexSpanScores
+cat(sprintf('Out of a total of %i participants, we have O-Span scores for %i, Sym-Span scores for %i, and composite span scores for %i.\n',
+              number_of_subjects, 
+              sum(is.finite(ospanScores)), 
+              sum(is.finite(symspanScores)), 
+              sum(is.finite(compositespanScores))))
 
 # Mean, Median, and Variance of ospan, symspan, and compositespan
 mean_ospan = mean(complexSpanScores$ospanScore, na.rm = T)
 mean_symspan = mean(complexSpanScores$symspanScore, na.rm = T)
 mean_compositespan = mean(complexSpanScores$compositeSpanScore, na.rm = T)
+
+sd_ospan = sd(complexSpanScores$ospanScore, na.rm = T)
+sd_symspan = sd(complexSpanScores$symspanScore, na.rm = T)
+sd_compositespan = sd(complexSpanScores$compositeSpanScore, na.rm = T)
 
 median_ospan = median(complexSpanScores$ospanScore, na.rm = T)
 median_symspan = median(complexSpanScores$symspanScore, na.rm = T)
@@ -616,105 +614,46 @@ variance_ospan = var(complexSpanScores$ospanScore, na.rm = T)
 variance_symspan = var(complexSpanScores$symspanScore, na.rm = T)
 variance_compositespan = var(complexSpanScores$compositeSpanScore, na.rm = T)
 
-var.test(ospanScores, symspanScores)
-
 # Include in the processing - Correlation between OSpan and SymSpan
 ospanScores = complexSpanScores$ospanScore
 symspanScores = complexSpanScores$symspanScore
 compositespanScores = complexSpanScores$compositeSpanScore
 
-cor.test(ospanScores, symspanScores)
+cor.test(ospanScores, symspanScores) # r(33) = 0.40, p = 0.02 (as of 2/12/24)
+var.test(ospanScores, symspanScores) # similar variance (p = 0.66 as of 2/12/24)
+t.test(ospanScores, symspanScores, paired = T) # t(34) = 1.4, p = 0.18 (as of 2/12/24)
+
+# SUMMARY: O-Span & Sym-Span scores are correlated with each other, and not significantly 
+# different from one another. They are NOT redundant (so correlation is ~0.4).
 
 plot(ospanScores, symspanScores, 
-     pch = 19, col = rgb(.5, .5, .5, .3), 
-     xlim = c(0, 12.5), ylim = c(0, 12.5), cex = 2.5,
+     pch = 19, col = rgb(.5, .5, .5, .5), 
+     xlim = c(0, 1), ylim = c(0, 1), cex = 2.5,
      xlab = 'OSpan Scores', ylab = 'SymSpan Scores', 
      main = 'Complex Span Scores')
-lines(x = c(0, 12), y = c(0, 12))
-
+lines(x = c(0, 1), y = c(0, 1))
 
 capacity_HighP1_lowN1 = (compositespanScores > median_compositespan)*2-1;
 
+sum(capacity_HighP1_lowN1 == 1, na.rm = T)
+sum(capacity_HighP1_lowN1 == -1, na.rm = T)
 
+# Plot the distribution w/ the median value
+hist(compositespanScores, breaks = 10, xlab = 'Composite Span Score', main = 'Distribution of Spans');
+abline(v = median_compositespan, col = 'red', lwd = 5)
 
-
-
-#### WM Task Analysis ####
-
-## TOTAL NUMBER FS & BS Correct (FS & BS)
-FS_correct = array(dim = c(number_of_clean_subjects,1));
-BS_correct = array(dim = c(number_of_clean_subjects,1));
-
-for (subj in 1:number_of_clean_subjects) {
-  subj_id = keep_participants[subj]
-  tmpdata = data_wm[data_wm$subjectnumber == subj_id, ]
-  # defines this person's data
-  FS_correct[subj] = sum(tmpdata$correct[tmpdata$forward1backward0 == 1], na.rm =
-                           T)
-  
-  BS_correct[subj] = sum(tmpdata$correct[tmpdata$forward1backward0 == 0], na.rm =
-                           T)
-}
-## Q:is there a statistically sig difference between number of FS and BS #correct/14? 
-t.test(FS_correct, BS_correct, paired = T);
-#A: not significant diff (3/7/23), suggestive that overall number of trials correct on either fs or bs is similar.
-#total number correct doesnt really tell us anything... exlcude from resutls manuscript! 
-
-# FS & BS max number_digits/length when correct (BEST SPAN)
-#Q: is there a difference in max number of digits correct in FS vs BS (comparing fs max digit length correct to bs)
-best_span_FS = array(dim = c(number_of_clean_subjects,1));
-best_span_BS = array(dim = c(number_of_clean_subjects,1));
-
-for (subj in 1:number_of_clean_subjects){
-  subj_id = keep_participants[subj]
-  tmpdata = data_wm[data_wm$subjectnumber == subj_id,]
-  best_span_FS[subj] = max(tmpdata$number_digits[(tmpdata$forward1backward0 == 1) & (tmpdata$correct == 1)], na.rm = T);
-  best_span_BS[subj] = max(tmpdata$number_digits[(tmpdata$forward1backward0 == 0) & (tmpdata$correct == 1)], na.rm = T);
-}
-
-t.test(best_span_FS, best_span_BS, paired = T);
-#A: yes, significant difference between max digit number/length FS correct compared to BS correct (4/2/23)!Suggestive that people have different capcities FS and BS
-
-cor.test(best_span_BS,best_span_FS)
-#A: yes, very correlated (r = 0.71, p = 7.9e-9)! 
-plot(best_span_BS, best_span_FS, 
-     pch = 19, col = rgb(.5, .5, .5, .3), 
-     xlim = c(0, 12.5), ylim = c(0, 12.5), cex = 2.5,
-     xlab = 'Best Forwards Span', ylab = 'Best Backwards Span', 
-     main = 'Forward vs Backwards Capacity')
-lines(x = c(0, 12), y = c(0, 12))
-
-# Collapse spans into a single span measure
-best_span_overall = rowMeans(cbind(best_span_FS,best_span_BS))
-
-# COG CONTROL REGRESSION & RT- use digit span info to account for capacity... #help says there are variablelengths!! 
-#must use median split
-#create median split values:
-medianSpan = median(best_span_overall);
-capacity_HighP1_lowN1 = (best_span_overall > medianSpan)*2-1;
 
 clean_data_dm$capacity_HighP1_lowN1 = NA;
-clean_data_dm$best_span_overall = NA;
 
 for(s in 1:number_of_clean_subjects){
   subj_id = keep_participants[s];
   clean_data_dm$capacity_HighP1_lowN1[clean_data_dm$subjectnumber == subj_id] = capacity_HighP1_lowN1[s];
-  clean_data_dm$best_span_overall[clean_data_dm$subjectnumber == subj_id] = best_span_overall[s];
 }
 
-clean_data_dm$best_span_overall_original = clean_data_dm$best_span_overall;
-clean_data_dm$best_span_overall = clean_data_dm$best_span_overall - mean(clean_data_dm$best_span_overall)
+clean_data_dm$complexspan_demeaned = clean_data_dm$complexspan - mean_compositespan;
 
-# Two options for visualizing Span.
-hist(best_span_overall, breaks = seq(from = 4.25, to = 11.75, by = .5))
-abline(v = medianSpan, col = 'red', lwd = 4)
-
-plot(sort(best_span_overall))
-abline(h = medianSpan, col = 'red', lwd = 4)
-
-
-mean((best_span_FS < median(best_span_FS)) == (best_span_BS < median(best_span_BS)))
-# median splits on only forward span & on only backward span agree about categorization 86% of the time - GOOD!
+plot(sort(compositespanScores))
+abline(h = median_compositespan, col = 'red', lwd = 2)
 
 
 
