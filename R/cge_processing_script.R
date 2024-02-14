@@ -10,22 +10,41 @@ rawdata_wd = paste0(main_wd,'raw/');
 processeddata_wd = paste0(main_wd,'preprocessed/')
 
 # set the working directory
+setwd('S:/shlab/Projects/CGE/data/preprocessed')
+setwed('S:/shlab/Projects/CGE/data/raw')
 setwd(rawdata_wd);
+
+getwd()
 
 # List all the data files
 rdmfn = dir(pattern = glob2rx('cgeRDM_*.csv'),full.names = T, recursive = T);
 sspfn = dir(pattern = glob2rx('cgeSYMSPANbothReal_*.csv'), full.names = T, recursive = T);
 ospfn = dir(pattern = glob2rx('cgeOSPANbothReal_*.csv'), full.names = T, recursive = T);
+qualfn = dir(pattern = glob2rx('2024.02.09-CGE+Survey_February+9,+2024_16.11.csv'), full.names = T, recursive = T);
 
 # Identify the number of participants from the file listing
 number_of_subjects = length(rdmfn);
+
+### Qualtrics: IUS-12 (Intolerance for Uncertainty), NCS-18 (Need for Cognition), SNS (Subjective Numeracy),
+# PSS (Perceived Stress), & Demographics ###
+
+qualtricsExclude = c()
+
+for(s in 1:Progress){
+qualtricstmpdata = read.csv(qualfn[s]);
+
+
+qualtricstmpdata$Progress
+
+print('hello')
+
 
 # Store some basic information about size of the decision-making task
 num_static_trials = 50;
 num_dynamic_trials = 120;
 number_of_dm_trials_per_person = num_static_trials + num_dynamic_trials; # static = 50, dynamic = 120
 
-# Set up variables to hold decision-making data
+# Set up variables to hold decision-making data & qualtrics
 column_names_dm = c(
   'trialnumber',
   'subjectnumber',
@@ -43,7 +62,12 @@ column_names_dm = c(
   'bestMu',
   'ospan',
   'symspan',
-  'complexspan'
+  'complexspan',
+  'NFC',
+  'PSS',
+  'SNS',
+  'IUS',
+  'Demo'
 );
 
 data_dm = array(data = NA, dim = c(0, length(column_names_dm)));
@@ -70,10 +94,11 @@ complexSpanScores$subjectnumber= 1:number_of_subjects
 # Loop
 for(s in 1:number_of_subjects){
   
-  ### OSPAN DATA ###
+  ### OSPAN DATA ### 
   
   ospantmpdata = read.csv(ospfn[s]);
   ospantmpdata$subid = as.integer(substr(ospfn[s],6,8));
+  
   
   if (any(ospantmpdata$percentCorrectMath[is.finite(ospantmpdata$percentCorrectMath)]<85)){
     ospanExclude = c(ospanExclude,ospantmpdata$subid[1]);
@@ -159,11 +184,11 @@ for(s in 1:number_of_subjects){
   dm_data_to_add[,15] = complexSpanScores$ospanScore[s];
   dm_data_to_add[,16] = complexSpanScores$symspanScore[s];
   dm_data_to_add[,17] = complexSpanScores$compositeSpanScore[s];
+  
+  
 
   # Add this person's DM data to the total DM data.
   data_dm = rbind(data_dm,dm_data_to_add);
-}
-
 # complexSpanExclude[is.na(complexSpanExclude[,])]=0
 
 data_dm = as.data.frame(data_dm) # make it a data frame so it plays nice
