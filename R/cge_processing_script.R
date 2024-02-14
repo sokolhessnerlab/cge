@@ -3,6 +3,8 @@
 # Script to process the data collected from CGE during Fall 2023 and Winter 2024 in the CGE
 # (Control & Gambling Task with Eyetracking) study.
 
+
+
 # identify the working directory paths
 main_wd = '/Volumes/shlab/Projects/CGE/data/';
 
