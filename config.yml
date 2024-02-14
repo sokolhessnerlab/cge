@@ -20,4 +20,6 @@ default:
 tabletas:
   path:
     data:
-      main: "thisisatest"
+      main: "/Volumes/shlab/Projects/CGE/data/"
+      raw: "/Volumes/shlab/Projects/CGE/data/raw/"
+      processed: "/Volumes/shlab/Projects/CGE/data/preprocessed/"
