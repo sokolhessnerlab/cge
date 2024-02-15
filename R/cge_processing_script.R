@@ -25,20 +25,49 @@ qualfn = dir(pattern = glob2rx('*Survey*.csv'), full.names = T, recursive = T);
 # Identify the number of participants from the file listing
 number_of_subjects = length(rdmfn);
 
-### Qualtrics: IUS-12 (Intolerance for Uncertainty), NCS-18 (Need for Cognition), SNS (Subjective Numeracy),
-# PSS (Perceived Stress), & Demographics ###
 
-qualtricsExclude = c()
+### Qualtrics Processing
+#   IUS-12 (Intolerance for Uncertainty)
+#   NCS-18 (Need for Cognition)
+#   SNS (Subjective Numeracy),
+#   PSS (Perceived Stress), & Demographics ###
 
-for(s in 1:Progress){
-  qualtricstmpdata = read.csv(qualfn[s]);
-  
-  
-  qualtricstmpdata$Progress
-}
+raw_qualtrics_data = read.csv(qualfn[(length(qualfn))]); # Load the last Qualtrics file, assuming naming convention sorts the files so that last is most recent!
 
-print('hello')
+survey_colnames = c(
+  'subjectID',
+  'age',
+  'gender',
+  'ethnicity',
+  'race',
+  'education',
+  'firstgen',
+  'politicalorientation',
+  'IUS',
+  'NCS',
+  'SNS',
+  'PSS'
+);
 
+survey_data = array(data = NA, dim = c(number_of_subjects, length(survey_colnames)));
+colnames(survey_data) <- survey_colnames;
+survey_data = as.data.frame(survey_data)
+
+raw_qualtrics_data$EI.1[15] = '007'; # replacing 'CGE007' with the numeric value
+raw_qualtrics_data = raw_qualtrics_data[-3,]; # deleting an early test line
+
+# Make indices to identify which rows to keep!
+ind_complete = raw_qualtrics_data$Finished == 1; # completed the survey
+ind_nottest = raw_qualtrics_data$EI.1 < 900; # Subject IDs should be < 900
+
+ind_overall = ind_complete & ind_nottest;
+cat(sprintf('Qualtrics data has %g participants; decision-making data has %g participants.\n', sum(ind_overall), number_of_subjects))
+
+survey_data$subjectID = as.numeric(raw_qualtrics_data$EI.1[ind_overall])
+#... do other columns!
+
+
+### Prepping for Subject-Level Task Data Loop ###
 
 # Store some basic information about size of the decision-making task
 num_static_trials = 50;
@@ -190,7 +219,7 @@ for(s in 1:number_of_subjects){
 
   # Add this person's DM data to the total DM data.
   data_dm = rbind(data_dm,dm_data_to_add);
-# complexSpanExclude[is.na(complexSpanExclude[,])]=0
+}
 
 data_dm = as.data.frame(data_dm) # make it a data frame so it plays nice
 
