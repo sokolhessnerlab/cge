@@ -674,14 +674,14 @@ clean_data_dm$sqrtRT = sqrt(clean_data_dm$reactiontime);
 
 ## Model 0: Current RT based on current easy difficult
 m0_diffcat = lm(sqrtRT ~ 1 + easyP1difficultN1, data = clean_data_dm); # LM
-summary(m0_diffcat)
+summary(m0_diffcat) # difficulty predicts RT!
 
 m0_diffcat_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 + (1 | subjectnumber), data = clean_data_dm); # LMER
-summary(m0_diffcat_rfx)
+summary(m0_diffcat_rfx) # Same with RFX! 
 
 m0_diffcat_dynonly_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 + (1 | subjectnumber),
                           data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]);
-summary(m0_diffcat_dynonly_rfx)
+summary(m0_diffcat_dynonly_rfx) # Same with only dynamic trials
 
 # Takeaway: In all cases, difficult is slower than easy! Use: m0_diffcat_rfx
 
@@ -697,18 +697,24 @@ m0_diffcont_dynonly_rfx = lmer(sqrtRT ~ 1 + diff_cont + (1 | subjectnumber),
 summary(m0_diffcont_dynonly_rfx) # matches categorical
 
 # TAKEAWAY: Nothing new here, matches categorical, as expected (diff_cont is practically categorical!)
+
 m0_alldiffcont = lm(sqrtRT ~ 1 + all_diff_cont, data = clean_data_dm);
 summary(m0_alldiffcont) # matches categorical
 
 m0_alldiffcont_rfx = lmer(sqrtRT ~ 1 + all_diff_cont + (1 | subjectnumber), data = clean_data_dm);
 summary(m0_alldiffcont_rfx) # matches categorical
 
+# IN ALL CASES, PEOPLE ARE SLOWER ON DIFFICULT TRIALS THAN EASY TRIALS.
+# UNAFFECTED BY CATEGORICAL/CONTINUOUS
+# UNAFFECTED BY DYNAMIC ONLY VS. ALL TRIALS
+
 # Which model should we use? 
 # It's between m0_diffcat_rfx and m0_alldiffcont_rfx
-AIC(m0_diffcat_rfx) # -4898.179
-AIC(m0_alldiffcont_rfx) # -4924.883 <- BETTER (more negative)
+AIC(m0_diffcat_rfx) # -5462.535
+AIC(m0_alldiffcont_rfx) # -5614.971 <- BETTER (more negative)
 
-anova(m0_diffcat_rfx,m0_alldiffcont_rfx) # CONFIRMS that all_diff_cont outperforms easyp1difficuln1
+anova(m0_diffcat_rfx,m0_alldiffcont_rfx) # CONFIRMS that all_diff_cont outperforms easyp1difficultn1
+# p < 2e-16 (it's reported as '0') for continuous as better than categorical
 
 # Plot the simple main effect of difficulty
 xval_plot = seq(from = 0, to = 1, by = .1);
@@ -747,43 +753,37 @@ clean_data_dm$sqrtRT_prev[clean_data_dm$trialnumber == 1] = NA;
 # Does previous difficulty influence subsequent RT? 
 # LMs
 m1_diffcat_prev = lm(sqrtRT ~ 1 + easyP1difficultN1 + easyP1difficultN1_prev, data = clean_data_dm);
-summary(m1_diffcat_prev) # no effect
+summary(m1_diffcat_prev) # slight effect, OPPOSITE to main pattern (p = 0.024 as of 2/15/24)
+#  (if prev. trial easy, slower on current trial .... OR
+#   if prev. trial difficult, faster on current trial)
 
 m1_diffcat_prev_intxn = lm(sqrtRT ~ 1 + easyP1difficultN1 * easyP1difficultN1_prev, data = clean_data_dm);
-summary(m1_diffcat_prev_intxn) # no effect
+summary(m1_diffcat_prev_intxn) # no interaction, same main effect as m1_diffcat_prev
 
 # LMERs, i.e. RFX Versions
 m1_diffcat_prev_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 + easyP1difficultN1_prev + 
                              (1 | subjectnumber), data = clean_data_dm);
-summary(m1_diffcat_prev_rfx) # no effect
+summary(m1_diffcat_prev_rfx) # previous difficulty has strong effect (p = 0.0089)
+# Same direction as in m1_diffcat_prev
 
 m1_diffcat_prev_intxn_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 * easyP1difficultN1_prev + (1 | subjectnumber), data = clean_data_dm);
-summary(m1_diffcat_prev_intxn_rfx) # no effect
+summary(m1_diffcat_prev_intxn_rfx) # no interaction, same main effect.
 
-# TAKEAWAY: Previous categorical difficulty has no effect on subsequent RTs
+# TAKEAWAY: Previous categorical difficulty has OPPOSITE effect on current RTs as current difficulty.
+#    THIS IS DIFFERENT FROM CGT! CGT HAD NO MAIN EFFECT OF PREV. CATEGORICAL DIFFICULTY.
 
 m1_prev_alldiffCont_intxn_rfx = lmer(sqrtRT ~ 1 + 
                                                 all_diff_cont * prev_all_diff_cont + 
                                                 (1 | subjectnumber), data = clean_data_dm);
-summary(m1_prev_alldiffCont_intxn_rfx) # Previous CONTINUOUS difficulty is significant (p < 0.03), no interaction w/ current diff
+summary(m1_prev_alldiffCont_intxn_rfx) # Previous CONTINUOUS difficulty is VERY significant (p = 7.6e-8), no interaction w/ current diff
 # Sign is negative: the more difficult the prev. trial was, the faster people were on the current trial
 # ... facilitatory? 
-#
-# 
-# Thinking this through... restricting the above RFX regression to JUST static or JUST dynamic data does not yield a significant
-# effect of previous difficulty (static: -0.003, p = .86; dynamic: 0.01, p = 0.24). Both alternative regressions return, as 
-# expected, positive effects of current difficulty on reaction time. 
-
-AIC(m1_prev_alldiffCont_intxn_rfx) # -4931.999
-AIC(m1_diffcat_prev_intxn_rfx) # -4875.277
-
-# Note that accounting for previous difficulty does outperform a model that does not (i.e. m0_alldiffcont_rfx, which had AIC 
-# of -4924.883)!
 
 
-# Categorically, there is no apparent effect of PREVIOUS difficulty on subsequent choices. 
-# HOWEVER, using continuous difficulty (including all trials, static & dynamic), we find a small effect of 
-# previous (continuous) difficulty on subsequent RTs. It's facilitatory! 
+AIC(m1_prev_alldiffCont_intxn_rfx) # -5604.554 <-- BETTER (more negative)
+AIC(m1_diffcat_prev_intxn_rfx) # -5445.634
+
+
 
 # Plot it!
 xval_plot = seq(from = 0, to = 1, by = .1);
@@ -795,13 +795,26 @@ plot(x = xval_plot, y = (coef_vals["(Intercept)"] +
                            prev_trial_diff[1]*coef_vals["prev_all_diff_cont"])^2, 
      type = 'l', lwd = 5, col = 'blue', 
      main = 'Effect of current & previous difficulty', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
-     ylim = c(1.25, 1.5))
+     ylim = c(1.25, 2))
 lines(x = xval_plot, y = (coef_vals["(Intercept)"] + 
                             xval_plot*coef_vals["all_diff_cont"] + 
                             prev_trial_diff[2]*coef_vals["prev_all_diff_cont"])^2, 
       lwd = 5, col = 'red')
 # RED = previous trial difficult
 # BLUE = previous trial easy
+
+
+
+
+# PSH STOPPED HERE ON FEBRUARY 15, 2024
+
+
+
+
+
+
+
+
 
 
 
