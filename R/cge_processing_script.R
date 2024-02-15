@@ -20,7 +20,7 @@ setwd(config$path$data$raw)
 rdmfn = dir(pattern = glob2rx('cgeRDM_*.csv'),full.names = T, recursive = T);
 sspfn = dir(pattern = glob2rx('cgeSYMSPANbothReal_*.csv'), full.names = T, recursive = T);
 ospfn = dir(pattern = glob2rx('cgeOSPANbothReal_*.csv'), full.names = T, recursive = T);
-qualfn = dir(pattern = glob2rx('2024.02.09-CGE+Survey_February+9,+2024_16.11.csv'), full.names = T, recursive = T);
+qualfn = dir(pattern = glob2rx('*Survey*.csv'), full.names = T, recursive = T);
 
 # Identify the number of participants from the file listing
 number_of_subjects = length(rdmfn);
