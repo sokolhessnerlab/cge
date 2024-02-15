@@ -4,19 +4,17 @@
 # (Control & Gambling Task with Eyetracking) study.
 
 
+# STEP 1: SET YOUR WORKING DIRECTORY!
+# On PSH's computers...
+setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
+# On Von's PC Laptop "tabletas"...
+setwd('???');
 
-# identify the working directory paths
-main_wd = '/Volumes/shlab/Projects/CGE/data/';
 
-rawdata_wd = paste0(main_wd,'raw/');
-processeddata_wd = paste0(main_wd,'preprocessed/')
+# STEP 2: then run from here on the same
+config = config::get()
 
-# set the working directory
-setwd('S:/shlab/Projects/CGE/data/preprocessed')
-setwed('S:/shlab/Projects/CGE/data/raw')
-setwd(rawdata_wd);
-
-getwd()
+setwd(config$path$data$raw)
 
 # List all the data files
 rdmfn = dir(pattern = glob2rx('cgeRDM_*.csv'),full.names = T, recursive = T);
@@ -33,10 +31,11 @@ number_of_subjects = length(rdmfn);
 qualtricsExclude = c()
 
 for(s in 1:Progress){
-qualtricstmpdata = read.csv(qualfn[s]);
-
-
-qualtricstmpdata$Progress
+  qualtricstmpdata = read.csv(qualfn[s]);
+  
+  
+  qualtricstmpdata$Progress
+}
 
 print('hello')
 
@@ -196,7 +195,7 @@ for(s in 1:number_of_subjects){
 data_dm = as.data.frame(data_dm) # make it a data frame so it plays nice
 
 # save out CSVs with the clean, compiled data!
-setwd(processeddata_wd);
+setwd(config$path$data$processed);
 
 write.csv(data_dm, file=sprintf('cge_processed_decisionmaking_data_%s.csv',format(Sys.Date(), format="%Y%m%d")),
           row.names = F);

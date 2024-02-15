@@ -6,12 +6,19 @@
 
 rm(list=ls()); # Clear the workspace
 
-# identify the working directory paths
-main_wd = '/Volumes/shlab/Projects/CGE/data/';
-processeddata_wd = paste0(main_wd,'preprocessed/')
+
+# STEP 1: SET YOUR WORKING DIRECTORY!
+# On PSH's computers...
+setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
+# On Von's PC Laptop "tabletas"...
+setwd('???');
+
+
+# STEP 2: then run from here on the same
+config = config::get()
 
 #### Loading Data ####
-setwd(processeddata_wd);
+setwd(config$path$data$processed)
 
 # Load Decision-Making Data
 fn = dir(pattern = glob2rx('cge_processed_decisionmaking*.csv'),full.names = T);
