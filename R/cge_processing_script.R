@@ -230,6 +230,8 @@ write.csv(data_dm, file=sprintf('cge_processed_decisionmaking_data_%s.csv',forma
           row.names = F);
 write.csv(complexSpanScores, file=sprintf('cge_processed_complexspan_data_%s.csv',format(Sys.Date(), format="%Y%m%d")),
           row.names = F);
+write.csv(survey_data, file=sprintf('cge_processed_survey_data_%s.csv',format(Sys.Date(), format="%Y%m%d")),
+          row.names = F);
 
 # all done!
 
