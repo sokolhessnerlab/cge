@@ -8,7 +8,7 @@
 # On PSH's computers...
 setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # On Von's PC Laptop "tabletas"...
-setwd('???');
+setwd('C:/Users/jvonm/Documents/GitHub/cge');
 
 
 # STEP 2: then run from here on the same
