@@ -67,6 +67,7 @@ survey_data$subjectID = as.numeric(raw_qualtrics_data$EI.1[ind_overall])
 #... do other columns!
 
 
+
 ### Prepping for Subject-Level Task Data Loop ###
 
 # Store some basic information about size of the decision-making task
