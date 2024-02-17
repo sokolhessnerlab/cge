@@ -16,6 +16,9 @@ config = config::get()
 
 setwd(config$path$data$raw)
 
+#Von's
+setwd('S:/shlab/Projects/CGE/data/raw')
+
 # List all the data files
 rdmfn = dir(pattern = glob2rx('cgeRDM_*.csv'),full.names = T, recursive = T);
 sspfn = dir(pattern = glob2rx('cgeSYMSPANbothReal_*.csv'), full.names = T, recursive = T);
@@ -26,11 +29,7 @@ qualfn = dir(pattern = glob2rx('*Survey*.csv'), full.names = T, recursive = T);
 number_of_subjects = length(rdmfn);
 
 
-### Qualtrics Processing
-#   IUS-12 (Intolerance for Uncertainty)
-#   NCS-18 (Need for Cognition)
-#   SNS (Subjective Numeracy),
-#   PSS (Perceived Stress), & Demographics ###
+### Qualtrics CGE Survey Processing ###
 
 raw_qualtrics_data = read.csv(qualfn[(length(qualfn))]); # Load the last Qualtrics file, assuming naming convention sorts the files so that last is most recent!
 
@@ -43,8 +42,12 @@ survey_colnames = c(
   'education',
   'firstgen',
   'politicalorientation',
+  'IUS_prospective',
+  'IUS_inhibitory',
   'IUS',
   'NCS',
+  'SNS_ability',
+  'SNS_preference',
   'SNS',
   'PSS'
 );
@@ -56,6 +59,8 @@ survey_data = as.data.frame(survey_data)
 raw_qualtrics_data$EI.1[15] = '007'; # replacing 'CGE007' with the numeric value
 raw_qualtrics_data = raw_qualtrics_data[-3,]; # deleting an early test line
 
+# Add attention check DG.4 - Need to have selected 3
+
 # Make indices to identify which rows to keep!
 ind_complete = raw_qualtrics_data$Finished == 1; # completed the survey
 ind_nottest = raw_qualtrics_data$EI.1 < 900; # Subject IDs should be < 900
@@ -63,8 +68,248 @@ ind_nottest = raw_qualtrics_data$EI.1 < 900; # Subject IDs should be < 900
 ind_overall = ind_complete & ind_nottest;
 cat(sprintf('Qualtrics data has %g participants; decision-making data has %g participants.\n', sum(ind_overall), number_of_subjects))
 
+# Used the rows from EI.1 (participant number) to create subject IDs
 survey_data$subjectID = as.numeric(raw_qualtrics_data$EI.1[ind_overall])
-#... do other columns!
+plot(survey_data$subjectID)
+
+# Age of participants
+survey_data$age = as.numeric(raw_qualtrics_data$DG.1[ind_overall])
+plot(survey_data$age)
+
+# Gender of participants (1 = Man; 2 = Woman; 3 = Non-binary; 4 = Genderqueer; 5 = Gender expansive; 6 = Two-spirited; 7 = 3rd Gender; 8 = Agender; 9 = Not sure; 10 = Other(text); 11 = Prefer not to say)
+
+
+# Ethnicity of participants (1 = Hispanic/Latinx; 2 = Not Hispanic/Latinx; 3 = Prefer not to say)
+
+
+# Race of participants (1 = American Indian/Alaska Native; 2 = Black/African-American; 3 = East Asian; 4 = Native Hawaiian/Pacific Islander; 5 = South Asian; 6 = White; 7 = Bi-/Multi-racial (text); 8 = Other (text); 9 = Prefer not to say)
+
+
+# Education level of participants (1 = No school; 2 = to 8th grade; 3 = Some HS, no diploma; 4 = HS/GED; 5 = Trade school; 6 = AA/S; 7 = BA/S; 8 = MA/S; 9 = Professional degree; 10 = PhD)
+
+
+# If participants are firstgen (1 = Yes; 2 = No; 3 = Unsure)
+
+
+# Political orientation of participants: Likert (1 = "Extremely conservative" to 9 = "Extremely liberal")
+
+
+# IUS-12 Scores (Intolerance for Uncertainty; Carleton et al., 2007): Total (12-60 & Subscales); Subscales (Prospective Anxiety: 1-7 & Inhibitory Anxiety: 8-12); Likert (1 = "Not at all characteristic of me" to 5 = "Entirely characteristic of me")
+survey_data$IUS_prospective = as.numeric(raw_qualtrics_data$IUS.12_1[ind_overall]) + # Prospective Anxiety
+                  as.numeric(raw_qualtrics_data$IUS.12_2[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_3[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_4[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_5[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_6[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_7[ind_overall]);
+
+min(survey_data$IUS_prospective)
+max(survey_data$IUS_prospective)
+mean(survey_data$IUS_prospective)
+sd(survey_data$IUS_prospective)
+median(survey_data$IUS_prospective)
+var(survey_data$IUS_prospective)
+
+hist(survey_data$IUS_prospective)
+
+survey_data$IUS_inhibitory = as.numeric(raw_qualtrics_data$IUS.12_8[ind_overall]) + # Inhibitory Anxiety
+                  as.numeric(raw_qualtrics_data$IUS.12_9[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_10[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_11[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_12[ind_overall]);
+
+min(survey_data$IUS_inhibitory)
+max(survey_data$IUS_inhibitory)
+mean(survey_data$IUS_inhibitory)
+sd(survey_data$IUS_inhibitory)
+median(survey_data$IUS_inhibitory)
+var(survey_data$IUS_inhibitory)
+
+hist(survey_data$IUS_inhibitory)
+
+survey_data$IUS = as.numeric(raw_qualtrics_data$IUS.12_1[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_2[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_3[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_4[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_5[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_6[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_7[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_8[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_9[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_10[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_11[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$IUS.12_12[ind_overall]);
+
+min(survey_data$IUS)
+max(survey_data$IUS)
+mean(survey_data$IUS)
+sd(survey_data$IUS)
+median(survey_data$IUS)
+var(survey_data$IUS)
+
+hist(survey_data$IUS)
+
+# NCS-18 Scores (Need for Cognition; Cacioppo et al., 1984): Total (18-450); Reverse score (3, 4, 5, 7, 8, 9, 12, 16, 17); Likert (1 = "Extremely uncharacteristic of me" to 5 = "Extremely characteristic of me")
+NCS_3_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_3[ind_overall]); # _R = reverse scoring the item(s)
+          as.numeric(raw_qualtrics_data$NCS.18_3[ind_overall]);
+          NCS_3_R;
+
+NCS_4_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_4[ind_overall]);
+          as.numeric(raw_qualtrics_data$NCS.18_4[ind_overall]);
+          NCS_4_R;
+
+NCS_5_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_5[ind_overall]) 
+          as.numeric(raw_qualtrics_data$NCS.18_5[ind_overall]);
+          NCS_5_R;
+
+NCS_7_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_7[ind_overall]) 
+          as.numeric(raw_qualtrics_data$NCS.18_7[ind_overall]);
+          NCS_7_R;
+
+NCS_8_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_8[ind_overall]) 
+          as.numeric(raw_qualtrics_data$NCS.18_8[ind_overall]);
+          NCS_8_R;
+
+NCS_9_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_9[ind_overall]) 
+          as.numeric(raw_qualtrics_data$NCS.18_9[ind_overall]);
+          NCS_9_R;
+
+NCS_12_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_12[ind_overall]) 
+           as.numeric(raw_qualtrics_data$NCS.18_12[ind_overall]);
+           NCS_12_R;
+
+NCS_16_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_16[ind_overall]) 
+           as.numeric(raw_qualtrics_data$NCS.18_16[ind_overall]);
+           NCS_16_R;
+
+NCS_17_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_17[ind_overall]) 
+           as.numeric(raw_qualtrics_data$NCS.18_17[ind_overall]);
+           NCS_17_R;
+
+survey_data$NCS = as.numeric(raw_qualtrics_data$NCS.18_1[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$NCS.18_2[ind_overall]) +
+                  NCS_3_R +
+                  NCS_4_R +
+                  NCS_5_R +
+                  as.numeric(raw_qualtrics_data$NCS.18_6[ind_overall]) +
+                  NCS_7_R +
+                  NCS_8_R +
+                  NCS_9_R +
+                  as.numeric(raw_qualtrics_data$NCS.18_10[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$NCS.18_11[ind_overall]) +
+                  NCS_12_R +
+                  as.numeric(raw_qualtrics_data$NCS.18_13[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$NCS.18_14[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$NCS.18_15[ind_overall]) +
+                  NCS_16_R +
+                  NCS_17_R +
+                  as.numeric(raw_qualtrics_data$NCS.18_18[ind_overall]);
+           
+min(survey_data$NCS)
+max(survey_data$NCS)
+mean(survey_data$NCS)
+sd(survey_data$IUS)
+median(survey_data$NCS)
+var(survey_data$NCS)
+           
+hist(survey_data$IUS)
+
+# SNS Scores (Subjective Numeracy; Fagerlin et al., 2007): Average (Total & Subscales); Reverse score (7); Subscales (Ability: 1-4 & Preference: 5-8); Ability Likert (1 = "Not at all good" to 6 = "Extremely good") & Prefernce Likert (5: 1 = Not at all helpful to 6 = Extremely helpful"; 6: 1 = "Always prefer words" to 6 = "Always prefer numbers"; 7: 1 = "Always prefer percentages" to 6 = "Always prefer words"; 8: 1 = "Never" to 6 = "Very often")
+SNS_7_R = 7 - as.numeric(raw_qualtrics_data$SNS.7.R[ind_overall]);
+          as.numeric(raw_qualtrics_data$SNS.7.R[ind_overall]);
+          SNS_7_R
+          
+
+SNS_tmpSum_ability = as.numeric(raw_qualtrics_data$SNS.1[ind_overall]) + # Ability
+                     as.numeric(raw_qualtrics_data$SNS.2[ind_overall]) +
+                     as.numeric(raw_qualtrics_data$SNS.3[ind_overall]) +
+                     as.numeric(raw_qualtrics_data$SNS.4[ind_overall]);
+
+survey_data$SNS_ability = SNS_tmpSum_ability/4
+
+min(survey_data$SNS_ability)
+max(survey_data$SNS_ability)
+mean(survey_data$SNS_ability)
+sd(survey_data$SNS_ability)
+median(survey_data$SNS_ability)
+var(survey_data$SNS_ability)
+
+hist(survey_data$SNS_ability)
+
+SNS_tmpSum_preference = as.numeric(raw_qualtrics_data$SNS.5[ind_overall]) + # Preference
+                        as.numeric(raw_qualtrics_data$SNS.6[ind_overall]) +
+                        SNS_7_R +
+                        as.numeric(raw_qualtrics_data$SNS.8[ind_overall]);
+
+survey_data$SNS_preference = SNS_tmpSum_preference/4
+
+min(survey_data$SNS_preference)
+max(survey_data$SNS_preference)
+mean(survey_data$SNS_preference)
+sd(survey_data$SNS_preference)
+median(survey_data$SNS_preference)
+var(survey_data$SNS_preference)
+
+hist(survey_data$SNS_preference)
+
+SNS_tmpSum = as.numeric(raw_qualtrics_data$SNS.1[ind_overall]) +
+             as.numeric(raw_qualtrics_data$SNS.2[ind_overall]) +
+             as.numeric(raw_qualtrics_data$SNS.3[ind_overall]) +
+             as.numeric(raw_qualtrics_data$SNS.4[ind_overall]) +
+             as.numeric(raw_qualtrics_data$SNS.5[ind_overall]) +
+             as.numeric(raw_qualtrics_data$SNS.6[ind_overall]) +
+             SNS_7_R +
+             as.numeric(raw_qualtrics_data$SNS.8[ind_overall]);
+
+survey_data$SNS = SNS_tmpSum/8
+
+min(survey_data$SNS)
+max(survey_data$SNS)
+mean(survey_data$SNS)
+sd(survey_data$SNS)
+median(survey_data$SNS)
+var(survey_data$SNS)
+
+hist(survey_data$SNS)
+
+# PSS Scores (Perceived Stress; Cohen et al., 1983): Total (0 - 40); Reverse score (4, 5, 7, & 8); Likert (0 = "Never" to 4 = "Very Often")
+PSS_4_R = 5 - as.numeric(raw_qualtrics_data$PSS.Matrix_4[ind_overall]);
+          as.numeric(raw_qualtrics_data$PSS.Matrix_4[ind_overall]);
+          PSS_4_R
+
+PSS_5_R = 5 - as.numeric(raw_qualtrics_data$PSS.Matrix_5[ind_overall]);
+          as.numeric(raw_qualtrics_data$PSS.Matrix_5[ind_overall]);
+          PSS_5_R
+
+PSS_7_R = 5 - as.numeric(raw_qualtrics_data$PSS.Matrix_7[ind_overall]);
+          as.numeric(raw_qualtrics_data$PSS.Matrix_7[ind_overall]);
+          PSS_7_R
+
+PSS_8_R = 5 - as.numeric(raw_qualtrics_data$PSS.Matrix_8[ind_overall]);
+          as.numeric(raw_qualtrics_data$PSS.Matrix_8[ind_overall]);
+          PSS_8_R
+
+survey_data$PSS = as.numeric(raw_qualtrics_data$PSS.Matrix_1[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$PSS.Matrix_2[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$PSS.Matrix_3[ind_overall]) +
+                  PSS_4_R +
+                  PSS_5_R +
+                  as.numeric(raw_qualtrics_data$PSS.Matrix_6[ind_overall]) +
+                  PSS_7_R +
+                  PSS_8_R +
+                  as.numeric(raw_qualtrics_data$PSS.Matrix_9[ind_overall]) +
+                  as.numeric(raw_qualtrics_data$PSS.Matrix_10[ind_overall]); 
+
+min(survey_data$PSS)
+max(survey_data$PSS)
+mean(survey_data$PSS)
+sd(survey_data$PSS)
+median(survey_data$PSS)
+var(survey_data$PSS)
+
+hist(survey_data$PSS)
+
+
 
 
 
