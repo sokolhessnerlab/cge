@@ -82,22 +82,18 @@ plot(survey_data$age)
 
 # Ethnicity of participants (1 = Hispanic/Latinx; 2 = Not Hispanic/Latinx; 3 = Prefer not to say)
 survey_data$ethnicity = as.numeric(raw_qualtrics_data$DG.3[ind_overall])
-hist(survey_data$ethnicity)
 
 # Race of participants (1 = American Indian/Alaska Native; 2 = Black/African-American; 3 = East Asian; 4 = Native Hawaiian/Pacific Islander; 5 = South Asian; 6 = White; 7 = Bi-/Multi-racial (text); 8 = Other (text); 9 = Prefer not to say)
 
 
 # Education level of participants (1 = No school; 2 = to 8th grade; 3 = Some HS, no diploma; 4 = HS/GED; 5 = Trade school; 6 = AA/S; 7 = BA/S; 8 = MA/S; 9 = Professional degree; 10 = PhD)
 survey_data$education = as.numeric(raw_qualtrics_data$DG.6[ind_overall])
-hist(survey_data$education)
 
 # If participants are firstgen (1 = Yes; 2 = No; 3 = Unsure)
 survey_data$firstgen = as.numeric(raw_qualtrics_data$DG.7[ind_overall])
-hist(survey_data$firstgen)
 
 # Political orientation of participants: Likert (1 = "Extremely conservative" to 9 = "Extremely liberal")
 survey_data$politicalorientation = as.numeric(raw_qualtrics_data$DG.8[ind_overall])
-hist(survey_data$politicalorientation)
 
 # IUS-12 Scores (Intolerance for Uncertainty; Carleton et al., 2007): Total (12-60 & Subscales); Subscales (Prospective Anxiety: 1-7 & Inhibitory Anxiety: 8-12); Likert (1 = "Not at all characteristic of me" to 5 = "Entirely characteristic of me")
 survey_data$IUS_prospective = as.numeric(raw_qualtrics_data$IUS.12_1[ind_overall]) + # Prospective Anxiety
@@ -108,15 +104,11 @@ survey_data$IUS_prospective = as.numeric(raw_qualtrics_data$IUS.12_1[ind_overall
                   as.numeric(raw_qualtrics_data$IUS.12_6[ind_overall]) +
                   as.numeric(raw_qualtrics_data$IUS.12_7[ind_overall]);
 
-hist(survey_data$IUS_prospective)
-
 survey_data$IUS_inhibitory = as.numeric(raw_qualtrics_data$IUS.12_8[ind_overall]) + # Inhibitory Anxiety
                   as.numeric(raw_qualtrics_data$IUS.12_9[ind_overall]) +
                   as.numeric(raw_qualtrics_data$IUS.12_10[ind_overall]) +
                   as.numeric(raw_qualtrics_data$IUS.12_11[ind_overall]) +
                   as.numeric(raw_qualtrics_data$IUS.12_12[ind_overall]);
-
-hist(survey_data$IUS_inhibitory)
 
 survey_data$IUS = as.numeric(raw_qualtrics_data$IUS.12_1[ind_overall]) +
                   as.numeric(raw_qualtrics_data$IUS.12_2[ind_overall]) +
@@ -130,8 +122,6 @@ survey_data$IUS = as.numeric(raw_qualtrics_data$IUS.12_1[ind_overall]) +
                   as.numeric(raw_qualtrics_data$IUS.12_10[ind_overall]) +
                   as.numeric(raw_qualtrics_data$IUS.12_11[ind_overall]) +
                   as.numeric(raw_qualtrics_data$IUS.12_12[ind_overall]);
-
-hist(survey_data$IUS)
 
 # NCS-18 Scores (Need for Cognition; Cacioppo et al., 1984): Total (18-450); Reverse score (3, 4, 5, 7, 8, 9, 12, 16, 17); Likert (1 = "Extremely uncharacteristic of me" to 5 = "Extremely characteristic of me")
 NCS_3_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_3[ind_overall]); # _R = reverse scoring the item(s)
@@ -170,8 +160,6 @@ survey_data$NCS = as.numeric(raw_qualtrics_data$NCS.18_1[ind_overall]) +
                   NCS_16_R +
                   NCS_17_R +
                   as.numeric(raw_qualtrics_data$NCS.18_18[ind_overall]);
-           
-hist(survey_data$IUS)
 
 # SNS Scores (Subjective Numeracy; Fagerlin et al., 2007): Average (Total & Subscales); Reverse score (7); Subscales (Ability: 1-4 & Preference: 5-8); Ability Likert (1 = "Not at all good" to 6 = "Extremely good") & Prefernce Likert (5: 1 = Not at all helpful to 6 = Extremely helpful"; 6: 1 = "Always prefer words" to 6 = "Always prefer numbers"; 7: 1 = "Always prefer percentages" to 6 = "Always prefer words"; 8: 1 = "Never" to 6 = "Very often")
 SNS_7_R = 7 - as.numeric(raw_qualtrics_data$SNS.7.R[ind_overall]);
@@ -183,16 +171,12 @@ SNS_tmpSum_ability = as.numeric(raw_qualtrics_data$SNS.1[ind_overall]) + # Abili
 
 survey_data$SNS_ability = SNS_tmpSum_ability/4
 
-hist(survey_data$SNS_ability)
-
 SNS_tmpSum_preference = as.numeric(raw_qualtrics_data$SNS.5[ind_overall]) + # Preference
                         as.numeric(raw_qualtrics_data$SNS.6[ind_overall]) +
                         SNS_7_R +
                         as.numeric(raw_qualtrics_data$SNS.8[ind_overall]);
 
 survey_data$SNS_preference = SNS_tmpSum_preference/4
-
-hist(survey_data$SNS_preference)
 
 SNS_tmpSum = as.numeric(raw_qualtrics_data$SNS.1[ind_overall]) +
              as.numeric(raw_qualtrics_data$SNS.2[ind_overall]) +
@@ -204,8 +188,6 @@ SNS_tmpSum = as.numeric(raw_qualtrics_data$SNS.1[ind_overall]) +
              as.numeric(raw_qualtrics_data$SNS.8[ind_overall]);
 
 survey_data$SNS = SNS_tmpSum/8
-
-hist(survey_data$SNS)
 
 # PSS Scores (Perceived Stress; Cohen et al., 1983): Total (0 - 40); Reverse score (4, 5, 7, & 8); Likert (0 = "Never" to 4 = "Very Often")
 PSS_4_R = 5 - as.numeric(raw_qualtrics_data$PSS.Matrix_4[ind_overall]);
@@ -226,8 +208,6 @@ survey_data$PSS = as.numeric(raw_qualtrics_data$PSS.Matrix_1[ind_overall]) +
                   PSS_8_R +
                   as.numeric(raw_qualtrics_data$PSS.Matrix_9[ind_overall]) +
                   as.numeric(raw_qualtrics_data$PSS.Matrix_10[ind_overall]); 
-
-hist(survey_data$PSS)
 
 ### Prepping for Subject-Level Task Data Loop ###
 
