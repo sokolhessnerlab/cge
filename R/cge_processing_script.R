@@ -12,12 +12,13 @@ setwd('C:/Users/jvonm/Documents/GitHub/cge');
 
 
 # STEP 2: then run from here on the same
-config = config::get()
+config = config::get();
 
-setwd(config$path$data$raw)
+setwd(config$path$data$raw);
 
 #Von's
 setwd('S:/shlab/Projects/CGE/data/raw')
+
 
 # List all the data files
 rdmfn = dir(pattern = glob2rx('cgeRDM_*.csv'),full.names = T, recursive = T);
@@ -80,19 +81,23 @@ plot(survey_data$age)
 
 
 # Ethnicity of participants (1 = Hispanic/Latinx; 2 = Not Hispanic/Latinx; 3 = Prefer not to say)
-
+survey_data$ethnicity = as.numeric(raw_qualtrics_data$DG.3[ind_overall])
+hist(survey_data$ethnicity)
 
 # Race of participants (1 = American Indian/Alaska Native; 2 = Black/African-American; 3 = East Asian; 4 = Native Hawaiian/Pacific Islander; 5 = South Asian; 6 = White; 7 = Bi-/Multi-racial (text); 8 = Other (text); 9 = Prefer not to say)
 
 
 # Education level of participants (1 = No school; 2 = to 8th grade; 3 = Some HS, no diploma; 4 = HS/GED; 5 = Trade school; 6 = AA/S; 7 = BA/S; 8 = MA/S; 9 = Professional degree; 10 = PhD)
-
+survey_data$education = as.numeric(raw_qualtrics_data$DG.6[ind_overall])
+hist(survey_data$education)
 
 # If participants are firstgen (1 = Yes; 2 = No; 3 = Unsure)
-
+survey_data$firstgen = as.numeric(raw_qualtrics_data$DG.7[ind_overall])
+hist(survey_data$firstgen)
 
 # Political orientation of participants: Likert (1 = "Extremely conservative" to 9 = "Extremely liberal")
-
+survey_data$politicalorientation = as.numeric(raw_qualtrics_data$DG.8[ind_overall])
+hist(survey_data$politicalorientation)
 
 # IUS-12 Scores (Intolerance for Uncertainty; Carleton et al., 2007): Total (12-60 & Subscales); Subscales (Prospective Anxiety: 1-7 & Inhibitory Anxiety: 8-12); Likert (1 = "Not at all characteristic of me" to 5 = "Entirely characteristic of me")
 survey_data$IUS_prospective = as.numeric(raw_qualtrics_data$IUS.12_1[ind_overall]) + # Prospective Anxiety
@@ -103,13 +108,6 @@ survey_data$IUS_prospective = as.numeric(raw_qualtrics_data$IUS.12_1[ind_overall
                   as.numeric(raw_qualtrics_data$IUS.12_6[ind_overall]) +
                   as.numeric(raw_qualtrics_data$IUS.12_7[ind_overall]);
 
-min(survey_data$IUS_prospective)
-max(survey_data$IUS_prospective)
-mean(survey_data$IUS_prospective)
-sd(survey_data$IUS_prospective)
-median(survey_data$IUS_prospective)
-var(survey_data$IUS_prospective)
-
 hist(survey_data$IUS_prospective)
 
 survey_data$IUS_inhibitory = as.numeric(raw_qualtrics_data$IUS.12_8[ind_overall]) + # Inhibitory Anxiety
@@ -117,13 +115,6 @@ survey_data$IUS_inhibitory = as.numeric(raw_qualtrics_data$IUS.12_8[ind_overall]
                   as.numeric(raw_qualtrics_data$IUS.12_10[ind_overall]) +
                   as.numeric(raw_qualtrics_data$IUS.12_11[ind_overall]) +
                   as.numeric(raw_qualtrics_data$IUS.12_12[ind_overall]);
-
-min(survey_data$IUS_inhibitory)
-max(survey_data$IUS_inhibitory)
-mean(survey_data$IUS_inhibitory)
-sd(survey_data$IUS_inhibitory)
-median(survey_data$IUS_inhibitory)
-var(survey_data$IUS_inhibitory)
 
 hist(survey_data$IUS_inhibitory)
 
@@ -140,51 +131,26 @@ survey_data$IUS = as.numeric(raw_qualtrics_data$IUS.12_1[ind_overall]) +
                   as.numeric(raw_qualtrics_data$IUS.12_11[ind_overall]) +
                   as.numeric(raw_qualtrics_data$IUS.12_12[ind_overall]);
 
-min(survey_data$IUS)
-max(survey_data$IUS)
-mean(survey_data$IUS)
-sd(survey_data$IUS)
-median(survey_data$IUS)
-var(survey_data$IUS)
-
 hist(survey_data$IUS)
 
 # NCS-18 Scores (Need for Cognition; Cacioppo et al., 1984): Total (18-450); Reverse score (3, 4, 5, 7, 8, 9, 12, 16, 17); Likert (1 = "Extremely uncharacteristic of me" to 5 = "Extremely characteristic of me")
 NCS_3_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_3[ind_overall]); # _R = reverse scoring the item(s)
-          as.numeric(raw_qualtrics_data$NCS.18_3[ind_overall]);
-          NCS_3_R;
 
 NCS_4_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_4[ind_overall]);
-          as.numeric(raw_qualtrics_data$NCS.18_4[ind_overall]);
-          NCS_4_R;
 
-NCS_5_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_5[ind_overall]) 
-          as.numeric(raw_qualtrics_data$NCS.18_5[ind_overall]);
-          NCS_5_R;
+NCS_5_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_5[ind_overall]);
 
-NCS_7_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_7[ind_overall]) 
-          as.numeric(raw_qualtrics_data$NCS.18_7[ind_overall]);
-          NCS_7_R;
+NCS_7_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_7[ind_overall]);
 
-NCS_8_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_8[ind_overall]) 
-          as.numeric(raw_qualtrics_data$NCS.18_8[ind_overall]);
-          NCS_8_R;
+NCS_8_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_8[ind_overall]);
 
-NCS_9_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_9[ind_overall]) 
-          as.numeric(raw_qualtrics_data$NCS.18_9[ind_overall]);
-          NCS_9_R;
+NCS_9_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_9[ind_overall]);
 
-NCS_12_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_12[ind_overall]) 
-           as.numeric(raw_qualtrics_data$NCS.18_12[ind_overall]);
-           NCS_12_R;
+NCS_12_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_12[ind_overall]);
 
-NCS_16_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_16[ind_overall]) 
-           as.numeric(raw_qualtrics_data$NCS.18_16[ind_overall]);
-           NCS_16_R;
+NCS_16_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_16[ind_overall]);
 
-NCS_17_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_17[ind_overall]) 
-           as.numeric(raw_qualtrics_data$NCS.18_17[ind_overall]);
-           NCS_17_R;
+NCS_17_R = 6 - as.numeric(raw_qualtrics_data$NCS.18_17[ind_overall]);
 
 survey_data$NCS = as.numeric(raw_qualtrics_data$NCS.18_1[ind_overall]) +
                   as.numeric(raw_qualtrics_data$NCS.18_2[ind_overall]) +
@@ -205,20 +171,10 @@ survey_data$NCS = as.numeric(raw_qualtrics_data$NCS.18_1[ind_overall]) +
                   NCS_17_R +
                   as.numeric(raw_qualtrics_data$NCS.18_18[ind_overall]);
            
-min(survey_data$NCS)
-max(survey_data$NCS)
-mean(survey_data$NCS)
-sd(survey_data$IUS)
-median(survey_data$NCS)
-var(survey_data$NCS)
-           
 hist(survey_data$IUS)
 
 # SNS Scores (Subjective Numeracy; Fagerlin et al., 2007): Average (Total & Subscales); Reverse score (7); Subscales (Ability: 1-4 & Preference: 5-8); Ability Likert (1 = "Not at all good" to 6 = "Extremely good") & Prefernce Likert (5: 1 = Not at all helpful to 6 = Extremely helpful"; 6: 1 = "Always prefer words" to 6 = "Always prefer numbers"; 7: 1 = "Always prefer percentages" to 6 = "Always prefer words"; 8: 1 = "Never" to 6 = "Very often")
 SNS_7_R = 7 - as.numeric(raw_qualtrics_data$SNS.7.R[ind_overall]);
-          as.numeric(raw_qualtrics_data$SNS.7.R[ind_overall]);
-          SNS_7_R
-          
 
 SNS_tmpSum_ability = as.numeric(raw_qualtrics_data$SNS.1[ind_overall]) + # Ability
                      as.numeric(raw_qualtrics_data$SNS.2[ind_overall]) +
@@ -226,13 +182,6 @@ SNS_tmpSum_ability = as.numeric(raw_qualtrics_data$SNS.1[ind_overall]) + # Abili
                      as.numeric(raw_qualtrics_data$SNS.4[ind_overall]);
 
 survey_data$SNS_ability = SNS_tmpSum_ability/4
-
-min(survey_data$SNS_ability)
-max(survey_data$SNS_ability)
-mean(survey_data$SNS_ability)
-sd(survey_data$SNS_ability)
-median(survey_data$SNS_ability)
-var(survey_data$SNS_ability)
 
 hist(survey_data$SNS_ability)
 
@@ -242,13 +191,6 @@ SNS_tmpSum_preference = as.numeric(raw_qualtrics_data$SNS.5[ind_overall]) + # Pr
                         as.numeric(raw_qualtrics_data$SNS.8[ind_overall]);
 
 survey_data$SNS_preference = SNS_tmpSum_preference/4
-
-min(survey_data$SNS_preference)
-max(survey_data$SNS_preference)
-mean(survey_data$SNS_preference)
-sd(survey_data$SNS_preference)
-median(survey_data$SNS_preference)
-var(survey_data$SNS_preference)
 
 hist(survey_data$SNS_preference)
 
@@ -263,31 +205,16 @@ SNS_tmpSum = as.numeric(raw_qualtrics_data$SNS.1[ind_overall]) +
 
 survey_data$SNS = SNS_tmpSum/8
 
-min(survey_data$SNS)
-max(survey_data$SNS)
-mean(survey_data$SNS)
-sd(survey_data$SNS)
-median(survey_data$SNS)
-var(survey_data$SNS)
-
 hist(survey_data$SNS)
 
 # PSS Scores (Perceived Stress; Cohen et al., 1983): Total (0 - 40); Reverse score (4, 5, 7, & 8); Likert (0 = "Never" to 4 = "Very Often")
 PSS_4_R = 5 - as.numeric(raw_qualtrics_data$PSS.Matrix_4[ind_overall]);
-          as.numeric(raw_qualtrics_data$PSS.Matrix_4[ind_overall]);
-          PSS_4_R
 
 PSS_5_R = 5 - as.numeric(raw_qualtrics_data$PSS.Matrix_5[ind_overall]);
-          as.numeric(raw_qualtrics_data$PSS.Matrix_5[ind_overall]);
-          PSS_5_R
 
 PSS_7_R = 5 - as.numeric(raw_qualtrics_data$PSS.Matrix_7[ind_overall]);
-          as.numeric(raw_qualtrics_data$PSS.Matrix_7[ind_overall]);
-          PSS_7_R
 
 PSS_8_R = 5 - as.numeric(raw_qualtrics_data$PSS.Matrix_8[ind_overall]);
-          as.numeric(raw_qualtrics_data$PSS.Matrix_8[ind_overall]);
-          PSS_8_R
 
 survey_data$PSS = as.numeric(raw_qualtrics_data$PSS.Matrix_1[ind_overall]) +
                   as.numeric(raw_qualtrics_data$PSS.Matrix_2[ind_overall]) +
@@ -300,18 +227,7 @@ survey_data$PSS = as.numeric(raw_qualtrics_data$PSS.Matrix_1[ind_overall]) +
                   as.numeric(raw_qualtrics_data$PSS.Matrix_9[ind_overall]) +
                   as.numeric(raw_qualtrics_data$PSS.Matrix_10[ind_overall]); 
 
-min(survey_data$PSS)
-max(survey_data$PSS)
-mean(survey_data$PSS)
-sd(survey_data$PSS)
-median(survey_data$PSS)
-var(survey_data$PSS)
-
 hist(survey_data$PSS)
-
-
-
-
 
 ### Prepping for Subject-Level Task Data Loop ###
 
@@ -320,7 +236,7 @@ num_static_trials = 50;
 num_dynamic_trials = 120;
 number_of_dm_trials_per_person = num_static_trials + num_dynamic_trials; # static = 50, dynamic = 120
 
-# Set up variables to hold decision-making data & qualtrics
+# Set up variables to hold decision-making data
 column_names_dm = c(
   'trialnumber',
   'subjectnumber',
@@ -339,11 +255,21 @@ column_names_dm = c(
   'ospan',
   'symspan',
   'complexspan',
-  'NFC',
-  'PSS',
-  'SNS',
+  'age',
+  'gender',
+  'ethnicity',
+  'race',
+  'education',
+  'firstgen',
+  'politicalorientation',
+  'IUS_prospective',
+  'IUS_inhibitory',
   'IUS',
-  'Demo'
+  'NCS',
+  'SNS_ability',
+  'SNS_preference',
+  'SNS',
+  'PSS'
 );
 
 data_dm = array(data = NA, dim = c(0, length(column_names_dm)));
@@ -410,7 +336,7 @@ for(s in 1:number_of_subjects){
   
   ### RDM Data ###
   # Load in the data
-  tmpdata = read.csv(rdmfn[s]);
+  tmpdata = read.csv(rdmfn[s]); 
   
   # DECISION-MAKING DATA
   dm_data_to_add = array(data = NA, dim = c(number_of_dm_trials_per_person,length(column_names_dm)));
@@ -461,6 +387,36 @@ for(s in 1:number_of_subjects){
   dm_data_to_add[,16] = complexSpanScores$symspanScore[s];
   dm_data_to_add[,17] = complexSpanScores$compositeSpanScore[s];
   
+  dm_data_to_add[,18] = survey_data$age[s];
+  
+  dm_data_to_add[,19] = survey_data$gender[s];
+  
+  dm_data_to_add[,20] = survey_data$ethnicity[s];
+  
+  dm_data_to_add[,21] = survey_data$race[s];
+  
+  dm_data_to_add[,22] = survey_data$education[s];
+  
+  dm_data_to_add[,23] = survey_data$firstgen[s];
+  
+  dm_data_to_add[,24] = survey_data$politicalorientation[s];
+  
+  dm_data_to_add[,25] = survey_data$IUS_prospective[s];
+  
+  dm_data_to_add[,26] = survey_data$IUS_inhibitory[s];
+  
+  dm_data_to_add[,27] = survey_data$IUS[s];
+  
+  dm_data_to_add[,28] = survey_data$NCS[s];
+  
+  dm_data_to_add[,29] = survey_data$SNS_ability[s];
+  
+  dm_data_to_add[,30] = survey_data$SNS_preference[s];
+  
+  dm_data_to_add[,31] = survey_data$SNS[s];
+  
+  dm_data_to_add[,32] = survey_data$PSS[s];
+  
   
 
   # Add this person's DM data to the total DM data.
@@ -469,8 +425,12 @@ for(s in 1:number_of_subjects){
 
 data_dm = as.data.frame(data_dm) # make it a data frame so it plays nice
 
+
 # save out CSVs with the clean, compiled data!
 setwd(config$path$data$processed);
+
+#Von's
+setwd('S:/shlab/Projects/CGE/data/preprocessed');
 
 write.csv(data_dm, file=sprintf('cge_processed_decisionmaking_data_%s.csv',format(Sys.Date(), format="%Y%m%d")),
           row.names = F);

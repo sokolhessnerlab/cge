@@ -20,6 +20,9 @@ config = config::get()
 #### Loading Data ####
 setwd(config$path$data$processed)
 
+#Von's 
+setwd('S:/shlab/Projects/CGE/data/preprocessed')
+
 # Load Decision-Making Data
 fn = dir(pattern = glob2rx('cge_processed_decisionmaking*.csv'),full.names = T);
 number_of_files = length(fn) # ASSUMES YOU WANT THE MOST-RECENT PROCESSED DATA
