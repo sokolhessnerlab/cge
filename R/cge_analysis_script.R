@@ -422,7 +422,7 @@ lines(x = c(mean_params[1], mean_params[1]), y = c(0,20), col = 'green', lwd = 5
 hist(estimated_parameters[,2], xlim = c(0,upper_bounds[2]),
      breaks = seq(from = 0, to = upper_bounds[2], by = 8), main = '',
      ylab = 'Participants', xlab = 'Mu (consistency)')
-lines(x = c(mean_params[2], mean_params[2]), y = c(0,20), col = 'purple', lwd = 5, lend = 'butt')
+lines(x = c(mean_params[2], mean_params[2]), y = c(0,20), col = 'orange', lwd = 5, lend = 'butt')
 
 #### Setup for Regressions ####
 
@@ -481,11 +481,17 @@ for (subj in 1:number_of_clean_subjects){
 
 
 # RTs between easy & difficult
-plot(mean_rt_diff, mean_rt_easy, main = 'Average RT By Trial Type', xlab = "Mean RT Difficult", ylab = "Mean RT Easy", xlim = c(0.75, 2.75), ylim = c(0.75, 2.75))
+plot(mean_rt_diff, mean_rt_easy,
+     main = 'Average RT By Trial Type', xlab = "Mean RT Difficult", ylab = "Mean RT Easy",
+     xlim = c(0.75, 2.75), ylim = c(0.75, 2.75))
 lines(c(0, 2.75), c(0, 2.75))
+points(mean(mean_rt_diff), mean(mean_rt_easy), pch = 16, col = rgb(1, 0, 1, .75), cex = 2.5)
 
-plot(median_rt_diff, median_rt_easy, main = 'Median RT By Trial Type', xlab = "Median RT Difficult", ylab = "Median RT Easy", xlim = c(0.75, 2.75), ylim = c(0.75, 2.75))
+plot(median_rt_diff, median_rt_easy, 
+     main = 'Median RT By Trial Type', xlab = "Median RT Difficult", ylab = "Median RT Easy", 
+     xlim = c(0.75, 2.75), ylim = c(0.75, 2.75))
 lines(c(0, 2.75), c(0, 2.75))
+points(mean(median_rt_diff), mean(median_rt_easy), pch = 16, col = rgb(1, 0, 1, .75), cex = 2.5)
 
 # test easy RTs vs. diff. RTs 
 rt_mean_test = t.test(mean_rt_easy,mean_rt_diff, paired = T); # VERY significant
@@ -493,21 +499,20 @@ rt_median_test = t.test(median_rt_easy,median_rt_diff, paired = T); # VERY signi
 #A: yes, looks like on average rt of difficult decisions was slower than avg rt of easy decisions 4/2/23
 
 # Test for the across-participant variances in RTs by trial type
-rt_mean_vartest = var.test(mean_rt_easy,mean_rt_diff); # p = 0.03856
-rt_median_vartest = var.test(median_rt_easy,median_rt_diff); # p = 0.005846
+rt_mean_vartest = var.test(mean_rt_easy,mean_rt_diff); # p = 0.005
+rt_median_vartest = var.test(median_rt_easy,median_rt_diff); # p = 0.0008
 # A:RTs more variable across people for diff. than easy trials
 
 
 # differences between variance of RTs in conditions WITHIN person
-var_test_within = t.test(var_rt_easy,var_rt_diff, paired = T);
+var_test_within = t.test(var_rt_easy,var_rt_diff, paired = T); # p = 0.000001
 
+yl = ceiling(max(c(max(var_rt_diff),max(var_rt_easy)))*10)/10
 plot(var_rt_easy, var_rt_diff, xlab = 'Easy trials', ylab = 'Difficult trials',
      main = 'Within-Trial-Type Variances in RT',
      sub = sprintf('paired t-test p = %.03f', var_test_within$p.value), 
-     xlim = c(0,.6), ylim = c(0,.6))
-#points(var_rt_easy[tmpdata$easyP1difficultN1 == 1], var_rt_diff[tmpdata$easyP1difficultN1 == 1], col = 'green')
-#points(var_rt_easy[tmpdata$easyP1difficultN1 == -1], var_rt_diff[tmpdata$easyP1difficultN1 == -1], col = 'red')
-lines(c(0,.6), c(0,.6), col = 'green', lwd = 1.5)
+     xlim = c(0,yl), ylim = c(0,yl))
+lines(c(0,.6), c(0,.6), col = 'black', lty = 'dashed', lwd = 1.5)
 
 # RTs on difficult trials are more variable WITHIN person than their RTs on easy trials
 
