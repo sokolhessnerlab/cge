@@ -537,7 +537,7 @@ for (subj in 1:number_of_clean_subjects){
 
 # test easy ACC vs. easy REJ RTs (and plot against each other)
 # Q: Can we treat easy ACC & REJ RTs as the same kind of thing? 
-t.test(mean_rt_easyACC,mean_rt_easyREJ, paired = T); #not sig. diff between easy types 3/7/23
+t.test(mean_rt_easyACC,mean_rt_easyREJ, paired = T); #not sig. diff between easy types 4/25/23
 plot(mean_rt_easyACC, mean_rt_easyREJ, main = 'Reaction Times on Easy Trials', 
      xlab = 'Easy ACCEPT trials', ylab = 'Easy REJECT trials', xlim = c(0,4), ylim = c(0,4))
 lines(c(0,4), c(0,4))
@@ -571,8 +571,8 @@ for (subj in 1:number_of_clean_subjects){
 }
 
 # does prev. trial type influence RT on the current trial
-t.test(easy_easy_mean_rt, diff_easy_mean_rt, paired = T); # NOT for easy 4/2/23
-t.test(diff_diff_mean_rt, easy_diff_mean_rt, paired = T); # NOT for difficult 4/2/23
+t.test(easy_easy_mean_rt, diff_easy_mean_rt, paired = T); # NOT for easy 2/25/24
+t.test(diff_diff_mean_rt, easy_diff_mean_rt, paired = T); # NOT for difficult 2/25/24
 # A: Not at this level.
 
 # Plot the current trial as a function of prev. trial type
@@ -581,7 +581,7 @@ plot(easy_easy_mean_rt, diff_easy_mean_rt, xlim = c(0.75,2.2), ylim = c(0.75,2.2
 plot(easy_diff_mean_rt, diff_diff_mean_rt, xlim = c(0.75,2.2), ylim = c(0.75,2.2),
      main = 'DIFFICULT TRIALS', xlab = 'Previous trial was EASY', ylab = 'Previous trial was DIFFICULT'); lines(c(0,3), c(0,3)); # NOT for difficult
 
-t.test(diff_diff_mean_rt, easy_easy_mean_rt, paired = T); # not sig diff 4/2/23
+t.test(diff_diff_mean_rt, easy_easy_mean_rt, paired = T); # not sig diff 2/25/24
 #A: it looks like RT based upon subsequent trials is not sig different at this level
 
 
@@ -610,9 +610,9 @@ for (subj in 1:number_of_clean_subjects){
                                                        (tmpdata$easyP1difficultN1[51:169] == 1)], na.rm = T);
 }  
 
-t.test(diff_diff_mean_pgamble, easy_diff_mean_pgamble, paired = T); # not sig diff 4/2/23
-t.test(diff_easy_mean_pgamble, easy_easy_mean_pgamble, paired = T); # not sig diff 4/2/23
-t.test(diff_diff_mean_pgamble, easy_easy_mean_pgamble, paired = T); # not sig diff 4/2/23
+t.test(diff_diff_mean_pgamble, easy_diff_mean_pgamble, paired = T); # not sig diff 2/25/24
+t.test(diff_easy_mean_pgamble, easy_easy_mean_pgamble, paired = T); # not sig diff 2/25/24
+t.test(diff_diff_mean_pgamble, easy_easy_mean_pgamble, paired = T); # not sig diff 2/25/24
 
 #A: it looks like pgamble based upon subsequent trials is not significantly differnt, difficulty doesnt show effect on p gamble.
 
@@ -621,9 +621,13 @@ t.test(diff_diff_mean_pgamble, easy_easy_mean_pgamble, paired = T); # not sig di
 
 cat(sprintf('Out of a total of %i participants, we have O-Span scores for %i, Sym-Span scores for %i, and composite span scores for %i.\n',
               number_of_subjects, 
-              sum(is.finite(ospanScores)), 
-              sum(is.finite(symspanScores)), 
-              sum(is.finite(compositespanScores))))
+              sum(is.finite(complexSpanScores$ospanScore)), 
+              sum(is.finite(complexSpanScores$symspanScore)), 
+              sum(is.finite(complexSpanScores$compositeSpanScore))))
+cat(sprintf('%i participants have both scores, %i participants are missing only one score, and %i participants are missing both scores.\n',
+            sum(is.finite(complexSpanScores$ospanScore) & is.finite(complexSpanScores$symspanScore)),
+            sum(xor(is.finite(complexSpanScores$ospanScore),is.finite(complexSpanScores$symspanScore))),
+            number_of_subjects-sum(is.finite(complexSpanScores$compositeSpanScore))))
 
 # Mean, Median, and Variance of ospan, symspan, and compositespan
 mean_ospan = mean(complexSpanScores$ospanScore, na.rm = T)
@@ -645,23 +649,23 @@ variance_compositespan = var(complexSpanScores$compositeSpanScore, na.rm = T)
 # Include in the processing - Correlation between OSpan and SymSpan
 ospanScores = complexSpanScores$ospanScore
 symspanScores = complexSpanScores$symspanScore
-compositespanScores = complexSpanScores$compositeSpanScore
+compositeSpanScores = complexSpanScores$compositeSpanScore
 
-cor.test(ospanScores, symspanScores) # r(33) = 0.40, p = 0.02 (as of 2/12/24)
-var.test(ospanScores, symspanScores) # similar variance (p = 0.66 as of 2/12/24)
+cor.test(ospanScores, symspanScores) # r(44) = 0.43, p = 0.003 (as of 2/25/24)
+var.test(ospanScores, symspanScores) # similar variance (p = 0.59 as of 2/25/24)
 t.test(ospanScores, symspanScores, paired = T) # t(34) = 1.4, p = 0.18 (as of 2/12/24)
 
 # SUMMARY: O-Span & Sym-Span scores are correlated with each other, and not significantly 
-# different from one another. They are NOT redundant (so correlation is ~0.4).
+# different from one another. They are NOT redundant (i.e., correlation is ~0.4).
 
 plot(ospanScores, symspanScores, 
      pch = 19, col = rgb(.5, .5, .5, .5), 
      xlim = c(0, 1), ylim = c(0, 1), cex = 2.5,
      xlab = 'OSpan Scores', ylab = 'SymSpan Scores', 
      main = 'Complex Span Scores')
-lines(x = c(0, 1), y = c(0, 1))
+lines(x = c(-1, 2), y = c(-1, 2)) # so line extends to edge
 
-capacity_HighP1_lowN1 = (compositespanScores > median_compositespan)*2-1;
+capacity_HighP1_lowN1 = (compositeSpanScores > median_compositespan)*2-1;
 
 sum(capacity_HighP1_lowN1 == 1, na.rm = T)
 sum(capacity_HighP1_lowN1 == -1, na.rm = T)
@@ -731,8 +735,8 @@ summary(m0_alldiffcont_rfx) # matches categorical
 
 # Which model should we use? 
 # It's between m0_diffcat_rfx and m0_alldiffcont_rfx
-AIC(m0_diffcat_rfx) # -5462.535
-AIC(m0_alldiffcont_rfx) # -5614.971 <- BETTER (more negative)
+AIC(m0_diffcat_rfx) # -6226.773
+AIC(m0_alldiffcont_rfx) # -6387.123 <- BETTER (more negative)
 
 anova(m0_diffcat_rfx,m0_alldiffcont_rfx) # CONFIRMS that all_diff_cont outperforms easyp1difficultn1
 # p < 2e-16 (it's reported as '0') for continuous as better than categorical
@@ -754,7 +758,7 @@ plot(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_dif
 # BIG TAKEAWAY:
 # Across categorical and two kinds of continuous difficulty, difficult trials are slower. 
 #
-# m0_alldiffcont_rfx is best (AIC: -4924.883; AIC(m0_diffcat_rfx) is -4898.179)
+# m0_alldiffcont_rfx is best (see AICs)
 
 
 
