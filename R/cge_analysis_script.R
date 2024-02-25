@@ -20,8 +20,8 @@ config = config::get()
 #### Loading Data ####
 setwd(config$path$data$processed)
 
-#Von's 
-setwd('S:/shlab/Projects/CGE/data/preprocessed')
+# #Von's 
+# setwd('S:/shlab/Projects/CGE/data/preprocessed')
 
 # Load Decision-Making Data
 fn = dir(pattern = glob2rx('cge_processed_decisionmaking*.csv'),full.names = T);
@@ -394,10 +394,10 @@ plot(grid_bestMu,estimated_parameters[,2], main = 'MU',
 lines(c(0, 100), c(0, 100))
 
 hist(grid_bestRho - estimated_parameters[,1], xlim = c(-2,2),
-     breaks = seq(from = -2, to = 2, by = 0.05), main = 'Difference in Rho Estimates',
+     breaks = seq(from = -2, to = 2, by = 0.02), main = 'Difference in Rho Estimates',
      ylab = 'Participants', xlab = 'Grid estimate - MLE estimate')
 hist(grid_bestMu - estimated_parameters[,2], xlim = c(-100,100), 
-     breaks = seq(from = -100, to = 100, by = 1), main = 'Difference in Mu Estimates',
+     breaks = seq(from = -100, to = 100, by = 0.5), main = 'Difference in Mu Estimates',
      ylab = 'Participants', xlab = 'Grid estimate - MLE estimate')
 # This is supposed to look silly! Should cluster around 0
 # ... and it does, as of 2/9/23!
@@ -410,6 +410,19 @@ cor.test(grid_bestMu, estimated_parameters[,2])
 
 # A: YES, grid-search values match optimized values very closely.
 
+# Who are our subjects? 
+mean_params = colMeans(estimated_parameters);
+
+hist(estimated_parameters[,1], xlim = c(0,2),
+     breaks = seq(from = 0, to = 2, by = 0.2), main = '',
+     ylab = 'Participants', xlab = 'Rho (risk attitudes)')
+lines(x = c(1,1), y = c(0,20), col = 'black', lwd = 2, lty = 'dashed')
+lines(x = c(mean_params[1], mean_params[1]), y = c(0,20), col = 'green', lwd = 5, lend = 'butt')
+
+hist(estimated_parameters[,2], xlim = c(0,upper_bounds[2]),
+     breaks = seq(from = 0, to = upper_bounds[2], by = 8), main = '',
+     ylab = 'Participants', xlab = 'Mu (consistency)')
+lines(x = c(mean_params[2], mean_params[2]), y = c(0,20), col = 'purple', lwd = 5, lend = 'butt')
 
 #### Setup for Regressions ####
 
