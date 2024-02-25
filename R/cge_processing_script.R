@@ -16,9 +16,9 @@ config = config::get();
 
 setwd(config$path$data$raw);
 
-#Von's
-setwd('S:/shlab/Projects/CGE/data/raw')
-
+# #Von's
+# setwd('S:/shlab/Projects/CGE/data/raw')
+# 
 
 # List all the data files
 rdmfn = dir(pattern = glob2rx('cgeRDM_*.csv'),full.names = T, recursive = T);
@@ -67,7 +67,13 @@ ind_complete = raw_qualtrics_data$Finished == 1; # completed the survey
 ind_nottest = raw_qualtrics_data$EI.1 < 900; # Subject IDs should be < 900
 
 ind_overall = ind_complete & ind_nottest;
+
+# Do the #s of Subjects match? 
 cat(sprintf('Qualtrics data has %g participants; decision-making data has %g participants.\n', sum(ind_overall), number_of_subjects))
+
+if (sum(ind_overall) != number_of_subjects) {
+  warning('WARNING: The numbers of subjects from Qualtrics & behavioral data do not match!!')
+} 
 
 # Used the rows from EI.1 (participant number) to create subject IDs
 survey_data$subjectID = as.numeric(raw_qualtrics_data$EI.1[ind_overall])
