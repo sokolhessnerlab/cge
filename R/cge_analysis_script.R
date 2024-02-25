@@ -778,7 +778,7 @@ clean_data_dm$sqrtRT_prev[clean_data_dm$trialnumber == 1] = NA;
 # Does previous difficulty influence subsequent RT? 
 # LMs
 m1_diffcat_prev = lm(sqrtRT ~ 1 + easyP1difficultN1 + easyP1difficultN1_prev, data = clean_data_dm);
-summary(m1_diffcat_prev) # slight effect, OPPOSITE to main pattern (p = 0.024 as of 2/15/24)
+summary(m1_diffcat_prev) # slight effect, OPPOSITE to main pattern (p = 0.0466 as of 2/25/24)
 #  (if prev. trial easy, slower on current trial .... OR
 #   if prev. trial difficult, faster on current trial)
 
@@ -788,7 +788,7 @@ summary(m1_diffcat_prev_intxn) # no interaction, same main effect as m1_diffcat_
 # LMERs, i.e. RFX Versions
 m1_diffcat_prev_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 + easyP1difficultN1_prev + 
                              (1 | subjectnumber), data = clean_data_dm);
-summary(m1_diffcat_prev_rfx) # previous difficulty has strong effect (p = 0.0089)
+summary(m1_diffcat_prev_rfx) # previous difficulty has strong effect (p = 0.02)
 # Same direction as in m1_diffcat_prev
 
 m1_diffcat_prev_intxn_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 * easyP1difficultN1_prev + (1 | subjectnumber), data = clean_data_dm);
@@ -800,14 +800,15 @@ summary(m1_diffcat_prev_intxn_rfx) # no interaction, same main effect.
 m1_prev_alldiffCont_intxn_rfx = lmer(sqrtRT ~ 1 + 
                                                 all_diff_cont * prev_all_diff_cont + 
                                                 (1 | subjectnumber), data = clean_data_dm);
-summary(m1_prev_alldiffCont_intxn_rfx) # Previous CONTINUOUS difficulty is VERY significant (p = 7.6e-8), no interaction w/ current diff
+summary(m1_prev_alldiffCont_intxn_rfx) # Previous CONTINUOUS difficulty is VERY significant (p = 1.2e-7), no interaction w/ current diff
 # Sign is negative: the more difficult the prev. trial was, the faster people were on the current trial
-# ... facilitatory? 
+# ... facilitory? "giving up"? 
 
 
-AIC(m1_prev_alldiffCont_intxn_rfx) # -5604.554 <-- BETTER (more negative)
-AIC(m1_diffcat_prev_intxn_rfx) # -5445.634
-
+# CAREFUL! These are different models with different #s of datapoints in them. 
+# !!!!!    CANNOT DIRECTLY COMPARE AICs     !!!!!
+# AIC(m1_prev_alldiffCont_intxn_rfx) # -6376.622 <-- BETTER (more negative)
+# AIC(m1_diffcat_prev_intxn_rfx) # -6208.394
 
 
 # Plot it!
@@ -827,22 +828,6 @@ lines(x = xval_plot, y = (coef_vals["(Intercept)"] +
       lwd = 5, col = 'red')
 # RED = previous trial difficult
 # BLUE = previous trial easy
-
-
-
-
-# PSH STOPPED HERE ON FEBRUARY 15, 2024
-
-
-
-
-
-
-
-
-
-
-
 
 ## Model 2: What role does high/low cognitive capacity have on CURRENT TRIAL EFFECTS
 m2_capacityCatDiff_intxn_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1 + 
