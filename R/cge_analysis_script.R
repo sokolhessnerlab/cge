@@ -838,17 +838,14 @@ summary(m2_capacityCatDiff_intxn_rfx) # Capacity interacts with current easy/dif
 #   LOW capacity people have smaller easy/difficult effect
 
 
-# (1.183 + 1*-0.03029 + 1*0.01499 + 1*1*-0.006186)^2 # easy, high cap
-# (1.183 + -1*-0.03029 + 1*0.01499 + -1*1*-0.006186)^2 # diff, high cap
-# 
-# (1.183 + 1*-0.03029 + -1*0.01499 + 1*-1*-0.006186)^2 # easy, low cap
-# (1.183 + -1*-0.03029 + -1*0.01499 + -1*-1*-0.006186)^2 # diff, low cap
-
-
 m2_capacityContDiff_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1 + 
                                        (1 | subjectnumber), data = clean_data_dm);
 summary(m2_capacityContDiff_intxn_rfx)
 # SAME PATTERN If you use continuous difficulty instead of categorical difficulty
+
+# effect of difficulty is 0.118 for HIGH CAPACITY
+# effect of difficulty is 0.100 for LOW CAPACITY
+
 
 AIC(m2_capacityCatDiff_intxn_rfx) # AIC: -5874.978
 AIC(m2_capacityContDiff_intxn_rfx) # AIC: -6026.223 (CONTINUOUS IS BETTER)
@@ -871,8 +868,8 @@ clean_data_dm$difficult = as.double(clean_data_dm$easyP1difficultN1 == -1)
 m3_capacityCat_intxn_rfx = lmer(sqrtRT ~ 1 + easy * capacity_HighP1_lowN1 + difficult * capacity_HighP1_lowN1 + 
                                   (1 | subjectnumber), data = clean_data_dm);
 summary(m3_capacityCat_intxn_rfx)
-# Very significant interaction between difficult and capacity, indicating that the above effect is due to 
-# higher RTs for people with higher capacity on DIFFICULT trials specifically.
+# Very significant interaction between difficult and capacity, indicating that the above effect is almost
+# entirely due to higher RTs for people with higher capacity on DIFFICULT trials specifically.
 
 
 # Continuous difficulty (including previous) and categorical capacity
@@ -894,15 +891,15 @@ AIC(m3_prev_diffCont_capacityCat_intxn_rfx) # Be careful when reporting; has few
 # Plot this??
 # 
 # MODEL OUTPUT
-# Estimate Std. Error         df t value Pr(>|t|)    
-# (Intercept)                                               1.156e+00  1.771e-02  5.594e+01  65.293  < 2e-16 ***
-#   all_diff_cont                                           6.818e-02  7.912e-03  8.307e+03   8.617  < 2e-16 ***
-#   prev_all_diff_cont                                     -1.946e-02  7.932e-03  8.307e+03  -2.453  0.01418 *  
-#   capacity_HighP1_lowN1                                   1.383e-03  1.771e-02  5.594e+01   0.078  0.93802    
-# all_diff_cont:prev_all_diff_cont                          2.624e-03  1.170e-02  8.305e+03   0.224  0.82253    
-# all_diff_cont:capacity_HighP1_lowN1                       2.375e-02  7.912e-03  8.307e+03   3.002  0.00269 ** 
-#   prev_all_diff_cont:capacity_HighP1_lowN1                1.387e-02  7.932e-03  8.307e+03   1.749  0.08036 .  
-# all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1   -1.810e-02  1.170e-02  8.305e+03  -1.547  0.12193    
+#                                                        Estimate Std. Error         df t value Pr(>|t|)    
+#   (Intercept)                                             1.222e+00  1.333e-02  6.778e+01  91.669  < 2e-16 ***
+#   all_diff_cont                                           1.085e-01  6.697e-03  9.839e+03  16.204  < 2e-16 ***
+#   prev_all_diff_cont                                     -3.647e-02  6.721e-03  9.840e+03  -5.426 5.91e-08 ***
+#   capacity_HighP1_lowN1                                  -1.606e-02  1.333e-02  6.778e+01  -1.205    0.233    
+#   all_diff_cont:prev_all_diff_cont                        6.487e-03  1.014e-02  9.834e+03   0.640    0.522    
+#   all_diff_cont:capacity_HighP1_lowN1                     8.721e-03  6.697e-03  9.839e+03   1.302    0.193    
+#   prev_all_diff_cont:capacity_HighP1_lowN1                6.921e-03  6.721e-03  9.840e+03   1.030    0.303    
+#   all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1  4.349e-05  1.014e-02  9.834e+03   0.004    0.997    
 #
 # Current difficulty = slower RTs (found previously)
 # Prev. difficulty = faster RTs (found previously)
@@ -911,10 +908,10 @@ AIC(m3_prev_diffCont_capacityCat_intxn_rfx) # Be careful when reporting; has few
 # Capacity = no net effect! [contrary to hypotheses]
 #
 # in CGT, Capacity interacted with CURRENT difficulty to potentiate slowing due to difficulty
-# for high capacity people, and attenuate that effect for low capacity people.
+# for high capacity people, and attenuate that effect for low capacity people. NOT SO IN CGE!
 # 
-# Capacity has trending interaction with previous difficulty to almost eliminate the effect of prev. difficulty
-# for high capacity folks, but potentiate it for low capacity folks. 
+# in CGT, Capacity had trending interaction with previous difficulty to almost eliminate the effect of prev. difficulty
+# for high capacity folks, but potentiate it for low capacity folks. NOT SO IN CGE! 
 
 
 xval_plot = seq(from = 0, to = 1, by = .1); # current difficulty (easy = 0, difficult = 1)
@@ -930,7 +927,7 @@ plot(x = xval_plot, y = (coef_vals["(Intercept)"] +
                            xval_plot*capacity[1]* coef_vals["all_diff_cont:capacity_HighP1_lowN1"] + 
                            prev_trial_diff[1]*capacity[1]*coef_vals["prev_all_diff_cont:capacity_HighP1_lowN1"])^2, 
      type = 'l', lwd = 5, col = 'red', 
-     main = 'Effect of current & previous difficulty', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
+     main = 'Effect of current & previous difficulty: HIGH CAP', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
      ylim = c(1.25, 2))
 # Second plot PREV diff & CAPACITY high
 lines(x = xval_plot, y = (coef_vals["(Intercept)"] + 
@@ -948,7 +945,7 @@ plot(x = xval_plot, y = (coef_vals["(Intercept)"] +
                             xval_plot*capacity[2]* coef_vals["all_diff_cont:capacity_HighP1_lowN1"] + 
                             prev_trial_diff[1]*capacity[2]*coef_vals["prev_all_diff_cont:capacity_HighP1_lowN1"])^2, 
      type = 'l',lwd = 5, col = 'red',
-     main = 'Effect of current & previous difficulty', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
+     main = 'Effect of current & previous difficulty: LOW CAP', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
      ylim = c(1.25,2))
 # Fourth (last) plot PREV diff & CAPACITY low
 lines(x = xval_plot, y = (coef_vals["(Intercept)"] + 
@@ -987,6 +984,8 @@ summary(m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx)
 #   prev_all_diff_cont               -4.340e-02  1.018e-02  4.995e+03  -4.261 2.07e-05 ***
 #   all_diff_cont:prev_all_diff_cont  6.464e-03  1.519e-02  4.992e+03   0.425     0.67    
 
+# The effect of previous difficulty is STRONGER in low capacity people (just not sig. so)
+
 # THESE FINDINGS TOTALLY PARALLEL THE COMPLEX INTERACTIVE MODEL ABOVE AND BACK UP THE OBSERVATIONS MADE THERE.
 
 
@@ -1018,7 +1017,8 @@ for(ind in 1:length(possible_threshold_values)){
 best_aic = min(all_aic_values, na.rm = T);
 best_threshold = possible_threshold_values[which(all_aic_values == best_aic)];
 
-cat(sprintf('The best fitting model uses a threshold value of %g.\n', best_threshold))
+cat(sprintf('The best fitting model uses a CompositeSpan threshold value of %g.\n', best_threshold))
+cat(sprintf('The best AIC obtained with the CompositeSpan was %0.2f\n', best_aic))
 
 plot(sort(compositeSpanScores), xlab = 'Participants', ylab = 'Span')
 abline(h = best_threshold, col = 'blue', lwd = 4)
@@ -1026,6 +1026,113 @@ abline(h = median_compositespan, col = 'red', lwd = 4, lty = 'dotted') # median 
 legend('topleft', legend = c('Span','Best threshold','Median span'), col = c('black','blue', 'red'), lty = 1)
 
 plot(x = possible_threshold_values, y = all_aic_values, type = 'l', col = 'green', xlab = 'Thresholds', ylab = 'AIC values (lower better)')
+abline(v = median_compositespan, col = 'red', lwd = 4, lty = 'dotted')
+abline(v = best_threshold, col = 'blue', lwd = 4)
+
+# The best-fitting threshold (just slightly above the median value) is 0.6571439
+
+break_val = best_threshold; # as of 2/25/24, this was 0.6571439
+
+clean_data_dm$capacity_HighP1_lowN1_best[clean_data_dm$complexspan > break_val] = 1;
+clean_data_dm$capacity_HighP1_lowN1_best[clean_data_dm$complexspan < break_val] = -1;
+
+m3_best = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+                 (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best)
+m3_best_summary = summary(m3_best);
+m3_best_meanlik = exp(-m3_best_summary$logLik/nobs(m3_best));
+cat(sprintf('The best mean likelihood obtained with the CompositeSpan was %0.4f\n', m3_best_meanlik))
+
+
+m3_best_HighCap_only = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont + 
+                              (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1_best == 1,], REML = F);
+summary(m3_best_HighCap_only)
+
+m3_best_LowCap_only = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont + 
+                             (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1_best == -1,], REML = F);
+summary(m3_best_LowCap_only)
+
+
+# Are we better off using O-Span or Sym-Span (vs. Composite Span)?
+
+# Examine best-fitting threshold values: OSPAN
+possible_threshold_values_Ospan = sort(unique(ospanScores))+.000001;
+possible_threshold_values_Ospan = possible_threshold_values_Ospan[1:(length(possible_threshold_values_Ospan)-1)];
+
+all_aic_values = array(data = NA, dim = length(possible_threshold_values_Ospan));
+all_meanLik_values = array(data = NA, dim = length(possible_threshold_values_Ospan));
+
+clean_data_dm$capacity_HighP1_lowN1_Ospan_temp = NA;
+
+for(ind in 1:length(possible_threshold_values_Ospan)){
+  break_val = possible_threshold_values_Ospan[ind];
+  clean_data_dm$capacity_HighP1_lowN1_Ospan_temp[clean_data_dm$ospan > break_val] = 1;
+  clean_data_dm$capacity_HighP1_lowN1_Ospan_temp[clean_data_dm$ospan < break_val] = -1;
+  
+  cat(sprintf('This many people are < break_val: %g\n',sum(ospanScores<break_val, na.rm = T)))
+  
+  if((sum(ospanScores<break_val, na.rm = T) == 1) | (sum(ospanScores>break_val, na.rm = T) == 1)){
+    next # don't use any categorizations that create a 'group' with just 1 person
+  }
+  
+  m3_tmp = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_Ospan_temp + 
+                  (1 | subjectnumber), data = clean_data_dm, REML = F);
+  m3_tmp_summ = summary(m3_tmp);
+  
+  all_aic_values[ind] = AIC(m3_tmp)
+  all_meanLik_values[ind] = exp(-m3_tmp_summ$logLik/nobs(m3_tmp))
+}
+
+best_Ospan_aic = min(all_aic_values, na.rm = T);
+best_Ospan_threshold = possible_threshold_values_Ospan[which(all_aic_values == best_Ospan_aic)];
+best_Ospan_meanlik = all_meanLik_values[which(all_aic_values == best_Ospan_aic)];
+
+cat(sprintf('The best fitting model uses an OSpan threshold value of %g.\n', best_Ospan_threshold))
+cat(sprintf('The best AIC obtained with the O-Span was %0.2f\n', best_Ospan_aic))
+cat(sprintf('The best mean likelihood obtained with the Ospan was %0.4f\n', best_Ospan_meanlik))
+
+# Examine best-fitting threshold values: SYMSPAN
+possible_threshold_values_Symspan = sort(unique(symspanScores))+.000001;
+possible_threshold_values_Symspan = possible_threshold_values_Symspan[1:(length(possible_threshold_values_Symspan)-1)];
+
+all_aic_values = array(data = NA, dim = length(possible_threshold_values_Symspan));
+all_meanLik_values = array(data = NA, dim = length(possible_threshold_values_Symspan));
+
+clean_data_dm$capacity_HighP1_lowN1_Symspan_temp = NA;
+
+for(ind in 1:length(possible_threshold_values_Symspan)){
+  break_val = possible_threshold_values_Symspan[ind];
+  clean_data_dm$capacity_HighP1_lowN1_Symspan_temp[clean_data_dm$symspan > break_val] = 1;
+  clean_data_dm$capacity_HighP1_lowN1_Symspan_temp[clean_data_dm$symspan < break_val] = -1;
+  
+  cat(sprintf('This many people are < break_val: %g\n',sum(symspanScores<break_val, na.rm = T)))
+  
+  if((sum(symspanScores<break_val, na.rm = T) == 1) | (sum(symspanScores>break_val, na.rm = T) == 1)){
+    next # don't use any categorizations that create a 'group' with just 1 person
+  }
+  
+  m3_tmp = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_Symspan_temp + 
+                  (1 | subjectnumber), data = clean_data_dm, REML = F);
+  m3_tmp_summ = summary(m3_tmp);
+
+  all_aic_values[ind] = AIC(m3_tmp)
+  all_meanLik_values[ind] = exp(-m3_tmp_summ$logLik/nobs(m3_tmp))
+}
+
+best_Symspan_aic = min(all_aic_values, na.rm = T);
+best_Symspan_threshold = possible_threshold_values_Symspan[which(all_aic_values == best_Symspan_aic)];
+best_Symspan_meanlik = all_meanLik_values[which(all_aic_values == best_Symspan_aic)];
+
+cat(sprintf('The best fitting model uses a SymSpan threshold value of %g.\n', best_Symspan_threshold))
+cat(sprintf('The best AIC obtained with the SymSpan was %0.2f\n', best_Symspan_aic))
+cat(sprintf('The best mean likelihood obtained with the SymSpan was %0.4f\n', best_Symspan_meanlik))
+
+
+# Which model does best?
+# Fraught question: different people & trials in these 3 models.
+# (well, the Ospan & Symspan are different; composite span includes both of those, but other people too)
+# Mean choice likelihood is best for SymSpan (0.7280), then Composite (0.7222), then OSpan (0.7195). Differences
+# are slight, so probably prefer the model that fits more data, i.e. composite.
 
 #####EXPLORATORY ANALYSES ##########
 
@@ -1051,7 +1158,7 @@ plot(x = possible_threshold_values, y = all_aic_values, type = 'l', col = 'green
 
 
 # Continuous difficulty (including previous) and continuous capacity and categorical capacity
-m1_prev_diffCont_capacityCont_capacityCat_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * best_span_overall + 
+m1_prev_diffCont_capacityCont_capacityCat_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * complexspan_demeaned + 
                                                              all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1 + 
                                                              (1 | subjectnumber), data = clean_data_dm);
 summary(m1_prev_diffCont_capacityCont_capacityCat_intxn_rfx)
@@ -1061,34 +1168,38 @@ summary(m1_prev_diffCont_capacityCont_capacityCat_intxn_rfx)
 
 
 ### Using Best Span Overall ###
-m1_diffCat_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 * best_span_overall + 
+m1_diffCat_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 * complexspan_demeaned + 
                                            (1 | subjectnumber), data = clean_data_dm);
 summary(m1_diffCat_capacityCont_intxn_rfx)
-# No effect, as expected. 
+# difficulty interacts with span - difficulty's slowing of RTs is potentiated for people with high cap.
 
 m1_prev_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                        easyP1difficultN1 * easyP1difficultN1_prev * best_span_overall + 
+                                        easyP1difficultN1 * easyP1difficultN1_prev * complexspan_demeaned + 
                                         (1 | subjectnumber), data = clean_data_dm);
 summary(m1_prev_capacityCont_intxn_rfx)
-# DOES NOT WORK with continuous measure of capacity
+# same main effects (curr. difficult -> slower RTs; prev. difficulty -> faster RTs; curr. difficulty effect
+# is stronger for high cap. than low cap. folks)
 
-m1_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + easy * best_span_overall + difficult * best_span_overall + 
+m1_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + easy * complexspan_demeaned + difficult * complexspan_demeaned + 
                                    (1 | subjectnumber), data = clean_data_dm);
 summary(m1_capacityCont_intxn_rfx)
-# Continuous span again does not work well. 
+# easy is faster (difficult is trendingly slower); No net effect of complex span.
+# but: BOTH easy & difficult are slower with complex span, but to diff. degrees?
 
-m1_diffCont_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * best_span_overall + 
+m1_diffCont_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned + 
                                             (1 | subjectnumber), data = clean_data_dm);
 summary(m1_diffCont_capacityCont_intxn_rfx)
-# No effect, as expected. 
+# same as observed above; span interacts with current difficulty.
 
 # Continuous difficulty (including previous) and continuous capacity
 m1_prev_diffCont_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                                 all_diff_cont * prev_all_diff_cont * best_span_overall + 
+                                                 all_diff_cont * prev_all_diff_cont * complexspan_demeaned + 
                                                  (1 | subjectnumber), data = clean_data_dm);
 summary(m1_prev_diffCont_capacityCont_intxn_rfx)
-# Again best span is not working well here.
-
+# Curr. difficulty predicts slower
+# Prev. difficulty predicts faster
+# Span potentiates current difficulty
+# Span *trendingly* eliminates prev. difficulty? 
 
 
 
