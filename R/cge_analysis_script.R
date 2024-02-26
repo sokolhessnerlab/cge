@@ -1134,25 +1134,47 @@ cat(sprintf('The best mean likelihood obtained with the SymSpan was %0.4f\n', be
 # Mean choice likelihood is best for SymSpan (0.7280), then Composite (0.7222), then OSpan (0.7195). Differences
 # are slight, so probably prefer the model that fits more data, i.e. composite.
 
-#####EXPLORATORY ANALYSES ##########
 
 
-#notes for scoring 
-#high scoring is a "thinker" 
-#5 x 18 = highest score = 90 
+#### Individual Regressions ####
 
-#reverse score these columns needForCog_ 3,4,5,7,8,9,12,16,17
-  # 1 = extremely characteristic 
-  # 5 = extremely uncharacteristic
+model_summaries = list()
+lm_estimates = array(data = NA, dim = c(number_of_clean_subjects,4)); # 4 estimates
+lm_pvalues = array(data = NA, dim = c(number_of_clean_subjects,4)); # 4 p-values
 
-# Normal answers ranged 1-5 
-  # extremely uncharacteristic of me to extremely characteristic of me 
+for (s in 1:number_of_clean_subjects){
+  subj_id = keep_participants[s]
+  tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
+  
+  indiv_model = lm(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont, 
+                   data = tmpdata);
+  
+  model_summaries[[s]] = summary(indiv_model)
+  lm_estimates[s,] = coef(indiv_model);
+  lm_pvalues[s,] = summary(indiv_model)$coefficients[,4] 
+}
 
+# Columns... 
+# 1 = intercept
+# 2 = all_diff_cont
+# 3 = prev_all_diff_cont
+# 4 = all_diff_cont:prev_all_diff_cont
 
+# p-values... expect low numbers for big effects
+plot(lm_pvalues[,2], compositeSpanScores[keep_participants]) # current difficulty
+  # given big model, mostly expect negative relationship (higher span = lower/more sig. p-value)
+  # LOOKS LIKE THAT
+plot(lm_pvalues[,3], compositeSpanScores[keep_participants]) # previous difficulty
+  # given big model, mostly expect positive relationship (higher span = higher/less sig. p-value)
+  # LOOKS LIKE THAT
 
-
-
-
+# Estimates... expect high values for big effects
+plot(lm_estimates[,2], compositeSpanScores[keep_participants]) # current difficulty
+  # given big model, mostly expect positive relationship (higher span = larger estimate)
+  # LOOKS LIKE THAT
+plot(lm_estimates[,3], compositeSpanScores[keep_participants]) # previous difficulty
+  # given big model, mostly expect negative relationship (higher span = lower estimate)
+  # WITH A FEW EXCEPTIONS, LOOKS LIKE THAT? 
 
 ################ MOST STUFF BELOW HERE CAN BE IGNORED ################
 
