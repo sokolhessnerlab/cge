@@ -1261,6 +1261,18 @@ wilcox.test(mean_choice_lik_relative[capacity_HighP1_lowN1_Best == 1], mean_choi
 # Low cap. mean difference = -0.011 (more positive)
 
 
+# Try a regression-based approach to this whole question?
+likmodel_catDiff_catCap = lmer(all_choice_likelihood ~ 1 + easyP1difficultN1 * easyP1difficultN1_prev * capacity_HighP1_lowN1_best + 
+                 (1 | subjectnumber), data = clean_data_dm)
+summary(likmodel_catDiff_catCap)
+# no signs of anything going on in previous difficulty
+
+likmodel_contDiff_catCap = lmer(all_choice_likelihood ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+                 (1 | subjectnumber), data = clean_data_dm)
+summary(likmodel_contDiff_catCap)
+# no signs of anything going on in previous difficulty
+
+
 # TAKEAWAY: 
 # There are no strong signs in peoples' choices that after difficult trials, choice likelihood 
 # is relatively lower for low capacity folks than for high capacity folks. That *would* have
