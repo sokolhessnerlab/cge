@@ -1033,6 +1033,8 @@ abline(v = best_threshold, col = 'blue', lwd = 4)
 
 break_val = best_threshold; # as of 2/25/24, this was 0.6571439
 
+capacity_HighP1_lowN1_Best = (compositeSpanScores[keep_participants] > break_val)*2 - 1;
+
 clean_data_dm$capacity_HighP1_lowN1_best[clean_data_dm$complexspan > break_val] = 1;
 clean_data_dm$capacity_HighP1_lowN1_best[clean_data_dm$complexspan < break_val] = -1;
 
@@ -1170,11 +1172,113 @@ plot(lm_pvalues[,3], compositeSpanScores[keep_participants]) # previous difficul
 
 # Estimates... expect high values for big effects
 plot(lm_estimates[,2], compositeSpanScores[keep_participants]) # current difficulty
+cor.test(lm_estimates[,2], compositeSpanScores[keep_participants]) # positive w/ p = 0.087 (trend)
   # given big model, mostly expect positive relationship (higher span = larger estimate)
   # LOOKS LIKE THAT
 plot(lm_estimates[,3], compositeSpanScores[keep_participants]) # previous difficulty
+cor.test(lm_estimates[,3], compositeSpanScores[keep_participants]) # POSITIVE*, w/ p = 0.033    *unexpected!
   # given big model, mostly expect negative relationship (higher span = lower estimate)
   # WITH A FEW EXCEPTIONS, LOOKS LIKE THAT? 
+
+# TAKEAWAY: Unsurprisingly, these individual-level estimates & p-values/etc are noisy. 
+# Without the stabilizing effect of a hierarchical approach, these are hard to read. 
+# Additionally the magnitude and significance of an estimate are two different things
+# and this approach doesn't handle that gracefully. 
+
+# PROBABLY DON'T TAKE SERIOUSLY OR USE CENTRALLY
+
+
+
+#### Throwing In The Towel ####
+
+### Explaining lower RTs (faster choices) after difficult trials: 
+# Are low-capacity participants "throwing in the towel" after difficult choices, or 
+# is their choice process *facilitated*, and thus better? 
+
+# APPROACH:
+#   1. Use all_choice_P values (calculated from estimates of rho & mu from static trials) to...
+#   2. Calculate the LIKELIHOOD of data on a per-trial basis in dynamic trials, and then...
+#   3. Calculate the MEAN LIKELIHOOD of dynamic trials that follow a difficult trial
+#      and compare it to the MEAN LIKELIHOOD of dynamic trials that follow an easy trial
+#   4. Calculate the difference in MEAN LIKELIHOOD (easy - difficult), and...
+#   5. Relate that difference to capacity group and/or continuous capacity.
+
+# 1. is already done. 
+
+# 2. Calculate the likelihood of the choices.
+
+clean_data_dm$all_choice_likelihood = clean_data_dm$choice * clean_data_dm$all_choiceP + (1-clean_data_dm$choice) * (1-clean_data_dm$all_choiceP);
+
+# 3. Calculate the mean likelihood on dynamic trials after diff. vs. easy trials.
+
+mean_choice_lik_prevEasy = array(data = NA, dim = c(number_of_clean_subjects,1));
+mean_choice_lik_prevDiff = array(data = NA, dim = c(number_of_clean_subjects,1));
+
+for (s in 1:number_of_clean_subjects){
+  subj_id = keep_participants[s]
+  tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
+  
+  mean_choice_lik_prevEasy[s] = mean(tmpdata$all_choice_likelihood[tmpdata$easyP1difficultN1_prev == 1], na.rm = T); # na.rm b/c of missed trials
+  mean_choice_lik_prevDiff[s] = mean(tmpdata$all_choice_likelihood[tmpdata$easyP1difficultN1_prev == -1], na.rm = T);
+
+  # Use this code to run this test ONLY on current difficult trials
+  # mean_choice_lik_prevEasy[s] = mean(tmpdata$all_choice_likelihood[(tmpdata$easyP1difficultN1_prev == 1) & (tmpdata$easyP1difficultN1 == -1)], na.rm = T); # na.rm b/c of missed trials
+  # mean_choice_lik_prevDiff[s] = mean(tmpdata$all_choice_likelihood[(tmpdata$easyP1difficultN1_prev == -1) & (tmpdata$easyP1difficultN1 == -1)], na.rm = T);
+}
+
+t.test(mean_choice_lik_prevEasy, mean_choice_lik_prevDiff, paired = T) # p = 0.09, 2/25/24
+wilcox.test(mean_choice_lik_prevEasy, mean_choice_lik_prevDiff, paired = T) 
+# mean choice likelihood is slightly HIGHER after difficult than after easy (0.697 vs. 0.685)
+
+cor.test(mean_choice_lik_prevEasy, mean_choice_lik_prevDiff) # r(59) = 0.33, p = 0.009
+cor.test(mean_choice_lik_prevEasy, mean_choice_lik_prevDiff, method = 'spearman') 
+# Correlated w/ each other, unsurprisingly.
+
+plot(mean_choice_lik_prevEasy, mean_choice_lik_prevDiff)
+lines(x = c(0, 1), y = c(0, 1))
+
+# 4. Calculate the difference in mean choice likelihood as a function of prev. difficulty
+
+mean_choice_lik_relative = mean_choice_lik_prevEasy - mean_choice_lik_prevDiff;
+# Positive numbers = Likelihood after easy is HIGHER than after difficult.
+# Negative numbers = likelihood after easy is LOWER than after difficult.
+#
+# We predict more positive numbers for low-capacity folks.
+
+# 5. Relate that difference to capacity group and/or continuous capacity.
+
+plot(mean_choice_lik_relative, compositeSpanScores[keep_participants])
+cor.test(mean_choice_lik_relative, compositeSpanScores[keep_participants]) # n.s. (p = 0.27) on 2/25/24
+cor.test(mean_choice_lik_relative, compositeSpanScores[keep_participants], method = 'spearman')
+# Direction of the (non-sig.) correlation is negative, as expected
+# Low capacity folks have a greater gap between their choice likelihood
+# after easy vs. difficult (and easy is >> difficult).
+
+t.test(mean_choice_lik_relative[capacity_HighP1_lowN1_Best == 1], mean_choice_lik_relative[capacity_HighP1_lowN1_Best == -1])
+wilcox.test(mean_choice_lik_relative[capacity_HighP1_lowN1_Best == 1], mean_choice_lik_relative[capacity_HighP1_lowN1_Best == -1])
+# n.s. p = 0.63 on 2/25/24
+# High cap. mean difference = -0.017
+# Low cap. mean difference = -0.011 (more positive)
+
+
+# TAKEAWAY: 
+# There are no strong signs in peoples' choices that after difficult trials, choice likelihood 
+# is relatively lower for low capacity folks than for high capacity folks. That *would* have
+# been consistent with 'giving up'. The signs are in the expected direction, but no stats 
+# reach significance. 
+#
+# Note that no stats are instead consistent with *facilitation* after difficult trials (which
+# might predict more internally-consistent choices after difficult trials). 
+
+# This analysis likely suffers from too much breaking-into-parts (and any others going down this
+# path would suffer more, e.g. is the likelihood lower, on difficult trials only, after difficult
+# trials than after easy trials? )
+
+
+
+
+
+
 
 ################ MOST STUFF BELOW HERE CAN BE IGNORED ################
 
