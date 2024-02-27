@@ -1379,25 +1379,3 @@ sd((meanRT_diff_capacity_Low), na.rm = T);
 mean((meanRT_easy_capacity_Low), na.rm = T);
 sd((meanRT_easy_capacity_Low), na.rm = T);
 
-#Q: Does rt vary significantly from high to low controllers regardelss of choice type/difficulty?
-#Q: Does cognitive capacity influence reaction time?Do high controllers have diff avg RT (predicted faster avg) compared to low controllers? 
-#t.test(meanRT_diff_capacity_High, meanRT_diff_capacity_Low, na.rm = T);
-#t.test(meanRT_easy_capacity_High, meanRT_easy_capacity_Low, na.rm = T)
-#A: not significantly different, suggesting that cognitive capacity on this level, does not effect reatction time. 
-
-
-#see behavioral (rt) variability in the regression based upon inc or dec of capacity?
-#see individual and group differences? 
-
-
-
-###Exploratory Analyses (Qualtrics Data) ###
-#1. import Qualtrics data 
-
-
-
-#2. quality check ie make sure pts are correct and match data  
-#3. score NFC & add it to measure of CC (see citations)
-#4. Run an analyses with CC see above with this measure instead? 
-
-#NFC scoring = sum of what they reported on all 18 , highest 72 lowest -72 
