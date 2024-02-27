@@ -1224,6 +1224,10 @@ for (s in 1:number_of_clean_subjects){
   # Use this code to run this test ONLY on current difficult trials
   # mean_choice_lik_prevEasy[s] = mean(tmpdata$all_choice_likelihood[(tmpdata$easyP1difficultN1_prev == 1) & (tmpdata$easyP1difficultN1 == -1)], na.rm = T); # na.rm b/c of missed trials
   # mean_choice_lik_prevDiff[s] = mean(tmpdata$all_choice_likelihood[(tmpdata$easyP1difficultN1_prev == -1) & (tmpdata$easyP1difficultN1 == -1)], na.rm = T);
+
+  # Use this code to run this test ONLY on current easy trials
+  # mean_choice_lik_prevEasy[s] = mean(tmpdata$all_choice_likelihood[(tmpdata$easyP1difficultN1_prev == 1) & (tmpdata$easyP1difficultN1 == 1)], na.rm = T); # na.rm b/c of missed trials
+  # mean_choice_lik_prevDiff[s] = mean(tmpdata$all_choice_likelihood[(tmpdata$easyP1difficultN1_prev == -1) & (tmpdata$easyP1difficultN1 == 1)], na.rm = T);
 }
 
 t.test(mean_choice_lik_prevEasy, mean_choice_lik_prevDiff, paired = T) # p = 0.09, 2/25/24
@@ -1284,7 +1288,18 @@ summary(likmodel_contDiff_catCap)
 
 # This analysis likely suffers from too much breaking-into-parts (and any others going down this
 # path would suffer more, e.g. is the likelihood lower, on difficult trials only, after difficult
-# trials than after easy trials? )
+# trials than after easy trials?)
+
+# This analysis is ALSO fundamentally limited by our design - easy and difficult trials are 
+# DESIGNED with a particular choice likelihood. That's the literal definition of what makes an
+# easy trial easy etc. In particular, difficult trials, where we might expect to see the most
+# movement, are designed with likelihoods *right in the middle*, so biases to act in a 
+# particular way on those trials (e.g. always gamble; always safe) might be impossible to see
+# as *all actions are equally (un)likely*. If anything, this counterintuitively suggests that
+# EASY trials would be the place to observe unusual behavior, but we may have again hurt 
+# ourselves as easy trials are SO easy as to be obvious, and not requiring much cognitive 
+# work at all to decide about. In short, the way to have observed this might have been with
+# trials that were in-between easy and difficult.
 
 
 
