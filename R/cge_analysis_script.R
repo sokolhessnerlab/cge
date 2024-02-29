@@ -107,13 +107,79 @@ number_of_clean_subjects = length(keep_participants);
 # Descriptives & simple averages of task performance
 
 #### Survey Analysis #### 
+library(corrplot)
 
 # DATA: age, ethnicity, education, firstgen, politicalorientation, IUS_probability, IUS_inihibitory, IUS, NCS, SNS_ability, SNS_preference, SNS, PSS
 # ANALYSIS: min, max, mean, SD, median, variance
 # GRAPHS: histograms, scatterplots, correlograms, pairwise correlations
 
-mean(clean_data_survey$age)
+mean(clean_data_survey$age) # 19.9 years old
+range(clean_data_survey$age) # 18-35
+sd(clean_data_survey$age) # 2.82 years
+hist(clean_data_survey$age)
 
+# Main Questionnaire Scores: 
+# NCS
+# SNS
+# IUS
+# PSS
+
+cor_matrix = cor(cbind(clean_data_survey[,c('NCS','IUS','SNS','PSS')],clean_data_complexspan['compositeSpanScore']),
+                 use = 'complete.obs');
+cor.test(clean_data_survey$NCS, clean_data_survey$IUS) # trend, neg
+cor.test(clean_data_survey$NCS, clean_data_survey$SNS) # p = 0.04, pos
+cor.test(clean_data_survey$NCS, clean_data_survey$PSS) # p = 0.01, neg
+cor.test(clean_data_survey$IUS, clean_data_survey$SNS) # n.s.
+cor.test(clean_data_survey$IUS, clean_data_survey$PSS) # p = 8e-6, pos
+cor.test(clean_data_survey$SNS, clean_data_survey$PSS) # n.s.
+cor.test(clean_data_survey$NCS, clean_data_complexspan$compositeSpanScore) # n.s.
+cor.test(clean_data_survey$IUS, clean_data_complexspan$compositeSpanScore) # n.s.
+cor.test(clean_data_survey$SNS, clean_data_complexspan$compositeSpanScore) # n.s.
+cor.test(clean_data_survey$PSS, clean_data_complexspan$compositeSpanScore) # n.s.
+
+plot(cbind(clean_data_survey[,c('NCS','IUS','SNS','PSS')],clean_data_complexspan['compositeSpanScore']));
+
+# Higher NCS, higher SNS
+# Higher NCS, lower PSS
+# maaaaaaybe higher NCS lower IUS (but only trend)
+
+# Higher IUS, higher PSS
+
+# NO RELATIONSHIPS TO WORKING MEMORY COMPOSITE SPAN
+
+corrplot(cor_matrix, type = 'lower')
+# Positive = blue
+# Negative = red
+
+# Any similarities to working memory span?
+
+# TAKEAWAYS:
+# Because of several inter-item correlations, it's not wise to include these in the same model
+# and we should expect some of these to perform similarly (i.e. PSS & IUS may be similar).
+# However, because they're unrelated to composite span, we can freely include them alongside
+# composite working memory span (and related variables). 
+
+par(mfrow = c(2,2))
+hist(clean_data_survey$NCS, ylab = '', xlab = 'Score', main = 'Need for Cognition (NCS)')
+abline(v = mean(clean_data_survey$NCS), col = 'red', lwd = 5)
+
+hist(clean_data_survey$IUS, ylab = '', xlab = 'Score', main = 'Intolerance of Uncertainty (IUS)')
+abline(v = mean(clean_data_survey$IUS), col = 'blue', lwd = 5)
+
+hist(clean_data_survey$SNS, ylab = '', xlab = 'Score', main = 'Subjective Numerancy Scale (SNS)')
+abline(v = mean(clean_data_survey$SNS), col = 'green', lwd = 5)
+
+hist(clean_data_survey$PSS, ylab = '', xlab = 'Score', main = 'Perceived Stress Scale (PSS)')
+abline(v = mean(clean_data_survey$PSS), col = 'magenta', lwd = 5)
+
+par(mfrow = c(1,1))
+
+# Make binary categorical variables for clean_data_dm based on each of the major Surveys
+
+clean_data_dm$NCS_HighP1_LowN1 = (clean_data_dm$NCS >= median(clean_data_survey$NCS))*2-1;
+clean_data_dm$IUS_HighP1_LowN1 = (clean_data_dm$IUS >= median(clean_data_survey$IUS))*2-1;
+clean_data_dm$SNS_HighP1_LowN1 = (clean_data_dm$SNS >= median(clean_data_survey$SNS))*2-1;
+clean_data_dm$PSS_HighP1_LowN1 = (clean_data_dm$PSS >= median(clean_data_survey$PSS))*2-1;
 
 
 
