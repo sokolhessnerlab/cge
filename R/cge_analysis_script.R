@@ -17,7 +17,8 @@ setwd('C:/Users/jvonm/Documents/GitHub/cge');
 # STEP 2: then run from here on the same
 config = config::get()
 
-#### Loading Data ####
+#### Loading Data #### 
+# Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = “tabletas”)
 setwd(config$path$data$processed)
 
 # #Von's 
@@ -32,6 +33,10 @@ data_dm = read.csv(fn[number_of_files]) # decision-making data
 fn = dir(pattern = glob2rx('cge_processed_complexspan_data_*.csv'),full.names = T);
 number_of_files = length(fn) # ASSUMES YOU WANT THE MOST-RECENT PROCESSED DATA
 complexSpanScores = read.csv(fn[number_of_files]) # working memory data 
+
+fn = dir(pattern = glob2rx('cge_processed_survey_data_*.csv'),full.names = T);
+number_of_files = length(fn) # ASSUMES YOU WANT THE MOST-RECENT PROCESSED DATA
+qualtrics = read.csv(fn[number_of_files]) # working memory data 
 
 number_of_subjects = length(unique(data_dm$subjectnumber));
 
@@ -79,6 +84,10 @@ mean_rts[keep_dm_rt]
 hist(mean_rts[keep_dm_rt]) # histogram of mean rts
 mean(mean_rts[keep_dm_rt]) # mean rt 1.60 seconds (as of CGE048 on 2/9/24)
 
+### Qualtrics Exclusions 
+# quick responses to surveys (still figuring out how that should be done)
+# questionable pattern of responses to surveys (nail in the coffin)
+
 
 #### Create clean data frames ####
 
@@ -87,14 +96,25 @@ keep_participants = which(keep_check_trial & keep_dm_rt);
 # Create clean data frames for data!
 clean_data_dm = data_dm[data_dm$subjectnumber %in% keep_participants,]
 clean_data_complexspan = complexSpanScores[complexSpanScores$subjectnumber %in% keep_participants,]
+clean_data_qualtrics = qualtrics[qualtrics$subjectID %in% keep_participants,]
 
 number_of_clean_subjects = length(keep_participants);
 
 
 #### BASIC DATA ANALYSIS ####
 
-# (Separately for DM & WM data)
+# (Separately for DM & WM, & Qualtrics data)
 # Descriptives & simple averages of task performance
+
+#### Qualtrics Analysis #### 
+
+# DATA: age, ethnicity, education, firstgen, politicalorientation, IUS_probability, IUS_inihibitory, IUS, NCS, SNS_ability, SNS_preference, SNS, PSS
+# ANALYSIS: min, max, mean, SD, median, variance
+# GRAPHS: histograms, scatterplots, correlograms, pairwise correlations
+
+mean(clean_data_qualtrics$age)
+
+
 
 #### DM task Analysis ####
 # Analysis for static trials: Mean p(gamble), optimization
@@ -649,7 +669,7 @@ variance_compositespan = var(complexSpanScores$compositeSpanScore, na.rm = T)
 # Include in the processing - Correlation between OSpan and SymSpan
 ospanScores = complexSpanScores$ospanScore
 symspanScores = complexSpanScores$symspanScore
-compositeSpanScores = complexSpanScores$compositeSpanScore
+compositespanScores = complexSpanScores$compositeSpanScore
 
 cor.test(ospanScores, symspanScores) # r(44) = 0.43, p = 0.003 (as of 2/25/24)
 var.test(ospanScores, symspanScores) # similar variance (p = 0.59 as of 2/25/24)
