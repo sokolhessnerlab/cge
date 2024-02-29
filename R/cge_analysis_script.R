@@ -691,7 +691,7 @@ sum(capacity_HighP1_lowN1 == 1, na.rm = T)
 sum(capacity_HighP1_lowN1 == -1, na.rm = T)
 
 # Plot the distribution w/ the median value
-hist(compositespanScores, breaks = 10, xlab = 'Composite Span Score', main = 'Distribution of Spans');
+hist(compositeSpanScores, breaks = 10, xlab = 'Composite Span Score', main = 'Distribution of Spans');
 abline(v = median_compositespan, col = 'red', lwd = 5)
 
 
@@ -704,7 +704,7 @@ for(s in 1:number_of_clean_subjects){
 
 clean_data_dm$complexspan_demeaned = clean_data_dm$complexspan - mean_compositespan;
 
-plot(sort(compositespanScores))
+plot(sort(compositeSpanScores))
 abline(h = median_compositespan, col = 'red', lwd = 2)
 
 
@@ -1073,6 +1073,75 @@ summary(m3_best_HighCap_only)
 m3_best_LowCap_only = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont + 
                              (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1_best == -1,], REML = F);
 summary(m3_best_LowCap_only)
+
+
+# Re-do easy/difficult regression w/ this split
+m3_capacityCat_intxn_rfx_bestcap = lmer(sqrtRT ~ 1 + easy * capacity_HighP1_lowN1_best + 
+                                          difficult * capacity_HighP1_lowN1_best + 
+                                  (1 | subjectnumber), data = clean_data_dm);
+summary(m3_capacityCat_intxn_rfx_bestcap)
+# With this "best split", BOTH easy and difficult are different by capacity?
+# This is dynamic-ONLY (using easy/difficult as categorical)
+
+
+m2_best_cap = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + 
+                  (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m2_best_cap)
+xval_plot = seq(from = 0, to = 1, by = .1);
+coef_vals = fixef(m2_best_cap)
+
+plot(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_diff_cont"] + 
+                           1*xval_plot*coef_vals["all_diff_cont:capacity_HighP1_lowN1_best"] + 
+                           1*coef_vals["capacity_HighP1_lowN1_best"])^2, 
+     type = 'l', lwd = 5, col = 'purple4', 
+     main = 'Effect of current difficulty', xlab = 'Difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)')
+lines(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_diff_cont"] + 
+                            -1*xval_plot*coef_vals["all_diff_cont:capacity_HighP1_lowN1_best"]+ 
+                            -1*coef_vals["capacity_HighP1_lowN1_best"])^2, 
+      lwd = 5, col = 'purple1')
+
+
+
+xval_plot = seq(from = 0, to = 1, by = .1); # current difficulty (easy = 0, difficult = 1)
+prev_trial_diff = c(0,1); # easy = 0, difficult = 1
+capacity = c(1, -1); # HIGH = 1, low = -1
+coef_vals = fixef(m3_best)
+
+#HIGH CAPACITY PLOT
+# First plot PREV easy & CAPACITY high
+plot(x = xval_plot, y = (coef_vals["(Intercept)"] + 
+                           xval_plot*coef_vals["all_diff_cont"] + 
+                           prev_trial_diff[1]*coef_vals["prev_all_diff_cont"] + 
+                           xval_plot*capacity[1]* coef_vals["all_diff_cont:capacity_HighP1_lowN1_best"] + 
+                           prev_trial_diff[1]*capacity[1]*coef_vals["prev_all_diff_cont:capacity_HighP1_lowN1_best"])^2, 
+     type = 'l', lwd = 5, col = 'blue', 
+     main = 'Effect of current & previous difficulty: HIGH CAP', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
+     ylim = c(1.25, 1.85))
+# Second plot PREV diff & CAPACITY high
+lines(x = xval_plot, y = (coef_vals["(Intercept)"] + 
+                            xval_plot*coef_vals["all_diff_cont"] + 
+                            prev_trial_diff[2]*coef_vals["prev_all_diff_cont"] + 
+                            xval_plot*capacity[1]* coef_vals["all_diff_cont:capacity_HighP1_lowN1_best"] + 
+                            prev_trial_diff[2]*capacity[1]*coef_vals["prev_all_diff_cont:capacity_HighP1_lowN1_best"])^2, 
+      lwd = 5, col = 'red')
+
+#SEPERATE INTO TWO PLOTS (LOW CAPACITY BELOW)
+# Third plot PREV easy & CAPACITY low
+plot(x = xval_plot, y = (coef_vals["(Intercept)"] + 
+                           xval_plot*coef_vals["all_diff_cont"] + 
+                           prev_trial_diff[1]*coef_vals["prev_all_diff_cont"] + 
+                           xval_plot*capacity[2]* coef_vals["all_diff_cont:capacity_HighP1_lowN1_best"] + 
+                           prev_trial_diff[1]*capacity[2]*coef_vals["prev_all_diff_cont:capacity_HighP1_lowN1_best"])^2, 
+     type = 'l',lwd = 5, col = 'blue',
+     main = 'Effect of current & previous difficulty: LOW CAP', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
+     ylim = c(1.25,1.85))
+# Fourth (last) plot PREV diff & CAPACITY low
+lines(x = xval_plot, y = (coef_vals["(Intercept)"] + 
+                            xval_plot*coef_vals["all_diff_cont"] + 
+                            prev_trial_diff[2]*coef_vals["prev_all_diff_cont"] + 
+                            xval_plot*capacity[2]* coef_vals["all_diff_cont:capacity_HighP1_lowN1_best"] + 
+                            prev_trial_diff[2]*capacity[2]*coef_vals["prev_all_diff_cont:capacity_HighP1_lowN1_best"])^2, 
+      lwd = 5, col = 'red')
 
 
 # Are we better off using O-Span or Sym-Span (vs. Composite Span)?
