@@ -1293,6 +1293,78 @@ cat(sprintf('The best mean likelihood obtained with the SymSpan was %0.4f\n', be
 # are slight, so probably prefer the model that fits more data, i.e. composite.
 
 
+### Testing the integration of Survey Data ###
+
+# NCS, IUS, SNS, PSS
+
+m3_best_NCS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * NCS_HighP1_LowN1 + 
+                 (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_NCS)
+# NCS x SPAN x current difficulty interaction
+
+m3_best_IUS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * IUS_HighP1_LowN1 + 
+                     (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_IUS)
+# IUS x Span x current difficulty interaction
+# IUS x current difficulty interaction
+
+m3_best_SNS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * SNS_HighP1_LowN1 + 
+                     (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_SNS)
+# SNS main effect
+
+m3_best_PSS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * PSS_HighP1_LowN1 + 
+                     (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_PSS)
+# PSS x Span x current difficulty interaction 
+
+AIC(m3_best_NCS) # -6421.915
+AIC(m3_best_IUS) # -6454.564 <- BEST AIC = IUS categorical
+AIC(m3_best_SNS) # -6427.539
+AIC(m3_best_PSS) # -6424.478
+
+# NCS, IUS, and PSS all have the same interaction in their regressions - with current difficulty
+# and working memory span. These interactions look like they qualify the 2-way interaction between
+# current difficulty & working memory span (that's present in these regressions). THAT interaction
+# best characterized as a difference in the slope of current difficulty between high and low 
+# capacity participants (high cap participants have a steeper slope with current difficulty). So
+# these 3-way interactions (+ve for NCS, -ve for IUS & PSS) can be broadly interpreted to indicate
+# that that increasing steepness with capacity is WEAKER for people low in need for cognition / 
+# high in intolerance of uncertainty / high in chronic stress (conversely, the opposite is true:
+# Increasing steepness w/ increasing capacity is STRONGER in people high in need for cognition, 
+# low in intolerance of uncertainty / low in chronic stress). 
+
+
+m3_best_IUS_SNS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * IUS_HighP1_LowN1 + 
+                         all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * SNS_HighP1_LowN1 + 
+                     (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_IUS_SNS)
+# We can run this regression, but... it's a lot. Many 2- & 3-way interactions. 
+# AIC *is* better (-6459.4)
+# 
+# Brief summary:
+# MAIN EFFECTS
+# current difficulty + 
+# previous difficulty - 
+# SNS score + 
+#
+# TWO WAY INTERACTIONS:
+# current difficulty x capacity (weak, trend) + 
+# previous difficulty x capacity + 
+# current difficulty x IUS - 
+#
+# THREE WAY INTERACTION:
+# Current difficulty x capacity x IUS - 
+# 
+
+
+
+# m3_best_summary = summary(m3_best);
+# m3_best_meanlik = exp(-m3_best_summary$logLik/nobs(m3_best));
+# cat(sprintf('The best mean likelihood obtained with the CompositeSpan was %0.4f\n', m3_best_meanlik))
+
+
+
 
 #### Individual Regressions ####
 
