@@ -1338,7 +1338,8 @@ AIC(m3_best_PSS) # -6424.478
 m3_best_IUS_SNS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * IUS_HighP1_LowN1 + 
                          all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * SNS_HighP1_LowN1 + 
                      (1 | subjectnumber), data = clean_data_dm, REML = F);
-summary(m3_best_IUS_SNS)
+summary(m3_best_IUS_SNS) # AIC -6459
+
 # We can run this regression, but... it's a lot. Many 2- & 3-way interactions. 
 # AIC *is* better (-6459.4)
 # 
@@ -1357,6 +1358,15 @@ summary(m3_best_IUS_SNS)
 # Current difficulty x capacity x IUS - 
 # 
 
+m3_best_IUS_SNS_simple = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+                                all_diff_cont * prev_all_diff_cont * IUS_HighP1_LowN1 + 
+                                all_diff_cont * prev_all_diff_cont * SNS_HighP1_LowN1 + 
+                                (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_IUS_SNS_simple) # AIC -6443; worse than mostly-interactive version
+
+m3_best_IUS_SNS_full = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * IUS_HighP1_LowN1 * SNS_HighP1_LowN1 + 
+                                (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_IUS_SNS_full) # AIC -6452; worse than mostly-interactive version
 
 
 # m3_best_summary = summary(m3_best);
