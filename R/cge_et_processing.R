@@ -9,8 +9,8 @@
 #   - what counts as a 'blink' (to extend)
 #   - what counts as 'a gap that's too long to interpolate over'
 #   - what are acceptable limits in terms of...
-#       - missing samples
-#       - blinks
+#       - number of missing samples
+#       - number of blinks
 #       - calibration quality
 #       - or other metric (% eyegaze off-screen?)
 # - Align timestamps from python output w/ eyelink timestamps
@@ -51,9 +51,9 @@ number_of_subjects = length(etfn);
 
 s = 1; 
 
-cat(sprintf('Reading eye-tracking data for %i.\n',s))
+cat(sprintf('Reading eye-tracking data for subject %i.\n',s))
 raw_et_data = read.asc(etfn[s], samples = T, events = F)
-cat(sprintf('Eye-tracking data loaded.\n',s))
+cat('Eye-tracking data loaded.\n')
 
 # Settings:
 # 1000 Hz sample rate
@@ -150,8 +150,38 @@ pupil_data_extend_interp_smooth = rollapply(pupil_data_extend_interp,
                                             align = 'center', na.rm = T)
 cat('Pupillometry smoothed.\n')
 
-# 4. Convert pupil diameter data to mm
+# 5. Convert pupil diameter data to mm
 pupil_data_extend_interp_smooth_mm = pupil_data_extend_interp_smooth; # MUST DO THIS!
 # SEE THIS LINK: https://researchwiki.solo.universiteitleiden.nl/xwiki/wiki/researchwiki.solo.universiteitleiden.nl/view/Hardware/EyeLink/#:~:text=EyeLink%20reports%20pupil%20size%20as,circle%20with%20a%20known%20diameter.
 
+# 6. Identify and extract timestamp for practice start from ET file
+cat('Beginning temporal alignment process.\n')
+et_file_connection = file(etfn[s],'r') # open the file connection to the ASC file.
+
+msgs = ''; # where we'll store messages
+number_of_messages = 0; # set our counter
+
+while ( TRUE ) {
+  line = readLines(et_file_connection, n = 1) # read a line of the file
+  if ( length(line) == 0 ) { # if we have read the full file and there are no more lines left, stop
+    break
+  }
+  # print(line) # for debugging
+  if ('MSG' == substr(line, 1, 3)) { # if this is a 'message' line... 
+    number_of_messages = number_of_messages + 1; # increment the # of messages we've found
+    # print(line) # for debugging
+    msgs[number_of_messages] = line; # store the message
+  }
+}
+
+close(et_file_connection) # close the file connection
+
+for (m in 1:number_of_messages){
+  if ('Practice Text Shown' == substr(msgs[m], 13, 31)){ # identify the line with this text
+    startT = as.numeric(substr(msgs[65], 5, 11)) # pull out the start time from that
+  }
+}
+
+time_data = time_data - startT; # Correct all timestamps to be relative to this moment
+cat('Eyetracking data temporally aligned.\n')
 
