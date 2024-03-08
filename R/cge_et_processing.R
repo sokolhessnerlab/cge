@@ -47,6 +47,14 @@ na_fill_after = 200; # how many milliseconds to expand the blinks forward
 
 maximum_allowable_missing = 1000; # milliseconds above which we do NOT interpolate across and just leave as an NA
 
+smoothing_window_width = 10; # points to smooth over; 10 pts @ 1000Hz = 10ms
+
+number_of_trials = 170; # number of RDM trials
+
+baseline_window_width = 500; # milliseconds of the baseline window width used for baseline correction
+
+fraction_allowable = 0.5; # max. fraction of samples that are allowed to be missing and the trial still being used
+
 #### STEP 4: SET UP FOR SUBJECT LOOP ####
 library('eyelinker') # for eyelink-specific file interaction
 library('zoo') # for interpolation
@@ -158,7 +166,6 @@ for (b in 1:number_of_blinks){
 
 ###### 6. Smooth (10-point moving window) ###### 
 cat('Smoothing pupil diameter data... ')
-smoothing_window_width = 10; # points to smooth over; 10 pts @ 1000Hz = 10ms
 pupil_data_extend_interp_smooth = rollapply(pupil_data_extend_interp, 
                                             width = smoothing_window_width, FUN = 'mean', partial = T,
                                             align = 'center', na.rm = T)
@@ -194,17 +201,17 @@ while ( TRUE ) {
 close(et_file_connection) # close the file connection
 
 for (m in 1:number_of_messages){
-  if ('Practice Text Shown' == substr(msgs[m], 13, 31)){ # identify the line with this text
-    et_alignment_time = as.numeric(substr(msgs[m], 5, 11)) # pull out the start time from that
+  if ('Practice Text Shown' == substr(msgs[m], 13, 31)){ # identify the msg with this text
+    et_alignment_time = as.numeric(substr(msgs[m], 5, 11)) # pull out the start time from that msg
   }
 }
+cat(sprintf('alignment timestamp = %i... ', et_alignment_time))
 
 time_data = time_data - et_alignment_time; # Correct all timestamps to be relative to this moment
 cat('Done.\n')
 
 ##### Create Behavioral Event Timestamp Matrix ###### 
 tmpdata = read.csv(rdmfn[s]); 
-number_of_trials = 170
 
 event_timestamps = array(data = NA, dim = c(number_of_trials, 4))
 column_names = c(
@@ -244,8 +251,6 @@ et_summary_stats = array(data = NA, dim = c(number_of_trials, length(column_name
 colnames(et_summary_stats) <- column_names;
 et_summary_stats = as.data.frame(et_summary_stats)
 
-baseline_window_width = 500; # ms
-
 for (t in 1:number_of_trials){
   
   ## Check how much data is missing in this trial ##
@@ -257,11 +262,9 @@ for (t in 1:number_of_trials){
   # Calculate missing fraction of data
   fraction_missing_trial_data = sum(is.na(full_trial_pupil))/length(full_trial_pupil);
   
-  if (fraction_missing_trial_data > .5){ # if missing fraction is > 0.5 (50%)...
+  if (fraction_missing_trial_data > fraction_allowable){ # if missing fraction is > 0.5 (50%)...
     next # skip analysis of this trial
   }
-  
-  print(length(full_trial_pupil))
   
   et_summary_stats$predecision_baseline_mean[t] = 
     mean(pupil_data_extend_interp_smooth_mm[(time_data >= (event_timestamps$decision_start[t] - baseline_window_width)) & 
