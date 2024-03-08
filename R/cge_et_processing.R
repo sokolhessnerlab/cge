@@ -50,11 +50,12 @@ number_of_subjects = length(etfn);
 # 
 # }
 
-s = 1; 
+s = 3; 
 
-cat(sprintf('Reading eye-tracking data for subject %i.\n',s))
+cat(sprintf('Processing eye-tracking data for subject %i.\n',s))
+cat('Loading eye-tracking data... ')
 raw_et_data = read.asc(etfn[s], samples = T, events = F)
-cat('Eye-tracking data loaded.\n')
+cat('Done.\n')
 
 # Settings:
 # 1000 Hz sample rate
@@ -103,32 +104,30 @@ blink_data = as.data.frame(cbind(blink_init_sample, blink_final_sample, blink_le
 hist(blink_data$blink_length, xlab = 'milliseconds', main = 'Blink Lengths', breaks = 200) # opt: visualize blink lengths
 
 ###### 2. Summarize Missing Data ###### 
-number_of_missing_samples = length(missing_points_ind);
-percent_of_missing_samples = number_of_missing_samples/length(pupil_data_raw);
+number_of_missing_samples_raw = length(missing_points_ind);
+percent_of_missing_samples_raw = number_of_missing_samples_raw/length(pupil_data_raw);
 number_of_blinks = length(blink_init_sample);
-
-cat(sprintf('Participant %i: Missing %i samples (%.1f%%), with %i blinks.\n', 
-            s, number_of_missing_samples, percent_of_missing_samples*100, number_of_blinks))
 
 ###### 3. Extend blink points ###### 
 blink_length_threshold = 20; # milliseconds (ms) what counts as a 'blink'? There are plenty of super-short missing samples.
 na_fill = 100; # how many milliseconds to expand the blinks
 pupil_data_extend = pupil_data_raw;
 
+cat('Extending blink gaps... ')
 for (b in 1:number_of_blinks){
   if (blink_data$blink_length[b] > blink_length_threshold){
     pupil_data_extend[(which(time_data > (time_data[blink_init_sample[b]] - na_fill))[1]):
                         ((which(time_data > (time_data[blink_final_sample[b]] + na_fill))[1])-1)] = NA;
   }
 }
-cat('Blinks extended.\n')
+cat('Done.\n')
 
 ###### 4. Interpolate ###### 
 
 # Interpolate linearly across NA gaps
-cat('Interpolating...')
+cat('Interpolating linearly across data gaps... ')
 pupil_data_extend_interp = na.approx(pupil_data_extend);
-cat('NA gaps linearly interpolated.\n')
+cat('Done.\n')
 # technically, this approach linearly interpolates across datapoints, not timepoints
 # i.e. if one or more timepoints are simply missing (not that they would be NAs, but 
 # that they would not be *present*), this would inaccurately interpolate. This is 
@@ -145,19 +144,22 @@ for (b in 1:number_of_blinks){
 }
 
 ###### 6. Smooth (10-point moving window) ###### 
-cat('Smoothing... ')
+cat('Smoothing pupil diameter data... ')
 smoothing_window_width = 10; # points to smooth over; 10 pts @ 1000Hz = 10ms
 pupil_data_extend_interp_smooth = rollapply(pupil_data_extend_interp, 
                                             width = smoothing_window_width, FUN = 'mean', partial = T,
                                             align = 'center', na.rm = T)
-cat('Pupillometry smoothed.\n')
+cat('Done.\n')
+
+number_of_missing_samples_proc = length(which(is.na(pupil_data_extend_interp_smooth)));
+percent_of_missing_samples_proc = number_of_missing_samples_proc/length(pupil_data_extend_interp_smooth);
 
 ###### 7. Convert pupil diameter data to mm ###### 
 pupil_data_extend_interp_smooth_mm = pupil_data_extend_interp_smooth; # MUST DO THIS!
 # SEE THIS LINK: https://researchwiki.solo.universiteitleiden.nl/xwiki/wiki/researchwiki.solo.universiteitleiden.nl/view/Hardware/EyeLink/#:~:text=EyeLink%20reports%20pupil%20size%20as,circle%20with%20a%20known%20diameter.
 
 ###### 8. Identify and extract timestamp for practice start from ET file ###### 
-cat('Beginning temporal alignment process.\n')
+cat('Aligning timestamps... ')
 et_file_connection = file(etfn[s],'r') # open the file connection to the ASC file.
 
 msgs = ''; # where we'll store messages
@@ -185,9 +187,9 @@ for (m in 1:number_of_messages){
 }
 
 time_data = time_data - et_alignment_time; # Correct all timestamps to be relative to this moment
-cat('Eyetracking data temporally aligned.\n')
+cat('Done.\n')
 
-##### Timestamp Matrix ###### 
+##### Create Behavioral Event Timestamp Matrix ###### 
 tmpdata = read.csv(rdmfn[s]); 
 number_of_trials = 170
 
@@ -215,7 +217,8 @@ event_timestamps[!(is.finite(tmpdata$choices[trial_index])),] = NA;
 event_timestamps = event_timestamps - beh_alignment_time; # align the behavioral data to the same moment
 event_timestamps = event_timestamps * 1000; # into milliseconds, like eyetracking
 
-##### Calculate Metrics of Pupillometry #####
+##### Calculate Summary Metrics of Pupillometry #####
+cat('Calculating summary pupillometry measures... ')
 column_names = c(
   'predecision_baseline_mean',
   'decision_mean',
@@ -256,3 +259,11 @@ for (t in 1:number_of_trials){
 
 et_summary_stats$decision_mean_cor = et_summary_stats$decision_mean - et_summary_stats$predecision_baseline_mean;
 et_summary_stats$outcome_mean_cor = et_summary_stats$outcome_mean - et_summary_stats$preoutcome_baseline_mean;
+
+cat('Done.\n')
+
+cat(sprintf('CGE%03i: RAW missing %i samples (%.1f%%); %i blinks. PROCESSED missing %i samples (%.1f%%).\n', 
+            s, number_of_missing_samples_raw, percent_of_missing_samples_raw*100, number_of_blinks,
+            number_of_missing_samples_proc, percent_of_missing_samples_proc*100))
+
+
