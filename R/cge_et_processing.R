@@ -1,14 +1,14 @@
 # CGE Eyetracking Data Processing Script
 #
 # Script to process the eyetracking data collected from the CGE (Control & Gambling 
-# Task with Eyetracking) study.
+# Task with Eyetracking) study in 2023-2024.
 #
 # NOTE: This processing pathway can take 30-60 seconds *per* participant. Processing the 
 # pupillometry for e.g. 80 participants is thus expected to take 40 min - 1 hr 20 min. 
 #
 # Plan accordingly!
 
-# Major To-Do's:
+# MAJOR TO-DO'S ####
 # - convert pupil data to millimeters (req. calibration procedure)
 # - Establish cutoffs for...
 #   - what counts as a 'blink' (to extend)
@@ -18,8 +18,6 @@
 #       - number of blinks
 #       - calibration quality
 #       - or other metric (% eyegaze off-screen?)
-# - Align timestamps from python output w/ eyelink timestamps
-#   - then trial timestamps
 
 
 # UNCOMMENT THIS BLOCK WHEN DONE
@@ -117,14 +115,15 @@ number_of_blinks = length(blink_init_sample);
 
 ###### 3. Extend blink points ###### 
 blink_length_threshold = 20; # milliseconds (ms) what counts as a 'blink'? There are plenty of super-short missing samples.
-na_fill = 100; # how many milliseconds to expand the blinks
+na_fill_before = 100; # how many milliseconds to expand the blinks backward
+na_fill_after = 200; # how many milliseconds to expand the blinks forward
 pupil_data_extend = pupil_data_raw;
 
 cat('Extending blink gaps... ')
 for (b in 1:number_of_blinks){
   if (blink_data$blink_length[b] > blink_length_threshold){
-    pupil_data_extend[(which(time_data > (time_data[blink_init_sample[b]] - na_fill))[1]):
-                        ((which(time_data > (time_data[blink_final_sample[b]] + na_fill))[1])-1)] = NA;
+    pupil_data_extend[(which(time_data > (time_data[blink_init_sample[b]] - na_fill_before))[1]):
+                        ((which(time_data > (time_data[blink_final_sample[b]] + na_fill_after))[1])-1)] = NA;
   }
 }
 cat('Done.\n')
