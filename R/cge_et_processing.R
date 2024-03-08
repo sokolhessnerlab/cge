@@ -240,6 +240,20 @@ et_summary_stats = as.data.frame(et_summary_stats)
 baseline_window_width = 500; # ms
 
 for (t in 1:number_of_trials){
+  
+  ## Check how much data is missing in this trial ##
+  
+  # Using FULLY-PROCESSED pupil data from start of dec to end of otc
+  full_trial_pupil = pupil_data_extend_interp_smooth_mm[(time_data >= (event_timestamps$decision_start[t])) & 
+                                                          (time_data < event_timestamps$outcome_end[t])];
+  
+  # Calculate missing fraction of data
+  fraction_missing_trial_data = sum(is.na(full_trial_pupil))/length(full_trial_pupil);
+  
+  if (fraction_missing_trial_data > .5){ # if missing fraction is > 0.5 (50%)...
+    next # skip analysis of this trial
+  }
+  
   et_summary_stats$predecision_baseline_mean[t] = 
     mean(pupil_data_extend_interp_smooth_mm[(time_data >= (event_timestamps$decision_start[t] - baseline_window_width)) & 
                                               (time_data < event_timestamps$decision_start[t])])
@@ -269,8 +283,9 @@ et_summary_stats$outcome_mean_cor = et_summary_stats$outcome_mean - et_summary_s
 cat('Done.\n')
 loop_time_elapsed = toc(quiet = T);
 
-cat(sprintf('CGE%03i: RAW missing %i samples (%.1f%%); %i blinks. PROCESSED missing %i samples (%.1f%%).\n', 
+cat(sprintf('CGE%03i: RAW missing %i samples (%.1f%%); %i blinks. PROCESSED missing %i samples (%.1f%%). %i trial(s) (%.0f%%) not analyzed for missing data.\n', 
             s, number_of_missing_samples_raw, percent_of_missing_samples_raw*100, number_of_blinks,
-            number_of_missing_samples_proc, percent_of_missing_samples_proc*100))
+            number_of_missing_samples_proc, percent_of_missing_samples_proc*100, sum(is.na(et_summary_stats$predecision_baseline_mean)),
+            sum(is.na(et_summary_stats$predecision_baseline_mean))/number_of_trials*100))
 
 
