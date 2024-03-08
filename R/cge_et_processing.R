@@ -18,6 +18,7 @@
 #       - number of blinks
 #       - calibration quality
 #       - or other metric (% eyegaze off-screen?)
+# - To what time period should decision & outcome pupillometry be baseline-corrected?
 
 
 # UNCOMMENT THIS BLOCK WHEN DONE
@@ -35,11 +36,16 @@
 # setwd(config$path$data$raw);
 setwd('~/Desktop/tmp_et_CGE/')
 
-#### STEP 3: Get the file names ####
+#### STEP 3: Get the file names & set variables ####
 cat('Identifying file locations.\n');
 etfn = dir(pattern = glob2rx('cge*.asc'),full.names = T, recursive = T);
 rdmfn = dir(pattern = glob2rx('cgeRDM_*.csv'),full.names = T, recursive = T);
 
+blink_length_threshold = 20; # milliseconds above which (ms) counts as a 'blink'. There are plenty of super-short missing samples.
+na_fill_before = 100; # how many milliseconds to expand the blinks backward
+na_fill_after = 200; # how many milliseconds to expand the blinks forward
+
+maximum_allowable_missing = 1000; # milliseconds above which we do NOT interpolate across and just leave as an NA
 
 #### STEP 4: SET UP FOR SUBJECT LOOP ####
 library('eyelinker') # for eyelink-specific file interaction
@@ -66,7 +72,7 @@ cat('Done.\n')
 # 1000 Hz sample rate
 # 1280 (w) x 1024 (h) screen size)
 # Diameter pupil data type (not area)
-original_sample_rate = raw_et_data$info$sample.rate
+# original_sample_rate = raw_et_data$info$sample.rate
 
 # # How to visualize the data
 # # NOTE: these are slow to execute because the dataset is so large (~1.2 million datapoints/person)
@@ -114,14 +120,11 @@ percent_of_missing_samples_raw = number_of_missing_samples_raw/length(pupil_data
 number_of_blinks = length(blink_init_sample);
 
 ###### 3. Extend blink points ###### 
-blink_length_threshold = 20; # milliseconds (ms) what counts as a 'blink'? There are plenty of super-short missing samples.
-na_fill_before = 100; # how many milliseconds to expand the blinks backward
-na_fill_after = 200; # how many milliseconds to expand the blinks forward
 pupil_data_extend = pupil_data_raw;
 
 cat('Extending blink gaps... ')
 for (b in 1:number_of_blinks){
-  if (blink_data$blink_length[b] > blink_length_threshold){
+  if (blink_data$blink_length[b] > blink_length_threshold){ # if it meets criterion as a blink
     pupil_data_extend[(which(time_data > (time_data[blink_init_sample[b]] - na_fill_before))[1]):
                         ((which(time_data > (time_data[blink_final_sample[b]] + na_fill_after))[1])-1)] = NA;
   }
@@ -141,13 +144,17 @@ cat('Done.\n')
 # be pretty minor.
 
 ######  5. Replace excessively long missing sections with NAs ###### 
-maximum_allowable_missing = 1000; # ms; what should this value be? 
 
+# Put back in the NAs for the excessively long missing sections, INCLUDING  the na_fill*
+# extensions backward and forward. 
 for (b in 1:number_of_blinks){
-  if (blink_data$blink_length[b] >= maximum_allowable_missing) {
-    pupil_data_extend_interp[blink_data$blink_init_sample[b]:blink_final_sample[b]] = NA;
+  if (blink_data$blink_length[b] >= maximum_allowable_missing) { # if it was too big of a gap
+    pupil_data_extend_interp[(blink_data$blink_init_sample[b] - na_fill_before)
+                             :(blink_data$blink_final_sample[b] - na_fill_after)] = NA;
   }
 }
+# Technically, na_fill_before (and *after) are in milliseconds not samples, but b/c
+# sampling rate was 1000Hz, they're the same - e.g., 100 timestamps back is 100ms back. 
 
 ###### 6. Smooth (10-point moving window) ###### 
 cat('Smoothing pupil diameter data... ')
@@ -254,6 +261,8 @@ for (t in 1:number_of_trials){
     next # skip analysis of this trial
   }
   
+  print(length(full_trial_pupil))
+  
   et_summary_stats$predecision_baseline_mean[t] = 
     mean(pupil_data_extend_interp_smooth_mm[(time_data >= (event_timestamps$decision_start[t] - baseline_window_width)) & 
                                               (time_data < event_timestamps$decision_start[t])])
@@ -288,4 +297,10 @@ cat(sprintf('CGE%03i: RAW missing %i samples (%.1f%%); %i blinks. PROCESSED miss
             number_of_missing_samples_proc, percent_of_missing_samples_proc*100, sum(is.na(et_summary_stats$predecision_baseline_mean)),
             sum(is.na(et_summary_stats$predecision_baseline_mean))/number_of_trials*100))
 
+
+# For Future Eye-Tracking Analysis Development ####
+# - downsample data in one of two ways:
+#   - to fixed length (a la mousetracking): e.g. so all pupillometry for otcs is 200 points
+#   - to a given frequency (i.e. 200Hz)
+# - store baseline-corrected pupil diameter traces for event segments (i.e. dec; otc)
 
