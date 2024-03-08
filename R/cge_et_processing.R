@@ -2,6 +2,11 @@
 #
 # Script to process the eyetracking data collected from the CGE (Control & Gambling 
 # Task with Eyetracking) study.
+#
+# NOTE: This processing pathway can take 30-60 seconds *per* participant. Processing the 
+# pupillometry for e.g. 80 participants is thus expected to take 40 min - 1 hr 20 min. 
+#
+# Plan accordingly!
 
 # Major To-Do's:
 # - convert pupil data to millimeters (req. calibration procedure)
@@ -41,6 +46,7 @@ rdmfn = dir(pattern = glob2rx('cgeRDM_*.csv'),full.names = T, recursive = T);
 #### STEP 4: SET UP FOR SUBJECT LOOP ####
 library('eyelinker') # for eyelink-specific file interaction
 library('zoo') # for interpolation
+library('tictoc')
 # library('gazer') # Requires R 4.2 or higher; may need to upgrade?
 
 number_of_subjects = length(etfn);
@@ -50,6 +56,7 @@ number_of_subjects = length(etfn);
 # 
 # }
 
+tic()
 s = 3; 
 
 cat(sprintf('Processing eye-tracking data for subject %i.\n',s))
@@ -261,6 +268,7 @@ et_summary_stats$decision_mean_cor = et_summary_stats$decision_mean - et_summary
 et_summary_stats$outcome_mean_cor = et_summary_stats$outcome_mean - et_summary_stats$preoutcome_baseline_mean;
 
 cat('Done.\n')
+loop_time_elapsed = toc(quiet = T);
 
 cat(sprintf('CGE%03i: RAW missing %i samples (%.1f%%); %i blinks. PROCESSED missing %i samples (%.1f%%).\n', 
             s, number_of_missing_samples_raw, percent_of_missing_samples_raw*100, number_of_blinks,
