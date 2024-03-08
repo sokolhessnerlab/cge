@@ -188,7 +188,7 @@ close(et_file_connection) # close the file connection
 
 for (m in 1:number_of_messages){
   if ('Practice Text Shown' == substr(msgs[m], 13, 31)){ # identify the line with this text
-    et_alignment_time = as.numeric(substr(msgs[65], 5, 11)) # pull out the start time from that
+    et_alignment_time = as.numeric(substr(msgs[m], 5, 11)) # pull out the start time from that
   }
 }
 
