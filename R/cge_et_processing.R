@@ -8,8 +8,18 @@
 #
 # Plan accordingly!
 
+
 # MAJOR TO-DO'S ####
 # - convert pupil data to millimeters (req. calibration procedure)
+# - save out QA metrics into df
+# - loop over subjects
+# - assemble LONG format df for et_summary_stats
+#   - save this...
+# - integrate the sourcing of this file into cge_processing_script.R to connect data with
+#   data_dm creation.
+
+
+# OUTSTANDING QUESTIONS ####
 # - Establish cutoffs for...
 #   - what counts as a 'blink' (to extend)
 #   - what counts as 'a gap that's too long to interpolate over'
