@@ -11,7 +11,6 @@
 
 # MAJOR TO-DO'S ####
 # - convert pupil data to millimeters (req. calibration procedure)
-# - save out QA metrics into df
 # - loop over subjects
 # - assemble LONG format df for et_summary_stats
 #   - save this...
@@ -75,6 +74,21 @@ library('zoo') # for interpolation
 
 number_of_subjects = length(etfn);
 
+pupil_qa_metric_columns = c(
+  'subject_number',
+  'number_of_missing_samples_raw',
+  'fraction_of_missing_samples_raw',
+  'number_of_blinks',
+  'number_of_missing_samples_proc',
+  'fraction_of_missing_samples_proc',
+  'number_missing_trials_proc',
+  'fraction_missing_trials_proc',
+  'keep_subj_pupil'
+)
+pupil_QA_metrics = array(data = NA, dim = c(number_of_subjects,length(pupil_qa_metric_columns)));
+pupil_QA_metrics = as.data.frame(pupil_QA_metrics);
+colnames(pupil_QA_metrics) <- pupil_qa_metric_columns;
+
 #### STEP 5: SUBJECT LOOP ####
 # for (s in 1:number_of_subjects){
 # 
@@ -134,7 +148,7 @@ hist(blink_data$blink_length, xlab = 'milliseconds', main = 'Blink Lengths', bre
 
 ###### 2. Summarize Missing Data ###### 
 number_of_missing_samples_raw = length(missing_points_ind);
-percent_of_missing_samples_raw = number_of_missing_samples_raw/length(pupil_data_raw);
+fraction_of_missing_samples_raw = number_of_missing_samples_raw/length(pupil_data_raw);
 number_of_blinks = length(blink_init_sample);
 
 ###### 3. Extend blink points ###### 
@@ -188,7 +202,7 @@ pupil_data_extend_interp_smooth = rollapply(pupil_data_extend_interp,
 cat('Done.\n')
 
 number_of_missing_samples_proc = length(which(is.na(pupil_data_extend_interp_smooth)));
-percent_of_missing_samples_proc = number_of_missing_samples_proc/length(pupil_data_extend_interp_smooth);
+fraction_of_missing_samples_proc = number_of_missing_samples_proc/length(pupil_data_extend_interp_smooth);
 
 ###### 7. Convert pupil diameter data to mm ###### 
 pupil_data_extend_interp_smooth_mm = pupil_data_extend_interp_smooth; # MUST DO THIS!
@@ -229,7 +243,6 @@ cat('Done.\n')
 ##### Create Behavioral Event Timestamp Matrix ###### 
 tmpdata = read.csv(rdmfn[s]); 
 
-event_timestamps = array(data = NA, dim = c(number_of_trials, 4))
 column_names = c(
   'decision_start',
   'decision_end',
@@ -237,6 +250,7 @@ column_names = c(
   'outcome_end',
   'iti_end'
 )
+event_timestamps = array(data = NA, dim = c(number_of_trials, length(column_names)))
 colnames(event_timestamps) <- column_names;
 event_timestamps = as.data.frame(event_timestamps)
 
@@ -338,16 +352,33 @@ et_summary_stats$outcome_mean_cor = et_summary_stats$outcome_mean - et_summary_s
 cat('Done.\n')
 # loop_time_elapsed = toc(quiet = T); # for timing this process
 
-missing_trials_proc = sum(is.na(et_summary_stats$predecision_baseline_mean));
+number_of_missing_trials_proc = sum(is.na(et_summary_stats$predecision_baseline_mean));
+fraction_of_missing_trials_proc = number_of_missing_trials_proc/number_of_trials;
 
 cat(sprintf('CGE%03i: RAW missing %i samples (%.1f%%); %i blinks. PROCESSED missing %i samples (%.1f%%). %i trial(s) (%.0f%%) not analyzed for missing data.\n', 
-            s, number_of_missing_samples_raw, percent_of_missing_samples_raw*100, number_of_blinks,
-            number_of_missing_samples_proc, percent_of_missing_samples_proc*100, missing_trials_proc,
-            missing_trials_proc/number_of_trials*100))
+            s, number_of_missing_samples_raw, fraction_of_missing_samples_raw*100, number_of_blinks,
+            number_of_missing_samples_proc, fraction_of_missing_samples_proc*100, number_of_missing_trials_proc,
+            fraction_of_missing_trials_proc*100))
 
-if ((missing_trials_proc/number_of_trials) >= fraction_allowable_missing_trials) {
+keep_subj_pupil = NA;
+if (fraction_of_missing_trials_proc >= fraction_allowable_missing_trials) {
   et_summary_stats[,] = NA; # remove all ET data for this participant
+  keep_subj_pupil = 0;
+} else {
+  keep_subj_pupil = 1;
 }
+
+pupil_QA_metrics[s,] = c(
+  s,
+  number_of_missing_samples_raw,
+  fraction_of_missing_samples_raw,
+  number_of_blinks,
+  number_of_missing_samples_proc,
+  fraction_of_missing_samples_proc,
+  number_of_missing_trials_proc,
+  fraction_of_missing_trials_proc,
+  keep_subj_pupil
+)
 
 # For Future Eye-Tracking Analysis Development ####
 # - downsample data in one of two ways:
