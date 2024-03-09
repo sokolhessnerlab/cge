@@ -45,9 +45,15 @@
 setwd('~/Desktop/tmp_et_CGE/')
 
 #### STEP 3: Get the file names & set variables ####
-cat('Identifying file locations.\n');
+cat('Identifying eye-tracking data file locations.\n');
 etfn = dir(pattern = glob2rx('cge*.asc'),full.names = T, recursive = T);
 rdmfn = dir(pattern = glob2rx('cgeRDM_*.csv'),full.names = T, recursive = T);
+
+all_dirs = dir();
+subject_IDs = c();
+for (s in 1:length(all_dirs)){
+  subject_IDs = c(subject_IDs,as.numeric(substr(all_dirs[s],4,6))) # read subject IDs from directory names
+}
 
 blink_length_threshold = 20; # milliseconds above which (ms) counts as a 'blink'. There are plenty of super-short missing samples.
 na_fill_before = 100; # how many milliseconds to expand the blinks backward
@@ -102,9 +108,16 @@ et_summary_data_column_names = c(
   'iti_mean',
   'iti_median'
 )
-data_pupil = array(data = NA, dim = c(0, length(et_summary_data_column_names)));
+timestamp_column_names = c(
+  'decision_start',
+  'decision_end',
+  'outcome_start',
+  'outcome_end',
+  'iti_end'
+)
+data_pupil = array(data = NA, dim = c(0, length(et_summary_data_column_names) + length(timestamp_column_names)));
 data_pupil = as.data.frame(data_pupil);
-colnames(data_pupil) <- et_summary_data_column_names;
+colnames(data_pupil) <- c(et_summary_data_column_names, timestamp_column_names);
 
 #### STEP 5: SUBJECT LOOP ####
 for (s in 1:number_of_subjects){
@@ -112,8 +125,8 @@ for (s in 1:number_of_subjects){
   # tic() # for timing this process
   # s = 4; # for debugging
   
-  cat(sprintf('Processing eye-tracking data for subject %i.\n',s))
-  cat('Loading eye-tracking data... ')
+  cat(sprintf('Starting subject CGE%03i.\n',subject_IDs[s]))
+  cat('Loading ET data...  ')
   raw_et_data = read.asc(etfn[s], samples = T, events = F)
   cat('Done.\n')
   
@@ -169,7 +182,7 @@ for (s in 1:number_of_subjects){
   ###### 3. Extend blink points ###### 
   pupil_data_extend = pupil_data_raw;
   
-  cat('Extending blink gaps... ')
+  cat('Extending blink gaps...  ')
   for (b in 1:number_of_blinks){
     if (blink_data$blink_length[b] > blink_length_threshold){ # if it meets criterion as a blink
       pupil_data_extend[(which(time_data > (time_data[blink_init_sample[b]] - na_fill_before))[1]):
@@ -187,7 +200,7 @@ for (s in 1:number_of_subjects){
   ###### 4. Interpolate ###### 
   
   # Interpolate linearly across NA gaps
-  cat('Interpolating linearly across data gaps... ')
+  cat('Interpolating linearly across data gaps...  ')
   pupil_data_extend_interp = na.approx(pupil_data_extend);
   cat('Done.\n')
   # technically, this approach linearly interpolates across datapoints, not timepoints
@@ -210,7 +223,7 @@ for (s in 1:number_of_subjects){
   # sampling rate was 1000Hz, they're the same - e.g., 100 timestamps back is 100ms back. 
   
   ###### 6. Smooth (10-point moving window) ###### 
-  cat('Smoothing pupil diameter data... ')
+  cat('Smoothing pupil diameter data...  ')
   pupil_data_extend_interp_smooth = rollapply(pupil_data_extend_interp, 
                                               width = smoothing_window_width, FUN = 'mean', partial = T,
                                               align = 'center', na.rm = T)
@@ -224,7 +237,7 @@ for (s in 1:number_of_subjects){
   # SEE THIS LINK: https://researchwiki.solo.universiteitleiden.nl/xwiki/wiki/researchwiki.solo.universiteitleiden.nl/view/Hardware/EyeLink/#:~:text=EyeLink%20reports%20pupil%20size%20as,circle%20with%20a%20known%20diameter.
   
   ###### 8. Identify and extract timestamp for practice start from ET file ###### 
-  cat('Aligning timestamps... ')
+  cat('Aligning timestamps...  ')
   et_file_connection = file(etfn[s],'r') # open the file connection to the ASC file.
   
   msgs = ''; # where we'll store messages
@@ -250,7 +263,7 @@ for (s in 1:number_of_subjects){
       et_alignment_time = as.numeric(substr(msgs[m], 5, 11)) # pull out the start time from that msg
     }
   }
-  cat(sprintf('alignment timestamp = %i... ', et_alignment_time))
+  cat(sprintf('alignment timestamp = %i...  ', et_alignment_time))
   
   time_data = time_data - et_alignment_time; # Correct all timestamps to be relative to this moment
   cat('Done.\n')
@@ -258,13 +271,6 @@ for (s in 1:number_of_subjects){
   ##### Create Behavioral Event Timestamp Matrix ###### 
   tmpdata = read.csv(rdmfn[s]); 
   
-  timestamp_column_names = c(
-    'decision_start',
-    'decision_end',
-    'outcome_start',
-    'outcome_end',
-    'iti_end'
-  )
   event_timestamps = array(data = NA, dim = c(number_of_trials, length(timestamp_column_names)))
   colnames(event_timestamps) <- timestamp_column_names;
   event_timestamps = as.data.frame(event_timestamps)
@@ -285,12 +291,12 @@ for (s in 1:number_of_subjects){
   event_timestamps = event_timestamps * 1000; # into milliseconds, like eyetracking
   
   ##### Calculate Summary Metrics of Pupillometry #####
-  cat('Calculating summary pupillometry measures... ')
+  cat('Calculating summary pupillometry measures...  ')
 
   et_summary_stats = array(data = NA, dim = c(number_of_trials, length(et_summary_data_column_names)))
   colnames(et_summary_stats) <- et_summary_data_column_names;
   et_summary_stats = as.data.frame(et_summary_stats)
-  et_summary_stats$subject_number = s;
+  et_summary_stats$subject_number = subject_IDs[s];
   et_summary_stats$trial_number = 1:number_of_trials;
   
   for (t in 1:number_of_trials){
@@ -362,7 +368,7 @@ for (s in 1:number_of_subjects){
   fraction_of_missing_trials_proc = number_of_missing_trials_proc/number_of_trials;
   
   cat(sprintf('CGE%03i: RAW missing %i samples (%.1f%%); %i blinks. PROCESSED missing %i samples (%.1f%%). %i trial(s) (%.0f%%) not analyzed for missing data.\n', 
-              s, number_of_missing_samples_raw, fraction_of_missing_samples_raw*100, number_of_blinks,
+              subject_IDs[s], number_of_missing_samples_raw, fraction_of_missing_samples_raw*100, number_of_blinks,
               number_of_missing_samples_proc, fraction_of_missing_samples_proc*100, number_of_missing_trials_proc,
               fraction_of_missing_trials_proc*100))
   
@@ -375,7 +381,7 @@ for (s in 1:number_of_subjects){
   }
   
   pupil_QA_metrics[s,] = c(
-    s,
+    subject_IDs[s],
     number_of_missing_samples_raw,
     fraction_of_missing_samples_raw,
     number_of_blinks,
@@ -393,7 +399,12 @@ for (s in 1:number_of_subjects){
     'pupil_data_extend_interp_smooth'
     ))
   
-  data_pupil = rbind(data_pupil, et_summary_stats);
+  data_pupil = rbind(data_pupil, cbind(et_summary_stats, event_timestamps));
+  
+  save(pupil_data_extend_interp_smooth_mm, time_data, et_summary_stats, event_timestamps,
+       file=sprintf('./cge%03i/cge%03i_et_processed_%s.RData',subject_IDs[s],subject_IDs[s],format(Sys.Date(), format="%Y%m%d")))
+
+  cat(sprintf('Finished with subject CGE%03i.\n\n',subject_IDs[s]))
 }
 
 # For Future Eye-Tracking Analysis Development ####
