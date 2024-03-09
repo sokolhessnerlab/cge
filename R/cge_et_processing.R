@@ -11,7 +11,6 @@
 
 # MAJOR TO-DO'S ####
 # - convert pupil data to millimeters (req. calibration procedure)
-# - loop over subjects
 # - assemble LONG format df for et_summary_stats
 #   - save this...
 # - integrate the sourcing of this file into cge_processing_script.R to connect data with
@@ -89,189 +88,9 @@ pupil_QA_metrics = array(data = NA, dim = c(number_of_subjects,length(pupil_qa_m
 pupil_QA_metrics = as.data.frame(pupil_QA_metrics);
 colnames(pupil_QA_metrics) <- pupil_qa_metric_columns;
 
-#### STEP 5: SUBJECT LOOP ####
-# for (s in 1:number_of_subjects){
-# 
-# }
-
-# tic() # for timing this process
-s = 4; 
-
-cat(sprintf('Processing eye-tracking data for subject %i.\n',s))
-cat('Loading eye-tracking data... ')
-raw_et_data = read.asc(etfn[s], samples = T, events = F)
-cat('Done.\n')
-
-# Settings:
-# 1000 Hz sample rate
-# 1280 (w) x 1024 (h) screen size)
-# Diameter pupil data type (not area)
-
-# # How to visualize the data
-# # NOTE: these are slow to execute because the dataset is so large (~1.2 million datapoints/person)
-# # Gaze location (coordinates (0,0) are TOP LEFT)
-# plot(raw_et_data$raw$xp, -raw_et_data$raw$yp, pch = 16, cex = .5, col = rgb(1,0,0,.1),
-#      xlim = c(-200, raw_et_data$info$screen.x + 200), ylim = c(200, -raw_et_data$info$screen.y-200))
-# lines(x = c(0, raw_et_data$info$screen.x, raw_et_data$info$screen.x, 0, 0),
-#       y = c(0, 0, -raw_et_data$info$screen.y, -raw_et_data$info$screen.y, 0))
-# plot(raw_et_data$raw$ps, type = 'l') # the pupil dilation data
-# 
-# # Code to construct a low-res 'heatmap' that displays more easily than the full data.
-# xres = 50;
-# yres = 51;
-# heatmap_density = array(data = NA, dim = c(xres, yres));
-# xd = raw_et_data$info$screen.x;
-# yd = raw_et_data$info$screen.y;
-# for (x in 1:xres){
-#   print(x)
-#   for (y in 1:yres){
-#     heatmap_density[x,y] = sum((raw_et_data$raw$xp >= (xd/xres*(x-1))) & (raw_et_data$raw$xp < (xd/xres*x)) &
-#                                (raw_et_data$raw$yp >= (yd/yres*(y-1))) & (raw_et_data$raw$yp < (yd/yres*y)),
-#                                na.rm = T);
-#   }
-# }
-# image(z = log(heatmap_density))
-
-##### Processing #####
-
-pupil_data_raw = raw_et_data$raw$ps;
-time_data = raw_et_data$raw$time; # UNCORRECTED! in milliseconds
-
-###### 1. Identify blink points ######
-missing_points_ind = which(is.na(pupil_data_raw)); # index of all missing datapoints
-blink_init_sample = missing_points_ind[c(1,which(diff(missing_points_ind) > 1) + 1)] # first sample of missing data epochs
-blink_final_sample = missing_points_ind[c(which(diff(missing_points_ind) > 1), length(missing_points_ind))] # final sample
-blink_length = time_data[blink_final_sample] - time_data[blink_init_sample]; # length in ms
-
-blink_data = as.data.frame(cbind(blink_init_sample, blink_final_sample, blink_length))
-hist(blink_data$blink_length, xlab = 'milliseconds', main = 'Blink Lengths', breaks = 200) # opt: visualize blink lengths
-
-###### 2. Summarize Missing Data ###### 
-number_of_missing_samples_raw = length(missing_points_ind);
-fraction_of_missing_samples_raw = number_of_missing_samples_raw/length(pupil_data_raw);
-number_of_blinks = length(blink_init_sample);
-
-###### 3. Extend blink points ###### 
-pupil_data_extend = pupil_data_raw;
-
-cat('Extending blink gaps... ')
-for (b in 1:number_of_blinks){
-  if (blink_data$blink_length[b] > blink_length_threshold){ # if it meets criterion as a blink
-    pupil_data_extend[(which(time_data > (time_data[blink_init_sample[b]] - na_fill_before))[1]):
-                        ((which(time_data > (time_data[blink_final_sample[b]] + na_fill_after))[1])-1)] = NA;
-    # Both of these are ">" because this code identifies SINGLE POINTS (see the [1] element)
-    # This code identifies the first sample within the na_fill_before window before the initial blink sample
-    # and the first sample BEFORE the na_fill_after window after the final blink sample (see: both the
-    # [1] and the "-1" portions of that line)
-    #
-    # Alternately phrased, this code identifies all samples WITHIN the before-to-after window.
-  }
-}
-cat('Done.\n')
-
-###### 4. Interpolate ###### 
-
-# Interpolate linearly across NA gaps
-cat('Interpolating linearly across data gaps... ')
-pupil_data_extend_interp = na.approx(pupil_data_extend);
-cat('Done.\n')
-# technically, this approach linearly interpolates across datapoints, not timepoints
-# i.e. if one or more timepoints are simply missing (not that they would be NAs, but 
-# that they would not be *present*), this would inaccurately interpolate. This is 
-# probably fine, though - missing samples are not expected, and the harm done would
-# be pretty minor.
-
-######  5. Replace excessively long missing sections with NAs ###### 
-
-# Put back in the NAs for the excessively long missing sections, INCLUDING  the na_fill*
-# extensions backward and forward. 
-for (b in 1:number_of_blinks){
-  if (blink_data$blink_length[b] >= maximum_width_allowable_missing) { # if it was too big of a gap
-    pupil_data_extend_interp[(blink_data$blink_init_sample[b] - na_fill_before)
-                             :(blink_data$blink_final_sample[b] + na_fill_after)] = NA;
-  }
-}
-# Technically, na_fill_before (and *after) are in milliseconds not samples, but b/c
-# sampling rate was 1000Hz, they're the same - e.g., 100 timestamps back is 100ms back. 
-
-###### 6. Smooth (10-point moving window) ###### 
-cat('Smoothing pupil diameter data... ')
-pupil_data_extend_interp_smooth = rollapply(pupil_data_extend_interp, 
-                                            width = smoothing_window_width, FUN = 'mean', partial = T,
-                                            align = 'center', na.rm = T)
-cat('Done.\n')
-
-number_of_missing_samples_proc = length(which(is.na(pupil_data_extend_interp_smooth)));
-fraction_of_missing_samples_proc = number_of_missing_samples_proc/length(pupil_data_extend_interp_smooth);
-
-###### 7. Convert pupil diameter data to mm ###### 
-pupil_data_extend_interp_smooth_mm = pupil_data_extend_interp_smooth; # MUST DO THIS!
-# SEE THIS LINK: https://researchwiki.solo.universiteitleiden.nl/xwiki/wiki/researchwiki.solo.universiteitleiden.nl/view/Hardware/EyeLink/#:~:text=EyeLink%20reports%20pupil%20size%20as,circle%20with%20a%20known%20diameter.
-
-###### 8. Identify and extract timestamp for practice start from ET file ###### 
-cat('Aligning timestamps... ')
-et_file_connection = file(etfn[s],'r') # open the file connection to the ASC file.
-
-msgs = ''; # where we'll store messages
-number_of_messages = 0; # set our counter
-
-while ( TRUE ) {
-  line = readLines(et_file_connection, n = 1) # read a line of the file
-  if ( length(line) == 0 ) { # if we have read the full file and there are no more lines left, stop
-    break
-  }
-  # print(line) # for debugging
-  if ('MSG' == substr(line, 1, 3)) { # if this is a 'message' line... 
-    number_of_messages = number_of_messages + 1; # increment the # of messages we've found
-    # print(line) # for debugging
-    msgs[number_of_messages] = line; # store the message
-  }
-}
-
-close(et_file_connection) # close the file connection
-
-for (m in 1:number_of_messages){
-  if ('Practice Text Shown' == substr(msgs[m], nchar(msgs[m])-18, nchar(msgs[m]))){ # identify the msg with this text
-    et_alignment_time = as.numeric(substr(msgs[m], 5, 11)) # pull out the start time from that msg
-  }
-}
-cat(sprintf('alignment timestamp = %i... ', et_alignment_time))
-
-time_data = time_data - et_alignment_time; # Correct all timestamps to be relative to this moment
-cat('Done.\n')
-
-##### Create Behavioral Event Timestamp Matrix ###### 
-tmpdata = read.csv(rdmfn[s]); 
-
-column_names = c(
-  'decision_start',
-  'decision_end',
-  'outcome_start',
-  'outcome_end',
-  'iti_end'
-)
-event_timestamps = array(data = NA, dim = c(number_of_trials, length(column_names)))
-colnames(event_timestamps) <- column_names;
-event_timestamps = as.data.frame(event_timestamps)
-
-beh_alignment_time = tmpdata$pracStartTxt.started[3];
-
-trial_index = is.finite(tmpdata$realChoiceResp.started);
-
-event_timestamps$decision_start = tmpdata$realChoiceResp.started[trial_index];
-event_timestamps$decision_end = tmpdata$isiRealFix.started[trial_index];
-event_timestamps$outcome_start = tmpdata$isiRealFix.stopped[trial_index];
-event_timestamps$outcome_end = tmpdata$itiRealFix.started[trial_index];
-event_timestamps$iti_end = tmpdata$itiRealFix.stopped[trial_index];s
-
-event_timestamps[!(is.finite(tmpdata$choices[trial_index])),] = NA;
-
-event_timestamps = event_timestamps - beh_alignment_time; # align the behavioral data to the same moment
-event_timestamps = event_timestamps * 1000; # into milliseconds, like eyetracking
-
-##### Calculate Summary Metrics of Pupillometry #####
-cat('Calculating summary pupillometry measures... ')
-column_names = c(
+et_summary_data_column_names = c(
+  'subject_number',
+  'trial_number',
   'predecision_baseline_mean',
   'decision_mean',
   'decision_median',
@@ -283,102 +102,299 @@ column_names = c(
   'iti_mean',
   'iti_median'
 )
-et_summary_stats = array(data = NA, dim = c(number_of_trials, length(column_names)))
-colnames(et_summary_stats) <- column_names;
-et_summary_stats = as.data.frame(et_summary_stats)
+data_pupil = array(data = NA, dim = c(0, length(et_summary_data_column_names)));
+data_pupil = as.data.frame(data_pupil);
+colnames(data_pupil) <- et_summary_data_column_names;
 
-for (t in 1:number_of_trials){
+#### STEP 5: SUBJECT LOOP ####
+for (s in 1:number_of_subjects){
   
-  ## Check how much data is missing in this trial ##
+  # tic() # for timing this process
+  # s = 4; # for debugging
   
-  # Using FULLY-PROCESSED pupil data from start of dec to end of otc
-  full_trial_pupil = pupil_data_extend_interp_smooth_mm[(time_data >= (event_timestamps$decision_start[t])) & 
-                                                          (time_data < event_timestamps$iti_end[t])];
+  cat(sprintf('Processing eye-tracking data for subject %i.\n',s))
+  cat('Loading eye-tracking data... ')
+  raw_et_data = read.asc(etfn[s], samples = T, events = F)
+  cat('Done.\n')
   
-  # Calculate missing fraction of data
-  fraction_missing_trial_data = sum(is.na(full_trial_pupil))/length(full_trial_pupil);
+  # Settings:
+  # 1000 Hz sample rate
+  # 1280 (w) x 1024 (h) screen size)
+  # Diameter pupil data type (not area)
   
-  if (fraction_missing_trial_data > fraction_allowable_missing_samples){ # if missing fraction is > 0.5 (50%)...
-    next # skip analysis of this trial
+  # # How to visualize the data
+  # # NOTE: these are slow to execute because the dataset is so large (~1.2 million datapoints/person)
+  # # Gaze location (coordinates (0,0) are TOP LEFT)
+  # plot(raw_et_data$raw$xp, -raw_et_data$raw$yp, pch = 16, cex = .5, col = rgb(1,0,0,.1),
+  #      xlim = c(-200, raw_et_data$info$screen.x + 200), ylim = c(200, -raw_et_data$info$screen.y-200))
+  # lines(x = c(0, raw_et_data$info$screen.x, raw_et_data$info$screen.x, 0, 0),
+  #       y = c(0, 0, -raw_et_data$info$screen.y, -raw_et_data$info$screen.y, 0))
+  # plot(raw_et_data$raw$ps, type = 'l') # the pupil dilation data
+  # 
+  # # Code to construct a low-res 'heatmap' that displays more easily than the full data.
+  # xres = 50;
+  # yres = 51;
+  # heatmap_density = array(data = NA, dim = c(xres, yres));
+  # xd = raw_et_data$info$screen.x;
+  # yd = raw_et_data$info$screen.y;
+  # for (x in 1:xres){
+  #   print(x)
+  #   for (y in 1:yres){
+  #     heatmap_density[x,y] = sum((raw_et_data$raw$xp >= (xd/xres*(x-1))) & (raw_et_data$raw$xp < (xd/xres*x)) &
+  #                                (raw_et_data$raw$yp >= (yd/yres*(y-1))) & (raw_et_data$raw$yp < (yd/yres*y)),
+  #                                na.rm = T);
+  #   }
+  # }
+  # image(z = log(heatmap_density))
+  
+  ##### Processing #####
+  
+  pupil_data_raw = raw_et_data$raw$ps;
+  time_data = raw_et_data$raw$time; # UNCORRECTED! in milliseconds
+  
+  ###### 1. Identify blink points ######
+  missing_points_ind = which(is.na(pupil_data_raw)); # index of all missing datapoints
+  blink_init_sample = missing_points_ind[c(1,which(diff(missing_points_ind) > 1) + 1)] # first sample of missing data epochs
+  blink_final_sample = missing_points_ind[c(which(diff(missing_points_ind) > 1), length(missing_points_ind))] # final sample
+  blink_length = time_data[blink_final_sample] - time_data[blink_init_sample]; # length in ms
+  
+  blink_data = as.data.frame(cbind(blink_init_sample, blink_final_sample, blink_length))
+  hist(blink_data$blink_length, xlab = 'milliseconds', main = 'Blink Lengths', breaks = 200) # opt: visualize blink lengths
+  
+  ###### 2. Summarize Missing Data ###### 
+  number_of_missing_samples_raw = length(missing_points_ind);
+  fraction_of_missing_samples_raw = number_of_missing_samples_raw/length(pupil_data_raw);
+  number_of_blinks = length(blink_init_sample);
+  
+  ###### 3. Extend blink points ###### 
+  pupil_data_extend = pupil_data_raw;
+  
+  cat('Extending blink gaps... ')
+  for (b in 1:number_of_blinks){
+    if (blink_data$blink_length[b] > blink_length_threshold){ # if it meets criterion as a blink
+      pupil_data_extend[(which(time_data > (time_data[blink_init_sample[b]] - na_fill_before))[1]):
+                          ((which(time_data > (time_data[blink_final_sample[b]] + na_fill_after))[1])-1)] = NA;
+      # Both of these are ">" because this code identifies SINGLE POINTS (see the [1] element)
+      # This code identifies the first sample within the na_fill_before window before the initial blink sample
+      # and the first sample BEFORE the na_fill_after window after the final blink sample (see: both the
+      # [1] and the "-1" portions of that line)
+      #
+      # Alternately phrased, this code identifies all samples WITHIN the before-to-after window.
+    }
+  }
+  cat('Done.\n')
+  
+  ###### 4. Interpolate ###### 
+  
+  # Interpolate linearly across NA gaps
+  cat('Interpolating linearly across data gaps... ')
+  pupil_data_extend_interp = na.approx(pupil_data_extend);
+  cat('Done.\n')
+  # technically, this approach linearly interpolates across datapoints, not timepoints
+  # i.e. if one or more timepoints are simply missing (not that they would be NAs, but 
+  # that they would not be *present*), this would inaccurately interpolate. This is 
+  # probably fine, though - missing samples are not expected, and the harm done would
+  # be pretty minor.
+  
+  ######  5. Replace excessively long missing sections with NAs ###### 
+  
+  # Put back in the NAs for the excessively long missing sections, INCLUDING  the na_fill*
+  # extensions backward and forward. 
+  for (b in 1:number_of_blinks){
+    if (blink_data$blink_length[b] >= maximum_width_allowable_missing) { # if it was too big of a gap
+      pupil_data_extend_interp[(blink_data$blink_init_sample[b] - na_fill_before)
+                               :(blink_data$blink_final_sample[b] + na_fill_after)] = NA;
+    }
+  }
+  # Technically, na_fill_before (and *after) are in milliseconds not samples, but b/c
+  # sampling rate was 1000Hz, they're the same - e.g., 100 timestamps back is 100ms back. 
+  
+  ###### 6. Smooth (10-point moving window) ###### 
+  cat('Smoothing pupil diameter data... ')
+  pupil_data_extend_interp_smooth = rollapply(pupil_data_extend_interp, 
+                                              width = smoothing_window_width, FUN = 'mean', partial = T,
+                                              align = 'center', na.rm = T)
+  cat('Done.\n')
+  
+  number_of_missing_samples_proc = length(which(is.na(pupil_data_extend_interp_smooth)));
+  fraction_of_missing_samples_proc = number_of_missing_samples_proc/length(pupil_data_extend_interp_smooth);
+  
+  ###### 7. Convert pupil diameter data to mm ###### 
+  pupil_data_extend_interp_smooth_mm = pupil_data_extend_interp_smooth; # MUST DO THIS!
+  # SEE THIS LINK: https://researchwiki.solo.universiteitleiden.nl/xwiki/wiki/researchwiki.solo.universiteitleiden.nl/view/Hardware/EyeLink/#:~:text=EyeLink%20reports%20pupil%20size%20as,circle%20with%20a%20known%20diameter.
+  
+  ###### 8. Identify and extract timestamp for practice start from ET file ###### 
+  cat('Aligning timestamps... ')
+  et_file_connection = file(etfn[s],'r') # open the file connection to the ASC file.
+  
+  msgs = ''; # where we'll store messages
+  number_of_messages = 0; # set our counter
+  
+  while ( TRUE ) {
+    line = readLines(et_file_connection, n = 1) # read a line of the file
+    if ( length(line) == 0 ) { # if we have read the full file and there are no more lines left, stop
+      break
+    }
+    # print(line) # for debugging
+    if ('MSG' == substr(line, 1, 3)) { # if this is a 'message' line... 
+      number_of_messages = number_of_messages + 1; # increment the # of messages we've found
+      # print(line) # for debugging
+      msgs[number_of_messages] = line; # store the message
+    }
   }
   
-  # Pre-decision baseline
-  et_summary_stats$predecision_baseline_mean[t] = 
-    mean(pupil_data_extend_interp_smooth_mm[(time_data >= (event_timestamps$decision_start[t] - baseline_window_width)) & 
-                                              (time_data < event_timestamps$decision_start[t])], na.rm = T)
-  # Decision (mean)
-  et_summary_stats$decision_mean[t] = 
-    mean(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$decision_start[t]) & 
-                                              (time_data < event_timestamps$decision_end[t])], na.rm = T)
-  # Decision (median)
-  et_summary_stats$decision_median[t] = 
-    median(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$decision_start[t]) & 
-                                              (time_data < event_timestamps$decision_end[t])], na.rm = T)
+  close(et_file_connection) # close the file connection
   
-  # ISI (mean)
-  et_summary_stats$isi_mean[t] = 
-    mean(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$decision_end[t]) & 
-                                              (time_data < event_timestamps$outcome_start[t])], na.rm = T)
-  et_summary_stats$isi_median[t] = 
-    median(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$decision_end[t]) & 
+  for (m in 1:number_of_messages){
+    if ('Practice Text Shown' == substr(msgs[m], nchar(msgs[m])-18, nchar(msgs[m]))){ # identify the msg with this text
+      et_alignment_time = as.numeric(substr(msgs[m], 5, 11)) # pull out the start time from that msg
+    }
+  }
+  cat(sprintf('alignment timestamp = %i... ', et_alignment_time))
+  
+  time_data = time_data - et_alignment_time; # Correct all timestamps to be relative to this moment
+  cat('Done.\n')
+  
+  ##### Create Behavioral Event Timestamp Matrix ###### 
+  tmpdata = read.csv(rdmfn[s]); 
+  
+  timestamp_column_names = c(
+    'decision_start',
+    'decision_end',
+    'outcome_start',
+    'outcome_end',
+    'iti_end'
+  )
+  event_timestamps = array(data = NA, dim = c(number_of_trials, length(timestamp_column_names)))
+  colnames(event_timestamps) <- timestamp_column_names;
+  event_timestamps = as.data.frame(event_timestamps)
+  
+  beh_alignment_time = tmpdata$pracStartTxt.started[3];
+  
+  trial_index = is.finite(tmpdata$realChoiceResp.started);
+  
+  event_timestamps$decision_start = tmpdata$realChoiceResp.started[trial_index];
+  event_timestamps$decision_end = tmpdata$isiRealFix.started[trial_index];
+  event_timestamps$outcome_start = tmpdata$isiRealFix.stopped[trial_index];
+  event_timestamps$outcome_end = tmpdata$itiRealFix.started[trial_index];
+  event_timestamps$iti_end = tmpdata$itiRealFix.stopped[trial_index];s
+  
+  event_timestamps[!(is.finite(tmpdata$choices[trial_index])),] = NA;
+  
+  event_timestamps = event_timestamps - beh_alignment_time; # align the behavioral data to the same moment
+  event_timestamps = event_timestamps * 1000; # into milliseconds, like eyetracking
+  
+  ##### Calculate Summary Metrics of Pupillometry #####
+  cat('Calculating summary pupillometry measures... ')
+
+  et_summary_stats = array(data = NA, dim = c(number_of_trials, length(et_summary_data_column_names)))
+  colnames(et_summary_stats) <- et_summary_data_column_names;
+  et_summary_stats = as.data.frame(et_summary_stats)
+  et_summary_stats$subject_number = s;
+  et_summary_stats$trial_number = 1:number_of_trials;
+  
+  for (t in 1:number_of_trials){
+    
+    ## Check how much data is missing in this trial ##
+    
+    # Using FULLY-PROCESSED pupil data from start of dec to end of otc
+    full_trial_pupil = pupil_data_extend_interp_smooth_mm[(time_data >= (event_timestamps$decision_start[t])) & 
+                                                            (time_data < event_timestamps$iti_end[t])];
+    
+    # Calculate missing fraction of data
+    fraction_missing_trial_data = sum(is.na(full_trial_pupil))/length(full_trial_pupil);
+    
+    if (fraction_missing_trial_data > fraction_allowable_missing_samples){ # if missing fraction is > 0.5 (50%)...
+      next # skip analysis of this trial
+    }
+    
+    # Pre-decision baseline
+    et_summary_stats$predecision_baseline_mean[t] = 
+      mean(pupil_data_extend_interp_smooth_mm[(time_data >= (event_timestamps$decision_start[t] - baseline_window_width)) & 
+                                                (time_data < event_timestamps$decision_start[t])], na.rm = T)
+    # Decision (mean)
+    et_summary_stats$decision_mean[t] = 
+      mean(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$decision_start[t]) & 
+                                                (time_data < event_timestamps$decision_end[t])], na.rm = T)
+    # Decision (median)
+    et_summary_stats$decision_median[t] = 
+      median(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$decision_start[t]) & 
+                                                  (time_data < event_timestamps$decision_end[t])], na.rm = T)
+    
+    # ISI (mean)
+    et_summary_stats$isi_mean[t] = 
+      mean(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$decision_end[t]) & 
                                                 (time_data < event_timestamps$outcome_start[t])], na.rm = T)
-  
-  # Pre-outcome baseline
-  et_summary_stats$preoutcome_baseline_mean[t] = 
-    mean(pupil_data_extend_interp_smooth_mm[(time_data >= (event_timestamps$outcome_start[t] - baseline_window_width)) & 
-                                              (time_data < event_timestamps$outcome_start[t])], na.rm = T)
-  # Outcome (mean)
-  et_summary_stats$outcome_mean[t] = 
-    mean(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$outcome_start[t]) & 
-                                              (time_data < event_timestamps$outcome_end[t])], na.rm = T)
-  # Outcome (median)
-  et_summary_stats$outcome_median[t] = 
-    median(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$outcome_start[t]) & 
+    et_summary_stats$isi_median[t] = 
+      median(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$decision_end[t]) & 
+                                                  (time_data < event_timestamps$outcome_start[t])], na.rm = T)
+    
+    # Pre-outcome baseline
+    et_summary_stats$preoutcome_baseline_mean[t] = 
+      mean(pupil_data_extend_interp_smooth_mm[(time_data >= (event_timestamps$outcome_start[t] - baseline_window_width)) & 
+                                                (time_data < event_timestamps$outcome_start[t])], na.rm = T)
+    # Outcome (mean)
+    et_summary_stats$outcome_mean[t] = 
+      mean(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$outcome_start[t]) & 
                                                 (time_data < event_timestamps$outcome_end[t])], na.rm = T)
-  
-  # ITI (mean)
-  et_summary_stats$iti_mean[t] = 
-    mean(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$outcome_end[t]) & 
-                                              (time_data < event_timestamps$iti_end[t])], na.rm = T)
-  # ITI (median)
-  et_summary_stats$iti_median[t] = 
-    median(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$outcome_end[t]) & 
+    # Outcome (median)
+    et_summary_stats$outcome_median[t] = 
+      median(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$outcome_start[t]) & 
+                                                  (time_data < event_timestamps$outcome_end[t])], na.rm = T)
+    
+    # ITI (mean)
+    et_summary_stats$iti_mean[t] = 
+      mean(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$outcome_end[t]) & 
                                                 (time_data < event_timestamps$iti_end[t])], na.rm = T)
+    # ITI (median)
+    et_summary_stats$iti_median[t] = 
+      median(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$outcome_end[t]) & 
+                                                  (time_data < event_timestamps$iti_end[t])], na.rm = T)
+  }
+  
+  et_summary_stats$decision_mean_cor = et_summary_stats$decision_mean - et_summary_stats$predecision_baseline_mean;
+  et_summary_stats$outcome_mean_cor = et_summary_stats$outcome_mean - et_summary_stats$preoutcome_baseline_mean;
+  
+  cat('Done.\n')
+  # loop_time_elapsed = toc(quiet = T); # for timing this process
+  
+  number_of_missing_trials_proc = sum(is.na(et_summary_stats$predecision_baseline_mean));
+  fraction_of_missing_trials_proc = number_of_missing_trials_proc/number_of_trials;
+  
+  cat(sprintf('CGE%03i: RAW missing %i samples (%.1f%%); %i blinks. PROCESSED missing %i samples (%.1f%%). %i trial(s) (%.0f%%) not analyzed for missing data.\n', 
+              s, number_of_missing_samples_raw, fraction_of_missing_samples_raw*100, number_of_blinks,
+              number_of_missing_samples_proc, fraction_of_missing_samples_proc*100, number_of_missing_trials_proc,
+              fraction_of_missing_trials_proc*100))
+  
+  keep_subj_pupil = NA;
+  if (fraction_of_missing_trials_proc >= fraction_allowable_missing_trials) {
+    et_summary_stats[,] = NA; # remove all ET data for this participant
+    keep_subj_pupil = 0;
+  } else {
+    keep_subj_pupil = 1;
+  }
+  
+  pupil_QA_metrics[s,] = c(
+    s,
+    number_of_missing_samples_raw,
+    fraction_of_missing_samples_raw,
+    number_of_blinks,
+    number_of_missing_samples_proc,
+    fraction_of_missing_samples_proc,
+    number_of_missing_trials_proc,
+    fraction_of_missing_trials_proc,
+    keep_subj_pupil
+  )
+  
+  rm(list = c(
+    'pupil_data_raw',
+    'pupil_data_extend',
+    'pupil_data_extend_interp',
+    'pupil_data_extend_interp_smooth'
+    ))
+  
+  data_pupil = rbind(data_pupil, et_summary_stats);
 }
-
-et_summary_stats$decision_mean_cor = et_summary_stats$decision_mean - et_summary_stats$predecision_baseline_mean;
-et_summary_stats$outcome_mean_cor = et_summary_stats$outcome_mean - et_summary_stats$preoutcome_baseline_mean;
-
-cat('Done.\n')
-# loop_time_elapsed = toc(quiet = T); # for timing this process
-
-number_of_missing_trials_proc = sum(is.na(et_summary_stats$predecision_baseline_mean));
-fraction_of_missing_trials_proc = number_of_missing_trials_proc/number_of_trials;
-
-cat(sprintf('CGE%03i: RAW missing %i samples (%.1f%%); %i blinks. PROCESSED missing %i samples (%.1f%%). %i trial(s) (%.0f%%) not analyzed for missing data.\n', 
-            s, number_of_missing_samples_raw, fraction_of_missing_samples_raw*100, number_of_blinks,
-            number_of_missing_samples_proc, fraction_of_missing_samples_proc*100, number_of_missing_trials_proc,
-            fraction_of_missing_trials_proc*100))
-
-keep_subj_pupil = NA;
-if (fraction_of_missing_trials_proc >= fraction_allowable_missing_trials) {
-  et_summary_stats[,] = NA; # remove all ET data for this participant
-  keep_subj_pupil = 0;
-} else {
-  keep_subj_pupil = 1;
-}
-
-pupil_QA_metrics[s,] = c(
-  s,
-  number_of_missing_samples_raw,
-  fraction_of_missing_samples_raw,
-  number_of_blinks,
-  number_of_missing_samples_proc,
-  fraction_of_missing_samples_proc,
-  number_of_missing_trials_proc,
-  fraction_of_missing_trials_proc,
-  keep_subj_pupil
-)
 
 # For Future Eye-Tracking Analysis Development ####
 # - downsample data in one of two ways:
