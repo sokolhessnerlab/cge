@@ -11,8 +11,6 @@
 
 # MAJOR TO-DO'S ####
 # - convert pupil data to millimeters (req. calibration procedure)
-# - assemble LONG format df for et_summary_stats
-#   - save this...
 # - integrate the sourcing of this file into cge_processing_script.R to connect data with
 #   data_dm creation.
 
@@ -406,6 +404,13 @@ for (s in 1:number_of_subjects){
 
   cat(sprintf('Finished with subject CGE%03i.\n\n',subject_IDs[s]))
 }
+
+
+# setwd(config$path$data$processed);
+
+write.csv(data_pupil, file=sprintf('cge_processed_eyetracking_data_%s.csv',format(Sys.Date(), format="%Y%m%d")),
+          row.names = F);
+
 
 # For Future Eye-Tracking Analysis Development ####
 # - downsample data in one of two ways:
