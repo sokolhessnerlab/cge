@@ -400,6 +400,9 @@ for (s in 1:number_of_subjects){
     'pupil_data_extend_interp_smooth'
     ))
   
+  plot(pupil_data_extend_interp_smooth_mm, type = 'l', main = sprintf('Processed pupil data for CGE%03i', subject_IDs[s]), 
+       xlab = 'milliseconds', ylab = 'pupil diameter (mm)')
+  
   data_pupil = rbind(data_pupil, cbind(et_summary_stats, event_timestamps));
   
   save(pupil_data_extend_interp_smooth_mm, time_data, et_summary_stats, event_timestamps,
