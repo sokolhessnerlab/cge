@@ -27,7 +27,7 @@
 # - To what time period should decision & outcome pupillometry be baseline-corrected?
 
 
-# UNCOMMENT THIS BLOCK WHEN DONE
+# !!!!!   DO NOT UNCOMMENT THIS BLOCK WHEN SOURCING FROM THE PROCESSING FILE   !!!!! #
 
 #### STEP 1: SET YOUR WORKING DIRECTORY! ####
 # # On PSH's computers...
@@ -39,8 +39,9 @@
 #### STEP 2: then run from here on the same ####
 # config = config::get();
 # 
-# setwd(config$path$data$raw);
-setwd('~/Desktop/tmp_et_CGE/')
+
+setwd(config$path$data$raw);
+# setwd('~/Desktop/tmp_et_CGE/')
 
 #### STEP 3: Get the file names & set variables ####
 cat('Identifying eye-tracking data file locations.\n');
@@ -406,11 +407,14 @@ for (s in 1:number_of_subjects){
 }
 
 
-# setwd(config$path$data$processed);
+setwd(config$path$data$processed); # set path to processed to save out the summary data
 
 write.csv(data_pupil, file=sprintf('cge_processed_eyetracking_data_%s.csv',format(Sys.Date(), format="%Y%m%d")),
           row.names = F);
 
+setwd(config$path$data$raw); # reset the path to raw.
+
+cat('Finished processing eye-tracking data.\n\n\n')
 
 # For Future Eye-Tracking Analysis Development ####
 # - downsample data in one of two ways:

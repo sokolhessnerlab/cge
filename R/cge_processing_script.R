@@ -5,20 +5,22 @@
 
 
 # STEP 1: SET YOUR WORKING DIRECTORY!
-# On PSH's computers...
-setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
-# On Von's PC Laptop "tabletas"...
-setwd('C:/Users/jvonm/Documents/GitHub/cge');
+# # On PSH's computers...
+# setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
+# # On Von's PC Laptop "tabletas"...
+# setwd('C:/Users/jvonm/Documents/GitHub/cge');
 
 
 # STEP 2: then run from here on the same
 config = config::get();
 
-setwd(config$path$data$raw);
+et_processing_file_name = normalizePath(dir(pattern = glob2rx('cge_et_processing.R'), full.names = T, recursive = T));
 
-# #Von's
-# setwd('S:/shlab/Projects/CGE/data/raw')
-# 
+# Run the Eye-Tracking Processing Script ###########
+source(et_processing_file_name) # NOTE: This will take a long time!! 
+
+# Prepare for the rest of the processing ###########
+setwd(config$path$data$raw);
 
 # List all the data files
 rdmfn = dir(pattern = glob2rx('cgeRDM_*.csv'),full.names = T, recursive = T);
@@ -31,6 +33,7 @@ number_of_subjects = length(rdmfn);
 
 
 ### Qualtrics CGE Survey Processing ###
+cat('Processing Survey data...\n')
 
 raw_qualtrics_data = read.csv(qualfn[(length(qualfn))]); # Load the last Qualtrics file, assuming naming convention sorts the files so that last is most recent!
 
@@ -215,7 +218,11 @@ survey_data$PSS = as.numeric(raw_qualtrics_data$PSS.Matrix_1[ind_overall]) +
                   as.numeric(raw_qualtrics_data$PSS.Matrix_9[ind_overall]) +
                   as.numeric(raw_qualtrics_data$PSS.Matrix_10[ind_overall]); 
 
+cat('Done.\n\n')
+
 ### Prepping for Subject-Level Task Data Loop ###
+
+cat('Processing decision-making and working memory data... ')
 
 # Store some basic information about size of the decision-making task
 num_static_trials = 50;
@@ -409,14 +416,15 @@ for(s in 1:number_of_subjects){
   data_dm = rbind(data_dm,dm_data_to_add);
 }
 
+data_dm = cbind(data_dm, data_pupil); # these should have the same # of rows! (number of trials x number of subjects long)
+
 data_dm = as.data.frame(data_dm) # make it a data frame so it plays nice
 
+cat('Done.\n')
 
 # save out CSVs with the clean, compiled data!
+cat('Saving out data... ')
 setwd(config$path$data$processed);
-
-# #Von's
-# setwd('S:/shlab/Projects/CGE/data/preprocessed');
 
 write.csv(data_dm, file=sprintf('cge_processed_decisionmaking_data_%s.csv',format(Sys.Date(), format="%Y%m%d")),
           row.names = F);
@@ -425,5 +433,6 @@ write.csv(complexSpanScores, file=sprintf('cge_processed_complexspan_data_%s.csv
 write.csv(survey_data, file=sprintf('cge_processed_survey_data_%s.csv',format(Sys.Date(), format="%Y%m%d")),
           row.names = F);
 
+cat('Done.\n\nAll data has been processed.\n\n')
 # all done!
 
