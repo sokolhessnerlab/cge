@@ -184,8 +184,19 @@ for (s in 1:number_of_subjects){
   cat('Extending blink gaps...  ')
   for (b in 1:number_of_blinks){
     if (blink_data$blink_length[b] > blink_length_threshold){ # if it meets criterion as a blink
-      pupil_data_extend[(which(time_data > (time_data[blink_init_sample[b]] - na_fill_before))[1]):
-                          ((which(time_data > (time_data[blink_final_sample[b]] + na_fill_after))[1])-1)] = NA;
+      
+      index1 = which(time_data > (time_data[blink_init_sample[b]] - na_fill_before))[1];
+      if (is.na(index1)){
+        index1 = 1; # make it the first index
+      }
+      
+      index2 = which(time_data > (time_data[blink_final_sample[b]] + na_fill_after))[1] - 1;
+      if (is.na(index2)){
+        index2 = length(time_data); # make it the final index
+      }
+      
+      
+      pupil_data_extend[index1:index2] = NA;
       # Both of these are ">" because this code identifies SINGLE POINTS (see the [1] element)
       # This code identifies the first sample within the na_fill_before window before the initial blink sample
       # and the first sample BEFORE the na_fill_after window after the final blink sample (see: both the
