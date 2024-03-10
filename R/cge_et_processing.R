@@ -400,7 +400,7 @@ for (s in 1:number_of_subjects){
     'pupil_data_extend_interp_smooth'
     ))
   
-  pdf(sprintf('./cge%03i/cge%03i_processed_pupil_plot.pdf',subject_IDs[s],subject_IDs[s]))
+  pdf(sprintf('./plots/cge%03i_processed_pupil_plot.pdf',subject_IDs[s]))
   plot(pupil_data_extend_interp_smooth_mm, type = 'l', main = sprintf('Processed pupil data for CGE%03i', subject_IDs[s]), 
        xlab = 'milliseconds', ylab = 'pupil diameter (mm)')
   dev.off()
