@@ -259,7 +259,9 @@ for (s in 1:number_of_subjects){
   
   for (m in 1:number_of_messages){
     if ('Practice Text Shown' == substr(msgs[m], nchar(msgs[m])-18, nchar(msgs[m]))){ # identify the msg with this text
-      et_alignment_time = as.numeric(substr(msgs[m], 5, 11)) # pull out the start time from that msg
+      first_ind = 5; # the first digit is always 5 characters in
+      last_ind = nchar(msgs[m])-20; # the "practice text shown" is always 18 characters long, preceded by a 1 char space; so last number if 20 back from end
+      et_alignment_time = as.numeric(substr(msgs[m], first_ind, last_ind)) # pull out the start time from that msg
     }
   }
   cat(sprintf('alignment timestamp = %i...  ', et_alignment_time))
