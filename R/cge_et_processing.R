@@ -48,7 +48,7 @@ cat('Identifying eye-tracking data file locations.\n');
 etfn = dir(pattern = glob2rx('cge*.asc'),full.names = T, recursive = T);
 rdmfn = dir(pattern = glob2rx('cgeRDM_*.csv'),full.names = T, recursive = T);
 
-all_dirs = dir();
+all_dirs = dir(pattern = glob2rx('cge*'));
 subject_IDs = c();
 for (s in 1:length(all_dirs)){
   subject_IDs = c(subject_IDs,as.numeric(substr(all_dirs[s],4,6))) # read subject IDs from directory names
