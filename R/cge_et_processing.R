@@ -315,7 +315,7 @@ for (s in 1:number_of_subjects){
     
     ## Check how much data is missing in this trial ##
     
-    # Using FULLY-PROCESSED pupil data from start of dec to end of otc
+    # Using FULLY-PROCESSED pupil data from start of DECISION to end of ITI
     full_trial_pupil = pupil_data_extend_interp_smooth_mm[(time_data >= (event_timestamps$decision_start[t])) & 
                                                             (time_data < event_timestamps$iti_end[t])];
     
