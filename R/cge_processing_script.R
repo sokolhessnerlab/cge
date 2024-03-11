@@ -416,7 +416,7 @@ for(s in 1:number_of_subjects){
   data_dm = rbind(data_dm,dm_data_to_add);
 }
 
-data_dm = cbind(data_dm, data_pupil); # these should have the same # of rows! (number of trials x number of subjects long)
+data_dm = cbind(data_dm, data_pupil[,3:ncol(data_pupil)]); # these should have the same # of rows! (number of trials x number of subjects long)
 
 data_dm = as.data.frame(data_dm) # make it a data frame so it plays nice
 
