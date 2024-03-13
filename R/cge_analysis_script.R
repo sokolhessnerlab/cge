@@ -503,13 +503,13 @@ mean_params = colMeans(estimated_parameters);
 hist(estimated_parameters[,1], xlim = c(0,2),
      breaks = seq(from = 0, to = 2, by = 0.2), main = '',
      ylab = 'Participants', xlab = 'Rho (risk attitudes)')
-lines(x = c(1,1), y = c(0,20), col = 'black', lwd = 2, lty = 'dashed')
-lines(x = c(mean_params[1], mean_params[1]), y = c(0,20), col = 'green', lwd = 5, lend = 'butt')
+lines(x = c(1,1), y = c(0,50), col = 'black', lwd = 2, lty = 'dashed')
+lines(x = c(mean_params[1], mean_params[1]), y = c(0,50), col = 'green', lwd = 5, lend = 'butt')
 
 hist(estimated_parameters[,2], xlim = c(0,upper_bounds[2]),
      breaks = seq(from = 0, to = upper_bounds[2], by = 8), main = '',
      ylab = 'Participants', xlab = 'Mu (consistency)')
-lines(x = c(mean_params[2], mean_params[2]), y = c(0,20), col = 'orange', lwd = 5, lend = 'butt')
+lines(x = c(mean_params[2], mean_params[2]), y = c(0,50), col = 'orange', lwd = 5, lend = 'butt')
 
 #### Setup for Regressions ####
 
@@ -1539,6 +1539,57 @@ summary(likmodel_contDiff_catCap)
 # work at all to decide about. In short, the way to have observed this might have been with
 # trials that were in-between easy and difficult.
 
+
+
+# Pupillometry Analyses #################
+
+## Regressions #################
+
+### Using continuous difficulty #################
+m0_pupil_decision_cont = lmer(decision_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+                        (1 | subjectnumber), data = clean_data_dm)
+summary(m0_pupil_decision_cont)
+# Negative effects of current and previous difficulty
+
+m0_pupil_isi_cont = lmer(isi_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+                       (1 | subjectnumber), data = clean_data_dm)
+summary(m0_pupil_isi_cont)
+# Negative effects of current & previous difficulty
+
+m0_pupil_otc_cont = lmer(outcome_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+                           (1 | subjectnumber), data = clean_data_dm)
+summary(m0_pupil_otc_cont)
+# Negative effects of current and previous difficulty
+# INTERACTION btwn current difficulty & capacity --> higher cap have larger pupil dilation, lower cap have more constriction
+
+m0_pupil_iti_cont = lmer(iti_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+                           (1 | subjectnumber), data = clean_data_dm)
+summary(m0_pupil_iti_cont)
+# Negative effects of current and previous difficulty
+# Trend INTERACTION btwn current difficulty & capacity (like otc, see above
+
+### Using continuous difficulty #################
+m0_pupil_decision_cat = lmer(decision_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best + 
+                                (1 | subjectnumber), data = clean_data_dm)
+summary(m0_pupil_decision_cat)
+# trend of previous difficulty (larger on difficult)
+
+m0_pupil_isi_cat = lmer(isi_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best + 
+                           (1 | subjectnumber), data = clean_data_dm)
+summary(m0_pupil_isi_cat)
+# current difficulty (larger on easy trials)
+
+m0_pupil_otc_cat = lmer(outcome_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best + 
+                           (1 | subjectnumber), data = clean_data_dm)
+summary(m0_pupil_otc_cat)
+# no effects
+
+m0_pupil_iti_cat = lmer(iti_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best + 
+                           (1 | subjectnumber), data = clean_data_dm)
+summary(m0_pupil_iti_cat)
+# current difficulty (larger on difficult)
+
+# These effects flip-flop and move around! 
 
 
 
