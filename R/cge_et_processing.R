@@ -243,7 +243,7 @@ for (s in 1:number_of_subjects){
   fraction_of_missing_samples_proc = number_of_missing_samples_proc/length(pupil_data_extend_interp_smooth);
   
   ###### 7. Convert pupil diameter data to mm ###### 
-  pupil_data_extend_interp_smooth_mm = pupil_data_extend_interp_smooth; # MUST DO THIS!
+  pupil_data_extend_interp_smooth_mm = pupil_data_extend_interp_smooth*8/7637.32; # MUST DO THIS!
   # SEE THIS LINK: https://researchwiki.solo.universiteitleiden.nl/xwiki/wiki/researchwiki.solo.universiteitleiden.nl/view/Hardware/EyeLink/#:~:text=EyeLink%20reports%20pupil%20size%20as,circle%20with%20a%20known%20diameter.
   
   ###### 8. Identify and extract timestamp for practice start from ET file ###### 
@@ -439,7 +439,7 @@ for (s in 1:number_of_subjects){
   
   data_pupil = rbind(data_pupil, cbind(et_summary_stats, event_timestamps));
   
-  save(pupil_data_extend_interp_smooth_mm, time_data, et_summary_stats, event_timestamps,
+  save(pupil_data_extend_interp_smooth_mm, time_data, et_summary_stats, event_timestamps, blink_data,
        file=sprintf('./cge%03i/cge%03i_et_processed_%s.RData',subject_IDs[s],subject_IDs[s],format(Sys.Date(), format="%Y%m%d")))
 
   cat(sprintf('Finished with subject CGE%03i.\n\n',subject_IDs[s]))
@@ -449,6 +449,8 @@ for (s in 1:number_of_subjects){
 setwd(config$path$data$processed); # set path to processed to save out the summary data
 
 write.csv(data_pupil, file=sprintf('cge_processed_eyetracking_data_%s.csv',format(Sys.Date(), format="%Y%m%d")),
+          row.names = F);
+write.csv(pupil_QA_metrics, file = sprintf('cge_pupil_QA_metrics_%s.csv',format(Sys.Date(), format="%Y%m%d")),
           row.names = F);
 
 setwd(config$path$data$raw); # reset the path to raw.
