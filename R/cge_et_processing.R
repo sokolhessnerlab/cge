@@ -311,18 +311,19 @@ for (s in 1:number_of_subjects){
   et_summary_stats$subject_number = subject_IDs[s];
   et_summary_stats$trial_number = 1:number_of_trials;
   
-  par(mfrow = c(2,1)); # Set up the individual-level plot 
-  # Pre-decision | Decision Start 
-  # Decision End | ISI | Outcome | ITI
-  plot(1, type = "n", xlab = "milliseconds", ylab = "raw pupil diameter (px)", main = "Aligned to Decision Window Start",
-       xlim = c(-baseline_window_width, 3000), ylim = c(1000, 8000))
-  p1_coords = par('usr');
-          # pre-dec window, up until 3000 ms into the 4000ms response window
-  
-  plot(1, type = "n", xlab = "milliseconds", ylab = "raw pupil diameter (px)", main = "Aligned to Choice",
-       xlim = c(-3000, 5500), ylim = c(1000, 8000))
-  p2_coords = par('usr');
-          # the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
+  # # PLOTTING CODE
+  # par(mfrow = c(2,1)); # Set up the individual-level plot 
+  # # Pre-decision | Decision Start 
+  # # Decision End | ISI | Outcome | ITI
+  # plot(1, type = "n", xlab = "milliseconds", ylab = "raw pupil diameter (px)", main = "Aligned to Decision Window Start",
+  #      xlim = c(-baseline_window_width, 3000), ylim = c(1000, 8000))
+  # p1_coords = par('usr');
+  #         # pre-dec window, up until 3000 ms into the 4000ms response window
+  # 
+  # plot(1, type = "n", xlab = "milliseconds", ylab = "raw pupil diameter (px)", main = "Aligned to Choice",
+  #      xlim = c(-3000, 5500), ylim = c(1000, 8000))
+  # p2_coords = par('usr');
+  #         # the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
   
   for (t in 1:number_of_trials){
     
@@ -344,8 +345,8 @@ for (s in 1:number_of_subjects){
       (time_data < event_timestamps$decision_start[t])
     pupil_tmp = pupil_data_extend_interp_smooth_mm[indices];
     time_tmp = time_data[indices] - event_timestamps$decision_start[t];
-    par(usr = p1_coords)
-    par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = adjustcolor('black',.2), lwd = 5)
+    # par(usr = p1_coords)
+    # par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = adjustcolor('black',.2), lwd = 5)
     et_summary_stats$predecision_baseline_mean[t] = mean(pupil_tmp, na.rm = T)
     
     # Decision (mean)
@@ -353,12 +354,11 @@ for (s in 1:number_of_subjects){
       (time_data < event_timestamps$decision_end[t]);
     pupil_tmp = pupil_data_extend_interp_smooth_mm[indices];
     time_tmp = time_data[indices] - event_timestamps$decision_start[t];
-    par(usr = p1_coords)
-    par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.2), lwd = 5)
+    # par(usr = p1_coords)
+    # par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.2), lwd = 5)
     et_summary_stats$decision_mean[t] = mean(pupil_tmp, na.rm = T)
     # Decision (median)
-    et_summary_stats$decision_median[t] = 
-      median(pupil_tmp, na.rm = T)
+    et_summary_stats$decision_median[t] = median(pupil_tmp, na.rm = T)
     
     # ISI (mean)
     et_summary_stats$isi_mean[t] = 
