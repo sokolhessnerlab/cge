@@ -4,15 +4,9 @@
 # Task with Eyetracking) study in 2023-2024.
 #
 # NOTE: This processing pathway can take 30-60 seconds *per* participant. Processing the 
-# pupillometry for e.g. 80 participants is thus expected to take 40 min - 1 hr 20 min. 
+# pupillometry for e.g. 80 participants is thus expected to take 1h30m. 
 #
 # Plan accordingly!
-
-
-# MAJOR TO-DO'S ####
-# - convert pupil data to millimeters (req. calibration procedure)
-# - integrate the sourcing of this file into cge_processing_script.R to connect data with
-#   data_dm creation.
 
 
 # OUTSTANDING QUESTIONS ####
@@ -54,6 +48,7 @@ for (s in 1:length(all_dirs)){
   subject_IDs = c(subject_IDs,as.numeric(substr(all_dirs[s],4,6))) # read subject IDs from directory names
 }
 
+## Setting parameters for eye-tracking preprocessing ## 
 blink_length_threshold = 20; # milliseconds above which (ms) counts as a 'blink'. There are plenty of super-short missing samples.
 na_fill_before = 100; # how many milliseconds to expand the blinks backward
 na_fill_after = 200; # how many milliseconds to expand the blinks forward
@@ -232,7 +227,7 @@ for (s in 1:number_of_subjects){
   # Technically, na_fill_before (and *after) are in milliseconds not samples, but b/c
   # sampling rate was 1000Hz, they're the same - e.g., 100 timestamps back is 100ms back. 
   
-  ###### 6. Smooth (10-point moving window) ###### 
+  ###### 6. Smooth (N-point moving window) ###### 
   cat('Smoothing pupil diameter data...  ')
   pupil_data_extend_interp_smooth = rollapply(pupil_data_extend_interp, 
                                               width = smoothing_window_width, FUN = 'mean', partial = T,
@@ -243,7 +238,7 @@ for (s in 1:number_of_subjects){
   fraction_of_missing_samples_proc = number_of_missing_samples_proc/length(pupil_data_extend_interp_smooth);
   
   ###### 7. Convert pupil diameter data to mm ###### 
-  pupil_data_extend_interp_smooth_mm = pupil_data_extend_interp_smooth*8/7637.32; # MUST DO THIS!
+  pupil_data_extend_interp_smooth_mm = pupil_data_extend_interp_smooth*8/7637.32; 
   # SEE THIS LINK: https://researchwiki.solo.universiteitleiden.nl/xwiki/wiki/researchwiki.solo.universiteitleiden.nl/view/Hardware/EyeLink/#:~:text=EyeLink%20reports%20pupil%20size%20as,circle%20with%20a%20known%20diameter.
   
   ###### 8. Identify and extract timestamp for practice start from ET file ###### 
