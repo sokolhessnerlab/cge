@@ -162,16 +162,16 @@ corrplot(cor_matrix, type = 'lower')
 
 par(mfrow = c(2,2))
 hist(clean_data_survey$NCS, ylab = '', xlab = 'Score', main = 'Need for Cognition (NCS)')
-abline(v = mean(clean_data_survey$NCS), col = 'red', lwd = 5)
+abline(v = mean(clean_data_survey$NCS, na.rm = T), col = 'red', lwd = 5)
 
 hist(clean_data_survey$IUS, ylab = '', xlab = 'Score', main = 'Intolerance of Uncertainty (IUS)')
-abline(v = mean(clean_data_survey$IUS), col = 'blue', lwd = 5)
+abline(v = mean(clean_data_survey$IUS, na.rm = T), col = 'blue', lwd = 5)
 
 hist(clean_data_survey$SNS, ylab = '', xlab = 'Score', main = 'Subjective Numerancy Scale (SNS)')
-abline(v = mean(clean_data_survey$SNS), col = 'green', lwd = 5)
+abline(v = mean(clean_data_survey$SNS, na.rm = T), col = 'green', lwd = 5)
 
 hist(clean_data_survey$PSS, ylab = '', xlab = 'Score', main = 'Perceived Stress Scale (PSS)')
-abline(v = mean(clean_data_survey$PSS), col = 'magenta', lwd = 5)
+abline(v = mean(clean_data_survey$PSS, na.rm = T), col = 'magenta', lwd = 5)
 
 par(mfrow = c(1,1))
 
@@ -521,6 +521,27 @@ clean_data_dm$all_diff_cont = abs(abs(clean_data_dm$all_choiceP - 0.5)*2-1); # f
 clean_data_dm$prev_all_diff_cont = c(NA,clean_data_dm$all_diff_cont[1:(length(clean_data_dm$all_diff_cont)-1)]) # for ALL trials
 clean_data_dm$prev_all_diff_cont[clean_data_dm$trialnumber == 1] = NA;
 
+clean_data_dm$prev2_all_diff_cont = c(NA,clean_data_dm$prev_all_diff_cont[1:(length(clean_data_dm$prev_all_diff_cont)-1)]) # for ALL trials
+clean_data_dm$prev2_all_diff_cont[clean_data_dm$trialnumber == 1] = NA;
+
+clean_data_dm$prev3_all_diff_cont = c(NA,clean_data_dm$prev2_all_diff_cont[1:(length(clean_data_dm$prev2_all_diff_cont)-1)]) # for ALL trials
+clean_data_dm$prev3_all_diff_cont[clean_data_dm$trialnumber == 1] = NA;
+
+clean_data_dm$prev4_all_diff_cont = c(NA,clean_data_dm$prev3_all_diff_cont[1:(length(clean_data_dm$prev3_all_diff_cont)-1)]) # for ALL trials
+clean_data_dm$prev4_all_diff_cont[clean_data_dm$trialnumber == 1] = NA;
+
+clean_data_dm$prev5_all_diff_cont = c(NA,clean_data_dm$prev4_all_diff_cont[1:(length(clean_data_dm$prev4_all_diff_cont)-1)]) # for ALL trials
+clean_data_dm$prev5_all_diff_cont[clean_data_dm$trialnumber == 1] = NA;
+
+clean_data_dm$prev6_all_diff_cont = c(NA,clean_data_dm$prev5_all_diff_cont[1:(length(clean_data_dm$prev5_all_diff_cont)-1)]) # for ALL trials
+clean_data_dm$prev6_all_diff_cont[clean_data_dm$trialnumber == 1] = NA;
+
+clean_data_dm$prev7_all_diff_cont = c(NA,clean_data_dm$prev6_all_diff_cont[1:(length(clean_data_dm$prev6_all_diff_cont)-1)]) # for ALL trials
+clean_data_dm$prev7_all_diff_cont[clean_data_dm$trialnumber == 1] = NA;
+
+clean_data_dm$prev8_all_diff_cont = c(NA,clean_data_dm$prev7_all_diff_cont[1:(length(clean_data_dm$prev7_all_diff_cont)-1)]) # for ALL trials
+clean_data_dm$prev8_all_diff_cont[clean_data_dm$trialnumber == 1] = NA;
+
 # EASY = 0
 # DIFFICULT = 1
 
@@ -582,8 +603,8 @@ lines(c(0, 2.75), c(0, 2.75))
 points(mean(median_rt_diff), mean(median_rt_easy), pch = 16, col = rgb(1, 0, 1, .75), cex = 2.5)
 
 # test easy RTs vs. diff. RTs 
-rt_mean_test = t.test(mean_rt_easy,mean_rt_diff, paired = T); # VERY significant
-rt_median_test = t.test(median_rt_easy,median_rt_diff, paired = T); # VERY significant
+rt_mean_test = t.test(mean_rt_easy,mean_rt_diff, paired = T) # VERY significant
+rt_median_test = t.test(median_rt_easy,median_rt_diff, paired = T) # VERY significant
 #A: yes, looks like on average rt of difficult decisions was slower than avg rt of easy decisions 4/2/23
 
 # Test for the across-participant variances in RTs by trial type
@@ -916,6 +937,22 @@ lines(x = xval_plot, y = (coef_vals["(Intercept)"] +
       lwd = 5, col = 'red')
 # RED = previous trial difficult
 # BLUE = previous trial easy
+
+# How far back does the previous difficulty effect go? Let's look **4 trials back**
+m1_prev_alldiffCont_back4_intxn_rfx = lmer(sqrtRT ~ 1 + 
+                                       all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont + 
+                                       (1 | subjectnumber), data = clean_data_dm);
+summary(m1_prev_alldiffCont_back4_intxn_rfx) 
+# All 4 are significant. 
+
+m1_prev_alldiffCont_back8_intxn_rfx = lmer(sqrtRT ~ 1 + 
+                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont + 
+                                             prev5_all_diff_cont + prev6_all_diff_cont + prev7_all_diff_cont + prev8_all_diff_cont + 
+                                             (1 | subjectnumber), data = clean_data_dm);
+summary(m1_prev_alldiffCont_back8_intxn_rfx) 
+# Looks like it peters out ~7 trials back. LONG LASTING EFFECTS! 
+
+
 
 ## Model 2: What role does high/low cognitive capacity have on CURRENT TRIAL EFFECTS
 m2_capacityCatDiff_intxn_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1 + 
