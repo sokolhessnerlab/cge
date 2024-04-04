@@ -18,6 +18,7 @@ config = config::get()
 
 #### Loading Data #### 
 # Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
+Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
 setwd(config$path$data$processed)
 
 # #Von's 
@@ -82,7 +83,7 @@ keep_dm_rt = mean_rts > 0.85;
 
 mean_rts[keep_dm_rt]
 hist(mean_rts[keep_dm_rt]) # histogram of mean rts
-mean(mean_rts[keep_dm_rt]) # mean rt 1.60 seconds (as of CGE048 on 2/9/24)
+mean(mean_rts[keep_dm_rt]) # mean rt 1.59 seconds (4/4/24)
 
 ### Survey Exclusions 
 # quick responses to surveys (still figuring out how that should be done)
