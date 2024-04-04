@@ -17,7 +17,7 @@ setwd('C:/Users/jvonm/Documents/GitHub/cge');
 config = config::get()
 
 #### Loading Data #### 
-# Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = “tabletas”)
+# Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
 setwd(config$path$data$processed)
 
 # #Von's 
