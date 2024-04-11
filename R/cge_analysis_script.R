@@ -18,7 +18,7 @@ config = config::get()
 
 #### Loading Data #### 
 # Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
-Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
+Sys.setenv(R_CONFIG_ACTIVE = 'tabletas');
 setwd(config$path$data$processed)
 
 # #Von's 
@@ -99,8 +99,8 @@ clean_data_dm = data_dm[data_dm$subjectnumber %in% keep_participants,]
 clean_data_complexspan = complexSpanScores[complexSpanScores$subjectnumber %in% keep_participants,]
 clean_data_survey = survey_data[survey_data$subjectID %in% keep_participants,]
 
-number_of_clean_subjects = length(keep_participants); # 85 participants (4/5/24)
-
+number_of_clean_subjects = length(keep_participants); 
+number_of_clean_subjects # 85 participants (4/5/24)
 
 #### BASIC DATA ANALYSIS ####
 
@@ -114,44 +114,62 @@ library(corrplot)
 # ANALYSIS: min, max, mean, SD, median, variance
 # GRAPHS: histograms, scatterplots, correlograms, pairwise correlations
 
+# Age
 mean(clean_data_survey$age) # 19.8 years old (4/5/24)
 range(clean_data_survey$age) # 12-35 (4/5/24) I think there is a typo - cge074 put 12
 sd(clean_data_survey$age) # 2.63 years (4/5/24)
 hist(clean_data_survey$age)
 
 # Main Questionnaire Scores: 
+
 # NCS
-# SNS
+mean(clean_data_survey$NCS, na.rm = T) # M = 59.40476
+sd(clean_data_survey$NCS, na.rm = T) # SD = 10.85293
+median(clean_data_survey$NCS, na.rm = T) # 60
+range(clean_data_survey$NCS, na.rm = T) # 39-80
 # IUS
+mean(clean_data_survey$IUS, na.rm = T) # M = 33.82143
+sd(clean_data_survey$IUS, na.rm = T) # SD = 8.067726
+median(clean_data_survey$IUS, na.rm = T) # 33
+range(clean_data_survey$IUS, na.rm = T) # 16-57
+# SNS
+mean(clean_data_survey$SNS, na.rm = T) # M = 4.05506
+sd(clean_data_survey$SNS, na.rm = T) # SD = 0.8809717
+median(clean_data_survey$SNS, na.rm = T) # 4.125
+range(clean_data_survey$SNS, na.rm = T) # 1.625-5.875
 # PSS
+mean(clean_data_survey$PSS, na.rm = T) # M = 22.96429
+sd(clean_data_survey$PSS, na.rm = T) # SD = 6.340625
+median(clean_data_survey$PSS, na.rm = T) # 23
+range(clean_data_survey$PSS, na.rm = T) # 7-43
 
 cor_matrix = cor(cbind(clean_data_survey[,c('NCS','IUS','SNS','PSS')],clean_data_complexspan['compositeSpanScore']),
                  use = 'complete.obs');
-cor.test(clean_data_survey$NCS, clean_data_survey$IUS) # r = -0.24, p = 0.03
-cor.test(clean_data_survey$NCS, clean_data_survey$SNS) # n.s., r = 0.19, p = 0.08 
-cor.test(clean_data_survey$NCS, clean_data_survey$PSS) # r = -0.29, p = 0.009
-cor.test(clean_data_survey$IUS, clean_data_survey$SNS) # n.s., r = 0.14, p = 0.21
-cor.test(clean_data_survey$IUS, clean_data_survey$PSS) # r = 0.47, p = 5.321e-06 
-cor.test(clean_data_survey$SNS, clean_data_survey$PSS) # n.s., r = -0.11, p = 0.31
-cor.test(clean_data_survey$NCS, clean_data_complexspan$compositeSpanScore) # n.s., r = 0.05, p = 0.69
-cor.test(clean_data_survey$IUS, clean_data_complexspan$compositeSpanScore) # n.s., r = -0.004, p = 0.97
-cor.test(clean_data_survey$SNS, clean_data_complexspan$compositeSpanScore) # n.s., r = 0.26, p = 0.02
-cor.test(clean_data_survey$PSS, clean_data_complexspan$compositeSpanScore) # n.s., r = -0.12, p = 0.25
+cor.test(clean_data_survey$NCS, clean_data_survey$IUS) # r(82) = -0.239142, p = 0.02846
+cor.test(clean_data_survey$NCS, clean_data_survey$SNS) # n.s., r(82) = 0.1917, p = 0.08066 
+cor.test(clean_data_survey$NCS, clean_data_survey$PSS) # r(82) = -0.2855222, p = 0.008471
+cor.test(clean_data_survey$IUS, clean_data_survey$SNS) # n.s., r(82) = 0.139341, p = 0.2062
+cor.test(clean_data_survey$IUS, clean_data_survey$PSS) # r(82) = 0.4737519, p = 5.321e-06 
+cor.test(clean_data_survey$SNS, clean_data_survey$PSS) # n.s., r(82) = -0.1120716, p = 0.3101
+cor.test(clean_data_survey$NCS, clean_data_complexspan$compositeSpanScore) # n.s., r(79) = 0.04481055, p = 0.6912
+cor.test(clean_data_survey$IUS, clean_data_complexspan$compositeSpanScore) # n.s., r(79) = -0.003903688, p = 0.9724
+cor.test(clean_data_survey$SNS, clean_data_complexspan$compositeSpanScore) # n.s., r(79) = 0.262511, p = 0.01791
+cor.test(clean_data_survey$PSS, clean_data_complexspan$compositeSpanScore) # n.s., r(79) = -0.1300933, p = 0.247
 
 plot(cbind(clean_data_survey[,c('NCS','IUS','SNS','PSS')],clean_data_complexspan['compositeSpanScore']));
 
-# Higher NCS, Lower IUS 
+# Higher NCS, Lower IUS - maybe because people with higher NFC are more open to and like uncertainty because it allows them to think
 # Higher NCS, Lower PSS
 
 # Higher IUS, Higher PSS
 
-# NO RELATIONSHIPS TO WORKING MEMORY COMPOSITE SPAN
+# NO RELATIONSHIPS TO WORKING MEMORY COMPOSITE SPAN - reflects similar findings in da Silva Castanheira et al. (2021)
 
 corrplot(cor_matrix, type = 'lower')
 # Positive = blue
 # Negative = red
 
-# Any similarities to working memory span? - what is this question referring to?
+# Any similarities to working memory span? - (Von) what is this question referring to?
 
 # TAKEAWAYS: - does this still hold true?
 # Because of several inter-item correlations, it's not wise to include these in the same model
@@ -174,7 +192,7 @@ abline(v = mean(clean_data_survey$PSS, na.rm = T), col = 'magenta', lwd = 5)
 
 par(mfrow = c(1,1)) # Returning graphs to plot 1 at a time
 
-# Make binary categorical variables for clean_data_dm based on each of the major Surveys
+# Make binary categorical variables for clean_data_dm based on each of the major Surveys (Con) Why empty when called?
 
 clean_data_dm$NCS_HighP1_LowN1 = (clean_data_dm$NCS >= median(clean_data_survey$NCS))*2-1;
 clean_data_dm$IUS_HighP1_LowN1 = (clean_data_dm$IUS >= median(clean_data_survey$IUS))*2-1;
@@ -232,23 +250,23 @@ data_rdm <- data.frame(mean_pgamble,static_mean_pgamble,dynamic_mean_pgamble,eas
 sem <- function(x) sd(x)/sqrt(length(x));
 
 # Calculate M's and SEMs
-mean(mean_pgamble) # 0.50
-mean(static_mean_pgamble) # 0.51
-mean(dynamic_mean_pgamble) # 0.49
-sem(mean_pgamble) # 0.01
-sem(static_mean_pgamble) # 0.02
-sem(dynamic_mean_pgamble) # 0.02
+mean(mean_pgamble) # 0.497775
+mean(static_mean_pgamble) # 0.5089402
+mean(dynamic_mean_pgamble) # 0.4930427
+sem(mean_pgamble) # 0.01143445
+sem(static_mean_pgamble) # 0.01492569
+sem(dynamic_mean_pgamble) # 0.01449466
 
-mean(easyACC_mean_pgamble) # 0.93
-mean(easyREJ_mean_pgamble) # 0.06
-sem(easyACC_mean_pgamble) # 0.01
-sem(easyREJ_mean_pgamble) # 0.006
+mean(easyACC_mean_pgamble) # 0.9343611
+mean(easyREJ_mean_pgamble) # 0.06401623
+sem(easyACC_mean_pgamble) # 0.009493229
+sem(easyREJ_mean_pgamble) # 0.00588866
 
-mean(diff_mean_pgamble) # 0.49
-sem(diff_mean_pgamble) # 0.03
+mean(diff_mean_pgamble) # 0.4863754
+sem(diff_mean_pgamble) # 0.02614511
 
-min(mean_pgamble) # 0.27
-max(mean_pgamble) # 0.82
+min(mean_pgamble) # 0.2647059
+max(mean_pgamble) # 0.8235294
 
 # Q: How did risk-taking compare across the different dynamic trial types?
 # e.g. easy accept vs. easy reject vs. difficult
@@ -271,7 +289,7 @@ plot(abs(easyACC_mean_pgamble-.5),abs(easyREJ_mean_pgamble-.5),xlim = c(0,.5), y
 lines(x = c(0,1), y = c(0,1), col = 'blue')
 
 # Statistically test relative difficulty observed in easy ACC vs. easy REJ
-t.test(abs(easyACC_mean_pgamble-.5), abs(easyREJ_mean_pgamble-.5), paired = T) # n.s., t = -0.002, p = 0.88
+t.test(abs(easyACC_mean_pgamble-.5), abs(easyREJ_mean_pgamble-.5), paired = T) # n.s., t(84) = -0.001622718, p = 0.8801
 
 # A: Yes, we can treat all easy trials as similarly easy (whether easy ACC or REJ), not sig different 2/9/24
 
@@ -1023,8 +1041,17 @@ m1_prev_alldiffCont_back8_intxn_rfx = lmer(sqrtRT ~ 1 +
                                              (1 | subjectnumber), data = clean_data_dm[only_finite_index,]);
 summary(m1_prev_alldiffCont_back8_intxn_rfx) 
 
+AIC(m1_prev_alldiffCont_back1_intxn_rfx)
+AIC(m1_prev_alldiffCont_back2_intxn_rfx)
+AIC(m1_prev_alldiffCont_back3_intxn_rfx)
+AIC(m1_prev_alldiffCont_back4_intxn_rfx)
+AIC(m1_prev_alldiffCont_back5_intxn_rfx)
+AIC(m1_prev_alldiffCont_back6_intxn_rfx)
+AIC(m1_prev_alldiffCont_back7_intxn_rfx)
+AIC(m1_prev_alldiffCont_back8_intxn_rfx)
 
-
+diff_trajectory = clean_data_dm$prev_all_diff_cont*-2.5593e-2 + clean_data_dm$prev2_all_diff_cont*-1.323-2 + clean_data_dm$prev3_all_diff_cont*1.499e-2
+plot(diff_trajectory[1:170], type = 'l')
 
 ## Model 2: What role does high/low cognitive capacity have on CURRENT TRIAL EFFECTS
 m2_capacityCatDiff_intxn_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1 + 
