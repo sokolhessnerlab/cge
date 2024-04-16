@@ -18,7 +18,7 @@ config = config::get()
 
 #### Loading Data #### 
 # Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
-Sys.setenv(R_CONFIG_ACTIVE = 'tabletas');
+Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
 setwd(config$path$data$processed)
 
 # #Von's 
@@ -83,7 +83,7 @@ keep_dm_rt = mean_rts > 0.85;
 
 mean_rts[keep_dm_rt]
 hist(mean_rts[keep_dm_rt]) # histogram of mean rts
-mean(mean_rts[keep_dm_rt]) # mean rt 1.59 seconds (4/4/24)
+mean(mean_rts[keep_dm_rt]) # mean rt 1.59362 seconds (4/4/24)
 
 ### Survey Exclusions 
 # quick responses to surveys (still figuring out how that should be done)
@@ -485,7 +485,7 @@ if (any((grid_bestRho - best_rhos) != 0)){
   print('Grid search values match (as expected)')
 }
 
-# Grid search replicates (which it should!)
+# Grid search replicates (which it should!) (4/11/24)
 
 # Then check estimated parameters vs. grid search parameters
 plot(grid_bestRho,estimated_parameters[,1], main = 'RHO', 
@@ -507,11 +507,11 @@ hist(grid_bestMu - estimated_parameters[,2], xlim = c(-100,100),
 # This is supposed to look silly! Should cluster around 0
 # ... and it does, as of 4/5/24!
 
-t.test(grid_bestRho, estimated_parameters[,1], paired = T) # no sig. diff (rho)... 4/2/23 (t = 0.005, p = 0.08)
-t.test(grid_bestMu, estimated_parameters[,2], paired = T) # no sig. diff (mu)... 4/2/23 (t = 0.07, p = 0.07)
+t.test(grid_bestRho, estimated_parameters[,1], paired = T) # no sig. diff (rho)... 4/11/24 (t(84) = 1.7804, p = 0.07862)
+t.test(grid_bestMu, estimated_parameters[,2], paired = T) # no sig. diff (mu)... 4/11/24 (t(84) = 1.8545, p = 0.06718)
 
-cor.test(grid_bestRho, estimated_parameters[,1]) # both extremely highly correlated. r = 0.997, p = 2.2e-16
-cor.test(grid_bestMu, estimated_parameters[,2]) # r = 0.999, p = 2.2e-16
+cor.test(grid_bestRho, estimated_parameters[,1]) # both extremely highly correlated. r(83) = 0.9974685, p = 2.2e-16
+cor.test(grid_bestMu, estimated_parameters[,2]) # r(83) = 0.9997898, p = 2.2e-16
 
 # A: YES, grid-search values match optimized values very closely.
 
@@ -622,18 +622,32 @@ lines(c(0, 2.75), c(0, 2.75))
 points(mean(median_rt_diff), mean(median_rt_easy), pch = 16, col = rgb(1, 0, 1, .75), cex = 2.5)
 
 # test easy RTs vs. diff. RTs 
-rt_mean_test = t.test(mean_rt_easy,mean_rt_diff, paired = T) # VERY significant (t = -0.10.37, p = 2.2e-16)
-rt_median_test = t.test(median_rt_easy,median_rt_diff, paired = T) # VERY significant (t = -10.18, p = 2.493e-16)
-#A: yes, looks like on average rt of difficult decisions was slower than avg rt of easy decisions 4/2/23
+rt_mean_test = t.test(mean_rt_easy,mean_rt_diff, paired = T) # VERY significant (t(84) = -10.368, p = 2.2e-16)
+rt_mean_test
+rt_median_test = t.test(median_rt_easy,median_rt_diff, paired = T) # VERY significant (t(84) = -10.184, p = 2.493e-16)
+rt_median_test 
+#A: yes, looks like on average rt of difficult decisions was slower than avg rt of easy decisions 4/11/24
 
 # Test for the across-participant variances in RTs by trial type
-rt_mean_vartest = var.test(mean_rt_easy,mean_rt_diff); # F = 0.42, p = 0.0001
-rt_median_vartest = var.test(median_rt_easy,median_rt_diff); # F = 0.36, p = 4.987e-06
+rt_mean_vartest = var.test(mean_rt_easy,mean_rt_diff); # F(84) = 0.42266, p = 0.0001059
+rt_mean_vartest
+var(mean_rt_easy)
+var(mean_rt_diff)
+rt_median_vartest = var.test(median_rt_easy,median_rt_diff); # F(84) = 0.36058, p = 4.987e-06
+rt_median_vartest
 # A: RTs are more variable across people for diff. than easy trials
+
+yl = ceiling(max(c(max(mean_rt_diff),max(mean_rt_easy)))*10)/10
+plot(mean_rt_easy, mean_rt_diff, xlab = 'Easy trials', ylab = 'Difficult trials',
+     main = 'Across-Participant Variances in RT',
+     sub = sprintf('variance test p = %.03f', var_test_within$p.value), 
+     xlim = c(0,yl), ylim = c(0,yl))
+lines(c(0,.6), c(0,.6), col = 'black', lty = 'dashed', lwd = 1.5)
 
 
 # differences between variance of RTs in conditions WITHIN person
-var_test_within = t.test(var_rt_easy,var_rt_diff, paired = T); # t = -5.85, p = 9.154e-08
+var_test_within = t.test(var_rt_easy,var_rt_diff, paired = T); # t(84) = -5.8504, p = 9.154e-08
+var_test_within
 
 
 yl = ceiling(max(c(max(var_rt_diff),max(var_rt_easy)))*10)/10
@@ -666,7 +680,7 @@ for (subj in 1:number_of_clean_subjects){
 
 # test easy ACC vs. easy REJ RTs (and plot against each other)
 # Q: Can we treat easy ACC & REJ RTs as the same kind of thing? 
-t.test(mean_rt_easyACC,mean_rt_easyREJ, paired = T); # not sig. diff between easy types 4/25/23 (t = 0.29, p = 0.77)
+t.test(mean_rt_easyACC,mean_rt_easyREJ, paired = T); # not sig. diff between easy types 4/25/23 (t(84) = 0.28963, p = 0.7728)
 plot(mean_rt_easyACC, mean_rt_easyREJ, main = 'Reaction Times on Easy Trials', 
      xlab = 'Easy ACCEPT trials', ylab = 'Easy REJECT trials', xlim = c(0,4), ylim = c(0,4))
 lines(c(0,4), c(0,4))
@@ -700,8 +714,8 @@ for (subj in 1:number_of_clean_subjects){
 }
 
 # does prev. trial type influence RT on the current trial 
-t.test(easy_easy_mean_rt, diff_easy_mean_rt, paired = T); # NOT for easy 4/5/24 (t = 0.72, p = 0.47)
-t.test(diff_diff_mean_rt, easy_diff_mean_rt, paired = T); # NOT for difficult 4/5/24 (t = 1.63, p = 0.12)
+t.test(easy_easy_mean_rt, diff_easy_mean_rt, paired = T); # NOT for easy 4/5/24 (t(84) = 0.72255, p = 0.472)
+t.test(diff_diff_mean_rt, easy_diff_mean_rt, paired = T); # NOT for difficult 4/5/24 (t(84) = 1.6342, p = 0.106)
 # A: Not at this level.
 
 # Plot the current trial as a function of prev. trial type
@@ -710,7 +724,7 @@ plot(easy_easy_mean_rt, diff_easy_mean_rt, xlim = c(0.75,2.2), ylim = c(0.75,2.2
 plot(easy_diff_mean_rt, diff_diff_mean_rt, xlim = c(0.75,2.2), ylim = c(0.75,2.2),
      main = 'DIFFICULT TRIALS', xlab = 'Previous trial was EASY', ylab = 'Previous trial was DIFFICULT'); lines(c(0,3), c(0,3)); # NOT for difficult
 
-t.test(diff_diff_mean_rt, easy_easy_mean_rt, paired = T); # not sig diff 4/5/24 (t = -0.076, p = 0.94)
+t.test(diff_diff_mean_rt, easy_easy_mean_rt, paired = T); # not sig diff 4/5/24 (t(84) = -0.075654, p = 0.9399)
 #A: it looks like RT based upon subsequent trials is not sig different at this level
 
 
@@ -739,12 +753,12 @@ for (subj in 1:number_of_clean_subjects){
                                                        (tmpdata$easyP1difficultN1[51:169] == 1)], na.rm = T);
 }  
 
-t.test(diff_diff_mean_pgamble, easy_diff_mean_pgamble, paired = T); # not sig diff 2/25/24 (t = 0.05, p = 0.96)
-t.test(diff_easy_mean_pgamble, easy_easy_mean_pgamble, paired = T); # not sig diff 2/25/24 (t = -0.7, p = 0.49)
-t.test(diff_diff_mean_pgamble, easy_easy_mean_pgamble, paired = T); # not sig diff 2/25/24 (t = 0.15, p = 0.88)
+t.test(diff_diff_mean_pgamble, easy_diff_mean_pgamble, paired = T); # not sig diff 2/25/24 (t(84) = 0.054225, p = 0.9569)
+t.test(diff_easy_mean_pgamble, easy_easy_mean_pgamble, paired = T); # not sig diff 2/25/24 (t(84) = -0.69596, p = 0.4884)
+t.test(diff_diff_mean_pgamble, easy_easy_mean_pgamble, paired = T); # not sig diff 2/25/24 (t(84) = 0.15362, p = 0.8783)
 
-#A: it looks like pgamble based upon subsequent trials is not significantly differnt, difficulty doesnt show effect on p gamble.
-
+#A: it looks like pgamble based upon subsequent trials is not significantly different, difficulty doesn't show effect on p gamble.
+# - may be due to not having intermediate pgambles?
 
 ### WORKING MEMORY BASIC ANALYSIS ###
 
@@ -753,10 +767,12 @@ cat(sprintf('Out of a total of %i participants, we have O-Span scores for %i, Sy
               sum(is.finite(complexSpanScores$ospanScore)), 
               sum(is.finite(complexSpanScores$symspanScore)), 
               sum(is.finite(complexSpanScores$compositeSpanScore))))
+# Out of a total of 88 participants, we have O-Span scores for 73, Sym-Span scores for 74, and composite span scores for 85.
 cat(sprintf('%i participants have both scores, %i participants are missing only one score, and %i participants are missing both scores.\n',
             sum(is.finite(complexSpanScores$ospanScore) & is.finite(complexSpanScores$symspanScore)),
             sum(xor(is.finite(complexSpanScores$ospanScore),is.finite(complexSpanScores$symspanScore))),
             number_of_subjects-sum(is.finite(complexSpanScores$compositeSpanScore))))
+# 62 participants have both scores, 23 participants are missing only one score, and 3 participants are missing both scores.
 
 # Mean, Median, and Variance of ospan, symspan, and compositespan
 mean_ospan = mean(complexSpanScores$ospanScore, na.rm = T)
@@ -780,9 +796,9 @@ ospanScores = complexSpanScores$ospanScore
 symspanScores = complexSpanScores$symspanScore
 compositeSpanScores = complexSpanScores$compositeSpanScore
 
-cor.test(ospanScores, symspanScores) # r(60) = 0.37, p = 0.003 (as of 2/25/24)
-var.test(ospanScores, symspanScores) # similar variance (p = 0.59 as of 2/25/24)
-t.test(ospanScores, symspanScores, paired = T) # t(34) = 1.4, p = 0.18 (as of 2/12/24)
+cor.test(ospanScores, symspanScores) # r(60) = 0.3703213, p = 0.00305 (as of 2/25/24)
+var.test(ospanScores, symspanScores) # similar variance (F(72) = 0.95278, p = 0.8378 as of 2/25/24)
+t.test(ospanScores, symspanScores, paired = T) # t(61) = 0.14979, p = 0.8814 (as of 2/12/24)
 
 # SUMMARY: O-Span & Sym-Span scores are correlated with each other, and not significantly 
 # different from one another. They are NOT redundant (i.e., correlation is ~0.4).
@@ -796,8 +812,8 @@ lines(x = c(-1, 2), y = c(-1, 2)) # so line extends to edge
 
 capacity_HighP1_lowN1 = (compositeSpanScores > median_compositespan)*2-1;
 
-sum(capacity_HighP1_lowN1 == 1, na.rm = T)
-sum(capacity_HighP1_lowN1 == -1, na.rm = T)
+sum(capacity_HighP1_lowN1 == 1, na.rm = T) # 41
+sum(capacity_HighP1_lowN1 == -1, na.rm = T) # 44
 
 # Plot the distribution w/ the median value
 hist(compositeSpanScores, breaks = 10, xlab = 'Composite Span Score', main = 'Distribution of Spans');
@@ -864,11 +880,25 @@ summary(m0_alldiffcont_rfx) # matches categorical
 
 # Which model should we use? 
 # It's between m0_diffcat_rfx and m0_alldiffcont_rfx
-AIC(m0_diffcat_rfx) # -6226.773
-AIC(m0_alldiffcont_rfx) # -6387.123 <- BETTER (more negative)
+AIC(m0_diffcat_rfx) # -8603.169
+AIC(m0_alldiffcont_rfx) # -8783.393 <- BETTER (more negative)
 
 anova(m0_diffcat_rfx,m0_alldiffcont_rfx) # CONFIRMS that all_diff_cont outperforms easyp1difficultn1
-# p < 2e-16 (it's reported as '0') for continuous as better than categorical
+# p < 2e-16 (it's reported as '0') for continuous as better than categorical ???
+
+# xval_plot = seq(from = 0, to = 1, by = .1);
+# 
+# predict_data_m0 = clean_data_dm[0,];
+# predict_data_m0[1:20,] = NA;
+# predict_data_m0$all_diff_cont[1:10] = xval_plot
+# # predict_data_m0$all_diff_cont[11:20] = xval_plot
+# 
+# predict_output_m0 = predict(m0_alldiffcont_rfx, newdata = predict_data_m0, type = 'response', re.form = NA)^2
+# 
+# plot(x = xval_plot, y = predict_output_m0[1:20], 
+#      type = 'l', lwd = 5, col = 'purple', 
+#      main = 'Effect of current difficulty', xlab = 'Difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)')
+
 
 # Plot the simple main effect of difficulty
 xval_plot = seq(from = 0, to = 1, by = .1);
@@ -957,6 +987,7 @@ plot(x = xval_plot, y = predict_output_m1[1:10],
      ylim = c(1.25, 2))
 lines(x = xval_plot, y = predict_output_m1[11:20], 
       lwd = 5, col = 'red')
+
 # BLUE = previous trial easy
 # RED = previous trial difficult
 
