@@ -26,15 +26,18 @@
 #### STEP 1: SET YOUR WORKING DIRECTORY! ####
 # # On PSH's computers...
 # setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
-# # On Von's PC Laptop "tabletas"...
-# setwd('C:/Users/jvonm/Documents/GitHub/cge');
+
+setwd('C:/Users/jvonm/Documents/GitHub/cge');
+
 # 
 # 
 #### STEP 2: then run from here on the same ####
-# config = config::get();
-# 
+config = config::get();
+
+Sys.setenv(R_CONFIG_ACTIVE = 'tabletas');
 
 setwd(config$path$data$raw);
+
 # setwd('~/Desktop/tmp_et_CGE/')
 
 #### STEP 3: Get the file names & set variables ####

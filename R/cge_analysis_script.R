@@ -1169,7 +1169,7 @@ AIC(m3_prev_diffCont_capacityCat_intxn_rfx) # Be careful when reporting; has few
 # in CGT, Capacity had trending interaction with previous difficulty to almost eliminate the effect of prev. difficulty
 # for high capacity folks, but potentiate it for low capacity folks. NOT SO IN CGE! 
 
-
+xval_plot = seq(from = 0, to = 1, length.out = 10)
 predict_data_m3_H = clean_data_dm[0,];
 predict_data_m3_H[1:20,] = NA;
 predict_data_m3_H$all_diff_cont[1:10] = xval_plot
@@ -1361,6 +1361,7 @@ lines(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_di
 # capacity = c(1, -1); # HIGH = 1, low = -1
 # coef_vals = fixef(m3_best)
 
+xval_plot = seq(from = 0, to = 1, length.out = 10)
 predict_data_m3_best_H = clean_data_dm[0,];
 predict_data_m3_best_H[1:20,] = NA;
 predict_data_m3_best_H$all_diff_cont[1:10] = xval_plot
@@ -1477,6 +1478,87 @@ cat(sprintf('The best mean likelihood obtained with the SymSpan was %0.4f\n', be
 # (well, the Ospan & Symspan are different; composite span includes both of those, but other people too)
 # Mean choice likelihood is best for SymSpan (0.7280), then Composite (0.7222), then OSpan (0.7195). Differences
 # are slight, so probably prefer the model that fits more data, i.e. composite.
+
+
+### Leave One Out Cross Validation ###
+
+# xval_plot = seq(from = 0, to = 1, length.out = 10)
+# predict_data_m3_H = clean_data_dm[0,];
+# predict_data_m3_H[1:20,] = NA;
+# predict_data_m3_H$all_diff_cont[1:10] = xval_plot
+# predict_data_m3_H$all_diff_cont[11:20] = xval_plot
+# predict_data_m3_H$prev_all_diff_cont[1:10] = 0;
+# predict_data_m3_H$prev_all_diff_cont[11:20] = 1;
+# predict_data_m3_H$capacity_HighP1_lowN1 = 1;
+# 
+# predict_data_m3_L = predict_data_m3_H;
+# predict_data_m3_L$capacity_HighP1_lowN1 = -1;
+# 
+# predict_output_m3_H = predict(m3_prev_diffCont_capacityCat_intxn_rfx, newdata = predict_data_m3_H, type = 'response', re.form = NA)^2
+# predict_output_m3_L = predict(m3_prev_diffCont_capacityCat_intxn_rfx, newdata = predict_data_m3_L, type = 'response', re.form = NA)^2
+# 
+# #HIGH CAPACITY PLOT
+# # First plot PREV easy & CAPACITY high
+# plot(x = xval_plot, y = predict_output_m3_H[1:10], 
+#      type = 'l', lwd = 5, col = 'blue', 
+#      main = 'Effect of current & previous difficulty: HIGH CAP', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
+#      ylim = c(1.25, 2))
+# # Second plot PREV diff & CAPACITY high
+# lines(x = xval_plot, y = predict_output_m3_H[11:20], 
+#       lwd = 5, col = 'red')
+# 
+# tmpdataDyn = tmpdata$trialnumber[tmpdata$static0dynamic1 == 1];
+# tmpdataDynSamp = sample(tmpdataDyn) # use length? 
+# 
+# trainDynData = tmpdataDynSamp[1:108]
+# testDynData = tmpdataDynSamp[109:120]
+
+# All dynamic trials
+for (subj in 1:number_of_clean_subjects){
+  subj_id = keep_participants[subj];
+  tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
+  
+  tmpdataDyn = tmpdata[tmpdata$static0dynamic1 == 1,];
+  tmpdataDynSamp = sample(tmpdataDyn$trialnumber)
+  
+  trainDynData = tmpdataDynSamp[1:108]
+  testDynData = tmpdataDynSamp[109:120] 
+  
+  # m1_trainDynData_intxn_rfx = lmer(sqrtRT ~ 1 + 
+  #                       trainDynData + 
+  #                       (1 | subjectnumber), data = tmpdata);
+  # summary(m1_trainDynData_intxn_rfx)
+  
+}
+
+# All easy trials
+for (subj in 1:number_of_clean_subjects){
+  subj_id = keep_participants[subj];
+  tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
+  
+  tmpdataEasy = tmpdata[tmpdata$easyP1difficultN1 == 1,];
+  tmpdataEasySamp = sample(tmpdataEasy$trialnumber)
+  
+  trainEasyData = tmpdataEasySamp[1:54]
+  testEasyData = tmpdataEasySamp[55:60]
+  
+  
+}
+
+# All difficult trials
+for (subj in 1:number_of_clean_subjects){
+  subj_id = keep_participants[subj];
+  tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
+  
+  tmpdataDiff = tmpdata[tmpdata$easyP1difficultN1 == -1,];
+  tmpdataDiffSamp = sample(tmpdataDiff$trialnumber)
+  
+  trainDiffData = tmpdataDiffSamp[1:54]
+  testDiffData = tmpdataDiffSamp[55:60]
+  
+  
+}
+
 
 
 ### Testing the integration of Survey Data ###  - I think this is where it breaks
