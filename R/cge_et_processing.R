@@ -9,6 +9,10 @@
 # Plan accordingly!
 
 
+# Changes to make
+# - 
+
+
 # OUTSTANDING QUESTIONS ####
 # - Establish cutoffs for...
 #   - what counts as a 'blink' (to extend)
@@ -52,6 +56,7 @@ for (s in 1:length(all_dirs)){
 blink_length_threshold = 20; # milliseconds above which (ms) counts as a 'blink'. There are plenty of super-short missing samples.
 na_fill_before = 100; # how many milliseconds to expand the blinks backward
 na_fill_after = 200; # how many milliseconds to expand the blinks forward
+# NON-BLINK gaps are not extended; they are interpolated across.
 
 maximum_width_allowable_missing = 1000; # milliseconds above which we do NOT interpolate across and just leave as an NA
 
@@ -60,6 +65,9 @@ smoothing_window_width = 11; # points to smooth over; 11 pts @ 1000Hz = 11ms
 number_of_trials = 170; # number of RDM trials
 
 baseline_window_width = 500; # milliseconds of the baseline window width used for baseline correction
+
+# Exclusion Criteria-Relevant Values
+fraction_allowable_missing_samples_raw = 0.2; # max. fraction of raw samples that are allowed to be missing for a participant
 
 fraction_allowable_missing_samples = 0.5; # max. fraction of samples that are allowed to be missing and the trial still being used
 
@@ -82,6 +90,9 @@ pupil_qa_metric_columns = c(
   'fraction_of_missing_samples_proc',
   'number_missing_trials_proc',
   'fraction_missing_trials_proc',
+  'validation_average_error',
+  'validation_max_error',
+  'validationG0F1P2',
   'keep_subj_pupil'
 )
 pupil_QA_metrics = array(data = NA, dim = c(number_of_subjects,length(pupil_qa_metric_columns)));
@@ -270,11 +281,29 @@ for (s in 1:number_of_subjects){
       et_alignment_time = as.numeric(substr(msgs[m], first_ind, last_ind)) # pull out the start time from that msg
     }
   }
+  
+  val_msgs = grep('VALIDATION', msgs);
+  last_val_msg = msgs[val_msgs[length(val_msgs)]];
+  
+  validation_average_error = as.numeric(substr(sub(".*ERROR ","",last_val_msg),1,5));
+  val_msg_subset = sub(" max.*","",last_val_msg);
+  validation_max_error = as.numeric(substr(val_msg_subset, nchar(val_msg_subset)-4, nchar(val_msg_subset)))
+  val_msg_subset = sub(" ERROR.*","",last_val_msg);
+  validation_str = substr(val_msg_subset, nchar(val_msg_subset)-3,nchar(val_msg_subset))
+  if (validation_str == 'GOOD'){
+    validationG0F1P2 = 0
+  } else if (validation_str == 'FAIR'){
+    validationG0F1P2 = 1
+  } else if (validation_str == 'POOR'){
+    validationG0F1P2 = 2
+  }
+  
   cat(sprintf('alignment timestamp = %i...  ', et_alignment_time))
   
   time_data = time_data - et_alignment_time; # Correct all timestamps to be relative to this moment
   cat('Done.\n')
   
+
   ##### Create Behavioral Event Timestamp Matrix ###### 
   tmpdata = read.csv(rdmfn[s]); 
   
@@ -400,14 +429,17 @@ for (s in 1:number_of_subjects){
               number_of_missing_samples_proc, fraction_of_missing_samples_proc*100, number_of_missing_trials_proc,
               fraction_of_missing_trials_proc*100))
   
+  # Perform Exclusions
   keep_subj_pupil = NA;
-  if (fraction_of_missing_trials_proc >= fraction_allowable_missing_trials) {
+  if ((fraction_of_missing_trials_proc >= fraction_allowable_missing_trials) || 
+      (fraction_of_missing_samples_raw >= fraction_allowable_missing_samples_raw)) {
     et_summary_stats[,] = NA; # remove all ET data for this participant
     keep_subj_pupil = 0;
   } else {
     keep_subj_pupil = 1;
   }
   
+  # Store info
   pupil_QA_metrics[s,] = c(
     subject_IDs[s],
     number_of_missing_samples_raw,
@@ -417,6 +449,9 @@ for (s in 1:number_of_subjects){
     fraction_of_missing_samples_proc,
     number_of_missing_trials_proc,
     fraction_of_missing_trials_proc,
+    validation_average_error,
+    validation_max_error,
+    validationG0F1P2,
     keep_subj_pupil
   )
   
