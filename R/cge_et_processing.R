@@ -285,7 +285,7 @@ for (s in 1:number_of_subjects){
     }
   }
   
-  val_msgs = grep('VALIDATION', msgs);
+  val_msgs = grep('VALIDATION HV', msgs);
   last_val_msg = msgs[val_msgs[length(val_msgs)]];
   
   validation_average_error = as.numeric(substr(sub(".*ERROR ","",last_val_msg),1,5));
