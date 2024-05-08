@@ -194,10 +194,11 @@ par(mfrow = c(1,1)) # Returning graphs to plot 1 at a time
 
 # Make binary categorical variables for clean_data_dm based on each of the major Surveys (Con) Why empty when called?
 
-clean_data_dm$NCS_HighP1_LowN1 = (clean_data_dm$NCS >= median(clean_data_survey$NCS))*2-1;
-clean_data_dm$IUS_HighP1_LowN1 = (clean_data_dm$IUS >= median(clean_data_survey$IUS))*2-1;
-clean_data_dm$SNS_HighP1_LowN1 = (clean_data_dm$SNS >= median(clean_data_survey$SNS))*2-1;
-clean_data_dm$PSS_HighP1_LowN1 = (clean_data_dm$PSS >= median(clean_data_survey$PSS))*2-1;
+
+clean_data_dm$NCS_HighP1_LowN1 = (clean_data_dm$NCS >= median(clean_data_survey$NCS, na.rm = T))*2-1;
+clean_data_dm$IUS_HighP1_LowN1 = (clean_data_dm$IUS >= median(clean_data_survey$IUS, na.rm = T))*2-1;
+clean_data_dm$SNS_HighP1_LowN1 = (clean_data_dm$SNS >= median(clean_data_survey$SNS, na.rm = T))*2-1;
+clean_data_dm$PSS_HighP1_LowN1 = (clean_data_dm$PSS >= median(clean_data_survey$PSS, na.rm = T))*2-1;
 
 
 
