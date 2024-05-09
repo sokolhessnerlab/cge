@@ -1587,10 +1587,10 @@ m3_best_PSS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_Hi
 summary(m3_best_PSS)
 # PSS x Span x current difficulty interaction 
 
-AIC(m3_best_NCS) # -6421.915
-AIC(m3_best_IUS) # -6454.564 <- BEST AIC = IUS categorical
-AIC(m3_best_SNS) # -6427.539
-AIC(m3_best_PSS) # -6424.478
+AIC(m3_best_NCS) # -8782.879
+AIC(m3_best_IUS) # -8794.3 <- BEST AIC = IUS categorical
+AIC(m3_best_SNS) # -8789.276
+AIC(m3_best_PSS) # -8785.113
 
 # NCS, IUS, and PSS all have the same interaction in their regressions - with current difficulty
 # and working memory span. These interactions look like they qualify the 2-way interaction between
