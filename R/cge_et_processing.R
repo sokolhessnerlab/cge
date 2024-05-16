@@ -335,7 +335,7 @@ for (s in 1:number_of_subjects){
   event_timestamps$decision_end = tmpdata$isiRealFix.started[trial_index];
   event_timestamps$outcome_start = tmpdata$isiRealFix.stopped[trial_index];
   event_timestamps$outcome_end = tmpdata$itiRealFix.started[trial_index];
-  event_timestamps$iti_end = tmpdata$itiRealFix.stopped[trial_index];s
+  event_timestamps$iti_end = tmpdata$itiRealFix.stopped[trial_index];
   
   event_timestamps[!(is.finite(tmpdata$choices[trial_index])),] = NA;
   
@@ -484,7 +484,7 @@ for (s in 1:number_of_subjects){
     'pupil_data_extend_interp_smooth'
     ))
   
-  pdf(sprintf('./plots/cge%03i_processed_pupil_plot.pdf',subject_IDs[s]))
+  pdf(sprintf('%s/plots/cge%03i_processed_pupil_plot.pdf',config$path$data$processed, subject_IDs[s]))
   plot(pupil_data_extend_interp_smooth_mm, type = 'l', main = sprintf('Processed pupil data for CGE%03i', subject_IDs[s]), 
        xlab = 'milliseconds', ylab = 'pupil diameter (mm)')
   dev.off()
@@ -492,9 +492,9 @@ for (s in 1:number_of_subjects){
   data_pupil = rbind(data_pupil, cbind(et_summary_stats, event_timestamps));
   
   save(pupil_data_extend_interp_smooth_mm, time_data, et_summary_stats, event_timestamps, blink_data,
-       file=sprintf('./cge%03i/cge%03i_et_processed_%s.RData',subject_IDs[s],subject_IDs[s],format(Sys.Date(), format="%Y%m%d")))
+       file=sprintf('%s/cge%03i/cge%03i_et_processed_%s.RData',config$path$data$processed,subject_IDs[s],subject_IDs[s],format(Sys.Date(), format="%Y%m%d")))
   save(downsampled_et_data,
-       file=sprintf('./cge%03i/cge%03i_et_processed_downsampled_%s.RData',subject_IDs[s],subject_IDs[s],format(Sys.Date(), format="%Y%m%d")))
+       file=sprintf('%s/cge%03i/cge%03i_et_processed_downsampled_%s.RData',config$path$data$processed,subject_IDs[s],subject_IDs[s],format(Sys.Date(), format="%Y%m%d")))
 
   cat(sprintf('Finished with subject CGE%03i.\n\n',subject_IDs[s]))
 }
