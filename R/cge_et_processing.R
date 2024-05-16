@@ -29,16 +29,14 @@
 
 #### STEP 1: SET YOUR WORKING DIRECTORY! ####
 # # On PSH's computers...
-# setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
+setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 
-setwd('C:/Users/jvonm/Documents/GitHub/cge');
+# setwd('C:/Users/jvonm/Documents/GitHub/cge');
+# Sys.setenv(R_CONFIG_ACTIVE = 'tabletas');
 
-# 
-# 
+
 #### STEP 2: then run from here on the same ####
 config = config::get();
-
-Sys.setenv(R_CONFIG_ACTIVE = 'tabletas');
 
 setwd(config$path$data$raw);
 
@@ -267,7 +265,7 @@ for (s in 1:number_of_subjects){
   
   downsampled_et_data = cbind(time_data_downsampled, pupil_data_extend_interp_smooth_mm_downsampled);
   
-  ###### 8. Identify and extract timestamp for practice start from ET file ###### 
+  ###### 9. Identify and extract timestamp for practice start from ET file ###### 
   cat('Aligning timestamps...  ')
   et_file_connection = file(etfn[s],'r') # open the file connection to the ASC file.
   
@@ -297,7 +295,7 @@ for (s in 1:number_of_subjects){
     }
   }
   
-  ####### Identify and extract Validation Information/metrics from ET file #######
+  ####### 10. Identify and extract Validation Information/metrics from ET file #######
   val_msgs = grep('VALIDATION HV', msgs);
   last_val_msg = msgs[val_msgs[length(val_msgs)]];
   
@@ -319,8 +317,8 @@ for (s in 1:number_of_subjects){
   time_data = time_data - et_alignment_time; # Correct all timestamps to be relative to this moment
   cat('Done.\n')
   
-
-  ##### Create Behavioral Event Timestamp Matrix ###### 
+  ##### Conduct basic trial-level analyses ######
+  ###### 1. Create Behavioral Event Timestamp Matrix ###### 
   tmpdata = read.csv(rdmfn[s]); 
   
   event_timestamps = array(data = NA, dim = c(number_of_trials, length(timestamp_column_names)))
@@ -342,7 +340,7 @@ for (s in 1:number_of_subjects){
   event_timestamps = event_timestamps - beh_alignment_time; # align the behavioral data to the same moment
   event_timestamps = event_timestamps * 1000; # into milliseconds, like eyetracking
   
-  ##### Calculate Summary Metrics of Pupillometry #####
+  ###### 2. Calculate Summary Metrics of Pupillometry #####
   cat('Calculating summary pupillometry measures...  ')
 
   et_summary_stats = array(data = NA, dim = c(number_of_trials, length(et_summary_data_column_names)))
@@ -512,8 +510,5 @@ setwd(config$path$data$raw); # reset the path to raw.
 cat('Finished processing eye-tracking data.\n\n\n')
 
 # For Future Eye-Tracking Analysis Development ####
-# - downsample data in one of two ways:
-#   - to fixed length (a la mousetracking): e.g. so all pupillometry for otcs is 200 points
-#   - to a given frequency (i.e. 200Hz)
 # - store baseline-corrected pupil diameter traces for event segments (i.e. dec; otc)
 
