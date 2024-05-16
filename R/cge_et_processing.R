@@ -96,6 +96,8 @@ pupil_qa_metric_columns = c(
   'validation_average_error',
   'validation_max_error',
   'validationG0F1P2',
+  'keep_subj_pupil_raw',
+  'keep_subj_pupil_proc',
   'keep_subj_pupil'
 )
 pupil_QA_metrics = array(data = NA, dim = c(number_of_subjects,length(pupil_qa_metric_columns)));
@@ -444,13 +446,17 @@ for (s in 1:number_of_subjects){
               fraction_of_missing_trials_proc*100))
   
   # Perform Exclusions
-  keep_subj_pupil = NA;
-  if ((fraction_of_missing_trials_proc >= fraction_allowable_missing_trials) || 
-      (fraction_of_missing_samples_raw >= fraction_allowable_missing_samples_raw)) {
-    et_summary_stats[,] = NA; # remove all ET data for this participant
-    keep_subj_pupil = 0;
-  } else {
-    keep_subj_pupil = 1;
+  keep_subj_pupil_raw = NA; # exclusion for raw data missing
+  keep_subj_pupil_proc = NA; # exclusion for processed data missing
+  keep_subj_pupil = NA; # overall exclusion
+  
+  keep_subj_pupil_raw = !(fraction_of_missing_samples_raw >= fraction_allowable_missing_samples_raw);
+  keep_subj_pupil_proc = !(fraction_of_missing_trials_proc >= fraction_allowable_missing_trials);
+  
+  keep_subj_pupil = keep_subj_pupil_raw & keep_subj_pupil_proc
+  
+  if (!keep_subj_pupil) {
+    et_summary_stats[,] = NA; # remove all ET summary data for this participant
   }
   
   # Store info
@@ -466,6 +472,8 @@ for (s in 1:number_of_subjects){
     validation_average_error,
     validation_max_error,
     validationG0F1P2,
+    keep_subj_pupil_raw,
+    keep_subj_pupil_proc,
     keep_subj_pupil
   )
   
