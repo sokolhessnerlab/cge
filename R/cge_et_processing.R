@@ -34,13 +34,13 @@ setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # setwd('C:/Users/jvonm/Documents/GitHub/cge');
 # Sys.setenv(R_CONFIG_ACTIVE = 'tabletas');
 
+library(tictoc);
+tic();
 
 #### STEP 2: then run from here on the same ####
 config = config::get();
 
 setwd(config$path$data$raw);
-
-# setwd('~/Desktop/tmp_et_CGE/')
 
 #### STEP 3: Get the file names & set variables ####
 cat('Identifying eye-tracking data file locations.\n');
@@ -507,6 +507,9 @@ write.csv(pupil_QA_metrics, file = sprintf('cge_pupil_QA_metrics_%s.csv',format(
 
 setwd(config$path$data$raw); # reset the path to raw.
 
+timeElapsed = toc();
+
+cat(sprintf('Processing took %s.\n',substr(timeElapsed$callback_msg, start = 0, stop = nchar(timeElapsed$callback_msg)-8)))
 cat('Finished processing eye-tracking data.\n\n\n')
 
 # For Future Eye-Tracking Analysis Development ####
