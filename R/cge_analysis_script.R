@@ -1826,6 +1826,8 @@ for (s in 1:number_of_subjects){
     load(tmp_downsampled_fn[length(tmp_downsampled_fn)])
     downsampled_et_data = as.data.frame(downsampled_et_data);
     
+    pdf(sprintf('%s/plots/cge%03i_downsampled_decision_plot.pdf',config$path$data$processed, subject_IDs[s]))
+
     par(mfrow = c(2,1)); # Set up the individual-level plot
     # Pre-decision | Decision Start
     # Decision End | ISI | Outcome | ITI
@@ -1877,6 +1879,9 @@ for (s in 1:number_of_subjects){
       par(usr = p2_coords)
       par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
     }
+    dev.off()
+    
+    
   }
 }
 
