@@ -315,6 +315,8 @@ for (s in 1:number_of_subjects){
   cat(sprintf('alignment timestamp = %i...  ', et_alignment_time))
   
   time_data = time_data - et_alignment_time; # Correct all timestamps to be relative to this moment
+  downsampled_et_data[,1] = downsampled_et_data[,1] - et_alignment_time # correct downsampled timestamps too!
+  
   cat('Done.\n')
   
   ##### Conduct basic trial-level analyses ######
@@ -491,7 +493,7 @@ for (s in 1:number_of_subjects){
   
   save(pupil_data_extend_interp_smooth_mm, time_data, et_summary_stats, event_timestamps, blink_data,
        file=sprintf('%s/cge%03i/cge%03i_et_processed_%s.RData',config$path$data$processed,subject_IDs[s],subject_IDs[s],format(Sys.Date(), format="%Y%m%d")))
-  save(downsampled_et_data,
+  save(downsampled_et_data, event_timestamps,
        file=sprintf('%s/cge%03i/cge%03i_et_processed_downsampled_%s.RData',config$path$data$processed,subject_IDs[s],subject_IDs[s],format(Sys.Date(), format="%Y%m%d")))
 
   cat(sprintf('Finished with subject CGE%03i.\n\n',subject_IDs[s]))
