@@ -1816,7 +1816,15 @@ summary(likmodel_contDiff_catCap)
 ## Plotting Downsampled Pupillometry ####################
 ### Per-Subject Plots ###########################
 
-baseline_window_width = 500
+baseline_window_width = 500;
+
+bin_increment = 50; # ensure bins increment by multiples of 25ms
+
+decision_start_bins = seq(from = -baseline_window_width, to = 3000, by = bin_increment); 
+decision_end_bins = seq(from = -3000, to = baseline_window_width, by = bin_increment); 
+
+decision_start_array = array(data = NA, dim = c(170,length(decision_start_bins)-1))
+decision_end_array = array(data = NA, dim = c(170,length(decision_start_bins)-1))
 
 for (s in 1:number_of_subjects){
   if (s %in% keep_participants){ # if they're someone we're keeping
@@ -1854,6 +1862,14 @@ for (s in 1:number_of_subjects){
       time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_start[t];
       par(usr = p1_coords)
       par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
+      
+      # Put the mean values into the bins
+      for (b in 1:(length(decision_start_bins)-1)){
+        tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_start_bins[b]) & (time_tmp < decision_start_bins[b+1])], na.rm = T);
+        if (!is.na(tmp_bin_mean)){
+          decision_start_array[t,b] = tmp_bin_mean;
+        }
+      }
 
       # Decision (mean)
       indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_start[t]) & 
@@ -1863,6 +1879,13 @@ for (s in 1:number_of_subjects){
       par(usr = p1_coords)
       par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
       
+      # Put the mean values into the bins
+      for (b in 1:(length(decision_start_bins)-1)){
+        tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_start_bins[b]) & (time_tmp < decision_start_bins[b+1])], na.rm = T);
+        if (!is.na(tmp_bin_mean)){
+          decision_start_array[t,b] = tmp_bin_mean;
+        }
+      }
       
       # Decision aligned to CHOICE (mean)
       indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_start[t]) & 
@@ -1872,14 +1895,41 @@ for (s in 1:number_of_subjects){
       par(usr = p2_coords)
       par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
       
-      # Post-decision Decision aligned to CHOICE (mean)
+      # Put the mean values into the bins
+      for (b in 1:(length(decision_end_bins)-1)){
+        tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_end_bins[b]) & (time_tmp < decision_end_bins[b+1])], na.rm = T);
+        if (!is.na(tmp_bin_mean)){
+          decision_end_array[t,b] = tmp_bin_mean;
+        }
+      }
+      
+      
+      # Post-decision aligned to CHOICE (mean)
       indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_end[t]) & 
         (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + baseline_window_width));
       pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
       time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
       par(usr = p2_coords)
       par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
+      
+      # Put the mean values into the bins
+      for (b in 1:(length(decision_end_bins)-1)){
+        tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_end_bins[b]) & (time_tmp < decision_end_bins[b+1])], na.rm = T);
+        if (!is.na(tmp_bin_mean)){
+          decision_end_array[t,b] = tmp_bin_mean;
+        }
+      }
     }
+    
+    par(usr = p1_coords)
+    par(mfg = c(1,1)); lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
+                             y = colMeans(decision_start_array, na.rm = T), col = rgb(1,0,0), lwd = 3)
+    
+    par(usr = p2_coords)
+    par(mfg = c(2,1)); lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2, 
+                             y = colMeans(decision_end_array, na.rm = T), col = rgb(1,0,0), lwd = 3)
+    
+    
     dev.off() # complete the plot
 
   }
