@@ -1826,18 +1826,19 @@ for (s in 1:number_of_subjects){
     load(tmp_downsampled_fn[length(tmp_downsampled_fn)])
     downsampled_et_data = as.data.frame(downsampled_et_data);
     
-    pdf(sprintf('%s/plots/cge%03i_downsampled_decision_plot.pdf',config$path$data$processed, subject_IDs[s]))
+    pdf(sprintf('%s/plots/cge%03i_downsampled_decision_plot.pdf',config$path$data$processed, s),
+        width = 5, height = 8)
 
     par(mfrow = c(2,1)); # Set up the individual-level plot
     # Pre-decision | Decision Start
     # Decision End | ISI | Outcome | ITI
-    plot(1, type = "n", xlab = "milliseconds", ylab = "raw pupil diameter (px)", main = "Aligned to Decision Window Start",
+    plot(1, type = "n", xlab = "milliseconds", ylab = "pupil diameter (mm)", main = "Aligned to Decision Window Start",
          xlim = c(-baseline_window_width, 3000), ylim = c(2, 6))
     abline(v = 0, lty = 'dashed')
     p1_coords = par('usr');
     # pre-dec window, up until 3000 ms into the 4000ms response window
 
-    plot(1, type = "n", xlab = "milliseconds", ylab = "raw pupil diameter (px)", main = "Aligned to Choice",
+    plot(1, type = "n", xlab = "milliseconds", ylab = "pupil diameter (mm)", main = "Aligned to Choice",
          xlim = c(-3000, baseline_window_width), ylim = c(2, 6))
     abline(v = 0, lty = 'dotted')
     p2_coords = par('usr');
@@ -1879,9 +1880,8 @@ for (s in 1:number_of_subjects){
       par(usr = p2_coords)
       par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
     }
-    dev.off()
-    
-    
+    dev.off() # complete the plot
+
   }
 }
 
