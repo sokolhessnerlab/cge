@@ -19,6 +19,7 @@ config = config::get()
 #### Loading Data #### 
 # Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
 Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
+
 setwd(config$path$data$processed)
 
 # #Von's 
@@ -1811,6 +1812,74 @@ summary(likmodel_contDiff_catCap)
 
 
 # Pupillometry Analyses #################
+
+## Plotting Downsampled Pupillometry ####################
+### Per-Subject Plots ###########################
+
+baseline_window_width = 500
+
+for (s in 1:number_of_subjects){
+  if (s %in% keep_participants){ # if they're someone we're keeping
+    # find their file...
+    tmp_downsampled_fn = dir(pattern = glob2rx(sprintf('cge%03i_et_processed_downsampled*.RData',s)),full.names = T, recursive = T);
+    # and load only the most recent downsampled data file
+    load(tmp_downsampled_fn[length(tmp_downsampled_fn)])
+    downsampled_et_data = as.data.frame(downsampled_et_data);
+    
+    par(mfrow = c(2,1)); # Set up the individual-level plot
+    # Pre-decision | Decision Start
+    # Decision End | ISI | Outcome | ITI
+    plot(1, type = "n", xlab = "milliseconds", ylab = "raw pupil diameter (px)", main = "Aligned to Decision Window Start",
+         xlim = c(-baseline_window_width, 3000), ylim = c(2, 6))
+    abline(v = 0, lty = 'dashed')
+    p1_coords = par('usr');
+    # pre-dec window, up until 3000 ms into the 4000ms response window
+
+    plot(1, type = "n", xlab = "milliseconds", ylab = "raw pupil diameter (px)", main = "Aligned to Choice",
+         xlim = c(-3000, baseline_window_width), ylim = c(2, 6))
+    abline(v = 0, lty = 'dotted')
+    p2_coords = par('usr');
+            # the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
+
+    number_of_trials = length(event_timestamps[,1]);
+    
+    for (t in 1:number_of_trials){
+      # Pre-decision baseline
+      indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_start[t] - baseline_window_width)) & 
+        (downsampled_et_data$time_data_downsampled < event_timestamps$decision_start[t])
+      pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
+      time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_start[t];
+      par(usr = p1_coords)
+      par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
+
+      # Decision (mean)
+      indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_start[t]) & 
+        (downsampled_et_data$time_data_downsampled < event_timestamps$decision_end[t]);
+      pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
+      time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_start[t];
+      par(usr = p1_coords)
+      par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
+      
+      
+      # Decision aligned to CHOICE (mean)
+      indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_start[t]) & 
+        (downsampled_et_data$time_data_downsampled < event_timestamps$decision_end[t]);
+      pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
+      time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
+      par(usr = p2_coords)
+      par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
+      
+      # Post-decision Decision aligned to CHOICE (mean)
+      indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_end[t]) & 
+        (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + baseline_window_width));
+      pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
+      time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
+      par(usr = p2_coords)
+      par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
+    }
+  }
+}
+
 
 ## Regressions #################
 
