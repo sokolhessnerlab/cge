@@ -12,14 +12,13 @@ rm(list=ls()); # Clear the workspace
 setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # On Von's PC Laptop "tabletas"...
 setwd('C:/Users/jvonm/Documents/GitHub/cge');
+# Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
+Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
 
 # STEP 2: then run from here on the same
 config = config::get()
 
 #### Loading Data #### 
-# Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
-Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
-
 setwd(config$path$data$processed)
 
 # #Von's 
@@ -1823,117 +1822,156 @@ bin_increment = 50; # ensure bins increment by multiples of 25ms
 decision_start_bins = seq(from = -baseline_window_width, to = 3000, by = bin_increment); 
 decision_end_bins = seq(from = -3000, to = baseline_window_width, by = bin_increment); 
 
-decision_start_array = array(data = NA, dim = c(170,length(decision_start_bins)-1))
-decision_end_array = array(data = NA, dim = c(170,length(decision_start_bins)-1))
+mean_decision_start_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_subjects))
+mean_decision_end_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_subjects))
 
-for (s in 1:number_of_subjects){
-  if (s %in% keep_participants){ # if they're someone we're keeping
-    # find their file...
-    tmp_downsampled_fn = dir(pattern = glob2rx(sprintf('cge%03i_et_processed_downsampled*.RData',s)),full.names = T, recursive = T);
-    # and load only the most recent downsampled data file
-    load(tmp_downsampled_fn[length(tmp_downsampled_fn)])
-    downsampled_et_data = as.data.frame(downsampled_et_data);
+for (s in keep_participants){
+  cat(sprintf('Subject %i of %i: trial 000', s, length(keep_participants)))
+  # Create NA-filled arrays to hold this one person's pupil trace data
+  decision_start_array = array(data = NA, dim = c(170,length(decision_start_bins)-1))
+  decision_end_array = array(data = NA, dim = c(170,length(decision_start_bins)-1))
+  
+  # find their file...
+  tmp_downsampled_fn = dir(pattern = glob2rx(sprintf('cge%03i_et_processed_downsampled*.RData',s)),full.names = T, recursive = T);
+  # and load only the most recent downsampled data file
+  load(tmp_downsampled_fn[length(tmp_downsampled_fn)])
+  downsampled_et_data = as.data.frame(downsampled_et_data);
+  
+  pdf(sprintf('%s/plots/cge%03i_downsampled_decision_plot.pdf',config$path$data$processed, s),
+      width = 5, height = 8)
+  
+  par(mfrow = c(2,1)); # Set up the individual-level plot
+  # Pre-decision | Decision Start
+  # Decision End | ISI | Outcome | ITI
+  plot(1, type = "n", xlab = "milliseconds", ylab = "pupil diameter (mm)", main = "Aligned to Decision Window Start",
+       xlim = c(-baseline_window_width, 3000), ylim = c(2, 6))
+  abline(v = 0, lty = 'dashed')
+  p1_coords = par('usr');
+  # pre-dec window, up until 3000 ms into the 4000ms response window
+  
+  plot(1, type = "n", xlab = "milliseconds", ylab = "pupil diameter (mm)", main = "Aligned to Choice",
+       xlim = c(-3000, baseline_window_width), ylim = c(2, 6))
+  abline(v = 0, lty = 'dotted')
+  p2_coords = par('usr');
+  # the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
+  
+  number_of_trials = length(event_timestamps[,1]);
+  
+  for (t in 1:number_of_trials){
+    cat(sprintf('\b\b\b%03i',t))
+    # Pre-decision baseline
+    indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_start[t] - baseline_window_width)) & 
+      (downsampled_et_data$time_data_downsampled < event_timestamps$decision_start[t])
+    pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
+    time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_start[t];
+    par(usr = p1_coords)
+    par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
     
-    pdf(sprintf('%s/plots/cge%03i_downsampled_decision_plot.pdf',config$path$data$processed, s),
-        width = 5, height = 8)
-
-    par(mfrow = c(2,1)); # Set up the individual-level plot
-    # Pre-decision | Decision Start
-    # Decision End | ISI | Outcome | ITI
-    plot(1, type = "n", xlab = "milliseconds", ylab = "pupil diameter (mm)", main = "Aligned to Decision Window Start",
-         xlim = c(-baseline_window_width, 3000), ylim = c(2, 6))
-    abline(v = 0, lty = 'dashed')
-    p1_coords = par('usr');
-    # pre-dec window, up until 3000 ms into the 4000ms response window
-
-    plot(1, type = "n", xlab = "milliseconds", ylab = "pupil diameter (mm)", main = "Aligned to Choice",
-         xlim = c(-3000, baseline_window_width), ylim = c(2, 6))
-    abline(v = 0, lty = 'dotted')
-    p2_coords = par('usr');
-            # the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
-
-    number_of_trials = length(event_timestamps[,1]);
-    
-    for (t in 1:number_of_trials){
-      # Pre-decision baseline
-      indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_start[t] - baseline_window_width)) & 
-        (downsampled_et_data$time_data_downsampled < event_timestamps$decision_start[t])
-      pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
-      time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_start[t];
-      par(usr = p1_coords)
-      par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-      
-      # Put the mean values into the bins
-      for (b in 1:(length(decision_start_bins)-1)){
-        tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_start_bins[b]) & (time_tmp < decision_start_bins[b+1])], na.rm = T);
-        if (!is.na(tmp_bin_mean)){
-          decision_start_array[t,b] = tmp_bin_mean;
-        }
-      }
-
-      # Decision (mean)
-      indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_start[t]) & 
-        (downsampled_et_data$time_data_downsampled < event_timestamps$decision_end[t]);
-      pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
-      time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_start[t];
-      par(usr = p1_coords)
-      par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-      
-      # Put the mean values into the bins
-      for (b in 1:(length(decision_start_bins)-1)){
-        tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_start_bins[b]) & (time_tmp < decision_start_bins[b+1])], na.rm = T);
-        if (!is.na(tmp_bin_mean)){
-          decision_start_array[t,b] = tmp_bin_mean;
-        }
-      }
-      
-      # Decision aligned to CHOICE (mean)
-      indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_start[t]) & 
-        (downsampled_et_data$time_data_downsampled < event_timestamps$decision_end[t]);
-      pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
-      time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
-      par(usr = p2_coords)
-      par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-      
-      # Put the mean values into the bins
-      for (b in 1:(length(decision_end_bins)-1)){
-        tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_end_bins[b]) & (time_tmp < decision_end_bins[b+1])], na.rm = T);
-        if (!is.na(tmp_bin_mean)){
-          decision_end_array[t,b] = tmp_bin_mean;
-        }
-      }
-      
-      
-      # Post-decision aligned to CHOICE (mean)
-      indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_end[t]) & 
-        (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + baseline_window_width));
-      pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
-      time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
-      par(usr = p2_coords)
-      par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-      
-      # Put the mean values into the bins
-      for (b in 1:(length(decision_end_bins)-1)){
-        tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_end_bins[b]) & (time_tmp < decision_end_bins[b+1])], na.rm = T);
-        if (!is.na(tmp_bin_mean)){
-          decision_end_array[t,b] = tmp_bin_mean;
-        }
+    # Put the mean values into the bins
+    for (b in 1:(length(decision_start_bins)-1)){
+      tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_start_bins[b]) & (time_tmp < decision_start_bins[b+1])], na.rm = T);
+      if (!is.na(tmp_bin_mean)){
+        decision_start_array[t,b] = tmp_bin_mean;
       }
     }
     
+    # Decision (mean)
+    indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_start[t]) & 
+      (downsampled_et_data$time_data_downsampled < event_timestamps$decision_end[t]);
+    pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
+    time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_start[t];
     par(usr = p1_coords)
-    par(mfg = c(1,1)); lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
-                             y = colMeans(decision_start_array, na.rm = T), col = rgb(1,0,0), lwd = 3)
+    par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
     
+    # Put the mean values into the bins
+    for (b in 1:(length(decision_start_bins)-1)){
+      tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_start_bins[b]) & (time_tmp < decision_start_bins[b+1])], na.rm = T);
+      if (!is.na(tmp_bin_mean)){
+        decision_start_array[t,b] = tmp_bin_mean;
+      }
+    }
+    
+    # Decision aligned to CHOICE (mean)
+    indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_start[t]) & 
+      (downsampled_et_data$time_data_downsampled < event_timestamps$decision_end[t]);
+    pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
+    time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
     par(usr = p2_coords)
-    par(mfg = c(2,1)); lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2, 
-                             y = colMeans(decision_end_array, na.rm = T), col = rgb(1,0,0), lwd = 3)
+    par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
+    
+    # Put the mean values into the bins
+    for (b in 1:(length(decision_end_bins)-1)){
+      tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_end_bins[b]) & (time_tmp < decision_end_bins[b+1])], na.rm = T);
+      if (!is.na(tmp_bin_mean)){
+        decision_end_array[t,b] = tmp_bin_mean;
+      }
+    }
     
     
-    dev.off() # complete the plot
-
+    # Post-decision aligned to CHOICE (mean)
+    indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_end[t]) & 
+      (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + baseline_window_width));
+    pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
+    time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
+    par(usr = p2_coords)
+    par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
+    
+    # Put the mean values into the bins
+    for (b in 1:(length(decision_end_bins)-1)){
+      tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_end_bins[b]) & (time_tmp < decision_end_bins[b+1])], na.rm = T);
+      if (!is.na(tmp_bin_mean)){
+        decision_end_array[t,b] = tmp_bin_mean;
+      }
+    }
   }
+  
+  par(usr = p1_coords)
+  par(mfg = c(1,1)); lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
+                           y = colMeans(decision_start_array, na.rm = T), col = rgb(1,0,0), lwd = 3)
+  
+  par(usr = p2_coords)
+  par(mfg = c(2,1)); lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2, 
+                           y = colMeans(decision_end_array, na.rm = T), col = rgb(1,0,0), lwd = 3)
+  
+  
+  dev.off() # complete the plot
+  
+  mean_decision_start_array[,s] = colMeans(decision_start_array, na.rm = T)
+  mean_decision_end_array[,s] = colMeans(decision_end_array, na.rm = T)
+  cat(sprintf('. Done.\n'))
 }
+
+pdf(sprintf('%s/plots/mean_downsampled_decision_plot.pdf',config$path$data$processed),
+    width = 5, height = 8)
+
+par(mfrow = c(2,1)); # Set up the individual-level plot
+# Pre-decision | Decision Start
+matplot(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
+        y = mean_decision_start_array,
+        col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
+        xlab = "milliseconds", ylab = "pupil diameter (mm)", 
+        main = "Aligned to Decision Window Start",
+        xlim = c(-baseline_window_width, 3000), ylim = c(2, 6))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
+     y = rowMeans(mean_decision_start_array, na.rm = T), 
+     lwd = 3, col = 'black')
+abline(v = 0, lty = 'dashed')
+
+# pre-dec window, up until 3000 ms into the 4000ms response window
+
+matplot(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2, 
+        y = mean_decision_end_array,
+        col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
+        xlab = "milliseconds", ylab = "pupil diameter (mm)", 
+        main = "Aligned to Choice",
+        xlim = c(-3000, baseline_window_width), ylim = c(2, 6))
+lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2, 
+      y = rowMeans(mean_decision_end_array, na.rm = T), 
+      lwd = 3, col = 'black')
+abline(v = 0, lty = 'dotted')
+
+# the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
+dev.off()
 
 
 ## Regressions #################
