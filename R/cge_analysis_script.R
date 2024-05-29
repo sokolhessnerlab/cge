@@ -7,7 +7,7 @@
 rm(list=ls()); # Clear the workspace
 
 
-# STEP 1: SET YOUR WORKING DIRECTORY!
+# STEP 1: SET YOUR WORKING DIRECTORY! ###################################
 # On PSH's computers...
 setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # On Von's PC Laptop "tabletas"...
@@ -18,7 +18,7 @@ Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
 # STEP 2: then run from here on the same
 config = config::get()
 
-#### Loading Data #### 
+# Loading Data ######################################## 
 setwd(config$path$data$processed)
 
 # #Von's 
@@ -41,7 +41,7 @@ survey_data = read.csv(fn[number_of_files]) # working memory data
 
 number_of_subjects = length(unique(data_dm$subjectnumber));
 
-#### Data Quality Checks & Exclusions ####
+# Data Quality Checks & Exclusions ############################################
 
 # Exclude on the basis of DM task performance
 # (using... check trials, RTs, choices)
@@ -102,12 +102,12 @@ clean_data_survey = survey_data[survey_data$subjectID %in% keep_participants,]
 number_of_clean_subjects = length(keep_participants); 
 number_of_clean_subjects # 85 participants (4/5/24)
 
-#### BASIC DATA ANALYSIS ####
+# BASIC DATA ANALYSIS ############################################
 
 # (Separately for DM & WM, & Qualtrics data)
 # Descriptives & simple averages of task performance
 
-#### Survey Analysis #### 
+## Survey Analysis ############################################
 library(corrplot)
 
 # DATA: age, ethnicity, education, firstgen, politicalorientation, IUS_probability, IUS_inihibitory, IUS, NCS, SNS_ability, SNS_preference, SNS, PSS
@@ -202,7 +202,7 @@ clean_data_dm$PSS_HighP1_LowN1 = (clean_data_dm$PSS >= median(clean_data_survey$
 
 
 
-#### DM task Analysis ####
+# DM task Analysis ############################################
 # Analysis for static trials: Mean p(gamble), optimization
 mean_pgamble = array(dim = c(number_of_clean_subjects,1));
 static_mean_pgamble = array(dim = c(number_of_clean_subjects, 1));
@@ -295,7 +295,7 @@ t.test(abs(easyACC_mean_pgamble-.5), abs(easyREJ_mean_pgamble-.5), paired = T) #
 # A: Yes, we can treat all easy trials as similarly easy (whether easy ACC or REJ), not sig different 2/9/24
 
 
-#### Optimization Function Creation ####
+## Optimization Function Creation ############################################
 
 # Function to calculate choice probabilities
 choice_probability <- function(parameters, choiceset) {
@@ -353,7 +353,7 @@ negLLprospect_cge <- function(parameters,choiceset,choices) {
 }
 
 
-#### Optimization ####
+## Optimization ############################################
 eps = .Machine$double.eps;
 lower_bounds = c(eps, 0); # R, M
 upper_bounds = c(2,80); 
@@ -424,7 +424,7 @@ for (subj in 1:number_of_clean_subjects){
 }
 
 
-#### Grid Search ####
+## Grid Search ############################################
 
 ### Q: Does optimized analysis match grid search analysis?###
 
@@ -532,7 +532,7 @@ hist(estimated_parameters[,2], xlim = c(0,upper_bounds[2]),
 lines(x = c(mean_params[2], mean_params[2]), y = c(0,50), col = 'orange', lwd = 5, lend = 'butt')
 # Seems positively skewed. Around 20-30.
 
-#### Setup for Regressions ####
+## Setup for Regressions ############################################
 
 ### Create Continuous difficulty metric ###
 clean_data_dm$diff_cont = abs(abs(clean_data_dm$choiceP - 0.5)*2-1); # JUST for the easy/difficult dynamic trials
@@ -566,7 +566,7 @@ clean_data_dm$prev8_all_diff_cont[clean_data_dm$trialnumber == 1] = NA;
 # DIFFICULT = 1
 
 
-#### Basic RT analysis ####
+## Basic RT analysis ############################################
 
 # Q:DO RT differ across conditions? Reaction times for easy risky, easy safe, and hard (hard > easy (either))
 #mean easy RT 
@@ -689,7 +689,7 @@ lines(c(0,4), c(0,4))
 # A: yes they are very similar & not significantly different, what we want to see. CAN collapse easy REJ and easy ACC as "easy"
 
 
-#### SUBSEQUENT DIFFICULTY ANALYSIS ####
+## SUBSEQUENT DIFFICULTY ANALYSIS ############################################
 
 #Q:Does RT change depending on subsequent trial types? # Something Anna wanted to examine - Underpowered?
 #mean RT subsequent #
@@ -835,7 +835,7 @@ abline(h = median_compositespan, col = 'red', lwd = 2)
 
 
 
-#### Regressions ####
+## RT Regressions ############################################
 
 # RT on trials regressions
 library(lme4)
@@ -1645,7 +1645,7 @@ summary(m3_best_IUS_SNS_full) # AIC -6452; worse than mostly-interactive version
 
 
 
-#### Individual Regressions ####
+### Individual Regressions ############################################
 
 model_summaries = list()
 lm_estimates = array(data = NA, dim = c(number_of_clean_subjects,4)); # 4 estimates
@@ -1696,7 +1696,7 @@ cor.test(lm_estimates[,3], compositeSpanScores[keep_participants]) # POSITIVE*, 
 
 
 
-#### Throwing In The Towel ####
+### Throwing In The Towel ############################################
 
 ### Explaining lower RTs (faster choices) after difficult trials: 
 # Are low-capacity participants "throwing in the towel" after difficult choices, or 
@@ -2032,8 +2032,13 @@ abline(v = 0, lty = 'dotted')
 # the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
 dev.off()
 
+### Next Steps #####################
+# 1. Reconsider baseline correction. 
+# 2. Make ISI/Outcome/ITI plot
+# 3. Make Easy & Difficult versions (separate graphs and/or combined for comparison)
 
-## Regressions #################
+
+## Pupil Regressions #################
 
 ### Using continuous difficulty #################
 m0_pupil_decision_cont = lmer(decision_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best + 
