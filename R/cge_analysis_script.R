@@ -1973,6 +1973,65 @@ abline(v = 0, lty = 'dotted')
 # the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
 dev.off()
 
+# Plot JUST the group means
+sem <- function(x){
+  if(!is.null(dim(x))){ # if x is 2-dimensional
+    sem_value = array(dim = dim(x)[1]) # make SEM vector assuming ROWS
+    for (row_num in 1:dim(x)[1]){
+      sem_value[row_num] = sd(x[row_num,], na.rm = T)/sqrt(sum(!is.na(x[row_num,])))
+    }
+  } else { # if unidimensional
+    sem_value = sd(x, na.rm = T)/sqrt(sum(!is.na(x)))
+  }
+  return(sem_value)
+}
+
+sem_decision_start_array = sem(mean_decision_start_array)
+sem_decision_end_array = sem(mean_decision_end_array)
+
+decision_start_upper = rowMeans(mean_decision_start_array, na.rm = T) + sem_decision_start_array
+decision_start_lower = rowMeans(mean_decision_start_array, na.rm = T) - sem_decision_start_array
+
+decision_end_upper = rowMeans(mean_decision_end_array, na.rm = T) + sem_decision_end_array
+decision_end_lower = rowMeans(mean_decision_end_array, na.rm = T) - sem_decision_end_array
+
+sem_decision_start_x_vals = c(decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+               rev(decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2))
+sem_decision_end_x_vals = c(decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2,
+                              rev(decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2))
+
+pdf(sprintf('%s/plots/mean_downsampled_decision_plot_groupOnly.pdf',config$path$data$processed),
+    width = 5, height = 8)
+
+par(mfrow = c(2,1)); # Set up the individual-level plot
+# Pre-decision | Decision Start
+plot(1, type = 'n',
+     xlab = "milliseconds", ylab = "pupil diameter (mm)", 
+     main = "Aligned to Decision Window Start",
+     xlim = c(-baseline_window_width, 3000), ylim = c(min(decision_start_lower),max(decision_start_upper)))
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_upper,rev(decision_start_lower)), 
+        lty = 0, col = rgb(0,0,0,.2))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
+      y = rowMeans(mean_decision_start_array, na.rm = T), type = 'l',
+      lwd = 3, col = 'black')
+abline(v = 0, lty = 'dashed')
+
+# pre-dec window, up until 3000 ms into the 4000ms response window
+
+plot(1, type = 'n',
+     xlab = "milliseconds", ylab = "pupil diameter (mm)", 
+     main = "Aligned to Choice",
+     xlim = c(-3000, baseline_window_width), ylim = c(min(decision_start_lower),max(decision_start_upper)))
+polygon(x = sem_decision_end_x_vals,y = c(decision_end_upper,rev(decision_end_lower)), 
+        lty = 0, col = rgb(0,0,0,.2))
+lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2, 
+      y = rowMeans(mean_decision_end_array, na.rm = T), type = 'l',
+      lwd = 3, col = 'black')
+abline(v = 0, lty = 'dotted')
+
+# the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
+dev.off()
+
 
 ## Regressions #################
 
