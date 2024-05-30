@@ -1871,6 +1871,12 @@ segments(x0 = 1:number_of_clean_subjects, x1 = 1:number_of_clean_subjects,
          y1 = ci_pupil_dilations[2,sort_order])
 dev.off()
 
+# There is in fact quite a bit of variation in mean pupil dilation, and as the
+# above graphs make clear, people are at very different levels overall.
+# Correcting for this might be unavoidable. There is also variability IN the
+# variability (i.e. some people are highly variable, others much less so), and
+# that may *also* need correction eventually via Z-scoring.
+
 
 ## Plotting Downsampled Pupillometry ####################
 ### Per-Subject Plots ###########################
