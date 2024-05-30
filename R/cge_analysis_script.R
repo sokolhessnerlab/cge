@@ -7,7 +7,9 @@
 rm(list=ls()); # Clear the workspace
 
 
-# STEP 1: SET YOUR WORKING DIRECTORY! ###################################
+# Setting Up ###################################
+
+# STEP 1: Set the working directory
 # On PSH's computers...
 setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # On Von's PC Laptop "tabletas"...
@@ -1812,6 +1814,64 @@ summary(likmodel_contDiff_catCap)
 
 # Pupillometry Analyses #################
 
+# SEM function
+sem <- function(x){
+  if(!is.null(dim(x))){ # if x is 2-dimensional
+    sem_value = array(dim = dim(x)[1]) # make SEM vector assuming ROWS
+    for (row_num in 1:dim(x)[1]){
+      sem_value[row_num] = sd(x[row_num,], na.rm = T)/sqrt(sum(!is.na(x[row_num,])))
+    }
+  } else { # if unidimensional
+    sem_value = sd(x, na.rm = T)/sqrt(sum(!is.na(x)))
+  }
+  return(sem_value)
+}
+
+## Characterizing Overall Pupillometric Variability Across Participants ##############################
+
+mean_pupil_dilations = array(dim = c(number_of_clean_subjects)) # mean pupil dilation
+sd_pupil_dilations = array(dim = c(number_of_clean_subjects)) # standard deviation
+ci_pupil_dilations = array(dim = c(2,number_of_clean_subjects)) # 95% CI
+
+for (s in keep_participants){
+  s_index = which(keep_participants == s);
+  
+  cat(sprintf('Subject CGE%03i (%i of %i)\n', s, s_index, length(keep_participants)))
+
+  # find their file...
+  tmp_downsampled_fn = dir(pattern = glob2rx(sprintf('cge%03i_et_processed_downsampled*.RData',s)),full.names = T, recursive = T);
+  # and load only the most recent downsampled data file
+  load(tmp_downsampled_fn[length(tmp_downsampled_fn)])
+  downsampled_et_data = as.data.frame(downsampled_et_data);
+  
+  mean_pupil_dilations[s_index] = mean(downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled, na.rm = T)
+  sd_pupil_dilations[s_index] = sd(downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled, na.rm = T)
+  ci_pupil_dilations[,s_index] = quantile(downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled, probs = c(0.025, 0.975), na.rm = T)
+}
+
+sort_order = order(mean_pupil_dilations)
+
+pdf(sprintf('%s/plots/mean_pupil_diameter_SDbars.pdf',config$path$data$processed),
+    width = 5, height = 5)
+plot(mean_pupil_dilations[sort_order], 
+     xlab = 'Participants', ylab = 'Diameter (mm)', main = 'Mean Pupil Diameter by Subject (w/ S.D.)',
+     pch = 20, ylim = c(2,7), xaxt = 'n')
+segments(x0 = 1:number_of_clean_subjects, x1 = 1:number_of_clean_subjects,
+         y0 = mean_pupil_dilations[sort_order] - sd_pupil_dilations[sort_order],
+         y1 = mean_pupil_dilations[sort_order] + sd_pupil_dilations[sort_order])
+dev.off()
+
+pdf(sprintf('%s/plots/mean_pupil_diameter_95CIbars.pdf',config$path$data$processed),
+    width = 5, height = 5)
+plot(mean_pupil_dilations[sort_order], 
+     xlab = 'Participants', ylab = 'Diameter (mm)', main = 'Mean Pupil Diameter by Subject (w/ 95% CIs)',
+     pch = 20, ylim = c(2,7), xaxt = 'n')
+segments(x0 = 1:number_of_clean_subjects, x1 = 1:number_of_clean_subjects,
+         y0 = ci_pupil_dilations[1,sort_order],
+         y1 = ci_pupil_dilations[2,sort_order])
+dev.off()
+
+
 ## Plotting Downsampled Pupillometry ####################
 ### Per-Subject Plots ###########################
 
@@ -1826,7 +1886,9 @@ mean_decision_start_array = array(data = NA, dim = c(length(decision_start_bins)
 mean_decision_end_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_subjects))
 
 for (s in keep_participants){
-  cat(sprintf('Subject %i of %i: trial 000', s, length(keep_participants)))
+  s_index = which(keep_participants == s);
+  
+  cat(sprintf('Subject CGE%03i (%i of %i): trial 000', s, s_index, length(keep_participants)))
   # Create NA-filled arrays to hold this one person's pupil trace data
   decision_start_array = array(data = NA, dim = c(170,length(decision_start_bins)-1))
   decision_end_array = array(data = NA, dim = c(170,length(decision_start_bins)-1))
@@ -1844,13 +1906,13 @@ for (s in keep_participants){
   # Pre-decision | Decision Start
   # Decision End | ISI | Outcome | ITI
   plot(1, type = "n", xlab = "milliseconds", ylab = "pupil diameter (mm)", main = "Aligned to Decision Window Start",
-       xlim = c(-baseline_window_width, 3000), ylim = c(2, 6))
+       xlim = c(-baseline_window_width, 3000), ylim = c(2, 7.5))
   abline(v = 0, lty = 'dashed')
   p1_coords = par('usr');
   # pre-dec window, up until 3000 ms into the 4000ms response window
   
   plot(1, type = "n", xlab = "milliseconds", ylab = "pupil diameter (mm)", main = "Aligned to Choice",
-       xlim = c(-3000, baseline_window_width), ylim = c(2, 6))
+       xlim = c(-3000, baseline_window_width), ylim = c(2, 7.5))
   abline(v = 0, lty = 'dotted')
   p2_coords = par('usr');
   # the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
@@ -1951,7 +2013,7 @@ matplot(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increme
         col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
         xlab = "milliseconds", ylab = "pupil diameter (mm)", 
         main = "Aligned to Decision Window Start",
-        xlim = c(-baseline_window_width, 3000), ylim = c(2, 6))
+        xlim = c(-baseline_window_width, 3000), ylim = c(2, 7.1))
 lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
      y = rowMeans(mean_decision_start_array, na.rm = T), 
      lwd = 3, col = 'black')
@@ -1964,7 +2026,7 @@ matplot(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2
         col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
         xlab = "milliseconds", ylab = "pupil diameter (mm)", 
         main = "Aligned to Choice",
-        xlim = c(-3000, baseline_window_width), ylim = c(2, 6))
+        xlim = c(-3000, baseline_window_width), ylim = c(2, 7.1))
 lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2, 
       y = rowMeans(mean_decision_end_array, na.rm = T), 
       lwd = 3, col = 'black')
@@ -1974,17 +2036,6 @@ abline(v = 0, lty = 'dotted')
 dev.off()
 
 # Plot JUST the group means
-sem <- function(x){
-  if(!is.null(dim(x))){ # if x is 2-dimensional
-    sem_value = array(dim = dim(x)[1]) # make SEM vector assuming ROWS
-    for (row_num in 1:dim(x)[1]){
-      sem_value[row_num] = sd(x[row_num,], na.rm = T)/sqrt(sum(!is.na(x[row_num,])))
-    }
-  } else { # if unidimensional
-    sem_value = sd(x, na.rm = T)/sqrt(sum(!is.na(x)))
-  }
-  return(sem_value)
-}
 
 sem_decision_start_array = sem(mean_decision_start_array)
 sem_decision_end_array = sem(mean_decision_end_array)
@@ -2035,7 +2086,10 @@ dev.off()
 ### Next Steps #####################
 # 1. Reconsider baseline correction. 
 # 2. Make ISI/Outcome/ITI plot
-# 3. Make Easy & Difficult versions (separate graphs and/or combined for comparison)
+# 3. Make Relative-Time Decision Window Plot
+# 4. Make Easy & Difficult versions (separate graphs and/or combined for comparison)
+#    (including curr. ease & difficulty, trial-wise plotted w/ color for cont. difficulty,
+#     previous ease/difficulty, prev & curr ease/difficulty)
 
 
 ## Pupil Regressions #################
