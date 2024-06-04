@@ -1884,22 +1884,27 @@ dev.off()
 ### Per-Subject Plots ###########################
 
 baseline_window_width = 500;
+dec_isi_otc_iti_window_width = 5000; # ITIs that were 3s long end at 5s after dec; other ITIs were 3.5s long
 
 bin_increment = 50; # ensure bins increment by multiples of 25ms
 
 decision_start_bins = seq(from = -baseline_window_width, to = 3000, by = bin_increment); 
 decision_end_bins = seq(from = -3000, to = baseline_window_width, by = bin_increment); 
+dec_isi_otc_iti_bins = seq(from = -baseline_window_width, to = 5000, by = bin_increment);
 
-mean_decision_start_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_subjects))
-mean_decision_end_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_subjects))
+mean_decision_start_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_clean_subjects))
+mean_decision_end_array = array(data = NA, dim = c(length(decision_end_bins)-1,number_of_clean_subjects))
+mean_dec_isi_otc_iti_array = array(data = NA, dim = c(length(dec_isi_otc_iti_bins)-1,number_of_clean_subjects))
+
+dec_isi_otc_iti_array = array(data = NA, dim = c(170, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects))
 
 for (s in keep_participants){
   s_index = which(keep_participants == s);
   
   cat(sprintf('Subject CGE%03i (%i of %i): trial 000', s, s_index, length(keep_participants)))
   # Create NA-filled arrays to hold this one person's pupil trace data
-  decision_start_array = array(data = NA, dim = c(170,length(decision_start_bins)-1))
-  decision_end_array = array(data = NA, dim = c(170,length(decision_start_bins)-1))
+  decision_start_array = array(data = NA, dim = c(170, length(decision_start_bins)-1))
+  decision_end_array = array(data = NA, dim = c(170, length(decision_end_bins)-1))
   
   # find their file...
   tmp_downsampled_fn = dir(pattern = glob2rx(sprintf('cge%03i_et_processed_downsampled*.RData',s)),full.names = T, recursive = T);
@@ -1998,6 +2003,23 @@ for (s in keep_participants){
         decision_end_array[t,b] = tmp_bin_mean;
       }
     }
+    
+    
+    # Dec/ISI/Otc/ITI
+    indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_end[t] - baseline_window_width)) & 
+      (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + dec_isi_otc_iti_window_width));
+    pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
+    time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
+    # par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
+    
+    # Put the mean values into the bins
+    for (b in 1:(length(decision_end_bins)-1)){
+      tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
+      if (!is.na(tmp_bin_mean)){
+        dec_isi_otc_iti_array[t,b,s_index] = tmp_bin_mean;
+      }
+    }
+    
   }
   
   par(usr = p1_coords)
@@ -2011,11 +2033,41 @@ for (s in keep_participants){
   
   dev.off() # complete the plot
   
-  mean_decision_start_array[,s] = colMeans(decision_start_array, na.rm = T)
-  mean_decision_end_array[,s] = colMeans(decision_end_array, na.rm = T)
+  mean_decision_start_array[,s_index] = colMeans(decision_start_array, na.rm = T)
+  mean_decision_end_array[,s_index] = colMeans(decision_end_array, na.rm = T)
+  mean_dec_isi_otc_iti_array[,s_index] = colMeans(dec_isi_otc_iti_array[,,s_index], na.rm = T)
   cat(sprintf('. Done.\n'))
 }
 
+
+# Plot the Dec/ISI/Otc/ITI Graphs
+for (s in keep_participants){
+  s_index = which(keep_participants == s);
+  
+  cat(sprintf('Subject CGE%03i (%i of %i): trial 000', s, s_index, length(keep_participants)))
+  
+  pdf(sprintf('%s/plots/cge%03i_downsampled_dec_isi_otc_iti_plot.pdf',config$path$data$processed, s),
+      width = 8, height = 4)
+  
+  # Decision End | ISI | Outcome | ITI
+  plot(1, type = "n", xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", main = "Aligned to Decision",
+       xlim = c(-baseline_window_width, dec_isi_otc_iti_window_width), ylim = c(-2, 2))
+  abline(v = 0, lty = 'dashed')
+
+  for (t in 1:number_of_trials){
+    cat(sprintf('\b\b\b%03i',t))
+    lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+          y = dec_isi_otc_iti_array[t,,s_index], col = rgb(0,0,0,.05), lwd = 3)
+  }
+  # Add the person's average
+  lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
+        y = mean_dec_isi_otc_iti_array[,s_index], col = rgb(1,0,0), lwd = 3)
+  dev.off() # complete the plot
+  cat(sprintf('. Done.\n'))
+}
+
+
+# Plot the downsampled Decisions
 pdf(sprintf('%s/plots/mean_downsampled_decision_plot.pdf',config$path$data$processed),
     width = 5, height = 8)
 
@@ -2024,7 +2076,7 @@ par(mfrow = c(2,1)); # Set up the individual-level plot
 matplot(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
         y = mean_decision_start_array,
         col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
-        xlab = "milliseconds", ylab = "pupil diameter (mm)", 
+        xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
         main = "Aligned to Decision Window Start",
         xlim = c(-baseline_window_width, 3000), ylim = c(-1, 1))
 lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
@@ -2037,7 +2089,7 @@ abline(v = 0, lty = 'dashed')
 matplot(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2, 
         y = mean_decision_end_array,
         col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
-        xlab = "milliseconds", ylab = "pupil diameter (mm)", 
+        xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
         main = "Aligned to Choice",
         xlim = c(-3000, baseline_window_width), ylim = c(-1, 1))
 lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2, 
@@ -2048,10 +2100,31 @@ abline(v = 0, lty = 'dotted')
 # the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
 dev.off()
 
+
+# Plot the downsampled dec/isi/otc/iti 
+pdf(sprintf('%s/plots/mean_downsampled_dec_isi_otc_iti_plot.pdf',config$path$data$processed),
+    width = 8, height = 4)
+
+matplot(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
+        y = mean_dec_isi_otc_iti_array,
+        col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
+        xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
+        main = "Aligned to Choice",
+        xlim = c(-baseline_window_width, dec_isi_otc_iti_window_width), ylim = c(-1, 1))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
+      y = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T), 
+      lwd = 3, col = 'black')
+abline(v = 0, lty = 'dashed')
+
+# the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
+dev.off()
+
+
 # Plot JUST the group means
 
 sem_decision_start_array = sem(mean_decision_start_array)
 sem_decision_end_array = sem(mean_decision_end_array)
+sem_dec_isi_otc_iti_array = sem(mean_dec_isi_otc_iti_array)
 
 decision_start_upper = rowMeans(mean_decision_start_array, na.rm = T) + sem_decision_start_array
 decision_start_lower = rowMeans(mean_decision_start_array, na.rm = T) - sem_decision_start_array
@@ -2059,10 +2132,15 @@ decision_start_lower = rowMeans(mean_decision_start_array, na.rm = T) - sem_deci
 decision_end_upper = rowMeans(mean_decision_end_array, na.rm = T) + sem_decision_end_array
 decision_end_lower = rowMeans(mean_decision_end_array, na.rm = T) - sem_decision_end_array
 
+dec_isi_otc_iti_upper = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T) + sem_dec_isi_otc_iti_array
+dec_isi_otc_iti_lower = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T) - sem_dec_isi_otc_iti_array
+
 sem_decision_start_x_vals = c(decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
                rev(decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2))
 sem_decision_end_x_vals = c(decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2,
                               rev(decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2))
+sem_dec_isi_otc_iti_x_vals = c(dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+                            rev(dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2))
 
 pdf(sprintf('%s/plots/mean_downsampled_decision_plot_groupOnly.pdf',config$path$data$processed),
     width = 5, height = 8)
@@ -2070,7 +2148,7 @@ pdf(sprintf('%s/plots/mean_downsampled_decision_plot_groupOnly.pdf',config$path$
 par(mfrow = c(2,1)); # Set up the individual-level plot
 # Pre-decision | Decision Start
 plot(1, type = 'n',
-     xlab = "milliseconds", ylab = "pupil diameter (mm)", 
+     xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
      main = "Aligned to Decision Window Start",
      xlim = c(-baseline_window_width, 3000), ylim = c(min(decision_start_lower),max(decision_start_upper)))
 polygon(x = sem_decision_start_x_vals,y = c(decision_start_upper,rev(decision_start_lower)), 
@@ -2083,7 +2161,7 @@ abline(v = 0, lty = 'dashed')
 # pre-dec window, up until 3000 ms into the 4000ms response window
 
 plot(1, type = 'n',
-     xlab = "milliseconds", ylab = "pupil diameter (mm)", 
+     xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
      main = "Aligned to Choice",
      xlim = c(-3000, baseline_window_width), ylim = c(min(decision_start_lower),max(decision_start_upper)))
 polygon(x = sem_decision_end_x_vals,y = c(decision_end_upper,rev(decision_end_lower)), 
@@ -2093,11 +2171,27 @@ lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2,
       lwd = 3, col = 'black')
 abline(v = 0, lty = 'dotted')
 
-# the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
 dev.off()
 
+
+
+pdf(sprintf('%s/plots/mean_downsampled_dec_isi_otc_iti_plot_groupOnly.pdf',config$path$data$processed),
+    width = 5, height = 8)
+plot(1, type = 'n',
+     xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
+     main = "Aligned to Choice",
+     xlim = c(-baseline_window_width, dec_isi_otc_iti_window_width), ylim = c(min(dec_isi_otc_iti_lower),max(dec_isi_otc_iti_upper)))
+polygon(x = sem_dec_isi_otc_iti_x_vals, 
+        y = c(dec_isi_otc_iti_upper,rev(dec_isi_otc_iti_lower)), 
+        lty = 0, col = rgb(0,0,0,.2))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
+      y = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T), type = 'l',
+      lwd = 3, col = 'black')
+abline(v = 0, lty = 'dashed')
+dev.off()
+
+
 ### Next Steps #####################
-# 1. Reconsider baseline correction. 
 # 2. Make ISI/Outcome/ITI plot
 # 3. Make Relative-Time Decision Window Plot
 # 4. Make Easy & Difficult versions (separate graphs and/or combined for comparison)
