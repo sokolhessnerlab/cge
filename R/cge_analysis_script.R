@@ -2013,7 +2013,7 @@ for (s in keep_participants){
     # par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
     
     # Put the mean values into the bins
-    for (b in 1:(length(decision_end_bins)-1)){
+    for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
       tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
       if (!is.na(tmp_bin_mean)){
         dec_isi_otc_iti_array[t,b,s_index] = tmp_bin_mean;
@@ -2052,6 +2052,9 @@ for (s in keep_participants){
   # Decision End | ISI | Outcome | ITI
   plot(1, type = "n", xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", main = "Aligned to Decision",
        xlim = c(-baseline_window_width, dec_isi_otc_iti_window_width), ylim = c(-2, 2))
+  polygon(x = c(1000, 2000, 2000, 1000),
+          y = c(3, 3, -3, -3), 
+          lty = 0, col = rgb(0,0,0,.1))
   abline(v = 0, lty = 'dashed')
 
   for (t in 1:number_of_trials){
@@ -2176,11 +2179,14 @@ dev.off()
 
 
 pdf(sprintf('%s/plots/mean_downsampled_dec_isi_otc_iti_plot_groupOnly.pdf',config$path$data$processed),
-    width = 5, height = 8)
+    width = 8, height = 4)
 plot(1, type = 'n',
      xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
      main = "Aligned to Choice",
      xlim = c(-baseline_window_width, dec_isi_otc_iti_window_width), ylim = c(min(dec_isi_otc_iti_lower),max(dec_isi_otc_iti_upper)))
+polygon(x = c(1000, 2000, 2000, 1000),
+        y = c(3, 3, -3, -3), 
+        lty = 0, col = rgb(0,0,0,.1))
 polygon(x = sem_dec_isi_otc_iti_x_vals, 
         y = c(dec_isi_otc_iti_upper,rev(dec_isi_otc_iti_lower)), 
         lty = 0, col = rgb(0,0,0,.2))
