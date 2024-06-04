@@ -104,6 +104,8 @@ clean_data_survey = survey_data[survey_data$subjectID %in% keep_participants,]
 number_of_clean_subjects = length(keep_participants); 
 number_of_clean_subjects # 85 participants (4/5/24)
 
+
+
 # BASIC DATA ANALYSIS ############################################
 
 # (Separately for DM & WM, & Qualtrics data)
@@ -1905,20 +1907,25 @@ for (s in keep_participants){
   load(tmp_downsampled_fn[length(tmp_downsampled_fn)])
   downsampled_et_data = as.data.frame(downsampled_et_data);
   
+  # Baseline correct all ET data to the MEAN PUPIL DIAMETER
+  downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled - 
+    mean(downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled, na.rm = T);
+  
+  # Prep Subject-Level Decision Plot
   pdf(sprintf('%s/plots/cge%03i_downsampled_decision_plot.pdf',config$path$data$processed, s),
       width = 5, height = 8)
   
   par(mfrow = c(2,1)); # Set up the individual-level plot
   # Pre-decision | Decision Start
   # Decision End | ISI | Outcome | ITI
-  plot(1, type = "n", xlab = "milliseconds", ylab = "pupil diameter (mm)", main = "Aligned to Decision Window Start",
-       xlim = c(-baseline_window_width, 3000), ylim = c(2, 7.5))
+  plot(1, type = "n", xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", main = "Aligned to Decision Window Start",
+       xlim = c(-baseline_window_width, 3000), ylim = c(-2, 2))
   abline(v = 0, lty = 'dashed')
   p1_coords = par('usr');
   # pre-dec window, up until 3000 ms into the 4000ms response window
   
-  plot(1, type = "n", xlab = "milliseconds", ylab = "pupil diameter (mm)", main = "Aligned to Choice",
-       xlim = c(-3000, baseline_window_width), ylim = c(2, 7.5))
+  plot(1, type = "n", xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", main = "Aligned to Choice",
+       xlim = c(-3000, baseline_window_width), ylim = c(-2, 2))
   abline(v = 0, lty = 'dotted')
   p2_coords = par('usr');
   # the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
@@ -2019,7 +2026,7 @@ matplot(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increme
         col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
         xlab = "milliseconds", ylab = "pupil diameter (mm)", 
         main = "Aligned to Decision Window Start",
-        xlim = c(-baseline_window_width, 3000), ylim = c(2, 7.1))
+        xlim = c(-baseline_window_width, 3000), ylim = c(-1, 1))
 lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
      y = rowMeans(mean_decision_start_array, na.rm = T), 
      lwd = 3, col = 'black')
@@ -2032,7 +2039,7 @@ matplot(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2
         col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
         xlab = "milliseconds", ylab = "pupil diameter (mm)", 
         main = "Aligned to Choice",
-        xlim = c(-3000, baseline_window_width), ylim = c(2, 7.1))
+        xlim = c(-3000, baseline_window_width), ylim = c(-1, 1))
 lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2, 
       y = rowMeans(mean_decision_end_array, na.rm = T), 
       lwd = 3, col = 'black')
