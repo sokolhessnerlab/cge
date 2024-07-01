@@ -3,6 +3,8 @@
 # Script to analyze the data collected online during Summer 2022 in the CGT
 # (Control & Gambling Task) study.
 
+# showing sophie githubs
+
 rm(list=ls()); # Clear the workspace
 
 # identify the working directory paths
@@ -49,9 +51,9 @@ mean_rts = array(dim = c(number_of_subjects,1));
 
 for (subj in 1:number_of_subjects){
   tmpdata = data_dm[data_dm$subjectnumber == subj,];
-  
+
   mean_rts[subj] = mean(tmpdata$reactiontime, na.rm = T)
-  
+
   # correct_answers = (reactiontime >= 0.25) #I don't think we need a top cut off based upon distribution mainly around 1 second, anything above 0.2 seconds
   # incorrect_answers = (reactiontime == is.NaN) #if no response and not correct answers
 }
