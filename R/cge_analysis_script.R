@@ -1893,11 +1893,23 @@ decision_start_bins = seq(from = -baseline_window_width, to = 3000, by = bin_inc
 decision_end_bins = seq(from = -3000, to = baseline_window_width, by = bin_increment); 
 dec_isi_otc_iti_bins = seq(from = -pre_dec_window_width, to = 5000, by = bin_increment);
 
+dec_isi_otc_iti_array = array(data = NA, dim = c(170, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects)) # trials x bins x subjects
+
+# overall arrays
 mean_decision_start_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_clean_subjects))
 mean_decision_end_array = array(data = NA, dim = c(length(decision_end_bins)-1,number_of_clean_subjects))
 mean_dec_isi_otc_iti_array = array(data = NA, dim = c(length(dec_isi_otc_iti_bins)-1,number_of_clean_subjects))
 
-dec_isi_otc_iti_array = array(data = NA, dim = c(170, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects))
+# easy/difficult arrays
+# TRIAL-level
+decision_start_EvD_array = array(data = NA, dim = c(60, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects, 2)) # trials x bins x subjects x Easy/Difficult
+dec_isi_otc_iti_EvD_array = array(data = NA, dim = c(60, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects, 2)) # trials x bins x subjects x Easy/Difficult
+# There are 120 dynamic trials: 60 easy & 60 difficult
+
+# SUBJECT-level
+mean_decision_start_EvD_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_clean_subjects, 2)) # ... by 2 for easy/difficult
+mean_dec_isi_otc_iti_EvD_array = array(data = NA, dim = c(length(dec_isi_otc_iti_bins)-1,number_of_clean_subjects, 2)) # ... by 2 for easy/difficult
+
 
 for (s in keep_participants){
   s_index = which(keep_participants == s);
