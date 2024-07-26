@@ -1885,12 +1885,13 @@ dev.off()
 
 baseline_window_width = 500;
 dec_isi_otc_iti_window_width = 5000; # ITIs that were 3s long end at 5s after dec; other ITIs were 3.5s long
+pre_dec_window_width = 1500;
 
 bin_increment = 50; # ensure bins increment by multiples of 25ms
 
 decision_start_bins = seq(from = -baseline_window_width, to = 3000, by = bin_increment); 
 decision_end_bins = seq(from = -3000, to = baseline_window_width, by = bin_increment); 
-dec_isi_otc_iti_bins = seq(from = -baseline_window_width, to = 5000, by = bin_increment);
+dec_isi_otc_iti_bins = seq(from = -pre_dec_window_width, to = 5000, by = bin_increment);
 
 mean_decision_start_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_clean_subjects))
 mean_decision_end_array = array(data = NA, dim = c(length(decision_end_bins)-1,number_of_clean_subjects))
@@ -2006,7 +2007,7 @@ for (s in keep_participants){
     
     
     # Dec/ISI/Otc/ITI
-    indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_end[t] - baseline_window_width)) & 
+    indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_end[t] - pre_dec_window_width)) & 
       (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + dec_isi_otc_iti_window_width));
     pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
     time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
@@ -2051,7 +2052,7 @@ for (s in keep_participants){
   
   # Decision End | ISI | Outcome | ITI
   plot(1, type = "n", xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", main = "Aligned to Decision",
-       xlim = c(-baseline_window_width, dec_isi_otc_iti_window_width), ylim = c(-2, 2))
+       xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(-2, 2))
   polygon(x = c(1000, 2000, 2000, 1000),
           y = c(3, 3, -3, -3), 
           lty = 0, col = rgb(0,0,0,.1))
@@ -2113,7 +2114,7 @@ matplot(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_incre
         col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
         xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
         main = "Aligned to Choice",
-        xlim = c(-baseline_window_width, dec_isi_otc_iti_window_width), ylim = c(-1, 1))
+        xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(-.5, .5))
 lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
       y = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T), 
       lwd = 3, col = 'black')
@@ -2183,7 +2184,7 @@ pdf(sprintf('%s/plots/mean_downsampled_dec_isi_otc_iti_plot_groupOnly.pdf',confi
 plot(1, type = 'n',
      xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
      main = "Aligned to Choice",
-     xlim = c(-baseline_window_width, dec_isi_otc_iti_window_width), ylim = c(min(dec_isi_otc_iti_lower),max(dec_isi_otc_iti_upper)))
+     xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(min(dec_isi_otc_iti_lower),max(dec_isi_otc_iti_upper)))
 polygon(x = c(1000, 2000, 2000, 1000),
         y = c(3, 3, -3, -3), 
         lty = 0, col = rgb(0,0,0,.1))
