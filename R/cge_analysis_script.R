@@ -2082,7 +2082,7 @@ for (s in keep_participants){
       for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
         tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
         if (!is.na(tmp_bin_mean)){
-          dec_isi_otc_iti_EvD_array[cum_easy_trial_num, b, s_index, 2] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
+          dec_isi_otc_iti_EvD_array[cum_diff_trial_num, b, s_index, 2] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
         }
       }
     }
