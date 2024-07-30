@@ -642,6 +642,10 @@ rt_median_vartest = var.test(median_rt_easy,median_rt_diff); # F(84) = 0.36058, 
 rt_median_vartest
 # A: RTs are more variable across people for diff. than easy trials
 
+# differences between variance of RTs in conditions WITHIN person
+var_test_within = t.test(var_rt_easy,var_rt_diff, paired = T); # t(84) = -5.8504, p = 9.154e-08
+var_test_within
+
 yl = ceiling(max(c(max(mean_rt_diff),max(mean_rt_easy)))*10)/10
 plot(mean_rt_easy, mean_rt_diff, xlab = 'Easy trials', ylab = 'Difficult trials',
      main = 'Across-Participant Variances in RT',
@@ -649,10 +653,6 @@ plot(mean_rt_easy, mean_rt_diff, xlab = 'Easy trials', ylab = 'Difficult trials'
      xlim = c(0,yl), ylim = c(0,yl))
 lines(c(0,.6), c(0,.6), col = 'black', lty = 'dashed', lwd = 1.5)
 
-
-# differences between variance of RTs in conditions WITHIN person
-var_test_within = t.test(var_rt_easy,var_rt_diff, paired = T); # t(84) = -5.8504, p = 9.154e-08
-var_test_within
 
 
 yl = ceiling(max(c(max(var_rt_diff),max(var_rt_easy)))*10)/10
@@ -1902,7 +1902,7 @@ mean_dec_isi_otc_iti_array = array(data = NA, dim = c(length(dec_isi_otc_iti_bin
 
 # easy/difficult arrays
 # TRIAL-level
-decision_start_EvD_array = array(data = NA, dim = c(60, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects, 2)) # trials x bins x subjects x Easy/Difficult
+decision_start_EvD_array = array(data = NA, dim = c(60, length(decision_start_bins)-1, number_of_clean_subjects, 2)) # trials x bins x subjects x Easy/Difficult
 dec_isi_otc_iti_EvD_array = array(data = NA, dim = c(60, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects, 2)) # trials x bins x subjects x Easy/Difficult
 # There are 120 dynamic trials: 60 easy & 60 difficult
 
@@ -1915,6 +1915,9 @@ for (s in keep_participants){
   s_index = which(keep_participants == s);
   
   cat(sprintf('Subject CGE%03i (%i of %i): trial 000', s, s_index, length(keep_participants)))
+  
+  tmpdata = clean_data_dm[clean_data_dm$subjectnumber == s,]; # defines this person's BEHAVIORAL data
+  
   # Create NA-filled arrays to hold this one person's pupil trace data
   decision_start_array = array(data = NA, dim = c(170, length(decision_start_bins)-1))
   decision_end_array = array(data = NA, dim = c(170, length(decision_end_bins)-1))
@@ -1949,6 +1952,8 @@ for (s in keep_participants){
   # the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
   
   number_of_trials = length(event_timestamps[,1]);
+  cum_easy_trial_num = 0; # for use in indexing; will increment
+  cum_diff_trial_num = 0;
   
   for (t in 1:number_of_trials){
     cat(sprintf('\b\b\b%03i',t))
@@ -2017,7 +2022,35 @@ for (s in keep_participants){
       }
     }
     
+
     
+    # Decision Start-Aligned x EASY/DIFF
+    indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_start[t] - baseline_window_width)) & 
+      (downsampled_et_data$time_data_downsampled < event_timestamps$decision_end[t])
+    pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
+    time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_start[t];
+    # par(usr = p1_coords)
+    # par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
+    
+    # Put the mean values into the bins
+    if(tmpdata$easyP1difficultN1[t] == 1) {
+      cum_easy_trial_num = cum_easy_trial_num + 1;
+      for (b in 1:(length(decision_start_bins)-1)){
+        tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_start_bins[b]) & (time_tmp < decision_start_bins[b+1])], na.rm = T);
+        if (!is.na(tmp_bin_mean)){
+          decision_start_EvD_array[cum_easy_trial_num, b, s_index, 1] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
+        }
+      }
+    } else if (tmpdata$easyP1difficultN1[t] == -1) {
+      cum_diff_trial_num = cum_diff_trial_num + 1;
+      for (b in 1:(length(decision_start_bins)-1)){
+        tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_start_bins[b]) & (time_tmp < decision_start_bins[b+1])], na.rm = T);
+        if (!is.na(tmp_bin_mean)){
+          decision_start_EvD_array[cum_diff_trial_num, b, s_index, 2] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
+        }
+      }
+    }
+
     # Dec/ISI/Otc/ITI
     indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_end[t] - pre_dec_window_width)) & 
       (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + dec_isi_otc_iti_window_width));
@@ -2030,6 +2063,27 @@ for (s in keep_participants){
       tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
       if (!is.na(tmp_bin_mean)){
         dec_isi_otc_iti_array[t,b,s_index] = tmp_bin_mean;
+      }
+    }
+    
+    cum_easy_trial_num = 0;
+    cum_diff_trial_num = 0;
+    # Put the mean values into the bins
+    if(tmpdata$easyP1difficultN1[t] == 1) {
+      cum_easy_trial_num = cum_easy_trial_num + 1;
+      for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
+        tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
+        if (!is.na(tmp_bin_mean)){
+          dec_isi_otc_iti_EvD_array[cum_easy_trial_num, b, s_index, 1] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
+        }
+      }
+    } else if (tmpdata$easyP1difficultN1[t] == -1) {
+      cum_diff_trial_num = cum_diff_trial_num + 1;
+      for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
+        tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
+        if (!is.na(tmp_bin_mean)){
+          dec_isi_otc_iti_EvD_array[cum_easy_trial_num, b, s_index, 2] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
+        }
       }
     }
     
@@ -2049,6 +2103,11 @@ for (s in keep_participants){
   mean_decision_start_array[,s_index] = colMeans(decision_start_array, na.rm = T)
   mean_decision_end_array[,s_index] = colMeans(decision_end_array, na.rm = T)
   mean_dec_isi_otc_iti_array[,s_index] = colMeans(dec_isi_otc_iti_array[,,s_index], na.rm = T)
+
+  mean_decision_start_EvD_array[,s_index,1] = colMeans(decision_start_EvD_array[,,s_index,1], na.rm = T)
+  mean_decision_start_EvD_array[,s_index,2] = colMeans(decision_start_EvD_array[,,s_index,2], na.rm = T)
+  mean_dec_isi_otc_iti_EvD_array[,s_index,1] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,1], na.rm = T)
+  mean_dec_isi_otc_iti_EvD_array[,s_index,2] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,1], na.rm = T)
   cat(sprintf('. Done.\n'))
 }
 
@@ -2142,6 +2201,11 @@ sem_decision_start_array = sem(mean_decision_start_array)
 sem_decision_end_array = sem(mean_decision_end_array)
 sem_dec_isi_otc_iti_array = sem(mean_dec_isi_otc_iti_array)
 
+sem_decision_start_Easy_array = sem(mean_decision_start_EvD_array[,,1])
+sem_decision_start_Diff_array = sem(mean_decision_start_EvD_array[,,2])
+sem_dec_isi_otc_iti_Easy_array = sem(mean_dec_isi_otc_iti_EvD_array[,,1])
+sem_dec_isi_otc_iti_Diff_array = sem(mean_dec_isi_otc_iti_EvD_array[,,2])
+
 decision_start_upper = rowMeans(mean_decision_start_array, na.rm = T) + sem_decision_start_array
 decision_start_lower = rowMeans(mean_decision_start_array, na.rm = T) - sem_decision_start_array
 
@@ -2150,6 +2214,16 @@ decision_end_lower = rowMeans(mean_decision_end_array, na.rm = T) - sem_decision
 
 dec_isi_otc_iti_upper = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T) + sem_dec_isi_otc_iti_array
 dec_isi_otc_iti_lower = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T) - sem_dec_isi_otc_iti_array
+
+decision_start_Easy_upper = rowMeans(mean_decision_start_EvD_array[,,1], na.rm = T) + sem_decision_start_Easy_array
+decision_start_Easy_lower = rowMeans(mean_decision_start_EvD_array[,,1], na.rm = T) - sem_decision_start_Easy_array
+decision_start_Diff_upper = rowMeans(mean_decision_start_EvD_array[,,2], na.rm = T) + sem_decision_start_Diff_array
+decision_start_Diff_lower = rowMeans(mean_decision_start_EvD_array[,,2], na.rm = T) - sem_decision_start_Diff_array
+
+dec_isi_otc_iti_Easy_upper = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,1], na.rm = T) + sem_dec_isi_otc_iti_Easy_array
+dec_isi_otc_iti_Easy_lower = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,1], na.rm = T) - sem_dec_isi_otc_iti_Easy_array
+dec_isi_otc_iti_Diff_upper = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,2], na.rm = T) + sem_dec_isi_otc_iti_Diff_array
+dec_isi_otc_iti_Diff_lower = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,2], na.rm = T) - sem_dec_isi_otc_iti_Diff_array
 
 sem_decision_start_x_vals = c(decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
                rev(decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2))
@@ -2206,6 +2280,55 @@ polygon(x = sem_dec_isi_otc_iti_x_vals,
 lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
       y = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T), type = 'l',
       lwd = 3, col = 'black')
+abline(v = 0, lty = 'dashed')
+dev.off()
+
+
+
+pdf(sprintf('%s/plots/mean_downsampled_decision_plot_EvD_groupOnly.pdf',config$path$data$processed),
+    width = 5, height = 8)
+
+plot(1, type = 'n',
+     xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
+     main = "Aligned to Decision Window Start",
+     xlim = c(-baseline_window_width, 3000), ylim = c(min(decision_start_Easy_lower),max(decision_start_Easy_upper))) # use Easy to specify height
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_upper,rev(decision_start_Easy_lower)), 
+        lty = 0, col = rgb(0,0,1,.1)) # blue for easy
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Diff_upper,rev(decision_start_Diff_lower)), 
+        lty = 0, col = rgb(1,0,0,.1)) # red for difficult
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
+      y = rowMeans(mean_decision_start_EvD_array[,,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
+      y = rowMeans(mean_decision_start_EvD_array[,,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0))
+abline(v = 0, lty = 'dashed')
+
+dev.off()
+
+
+
+pdf(sprintf('%s/plots/mean_downsampled_dec_isi_otc_iti_plot_EvD_groupOnly.pdf',config$path$data$processed),
+    width = 8, height = 4)
+plot(1, type = 'n',
+     xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
+     main = "Aligned to Choice",
+     xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(min(dec_isi_otc_iti_Easy_lower),max(dec_isi_otc_iti_Easy_upper)))
+polygon(x = c(1000, 2000, 2000, 1000), # outcome
+        y = c(3, 3, -3, -3), 
+        lty = 0, col = rgb(0,0,0,.1))
+polygon(x = sem_dec_isi_otc_iti_x_vals, 
+        y = c(dec_isi_otc_iti_Easy_upper,rev(dec_isi_otc_iti_Easy_lower)), 
+        lty = 0, col = rgb(0,0,1,.1)) # blue (easy)
+polygon(x = sem_dec_isi_otc_iti_x_vals, 
+        y = c(dec_isi_otc_iti_Diff_upper,rev(dec_isi_otc_iti_Diff_lower)), 
+        lty = 0, col = rgb(1,0,0,.1)) # red (difficult)
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
+      y = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1)) # blue (easy) mean
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
+      y = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0)) # red (diff) mean
 abline(v = 0, lty = 'dashed')
 dev.off()
 
