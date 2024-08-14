@@ -2066,11 +2066,8 @@ for (s in keep_participants){
       }
     }
     
-    cum_easy_trial_num = 0;
-    cum_diff_trial_num = 0;
     # Put the mean values into the bins
     if(tmpdata$easyP1difficultN1[t] == 1) {
-      cum_easy_trial_num = cum_easy_trial_num + 1;
       for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
         tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
         if (!is.na(tmp_bin_mean)){
@@ -2078,7 +2075,6 @@ for (s in keep_participants){
         }
       }
     } else if (tmpdata$easyP1difficultN1[t] == -1) {
-      cum_diff_trial_num = cum_diff_trial_num + 1;
       for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
         tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
         if (!is.na(tmp_bin_mean)){
@@ -2107,7 +2103,7 @@ for (s in keep_participants){
   mean_decision_start_EvD_array[,s_index,1] = colMeans(decision_start_EvD_array[,,s_index,1], na.rm = T)
   mean_decision_start_EvD_array[,s_index,2] = colMeans(decision_start_EvD_array[,,s_index,2], na.rm = T)
   mean_dec_isi_otc_iti_EvD_array[,s_index,1] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,1], na.rm = T)
-  mean_dec_isi_otc_iti_EvD_array[,s_index,2] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,1], na.rm = T)
+  mean_dec_isi_otc_iti_EvD_array[,s_index,2] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,2], na.rm = T)
   cat(sprintf('. Done.\n'))
 }
 
@@ -2286,7 +2282,7 @@ dev.off()
 
 
 pdf(sprintf('%s/plots/mean_downsampled_decision_plot_EvD_groupOnly.pdf',config$path$data$processed),
-    width = 5, height = 8)
+    width = 5, height = 4)
 
 plot(1, type = 'n',
      xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
@@ -2331,6 +2327,10 @@ lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increme
       lwd = 3, col = rgb(1,0,0)) # red (diff) mean
 abline(v = 0, lty = 'dashed')
 dev.off()
+
+
+
+
 
 
 ### Next Steps #####################
