@@ -20,10 +20,10 @@ Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
 # STEP 2: then run from here on the same
 config = config::get()
 
-# Loading Data ######################################## 
+# Loading Data ########################################
 setwd(config$path$data$processed)
 
-# #Von's 
+# #Von's
 # setwd('S:/shlab/Projects/CGE/data/preprocessed')
 
 # Load Decision-Making Data
@@ -34,12 +34,12 @@ data_dm = read.csv(fn[number_of_files]) # decision-making data
 # Load Working Memory Data
 fn = dir(pattern = glob2rx('cge_processed_complexspan_data_*.csv'),full.names = T);
 number_of_files = length(fn) # ASSUMES YOU WANT THE MOST-RECENT PROCESSED DATA
-complexSpanScores = read.csv(fn[number_of_files]) # working memory data 
+complexSpanScores = read.csv(fn[number_of_files]) # working memory data
 
 # Load Qualtrics Survey Data
 fn = dir(pattern = glob2rx('cge_processed_survey_data_*.csv'),full.names = T);
 number_of_files = length(fn) # ASSUMES YOU WANT THE MOST-RECENT PROCESSED DATA
-survey_data = read.csv(fn[number_of_files]) # working memory data 
+survey_data = read.csv(fn[number_of_files]) # working memory data
 
 number_of_subjects = length(unique(data_dm$subjectnumber));
 
@@ -57,9 +57,9 @@ for (subj in 1:number_of_subjects){
   correct_answers = (0.5 * tmpdata$riskyopt1[check_trial_index] +
                        0.5 * tmpdata$riskyopt2[check_trial_index]) > tmpdata$safe[check_trial_index];
   check_trial_failurerate[subj] = length(which(!tmpdata$choice[check_trial_index] == correct_answers))/length(check_trial_index);
-  
+
   # Plot the choice data
-  plot(tmpdata$riskyopt1[tmpdata$choice == 1],tmpdata$safe[tmpdata$choice == 1], col = 'green', 
+  plot(tmpdata$riskyopt1[tmpdata$choice == 1],tmpdata$safe[tmpdata$choice == 1], col = 'green',
        xlab = 'Risky Gain $', ylab = 'Safe $', main = paste0('All Subjects; Subj ', subj),
        xlim = c(0,30), ylim = c(0,12))
   points(tmpdata$riskyopt1[tmpdata$choice == 0],tmpdata$safe[tmpdata$choice == 0], col = 'red')
@@ -77,7 +77,7 @@ mean_rts = array(dim = c(number_of_subjects,1));
 
 for (subj in 1:number_of_subjects){
   tmpdata = data_dm[data_dm$subjectnumber == subj,];
-  
+
   mean_rts[subj] = mean(tmpdata$reactiontime, na.rm = T)
 }
 
@@ -87,7 +87,7 @@ mean_rts[keep_dm_rt]
 hist(mean_rts[keep_dm_rt]) # histogram of mean rts
 mean(mean_rts[keep_dm_rt]) # mean rt 1.59362 seconds (4/4/24)
 
-### Survey Exclusions 
+### Survey Exclusions
 # quick responses to surveys (still figuring out how that should be done)
 # questionable pattern of responses to surveys (nail in the coffin)
 
@@ -101,7 +101,7 @@ clean_data_dm = data_dm[data_dm$subjectnumber %in% keep_participants,]
 clean_data_complexspan = complexSpanScores[complexSpanScores$subjectnumber %in% keep_participants,]
 clean_data_survey = survey_data[survey_data$subjectID %in% keep_participants,]
 
-number_of_clean_subjects = length(keep_participants); 
+number_of_clean_subjects = length(keep_participants);
 number_of_clean_subjects # 85 participants (4/5/24)
 
 
@@ -124,14 +124,46 @@ range(clean_data_survey$age) # 12-35 (4/5/24) I think there is a typo - cge074 p
 sd(clean_data_survey$age) # 2.63 years (4/5/24)
 hist(clean_data_survey$age)
 
-# Main Questionnaire Scores: 
+# Race (1 = American Indian/Alaska Native; 2 = Black/African-American; 3 = East Asian; 4 = Native Hawaiian/Pacific Islander; 5 = South Asian; 6 = White; 7 = Bi-/Multi-racial (text); 8 = Other (text); 9 = Prefer not to say)
+clean_data_survey$race # was never loaded for some reason
+sum(clean_data_survey$race == 1, na.rm = T) # 3
+sum(clean_data_survey$race == 2, na.rm = T) # 4
+sum(clean_data_survey$race == 3, na.rm = T) # 4
+sum(clean_data_survey$race == 4, na.rm = T) # 0
+sum(clean_data_survey$race == 5, na.rm = T) # 0
+sum(clean_data_survey$race == 6, na.rm = T) # 66
+sum(clean_data_survey$race == 7, na.rm = T) # 3
+sum(clean_data_survey$race == 8, na.rm = T) # 2
+sum(clean_data_survey$race == 9, na.rm = T) # 3
 
-# NCS
+# Gender of participants (1 = Man; 2 = Woman; 3 = Non-binary; 4 = Genderqueer; 5 = Gender expansive; 6 = Two-spirited; 7 = 3rd Gender; 8 = Agender; 9 = Not sure; 10 = Other(text); 11 = Prefer not to say)
+sum(clean_data_survey$gender == 1, na.rm = T) # 30
+sum(clean_data_survey$gender == 2, na.rm = T) # 47
+sum(clean_data_survey$gender == 3, na.rm = T) # 3
+sum(clean_data_survey$gender == 4, na.rm = T) # 1
+sum(clean_data_survey$gender == 5, na.rm = T) # 0
+sum(clean_data_survey$gender == 6, na.rm = T) # 0
+sum(clean_data_survey$gender == 7, na.rm = T) # 0
+sum(clean_data_survey$gender == 8, na.rm = T) # 0
+sum(clean_data_survey$gender == 9, na.rm = T) # 0
+sum(clean_data_survey$gender == 10, na.rm = T) # 1
+sum(clean_data_survey$gender == 11, na.rm = T) # 0
+
+
+# Ethnicity of participants (1 = Hispanic/Latinx; 2 = Not Hispanic/Latinx; 3 = Prefer not to say)
+sum(clean_data_survey$ethnicity == 1, na.rm = T) # 12
+sum(clean_data_survey$ethnicity == 2, na.rm = T) # 73
+sum(clean_data_survey$ethnicity == 3, na.rm = T) # 0
+
+
+# Main Questionnaire Scores:
+
+# NCS - might be positive motivation to exert effort
 mean(clean_data_survey$NCS, na.rm = T) # M = 59.40476
 sd(clean_data_survey$NCS, na.rm = T) # SD = 10.85293
 median(clean_data_survey$NCS, na.rm = T) # 60
 range(clean_data_survey$NCS, na.rm = T) # 39-80
-# IUS
+# IUS - might be negative motivation to exert effort
 mean(clean_data_survey$IUS, na.rm = T) # M = 33.82143
 sd(clean_data_survey$IUS, na.rm = T) # SD = 8.067726
 median(clean_data_survey$IUS, na.rm = T) # 33
@@ -150,10 +182,10 @@ range(clean_data_survey$PSS, na.rm = T) # 7-43
 cor_matrix = cor(cbind(clean_data_survey[,c('NCS','IUS','SNS','PSS')],clean_data_complexspan['compositeSpanScore']),
                  use = 'complete.obs');
 cor.test(clean_data_survey$NCS, clean_data_survey$IUS) # r(82) = -0.239142, p = 0.02846
-cor.test(clean_data_survey$NCS, clean_data_survey$SNS) # n.s., r(82) = 0.1917, p = 0.08066 
+cor.test(clean_data_survey$NCS, clean_data_survey$SNS) # n.s., r(82) = 0.1917, p = 0.08066
 cor.test(clean_data_survey$NCS, clean_data_survey$PSS) # r(82) = -0.2855222, p = 0.008471
-cor.test(clean_data_survey$IUS, clean_data_survey$SNS) # n.s., r(82) = 0.139341, p = 0.2062
-cor.test(clean_data_survey$IUS, clean_data_survey$PSS) # r(82) = 0.4737519, p = 5.321e-06 
+cor.test(clean_data_survey$IUS, clean_data_survey$SNS) # n.s., r(82) = 0.139341, p = 0.2062 # using both in EDI
+cor.test(clean_data_survey$IUS, clean_data_survey$PSS) # r(82) = 0.4737519, p = 5.321e-06
 cor.test(clean_data_survey$SNS, clean_data_survey$PSS) # n.s., r(82) = -0.1120716, p = 0.3101
 cor.test(clean_data_survey$NCS, clean_data_complexspan$compositeSpanScore) # n.s., r(79) = 0.04481055, p = 0.6912
 cor.test(clean_data_survey$IUS, clean_data_complexspan$compositeSpanScore) # n.s., r(79) = -0.003903688, p = 0.9724
@@ -179,7 +211,7 @@ corrplot(cor_matrix, type = 'lower')
 # Because of several inter-item correlations, it's not wise to include these in the same model
 # and we should expect some of these to perform similarly (i.e. PSS & IUS may be similar).
 # However, because they're unrelated to composite span, we can freely include them alongside
-# composite working memory span (and related variables). 
+# composite working memory span (and related variables).
 
 par(mfrow = c(2,2)) # Allowing graphs to plot 2 x 2
 hist(clean_data_survey$NCS, ylab = '', xlab = 'Score', main = 'Need for Cognition (NCS)')
@@ -196,14 +228,12 @@ abline(v = mean(clean_data_survey$PSS, na.rm = T), col = 'magenta', lwd = 5)
 
 par(mfrow = c(1,1)) # Returning graphs to plot 1 at a time
 
-# Make binary categorical variables for clean_data_dm based on each of the major Surveys (Con) Why empty when called?
-
+# Make binary categorical variables for clean_data_dm based on each of the major Surveys - Median splits
 
 clean_data_dm$NCS_HighP1_LowN1 = (clean_data_dm$NCS >= median(clean_data_survey$NCS, na.rm = T))*2-1;
 clean_data_dm$IUS_HighP1_LowN1 = (clean_data_dm$IUS >= median(clean_data_survey$IUS, na.rm = T))*2-1;
 clean_data_dm$SNS_HighP1_LowN1 = (clean_data_dm$SNS >= median(clean_data_survey$SNS, na.rm = T))*2-1;
 clean_data_dm$PSS_HighP1_LowN1 = (clean_data_dm$PSS >= median(clean_data_survey$PSS, na.rm = T))*2-1;
-
 
 
 # DM task Analysis ############################################
@@ -226,9 +256,9 @@ for (subj in 1:number_of_clean_subjects){
   diff_mean_pgamble[subj] = mean(tmpdata$choice[tmpdata$easyP1difficultN1 == -1], na.rm = T);
   easyACC_mean_pgamble[subj] = mean(tmpdata$choice[(tmpdata$easyP1difficultN1 == 1) & (tmpdata$choiceP > .5)], na.rm = T);
   easyREJ_mean_pgamble[subj] = mean(tmpdata$choice[(tmpdata$easyP1difficultN1 == 1) & (tmpdata$choiceP < .5)], na.rm = T);
-  
+
   # Plot the choice data
-  plot(tmpdata$riskyopt1[tmpdata$choice == 1],tmpdata$safe[tmpdata$choice == 1], col = 'green', 
+  plot(tmpdata$riskyopt1[tmpdata$choice == 1],tmpdata$safe[tmpdata$choice == 1], col = 'green',
        xlab = 'Risky Gain $', ylab = 'Safe $', main = paste0('Kept Subjects; Subj ', subj_id),
        xlim = c(0,30), ylim = c(0,12))
   points(tmpdata$riskyopt1[tmpdata$choice == 0],tmpdata$safe[tmpdata$choice == 0], col = 'red')
@@ -238,10 +268,10 @@ for (subj in 1:number_of_clean_subjects){
 column_names_rdm = c(
   'mean_pgamble',
   'static_mean_pgamble',
-  'dynamic_mean_pgamble', 
+  'dynamic_mean_pgamble',
   'easy_mean_pgamble',
-  'diff_mean_pgamble', 
-  'easyACC_mean_pgamble', 
+  'diff_mean_pgamble',
+  'easyACC_mean_pgamble',
   'easyREJ_mean_pgamble'
 );
 
@@ -277,18 +307,18 @@ max(mean_pgamble) # 0.8235294
 # e.g. easy accept vs. easy reject vs. difficult
 hist(easyACC_mean_pgamble,
      col = rgb(0,1,0,.5), breaks = seq(from = 0, to = 1, by = 0.05), xlim = c(0,1),
-     xlab = 'Mean Probability of Risk-Taking', ylab = 'Frequency', 
+     xlab = 'Mean Probability of Risk-Taking', ylab = 'Frequency',
      main = 'Average Risk-Taking Behavior By Trial Type')
 hist(easyREJ_mean_pgamble,
      col = rgb(1,0,0,.5), breaks = seq(from = 0, to = 1, by = 0.05), add = TRUE)
 hist(diff_mean_pgamble,
      col = rgb(0,0,1,.5), breaks = seq(from = 0, to = 1, by = 0.05), add = TRUE)
-# A: As expected red < blue < green (easy reject < difficult < easy accept), blue is more spread out 
+# A: As expected red < blue < green (easy reject < difficult < easy accept), blue is more spread out
 
 
 # Q: Can we collapse across easy accept & reject trials based on relative distance of CHOICES from 0.5?
 plot(abs(easyACC_mean_pgamble-.5),abs(easyREJ_mean_pgamble-.5),xlim = c(0,.5), ylim = c(0,.5),
-     xlab = 'Easy Accept', ylab = 'Easy Reject', 
+     xlab = 'Easy Accept', ylab = 'Easy Reject',
      main = 'Distance of Observed p(risky) from 0.5 (chance) for EASY trial subtypes',
      pch = 19, col = rgb(0,0,0,.2), cex = 2)
 lines(x = c(0,1), y = c(0,1), col = 'blue')
@@ -309,31 +339,31 @@ choice_probability <- function(parameters, choiceset) {
   # Assumes choiceset has columns riskyoption1, riskyoption2, and safeoption
   #
   # PSH & AR June 2022
-  
+
   # extract  parameters
   rho = as.double(parameters[1]); # risk attitudes
   mu = as.double(parameters[2]); # choice consistency
-  
+
   # Correct parameter bounds
   if(rho <= 0){
     rho = .Machine$double.eps;
   }
-  
+
   if(mu < 0){
     mu = 0;
   }
-  
+
   # calculate utility of the two options
-  utility_risky_option = 0.5 * choiceset$riskyoption1^rho + 
+  utility_risky_option = 0.5 * choiceset$riskyoption1^rho +
     0.5 * choiceset$riskyoption2^rho;
   utility_safe_option = choiceset$safeoption^rho;
-  
+
   # normalize values using this term
   div <- max(choiceset[,1:3])^rho; # decorrelates rho & mu
-  
+
   # calculate the probability of selecting the risky option
   p = 1/(1+exp(-mu/div*(utility_risky_option - utility_safe_option)));
-  
+
   return(p)
 }
 
@@ -346,12 +376,12 @@ negLLprospect_cge <- function(parameters,choiceset,choices) {
   #
   # Peter Sokol-Hessner
   # July 2021
-  
+
   choiceP = choice_probability(parameters, choiceset);
-  
+
   likelihood = choices * choiceP + (1 - choices) * (1-choiceP);
   likelihood[likelihood == 0] = 0.000000000000001; # 1e-15, i.e. 14 zeros followed by a 1
-  
+
   nll <- -sum(log(likelihood));
   return(nll)
 }
@@ -360,7 +390,7 @@ negLLprospect_cge <- function(parameters,choiceset,choices) {
 ## Optimization ############################################
 eps = .Machine$double.eps;
 lower_bounds = c(eps, 0); # R, M
-upper_bounds = c(2,80); 
+upper_bounds = c(2,80);
 number_of_parameters = length(lower_bounds);
 
 # Create placeholders for parameters, errors, NLL (and anything else you want)
@@ -376,26 +406,26 @@ cat('Beginning Optimization\n')
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
   print(subj_id)
-  
-  tmpdata = clean_data_dm[(clean_data_dm$subjectnumber == subj_id) & 
-                            (clean_data_dm$static0dynamic1 == 0) & 
+
+  tmpdata = clean_data_dm[(clean_data_dm$subjectnumber == subj_id) &
+                            (clean_data_dm$static0dynamic1 == 0) &
                             is.finite(clean_data_dm$choice),]; # defines this person's data
-  
+
   temp_parameters = array(dim = c(number_of_iterations,number_of_parameters));
   temp_hessians = array(dim = c(number_of_iterations,number_of_parameters,number_of_parameters));
   temp_NLLs = array(dim = c(number_of_iterations,1));
-  
+
   choiceset = as.data.frame(cbind(tmpdata$riskyopt1, tmpdata$riskyopt2, tmpdata$safe));
   colnames(choiceset) <- c('riskyoption1', 'riskyoption2', 'safeoption');
-  
+
   # tic() # start the timer
-  
+
   for(iter in 1:number_of_iterations){
     # Randomly set initial values within supported values
     # using uniformly-distributed values. Many ways to do this!
-    
+
     initial_values = runif(number_of_parameters, min = lower_bounds, max = upper_bounds)
-    
+
     temp_output = optim(initial_values, negLLprospect_cge,
                         choiceset = choiceset,
                         choices = tmpdata$choice,
@@ -403,27 +433,27 @@ for (subj in 1:number_of_clean_subjects){
                         upper = upper_bounds,
                         method = "L-BFGS-B",
                         hessian = T)
-    
+
     # Store the output we need access to later
     temp_parameters[iter,] = temp_output$par; # parameter values
     temp_hessians[iter,,] = temp_output$hessian; # SEs
     temp_NLLs[iter,] = temp_output$value; # the NLLs
   }
-  
+
   # Compare output; select the best one
   NLLs[subj] = min(temp_NLLs); # the best NLL for this person
   best_ind = which(temp_NLLs == NLLs[subj])[1]; # the index of that NLL
-  
+
   estimated_parameters[subj,] = temp_parameters[best_ind,] # the parameters
   estimated_parameter_errors[subj,] = sqrt(diag(solve(temp_hessians[best_ind,,]))); # the SEs
-  
+
   # Calculating all choice probabilities for this participant, given best-fit parameters
   all_choice_ind = (clean_data_dm$subjectnumber == subj_id) & is.finite(clean_data_dm$choice)
   tmpdata = clean_data_dm[all_choice_ind,]; # defines this person's data
-  
+
   choiceset = as.data.frame(cbind(tmpdata$riskyopt1, tmpdata$riskyopt2, tmpdata$safe));
   colnames(choiceset) <- c('riskyoption1', 'riskyoption2', 'safeoption');
-  
+
   clean_data_dm$all_choiceP[all_choice_ind] = choice_probability(temp_parameters[best_ind,],choiceset);
 }
 
@@ -446,25 +476,25 @@ cat('Beginning Grid Search\n')
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
   print(subj_id)
-  #   
-  tmpdata = clean_data_dm[(clean_data_dm$subjectnumber == subj_id) & 
-                            (clean_data_dm$static0dynamic1 == 0) & 
+  #
+  tmpdata = clean_data_dm[(clean_data_dm$subjectnumber == subj_id) &
+                            (clean_data_dm$static0dynamic1 == 0) &
                             is.finite(clean_data_dm$choice),]; # defines this person's data
-  
+
   choiceset = as.data.frame(cbind(tmpdata$riskyopt1, tmpdata$riskyopt2, tmpdata$safe));
   colnames(choiceset) <- c('riskyoption1', 'riskyoption2', 'safeoption');
-  
+
   grid_nll_values = array(dim = c(n_rho_values, n_mu_values));
-  
+
   for(r in 1:n_rho_values){
     for(m in 1:n_mu_values){
       grid_nll_values[r,m] = negLLprospect_cge(c(rho_values[r],mu_values[m]), choiceset, tmpdata$choice)
     }
   }
-  
+
   min_nll = min(grid_nll_values); # identify the single best value
   indexes = which(grid_nll_values == min_nll, arr.ind = T); # Get indices for that single best value
-  
+
   best_rhos[subj] = rho_values[indexes[1]]; # what are the corresponding rho & mu values?
   best_mus[subj] = mu_values[indexes[2]];
 }
@@ -474,9 +504,9 @@ grid_bestRho = array(dim = c(number_of_clean_subjects,1));
 grid_bestMu = array(dim = c(number_of_clean_subjects,1));
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
-  
+
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
-  
+
   grid_bestRho[subj] = rho_values[unique(tmpdata$bestRho)];
   grid_bestMu[subj] = mu_values[unique(tmpdata$bestMu)];
 }
@@ -493,8 +523,8 @@ if (any((grid_bestRho - best_rhos) != 0)){
 # Grid search replicates (which it should!) (4/11/24)
 
 # Then check estimated parameters vs. grid search parameters
-plot(grid_bestRho,estimated_parameters[,1], main = 'RHO', 
-     xlab = 'Grid Search Estimate', ylab = 'Optimization estimate', 
+plot(grid_bestRho,estimated_parameters[,1], main = 'RHO',
+     xlab = 'Grid Search Estimate', ylab = 'Optimization estimate',
      xlim = c(0, 2), ylim = c(0, 2))
 lines(c(0, 2), c(0, 2))
 
@@ -506,7 +536,7 @@ lines(c(0, 100), c(0, 100))
 hist(grid_bestRho - estimated_parameters[,1], xlim = c(-2,2),
      breaks = seq(from = -2, to = 2, by = 0.02), main = 'Difference in Rho Estimates',
      ylab = 'Participants', xlab = 'Grid estimate - MLE estimate')
-hist(grid_bestMu - estimated_parameters[,2], xlim = c(-100,100), 
+hist(grid_bestMu - estimated_parameters[,2], xlim = c(-100,100),
      breaks = seq(from = -100, to = 100, by = 0.5), main = 'Difference in Mu Estimates',
      ylab = 'Participants', xlab = 'Grid estimate - MLE estimate')
 # This is supposed to look silly! Should cluster around 0
@@ -520,7 +550,7 @@ cor.test(grid_bestMu, estimated_parameters[,2]) # r(83) = 0.9997898, p = 2.2e-16
 
 # A: YES, grid-search values match optimized values very closely.
 
-# Who are our subjects? 
+# Who are our subjects?
 mean_params = colMeans(estimated_parameters);
 
 hist(estimated_parameters[,1], xlim = c(0,2),
@@ -573,7 +603,7 @@ clean_data_dm$prev8_all_diff_cont[clean_data_dm$trialnumber == 1] = NA;
 ## Basic RT analysis ############################################
 
 # Q:DO RT differ across conditions? Reaction times for easy risky, easy safe, and hard (hard > easy (either))
-#mean easy RT 
+#mean easy RT
 mean_rt_easy = array(dim = c(number_of_clean_subjects, 1));
 mean_rt_diff = array(dim = c(number_of_clean_subjects, 1));
 median_rt_easy = array(dim = c(number_of_clean_subjects, 1));
@@ -589,27 +619,27 @@ mean_rt_dynamic = array(dim = c(number_of_clean_subjects, 1));
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
   tmpdata = data_dm[data_dm$subjectnumber == subj_id,];
-  
-  mean_rt_static[subj] = mean(tmpdata$reactiontime[(tmpdata$static0dynamic1 == 0)],na.rm = T); 
+
+  mean_rt_static[subj] = mean(tmpdata$reactiontime[(tmpdata$static0dynamic1 == 0)],na.rm = T);
   mean_rt_dynamic[subj] = mean(tmpdata$reactiontime[(tmpdata$static0dynamic1 == 1)], na.rm = T);
-  
+
   # Identify just EASY dynamic data
   tmpdataEasyDyn = tmpdata[tmpdata$easyP1difficultN1 == 1,];
-  
+
   # RTs within easy dynamic data
   mean_rt_easy[subj] = mean(tmpdataEasyDyn$reactiontime, na.rm = T)
   median_rt_easy[subj] = median(tmpdataEasyDyn$reactiontime, na.rm = T)
   mean_rt_easyACC[subj] = mean(tmpdataEasyDyn$reactiontime[(tmpdataEasyDyn$choiceP > .5)], na.rm = T);
   mean_rt_easyREJ[subj] = mean(tmpdataEasyDyn$reactiontime[(tmpdataEasyDyn$choiceP < .5)], na.rm = T);
   var_rt_easy[subj] = var(tmpdataEasyDyn$reactiontime, na.rm = T);
-  
+
   # Identify just DIFFICULT dynamic data
   tmpdataDiffDyn = tmpdata[tmpdata$easyP1difficultN1 == -1,];
-  
+
   mean_rt_diff[subj] = mean(tmpdataDiffDyn$reactiontime, na.rm = T)
   median_rt_diff[subj] = median(tmpdataDiffDyn$reactiontime, na.rm = T)
   var_rt_diff[subj] = var(tmpdataDiffDyn$reactiontime, na.rm = T);
-  
+
 }
 
 
@@ -620,17 +650,17 @@ plot(mean_rt_diff, mean_rt_easy,
 lines(c(0, 2.75), c(0, 2.75))
 points(mean(mean_rt_diff), mean(mean_rt_easy), pch = 16, col = rgb(1, 0, 1, .75), cex = 2.5)
 
-plot(median_rt_diff, median_rt_easy, 
-     main = 'Median RT By Trial Type', xlab = "Median RT Difficult", ylab = "Median RT Easy", 
+plot(median_rt_diff, median_rt_easy,
+     main = 'Median RT By Trial Type', xlab = "Median RT Difficult", ylab = "Median RT Easy",
      xlim = c(0.75, 2.75), ylim = c(0.75, 2.75))
 lines(c(0, 2.75), c(0, 2.75))
 points(mean(median_rt_diff), mean(median_rt_easy), pch = 16, col = rgb(1, 0, 1, .75), cex = 2.5)
 
-# test easy RTs vs. diff. RTs 
-rt_mean_test = t.test(mean_rt_easy,mean_rt_diff, paired = T) # VERY significant (t(84) = -10.368, p = 2.2e-16)
+# test easy RTs vs. diff. RTs
+rt_mean_test = t.test(mean_rt_easy,mean_rt_diff, paired = T) # VERY significant (t(84) = -10.368, p = 2.2e-16) # thesis
 rt_mean_test
 rt_median_test = t.test(median_rt_easy,median_rt_diff, paired = T) # VERY significant (t(84) = -10.184, p = 2.493e-16)
-rt_median_test 
+rt_median_test
 #A: yes, looks like on average rt of difficult decisions was slower than avg rt of easy decisions 4/11/24
 
 # Test for the across-participant variances in RTs by trial type
@@ -649,7 +679,7 @@ var_test_within
 yl = ceiling(max(c(max(mean_rt_diff),max(mean_rt_easy)))*10)/10
 plot(mean_rt_easy, mean_rt_diff, xlab = 'Easy trials', ylab = 'Difficult trials',
      main = 'Across-Participant Variances in RT',
-     sub = sprintf('variance test p = %.03f', var_test_within$p.value), 
+     sub = sprintf('variance test p = %.03f', var_test_within$p.value),
      xlim = c(0,yl), ylim = c(0,yl))
 lines(c(0,.6), c(0,.6), col = 'black', lty = 'dashed', lwd = 1.5)
 
@@ -658,7 +688,7 @@ lines(c(0,.6), c(0,.6), col = 'black', lty = 'dashed', lwd = 1.5)
 yl = ceiling(max(c(max(var_rt_diff),max(var_rt_easy)))*10)/10
 plot(var_rt_easy, var_rt_diff, xlab = 'Easy trials', ylab = 'Difficult trials',
      main = 'Within-Trial-Type Variances in RT',
-     sub = sprintf('paired t-test p = %.03f', var_test_within$p.value), 
+     sub = sprintf('paired t-test p = %.03f', var_test_within$p.value),
      xlim = c(0,yl), ylim = c(0,yl))
 lines(c(0,.6), c(0,.6), col = 'black', lty = 'dashed', lwd = 1.5)
 
@@ -666,27 +696,27 @@ lines(c(0,.6), c(0,.6), col = 'black', lty = 'dashed', lwd = 1.5)
 
 
 # per person basis of easy RTs vs diff. RTs??
-#Q: are easy choices similarly fast across people & are difficult choices similarly slower across people? 
+#Q: are easy choices similarly fast across people & are difficult choices similarly slower across people?
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,]; # identify this person's data
-  
+
   # test their easy trials vs. their difficult trials
   diff_stat_result = t.test(tmpdata$reactiontime[tmpdata$easyP1difficultN1 == 1], tmpdata$reactiontime[tmpdata$easyP1difficultN1 == -1]);
   var_stat_results = var.test(tmpdata$reactiontime[tmpdata$easyP1difficultN1 == 1], tmpdata$reactiontime[tmpdata$easyP1difficultN1 == -1]);
-  
-  hist(tmpdata$reactiontime[tmpdata$easyP1difficultN1 == -1], 
+
+  hist(tmpdata$reactiontime[tmpdata$easyP1difficultN1 == -1],
        breaks = seq(from = 0, to = 4, by = .25), col = rgb(1,0,0,0.6), xlim = c(0,4), ylim = c(0,30),
        main = sprintf('Subject %g: t-test p = %.03f; var test p = %.03f', subj_id, diff_stat_result$p.value, var_stat_results$p.value));
-  hist(tmpdata$reactiontime[tmpdata$easyP1difficultN1 == 1], 
+  hist(tmpdata$reactiontime[tmpdata$easyP1difficultN1 == 1],
        breaks = seq(from = 0, to = 4, by = .25), col = rgb(0,0,1,0.6), add = T)
 }
 
 
 # test easy ACC vs. easy REJ RTs (and plot against each other)
-# Q: Can we treat easy ACC & REJ RTs as the same kind of thing? 
-t.test(mean_rt_easyACC,mean_rt_easyREJ, paired = T); # not sig. diff between easy types 4/25/23 (t(84) = 0.28963, p = 0.7728)
-plot(mean_rt_easyACC, mean_rt_easyREJ, main = 'Reaction Times on Easy Trials', 
+# Q: Can we treat easy ACC & REJ RTs as the same kind of thing?
+t.test(mean_rt_easyACC,mean_rt_easyREJ, paired = T); # not sig. diff between easy types 4/25/23 (t(84) = 0.28963, p = 0.7728) # thesis
+plot(mean_rt_easyACC, mean_rt_easyREJ, main = 'Reaction Times on Easy Trials',
      xlab = 'Easy ACCEPT trials', ylab = 'Easy REJECT trials', xlim = c(0,4), ylim = c(0,4))
 lines(c(0,4), c(0,4))
 
@@ -707,19 +737,19 @@ for (subj in 1:number_of_clean_subjects){
   tmpdata = data_dm[data_dm$subjectnumber == subj_id,]
   easy_easy_mean_rt[subj] = mean(tmpdata$reactiontime[(tmpdata$easyP1difficultN1[52:170] == 1) &
                                                         (tmpdata$easyP1difficultN1[51:169] == 1)], na.rm = T);
-  
-  diff_diff_mean_rt[subj] = mean(tmpdata$reactiontime[(tmpdata$easyP1difficultN1[52:170] == -1) & 
+
+  diff_diff_mean_rt[subj] = mean(tmpdata$reactiontime[(tmpdata$easyP1difficultN1[52:170] == -1) &
                                                         (tmpdata$easyP1difficultN1[51:169] == -1)], na.rm = T);
-  
-  diff_easy_mean_rt[subj] = mean(tmpdata$reactiontime[(tmpdata$easyP1difficultN1[52:170] == 1) & 
+
+  diff_easy_mean_rt[subj] = mean(tmpdata$reactiontime[(tmpdata$easyP1difficultN1[52:170] == 1) &
                                                         (tmpdata$easyP1difficultN1[51:169] == -1)], na.rm = T);
-  
+
   easy_diff_mean_rt[subj] = mean(tmpdata$reactiontime[(tmpdata$easyP1difficultN1[52:170] == -1) &
                                                         (tmpdata$easyP1difficultN1[51:169] == 1)], na.rm = T);
 }
 
-# does prev. trial type influence RT on the current trial 
-t.test(easy_easy_mean_rt, diff_easy_mean_rt, paired = T); # NOT for easy 4/5/24 (t(84) = 0.72255, p = 0.472)
+# does prev. trial type influence RT on the current trial
+t.test(easy_easy_mean_rt, diff_easy_mean_rt, paired = T); # NOT for easy 4/5/24 (t(84) = 0.72255, p = 0.472) # thesis
 t.test(diff_diff_mean_rt, easy_diff_mean_rt, paired = T); # NOT for difficult 4/5/24 (t(84) = 1.6342, p = 0.106)
 # A: Not at this level.
 
@@ -729,12 +759,12 @@ plot(easy_easy_mean_rt, diff_easy_mean_rt, xlim = c(0.75,2.2), ylim = c(0.75,2.2
 plot(easy_diff_mean_rt, diff_diff_mean_rt, xlim = c(0.75,2.2), ylim = c(0.75,2.2),
      main = 'DIFFICULT TRIALS', xlab = 'Previous trial was EASY', ylab = 'Previous trial was DIFFICULT'); lines(c(0,3), c(0,3)); # NOT for difficult
 
-t.test(diff_diff_mean_rt, easy_easy_mean_rt, paired = T); # not sig diff 4/5/24 (t(84) = -0.075654, p = 0.9399)
+t.test(diff_diff_mean_rt, easy_easy_mean_rt, paired = T); # not sig diff 4/5/24 (t(84) = -0.075654, p = 0.9399) # thesis
 #A: it looks like RT based upon subsequent trials is not sig different at this level
 
 
-#Q: Does gambling behavior change based upon previous trial difficulty? 
-#mean p_gamble subsequent 
+#Q: Does gambling behavior change based upon previous trial difficulty?
+#mean p_gamble subsequent
 diff_diff_mean_pgamble = array(dim = c(number_of_clean_subjects, 1));
 easy_easy_mean_pgamble = array(dim = c(number_of_clean_subjects, 1));
 easy_diff_mean_pgamble = array(dim = c(number_of_clean_subjects, 1));
@@ -745,18 +775,18 @@ for (subj in 1:number_of_clean_subjects){
   tmpdata = data_dm[data_dm$subjectnumber == subj_id,]
   diff_diff_mean_pgamble[subj] = mean(tmpdata$choice[(tmpdata$easyP1difficultN1[52:170] == -1) &
                                                        (tmpdata$easyP1difficultN1[51:169] == -1)], na.rm = T);
-  
+
   easy_easy_mean_pgamble[subj] = mean(tmpdata$choice[(tmpdata$easyP1difficultN1[52:170] == 1) &
                                                        (tmpdata$easyP1difficultN1[51:169] == 1)], na.rm = T);
-  
-  
+
+
   easy_diff_mean_pgamble[subj] = mean(tmpdata$choice[(tmpdata$easyP1difficultN1[52:170] == 1) &
                                                        (tmpdata$easyP1difficultN1[51:169] == -1)], na.rm = T);
-  
-  
+
+
   diff_easy_mean_pgamble[subj] = mean(tmpdata$choice[(tmpdata$easyP1difficultN1[52:170] == -1) &
                                                        (tmpdata$easyP1difficultN1[51:169] == 1)], na.rm = T);
-}  
+}
 
 t.test(diff_diff_mean_pgamble, easy_diff_mean_pgamble, paired = T); # not sig diff 2/25/24 (t(84) = 0.054225, p = 0.9569)
 t.test(diff_easy_mean_pgamble, easy_easy_mean_pgamble, paired = T); # not sig diff 2/25/24 (t(84) = -0.69596, p = 0.4884)
@@ -765,12 +795,13 @@ t.test(diff_diff_mean_pgamble, easy_easy_mean_pgamble, paired = T); # not sig di
 #A: it looks like pgamble based upon subsequent trials is not significantly different, difficulty doesn't show effect on p gamble.
 # - may be due to not having intermediate pgambles?
 
+
 ### WORKING MEMORY BASIC ANALYSIS ###
 
 cat(sprintf('Out of a total of %i participants, we have O-Span scores for %i, Sym-Span scores for %i, and composite span scores for %i.\n',
-              number_of_subjects, 
-              sum(is.finite(complexSpanScores$ospanScore)), 
-              sum(is.finite(complexSpanScores$symspanScore)), 
+              number_of_subjects,
+              sum(is.finite(complexSpanScores$ospanScore)),
+              sum(is.finite(complexSpanScores$symspanScore)),
               sum(is.finite(complexSpanScores$compositeSpanScore))))
 # Out of a total of 88 participants, we have O-Span scores for 73, Sym-Span scores for 74, and composite span scores for 85.
 cat(sprintf('%i participants have both scores, %i participants are missing only one score, and %i participants are missing both scores.\n',
@@ -805,13 +836,13 @@ cor.test(ospanScores, symspanScores) # r(60) = 0.3703213, p = 0.00305 (as of 2/2
 var.test(ospanScores, symspanScores) # similar variance (F(72) = 0.95278, p = 0.8378 as of 2/25/24)
 t.test(ospanScores, symspanScores, paired = T) # t(61) = 0.14979, p = 0.8814 (as of 2/12/24)
 
-# SUMMARY: O-Span & Sym-Span scores are correlated with each other, and not significantly 
+# SUMMARY: O-Span & Sym-Span scores are correlated with each other, and not significantly
 # different from one another. They are NOT redundant (i.e., correlation is ~0.4).
 
-plot(ospanScores, symspanScores, 
-     pch = 19, col = rgb(.5, .5, .5, .5), 
+plot(ospanScores, symspanScores,
+     pch = 19, col = rgb(.5, .5, .5, .5),
      xlim = c(0, 1), ylim = c(0, 1), cex = 2.5,
-     xlab = 'OSpan Scores', ylab = 'SymSpan Scores', 
+     xlab = 'OSpan Scores', ylab = 'SymSpan Scores',
      main = 'Complex Span Scores')
 lines(x = c(-1, 2), y = c(-1, 2)) # so line extends to edge
 
@@ -837,6 +868,57 @@ clean_data_dm$complexspan_demeaned = clean_data_dm$complexspan - mean_composites
 plot(sort(compositeSpanScores))
 abline(h = median_compositespan, col = 'red', lwd = 2)
 
+# Easy vs. Difficult in WMC - From thesis
+
+rt_mean__Hcap_test = t.test(mean_rt_easy[capacity_HighP1_lowN1 == 1], mean_rt_diff[capacity_HighP1_lowN1 == 1], paired = T) #
+rt_mean__Hcap_test
+rt_median_Hcap_test = t.test(median_rt_easy[capacity_HighP1_lowN1 == 1],median_rt_diff[capacity_HighP1_lowN1 == 1], paired = T) #
+rt_median_Hcap_test
+
+rt_mean__Lcap_test = t.test(mean_rt_easy[capacity_HighP1_lowN1 == 1], mean_rt_diff[capacity_HighP1_lowN1 == 1], paired = T) #
+rt_mean__Lcap_test
+rt_median_Lcap_test = t.test(median_rt_easy[capacity_HighP1_lowN1 == 1],median_rt_diff[capacity_HighP1_lowN1 == 1], paired = T) #
+rt_median_Lcap_test
+
+# - modified from cgt
+meanRT_capacity_High <- numeric(number_of_clean_subjects)
+meanRT_capacity_Low <- numeric(number_of_clean_subjects)
+meanRT_diff_capacity_High <- numeric(number_of_clean_subjects)
+meanRT_diff_capacity_Low <- numeric(number_of_clean_subjects)
+meanRT_easy_capacity_High <- numeric(number_of_clean_subjects)
+meanRT_easy_capacity_Low <- numeric(number_of_clean_subjects)
+
+for (subj in 1:number_of_clean_subjects) {
+  subj_id <- keep_participants[subj]
+  tmpdata <- clean_data_dm[clean_data_dm$subjectnumber == subj_id, ]
+  meanRT_capacity_High[subj] <- mean(tmpdata$reactiontime[tmpdata$capacity_HighP1_lowN1 == 1], na.rm = TRUE)
+  meanRT_capacity_Low[subj] <- mean(tmpdata$reactiontime[tmpdata$capacity_HighP1_lowN1 == -1], na.rm = TRUE)
+  meanRT_diff_capacity_High[subj] <- mean(tmpdata$reactiontime[(tmpdata$capacity_HighP1_lowN1 == 1) & (tmpdata$easyP1difficultN1 == -1)], na.rm = TRUE)
+  meanRT_easy_capacity_High[subj] <- mean(tmpdata$reactiontime[(tmpdata$capacity_HighP1_lowN1 == 1) & (tmpdata$easyP1difficultN1 == 1)], na.rm = TRUE)
+  meanRT_diff_capacity_Low[subj] <- mean(tmpdata$reactiontime[(tmpdata$capacity_HighP1_lowN1 == -1) & (tmpdata$easyP1difficultN1 == -1)], na.rm = TRUE)
+  meanRT_easy_capacity_Low[subj] <- mean(tmpdata$reactiontime[(tmpdata$capacity_HighP1_lowN1 == -1) & (tmpdata$easyP1difficultN1 == 1)], na.rm = TRUE)
+}
+
+mean(meanRT_capacity_Low, na.rm = T) # 1.631571
+sd(meanRT_capacity_Low, na.rm = T) # 0.2828634
+
+mean(meanRT_capacity_High, na.rm = T) # 1.599115
+sd(meanRT_capacity_High, na.rm = T) # 0.240628
+
+t.test(meanRT_capacity_High, meanRT_capacity_Low, na.rm = T) # t = -0.5596, df = 77.995, p-value = 0.5774 # thesis
+
+mean((meanRT_diff_capacity_High), na.rm = T); # 1.703286
+sd((meanRT_diff_capacity_High), na.rm = T); # 0.3666631
+mean((meanRT_easy_capacity_High), na.rm = T); # 1.445861
+sd((meanRT_easy_capacity_High), na.rm = T); # 0.1942527
+mean((meanRT_diff_capacity_Low), na.rm = T); # 1.690224
+sd((meanRT_diff_capacity_Low), na.rm = T); # 0.3242537
+mean((meanRT_easy_capacity_Low), na.rm = T); # 1.465639
+sd((meanRT_easy_capacity_Low), na.rm = T); # 0.2483976
+
+t.test(meanRT_easy_capacity_High, meanRT_diff_capacity_High, na.rm = T) # t = -3.9724, df = 60.814, p-value = 0.000191 # thesis
+t.test(meanRT_easy_capacity_Low, meanRT_diff_capacity_Low, na.rm = T) # t = -3.5206, df = 74.921, p-value = 0.0007364
+
 
 
 ## RT Regressions ############################################
@@ -852,7 +934,7 @@ m0_diffcat = lm(sqrtRT ~ 1 + easyP1difficultN1, data = clean_data_dm); # LM
 summary(m0_diffcat) # difficulty predicts RT!
 
 m0_diffcat_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 + (1 | subjectnumber), data = clean_data_dm); # LMER
-summary(m0_diffcat_rfx) # Same with RFX! 
+summary(m0_diffcat_rfx) # Same with RFX!
 
 m0_diffcat_dynonly_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 + (1 | subjectnumber),
                           data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]);
@@ -860,7 +942,7 @@ summary(m0_diffcat_dynonly_rfx) # Same with only dynamic trials
 
 # Takeaway: In all cases, difficult is slower than easy! Use: m0_diffcat_rfx
 
-# use continuous diff metric instead of easy/difficult 
+# use continuous diff metric instead of easy/difficult
 m0_diffcont = lm(sqrtRT ~ 1 + diff_cont , data = clean_data_dm);
 summary(m0_diffcont) # matches categorical
 
@@ -883,7 +965,7 @@ summary(m0_alldiffcont_rfx) # matches categorical
 # UNAFFECTED BY CATEGORICAL/CONTINUOUS
 # UNAFFECTED BY DYNAMIC ONLY VS. ALL TRIALS
 
-# Which model should we use? 
+# Which model should we use?
 # It's between m0_diffcat_rfx and m0_alldiffcont_rfx
 AIC(m0_diffcat_rfx) # -8603.169
 AIC(m0_alldiffcont_rfx) # -8783.393 <- BETTER (more negative)
@@ -892,16 +974,16 @@ anova(m0_diffcat_rfx,m0_alldiffcont_rfx) # CONFIRMS that all_diff_cont outperfor
 # p < 2e-16 (it's reported as '0') for continuous as better than categorical ???
 
 # xval_plot = seq(from = 0, to = 1, by = .1);
-# 
+#
 # predict_data_m0 = clean_data_dm[0,];
 # predict_data_m0[1:20,] = NA;
 # predict_data_m0$all_diff_cont[1:10] = xval_plot
 # # predict_data_m0$all_diff_cont[11:20] = xval_plot
-# 
+#
 # predict_output_m0 = predict(m0_alldiffcont_rfx, newdata = predict_data_m0, type = 'response', re.form = NA)^2
-# 
-# plot(x = xval_plot, y = predict_output_m0[1:20], 
-#      type = 'l', lwd = 5, col = 'purple', 
+#
+# plot(x = xval_plot, y = predict_output_m0[1:20],
+#      type = 'l', lwd = 5, col = 'purple',
 #      main = 'Effect of current difficulty', xlab = 'Difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)')
 
 
@@ -909,8 +991,8 @@ anova(m0_diffcat_rfx,m0_alldiffcont_rfx) # CONFIRMS that all_diff_cont outperfor
 xval_plot = seq(from = 0, to = 1, by = .1);
 coef_vals = fixef(m0_alldiffcont_rfx)
 
-plot(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_diff_cont"])^2, 
-     type = 'l', lwd = 5, col = 'purple', 
+plot(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_diff_cont"])^2,
+     type = 'l', lwd = 5, col = 'purple',
      main = 'Effect of current difficulty', xlab = 'Difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)')
 
 # # Alternative Approach using data points and abline function
@@ -920,7 +1002,7 @@ plot(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_dif
 
 
 # BIG TAKEAWAY:
-# Across categorical and two kinds of continuous difficulty, difficult trials are slower. 
+# Across categorical and two kinds of continuous difficulty, difficult trials are slower.
 #
 # m0_alldiffcont_rfx is best (see AICs)
 
@@ -939,7 +1021,7 @@ clean_data_dm$sqrtRT_prev = c(NA,clean_data_dm$sqrtRT[1:(length(clean_data_dm$sq
 clean_data_dm$sqrtRT_prev[clean_data_dm$trialnumber == 1] = NA;
 
 
-# Does previous difficulty influence subsequent RT? 
+# Does previous difficulty influence subsequent RT?
 # LMs
 m1_diffcat_prev = lm(sqrtRT ~ 1 + easyP1difficultN1 + easyP1difficultN1_prev, data = clean_data_dm);
 summary(m1_diffcat_prev) # slight effect, OPPOSITE to main pattern (p = 0.0466 as of 2/25/24)
@@ -950,7 +1032,7 @@ m1_diffcat_prev_intxn = lm(sqrtRT ~ 1 + easyP1difficultN1 * easyP1difficultN1_pr
 summary(m1_diffcat_prev_intxn) # no interaction, same main effect as m1_diffcat_prev
 
 # LMERs, i.e. RFX Versions
-m1_diffcat_prev_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 + easyP1difficultN1_prev + 
+m1_diffcat_prev_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 + easyP1difficultN1_prev +
                              (1 | subjectnumber), data = clean_data_dm);
 summary(m1_diffcat_prev_rfx) # previous difficulty has strong effect (p = 0.02)
 # Same direction as in m1_diffcat_prev
@@ -961,14 +1043,14 @@ summary(m1_diffcat_prev_intxn_rfx) # no interaction, same main effect.
 # TAKEAWAY: Previous categorical difficulty has OPPOSITE effect on current RTs as current difficulty.
 #    THIS IS DIFFERENT FROM CGT! CGT HAD NO MAIN EFFECT OF PREV. CATEGORICAL DIFFICULTY.
 
-m1_prev_alldiffCont_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                                all_diff_cont * prev_all_diff_cont + 
+m1_prev_alldiffCont_intxn_rfx = lmer(sqrtRT ~ 1 +
+                                                all_diff_cont * prev_all_diff_cont +
                                                 (1 | subjectnumber), data = clean_data_dm);
 summary(m1_prev_alldiffCont_intxn_rfx) # Previous CONTINUOUS difficulty is VERY significant (p = 1.2e-7), no interaction w/ current diff
 # Sign is negative: the more difficult the prev. trial was, the faster people were on the current trial
-# ... facilitory? "giving up"? 
+# ... facilitory? "giving up"?
 
-# CAREFUL! These are different models with different #s of datapoints in them. 
+# CAREFUL! These are different models with different #s of datapoints in them.
 # !!!!!    CANNOT DIRECTLY COMPARE AICs     !!!!!
 # AIC(m1_prev_alldiffCont_intxn_rfx) # -6376.622 <-- BETTER (more negative)
 # AIC(m1_diffcat_prev_intxn_rfx) # -6208.394
@@ -986,119 +1068,156 @@ predict_data_m1$prev_all_diff_cont[11:20] = 1;
 predict_output_m1 = predict(m1_prev_alldiffCont_intxn_rfx, newdata = predict_data_m1, type = 'response', re.form = NA)^2
 
 # Plot it!
-plot(x = xval_plot, y = predict_output_m1[1:10], 
-     type = 'l', lwd = 5, col = 'blue', 
+plot(x = xval_plot, y = predict_output_m1[1:10],
+     type = 'l', lwd = 5, col = 'blue',
      main = 'Effect of current & previous difficulty', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
      ylim = c(1.25, 2))
-lines(x = xval_plot, y = predict_output_m1[11:20], 
+lines(x = xval_plot, y = predict_output_m1[11:20],
       lwd = 5, col = 'red')
 
 # BLUE = previous trial easy
 # RED = previous trial difficult
 
 # How far back does the previous difficulty effect go? Let's look **4 trials back**
-m1_prev_alldiffCont_back4_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                       all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont + 
+m1_prev_alldiffCont_back4_intxn_rfx = lmer(sqrtRT ~ 1 +
+                                       all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont +
                                        (1 | subjectnumber), data = clean_data_dm);
-summary(m1_prev_alldiffCont_back4_intxn_rfx) 
-# All 4 are significant. 
+summary(m1_prev_alldiffCont_back4_intxn_rfx)
+# All 4 are significant.
 
-m1_prev_alldiffCont_back8_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont + 
-                                             prev5_all_diff_cont + prev6_all_diff_cont + prev7_all_diff_cont + prev8_all_diff_cont + 
+m1_prev_alldiffCont_back8_intxn_rfx = lmer(sqrtRT ~ 1 +
+                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont +
+                                             prev5_all_diff_cont + prev6_all_diff_cont + prev7_all_diff_cont + prev8_all_diff_cont +
                                              (1 | subjectnumber), data = clean_data_dm);
-summary(m1_prev_alldiffCont_back8_intxn_rfx) 
-# Looks like it peters out ~7 trials back. LONG LASTING EFFECTS! 
+summary(m1_prev_alldiffCont_back8_intxn_rfx)
+# Looks like it peters out ~7 trials back. LONG LASTING EFFECTS!
 
 # Trying out each difficult trial back
 
-only_finite_index = 
+only_finite_index =
   is.finite(
-      clean_data_dm$all_diff_cont + 
-      clean_data_dm$prev_all_diff_cont + 
-      clean_data_dm$prev2_all_diff_cont + 
-      clean_data_dm$prev3_all_diff_cont + 
-      clean_data_dm$prev4_all_diff_cont + 
-      clean_data_dm$prev5_all_diff_cont + 
-      clean_data_dm$prev6_all_diff_cont + 
-      clean_data_dm$prev7_all_diff_cont + 
+      clean_data_dm$all_diff_cont +
+      clean_data_dm$prev_all_diff_cont +
+      clean_data_dm$prev2_all_diff_cont +
+      clean_data_dm$prev3_all_diff_cont +
+      clean_data_dm$prev4_all_diff_cont +
+      clean_data_dm$prev5_all_diff_cont +
+      clean_data_dm$prev6_all_diff_cont +
+      clean_data_dm$prev7_all_diff_cont +
       clean_data_dm$prev8_all_diff_cont)
 
 
 # -1 trial back
-m1_prev_alldiffCont_back1_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                             all_diff_cont + prev_all_diff_cont + 
+m1_prev_alldiffCont_back1_intxn_rfx = lmer(sqrtRT ~ 1 +
+                                             all_diff_cont + prev_all_diff_cont +
                                              (1 | subjectnumber), data = clean_data_dm[only_finite_index,]);
-summary(m1_prev_alldiffCont_back1_intxn_rfx) 
+summary(m1_prev_alldiffCont_back1_intxn_rfx)
 
 # -2 trials back
-m1_prev_alldiffCont_back2_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + 
+m1_prev_alldiffCont_back2_intxn_rfx = lmer(sqrtRT ~ 1 +
+                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont +
                                              (1 | subjectnumber), data = clean_data_dm[only_finite_index,]);
-summary(m1_prev_alldiffCont_back2_intxn_rfx) 
+summary(m1_prev_alldiffCont_back2_intxn_rfx)
 
 # -3 trials back
-m1_prev_alldiffCont_back3_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + 
+m1_prev_alldiffCont_back3_intxn_rfx = lmer(sqrtRT ~ 1 +
+                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont +
                                              (1 | subjectnumber), data = clean_data_dm[only_finite_index,]);
-summary(m1_prev_alldiffCont_back3_intxn_rfx) 
+summary(m1_prev_alldiffCont_back3_intxn_rfx)
 
 # -4 trials back
-m1_prev_alldiffCont_back4_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont + 
+m1_prev_alldiffCont_back4_intxn_rfx = lmer(sqrtRT ~ 1 +
+                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont +
                                              (1 | subjectnumber), data = clean_data_dm[only_finite_index,]);
-summary(m1_prev_alldiffCont_back4_intxn_rfx) 
+summary(m1_prev_alldiffCont_back4_intxn_rfx)
 
 # -5 trials back
-m1_prev_alldiffCont_back5_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont + 
-                                             prev5_all_diff_cont + 
+m1_prev_alldiffCont_back5_intxn_rfx = lmer(sqrtRT ~ 1 +
+                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont +
+                                             prev5_all_diff_cont +
                                              (1 | subjectnumber), data = clean_data_dm[only_finite_index,]);
-summary(m1_prev_alldiffCont_back5_intxn_rfx) 
+summary(m1_prev_alldiffCont_back5_intxn_rfx)
 
 # -6 trials back
-m1_prev_alldiffCont_back6_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont + 
-                                             prev5_all_diff_cont + prev6_all_diff_cont + 
+m1_prev_alldiffCont_back6_intxn_rfx = lmer(sqrtRT ~ 1 +
+                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont +
+                                             prev5_all_diff_cont + prev6_all_diff_cont +
                                              (1 | subjectnumber), data = clean_data_dm[only_finite_index,]);
-summary(m1_prev_alldiffCont_back6_intxn_rfx) 
+summary(m1_prev_alldiffCont_back6_intxn_rfx)
 
 # -7 trials back
-m1_prev_alldiffCont_back7_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont + 
+m1_prev_alldiffCont_back7_intxn_rfx = lmer(sqrtRT ~ 1 +
+                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont +
                                              prev5_all_diff_cont + prev6_all_diff_cont + prev7_all_diff_cont +
                                              (1 | subjectnumber), data = clean_data_dm[only_finite_index,]);
-summary(m1_prev_alldiffCont_back7_intxn_rfx) 
+summary(m1_prev_alldiffCont_back7_intxn_rfx)
 
 # -8 trials back
-m1_prev_alldiffCont_back8_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont + 
-                                             prev5_all_diff_cont + prev6_all_diff_cont + prev7_all_diff_cont + prev8_all_diff_cont + 
+m1_prev_alldiffCont_back8_intxn_rfx = lmer(sqrtRT ~ 1 +
+                                             all_diff_cont + prev_all_diff_cont + prev2_all_diff_cont + prev3_all_diff_cont + prev4_all_diff_cont +
+                                             prev5_all_diff_cont + prev6_all_diff_cont + prev7_all_diff_cont + prev8_all_diff_cont +
                                              (1 | subjectnumber), data = clean_data_dm[only_finite_index,]);
-summary(m1_prev_alldiffCont_back8_intxn_rfx) 
+summary(m1_prev_alldiffCont_back8_intxn_rfx)
 
-AIC(m1_prev_alldiffCont_back1_intxn_rfx)
-AIC(m1_prev_alldiffCont_back2_intxn_rfx)
-AIC(m1_prev_alldiffCont_back3_intxn_rfx)
-AIC(m1_prev_alldiffCont_back4_intxn_rfx)
-AIC(m1_prev_alldiffCont_back5_intxn_rfx)
-AIC(m1_prev_alldiffCont_back6_intxn_rfx)
-AIC(m1_prev_alldiffCont_back7_intxn_rfx)
-AIC(m1_prev_alldiffCont_back8_intxn_rfx)
+back1 = AIC(m1_prev_alldiffCont_back1_intxn_rfx)
+back2 = AIC(m1_prev_alldiffCont_back2_intxn_rfx)
+back3 = AIC(m1_prev_alldiffCont_back3_intxn_rfx)
+back4 = AIC(m1_prev_alldiffCont_back4_intxn_rfx)
+back5 = AIC(m1_prev_alldiffCont_back5_intxn_rfx)
+back6 = AIC(m1_prev_alldiffCont_back6_intxn_rfx)
+back7 = AIC(m1_prev_alldiffCont_back7_intxn_rfx)
+back8 = AIC(m1_prev_alldiffCont_back8_intxn_rfx)
 
 diff_trajectory = clean_data_dm$prev_all_diff_cont*-2.5593e-2 + clean_data_dm$prev2_all_diff_cont*-1.323-2 + clean_data_dm$prev3_all_diff_cont*1.499e-2
 plot(diff_trajectory[1:170], type = 'l')
 
+
+# Define the AIC values
+trialBack_AIC = c(back1, back2, back3, back4, back5, back6, back7, back8)
+
+# Define the Previous Trial Difficulty labels
+trials = c('1 trial', '2 trials', '3 trials', '4 trials', '5 trials', '6 trials', '7 trials', '8 trials')
+
+
+# Determine the range for zooming in
+max_aic = max(trialBack_AIC)
+min_aic = min(trialBack_AIC)
+
+# Create the bar plot
+barplot(trialBack_AIC, names.arg = trials,
+        col = rgb(0,0,1,.5), xlab = 'Previous Trial Difficulty', ylab = 'AIC',
+        main = 'AIC Values for Multiple Previous Trial Difficulty',
+        ylim = c(-8590, -8610),
+        border = 'black', xpd = FALSE, las = 2)
+box(bty="l")
+
+# Create the bar plot
+barplot(trialBack_AIC, names.arg = trials,
+        col = rgb(0,0,1,.5), xlab = 'Previous Trial Difficulty', ylab = 'AIC',
+        main = 'AIC Values for Multiple Previous Trial Difficulty',
+        ylim = c(-8595, -8610),
+        border = 'black', xpd = FALSE)
+box(bty="l")
+
+# Create the bar plot
+barplot(trialBack_AIC, names.arg = trials,
+        col = rgb(0,0,1,.5), xlab = 'Previous Trial Difficulty', ylab = 'AIC',
+        main = 'AIC Values for Multiple Previous Trial Difficulty',
+        ylim = c(-8590, -8610),
+        border = 'black', xpd = FALSE)
+box(bty="l")
+
+
 ## Model 2: What role does high/low cognitive capacity have on CURRENT TRIAL EFFECTS
-m2_capacityCatDiff_intxn_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1 + 
+m2_capacityCatDiff_intxn_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1 +
                                       (1 | subjectnumber), data = clean_data_dm);
 summary(m2_capacityCatDiff_intxn_rfx) # Capacity interacts with current easy/difficult CATEGORICALLY
-# Sign of interaction indicates... 
+# Sign of interaction indicates...
 #   HIGH capacity people have greater easy/difficult effect
 #   LOW capacity people have smaller easy/difficult effect
 
 
-m2_capacityContDiff_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1 + 
+m2_capacityContDiff_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1 +
                                        (1 | subjectnumber), data = clean_data_dm);
 summary(m2_capacityContDiff_intxn_rfx)
 # SAME PATTERN If you use continuous difficulty instead of categorical difficulty
@@ -1113,19 +1232,19 @@ AIC(m2_capacityContDiff_intxn_rfx) # AIC: -6026.223 (CONTINUOUS IS BETTER)
 
 # Model 3: What role does high/low cognitive capacity have on CURRENT AND PREVIOUS TRIAL EFFECTS
 
-m3_prev_capacityCat_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                       easyP1difficultN1 * easyP1difficultN1_prev * capacity_HighP1_lowN1 + 
+m3_prev_capacityCat_intxn_rfx = lmer(sqrtRT ~ 1 +
+                                       easyP1difficultN1 * easyP1difficultN1_prev * capacity_HighP1_lowN1 +
                                        (1 | subjectnumber), data = clean_data_dm);
 summary(m3_prev_capacityCat_intxn_rfx)
 # Current difficulty predicts higher RT
 # Previous difficulty predicts lower RT
-# Current difficulty predicts EVEN HIGHER RT for people with high capacity. 
+# Current difficulty predicts EVEN HIGHER RT for people with high capacity.
 
 #Q: separate easy and difficult based upon experienced difficulty
 clean_data_dm$easy = as.double(clean_data_dm$easyP1difficultN1 == 1)
 clean_data_dm$difficult = as.double(clean_data_dm$easyP1difficultN1 == -1)
 
-m3_capacityCat_intxn_rfx = lmer(sqrtRT ~ 1 + easy * capacity_HighP1_lowN1 + difficult * capacity_HighP1_lowN1 + 
+m3_capacityCat_intxn_rfx = lmer(sqrtRT ~ 1 + easy * capacity_HighP1_lowN1 + difficult * capacity_HighP1_lowN1 +
                                   (1 | subjectnumber), data = clean_data_dm);
 summary(m3_capacityCat_intxn_rfx)
 # Very significant interaction between difficult and capacity, indicating that the above effect is almost
@@ -1133,11 +1252,11 @@ summary(m3_capacityCat_intxn_rfx)
 
 
 # Continuous difficulty (including previous) and categorical capacity
-m3_prev_diffCont_capacityCat_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                                all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1 + 
+m3_prev_diffCont_capacityCat_intxn_rfx = lmer(sqrtRT ~ 1 +
+                                                all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1 +
                                                 (1 | subjectnumber), data = clean_data_dm);
 summary(m3_prev_diffCont_capacityCat_intxn_rfx)
-# Besides main effects of current and previous difficulty, NO INTERACTIONS between capacity and 
+# Besides main effects of current and previous difficulty, NO INTERACTIONS between capacity and
 # difficulty (current or previous).
 
 
@@ -1150,29 +1269,29 @@ AIC(m3_prev_diffCont_capacityCat_intxn_rfx) # Be careful when reporting; has few
 
 
 # Plot this??
-# 
+#
 # MODEL OUTPUT
-#                                                        Estimate Std. Error         df t value Pr(>|t|)    
+#                                                        Estimate Std. Error         df t value Pr(>|t|)
 #   (Intercept)                                             1.222e+00  1.333e-02  6.778e+01  91.669  < 2e-16 ***
 #   all_diff_cont                                           1.085e-01  6.697e-03  9.839e+03  16.204  < 2e-16 ***
 #   prev_all_diff_cont                                     -3.647e-02  6.721e-03  9.840e+03  -5.426 5.91e-08 ***
-#   capacity_HighP1_lowN1                                  -1.606e-02  1.333e-02  6.778e+01  -1.205    0.233    
-#   all_diff_cont:prev_all_diff_cont                        6.487e-03  1.014e-02  9.834e+03   0.640    0.522    
-#   all_diff_cont:capacity_HighP1_lowN1                     8.721e-03  6.697e-03  9.839e+03   1.302    0.193    
-#   prev_all_diff_cont:capacity_HighP1_lowN1                6.921e-03  6.721e-03  9.840e+03   1.030    0.303    
-#   all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1  4.349e-05  1.014e-02  9.834e+03   0.004    0.997    
+#   capacity_HighP1_lowN1                                  -1.606e-02  1.333e-02  6.778e+01  -1.205    0.233
+#   all_diff_cont:prev_all_diff_cont                        6.487e-03  1.014e-02  9.834e+03   0.640    0.522
+#   all_diff_cont:capacity_HighP1_lowN1                     8.721e-03  6.697e-03  9.839e+03   1.302    0.193
+#   prev_all_diff_cont:capacity_HighP1_lowN1                6.921e-03  6.721e-03  9.840e+03   1.030    0.303
+#   all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1  4.349e-05  1.014e-02  9.834e+03   0.004    0.997
 #
 # Current difficulty = slower RTs (found previously)
 # Prev. difficulty = faster RTs (found previously)
-# Curr. & prev. difficulty do NOT interact to influence reaction time. 
-# 
+# Curr. & prev. difficulty do NOT interact to influence reaction time.
+#
 # Capacity = no net effect! [contrary to hypotheses]
 #
 # in CGT, Capacity interacted with CURRENT difficulty to potentiate slowing due to difficulty
 # for high capacity people, and attenuate that effect for low capacity people. NOT SO IN CGE!
-# 
+#
 # in CGT, Capacity had trending interaction with previous difficulty to almost eliminate the effect of prev. difficulty
-# for high capacity folks, but potentiate it for low capacity folks. NOT SO IN CGE! 
+# for high capacity folks, but potentiate it for low capacity folks. NOT SO IN CGE!
 
 xval_plot = seq(from = 0, to = 1, length.out = 10)
 predict_data_m3_H = clean_data_dm[0,];
@@ -1191,52 +1310,52 @@ predict_output_m3_L = predict(m3_prev_diffCont_capacityCat_intxn_rfx, newdata = 
 
 #HIGH CAPACITY PLOT
 # First plot PREV easy & CAPACITY high
-plot(x = xval_plot, y = predict_output_m3_H[1:10], 
-     type = 'l', lwd = 5, col = 'blue', 
+plot(x = xval_plot, y = predict_output_m3_H[1:10],
+     type = 'l', lwd = 5, col = 'blue',
      main = 'Effect of current & previous difficulty: HIGH CAP', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
      ylim = c(1.25, 2))
 # Second plot PREV diff & CAPACITY high
-lines(x = xval_plot, y = predict_output_m3_H[11:20], 
+lines(x = xval_plot, y = predict_output_m3_H[11:20],
       lwd = 5, col = 'red')
 
 #SEPERATE INTO TWO PLOTS (LOW CAPACITY BELOW)
 # Third plot PREV easy & CAPACITY low
-plot(x = xval_plot, y = predict_output_m3_L[1:10], 
+plot(x = xval_plot, y = predict_output_m3_L[1:10],
      type = 'l',lwd = 5, col = 'blue',
      main = 'Effect of current & previous difficulty: LOW CAP', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
      ylim = c(1.25,2))
 # Fourth (last) plot PREV diff & CAPACITY low
-lines(x = xval_plot, y = predict_output_m3_L[11:20], 
+lines(x = xval_plot, y = predict_output_m3_L[11:20],
       lwd = 5, col = 'red')
 
 # RED = previous trial easy
 # BLUE = previous trial difficult
 
 
-m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx = lmer(sqrtRT ~ 1 + 
-                                                all_diff_cont * prev_all_diff_cont + 
+m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx = lmer(sqrtRT ~ 1 +
+                                                all_diff_cont * prev_all_diff_cont +
                                                 (1 | subjectnumber),
                                                 data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == 1,]);
 summary(m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx)
 # Fixed effects:
-#   Estimate Std. Error         df t value Pr(>|t|)    
+#   Estimate Std. Error         df t value Pr(>|t|)
 #   (Intercept)                       1.206e+00  1.750e-02  3.289e+01  68.920  < 2e-16 ***
 #   all_diff_cont                     1.172e-01  8.756e-03  4.845e+03  13.387  < 2e-16 ***
 #   prev_all_diff_cont               -2.957e-02  8.816e-03  4.845e+03  -3.355 0.000801 ***
-#   all_diff_cont:prev_all_diff_cont  6.550e-03  1.346e-02  4.843e+03   0.486 0.626637   
+#   all_diff_cont:prev_all_diff_cont  6.550e-03  1.346e-02  4.843e+03   0.486 0.626637
 
 # Contrary to CGT, there *IS* a significant effect of previous difficulty for high capacity folks.
 
-m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx = lmer(sqrtRT ~ 1 + 
-                                                        all_diff_cont * prev_all_diff_cont + 
+m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx = lmer(sqrtRT ~ 1 +
+                                                        all_diff_cont * prev_all_diff_cont +
                                                         (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == -1,]);
 summary(m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx)
 # Fixed effects:
-#   Estimate Std. Error         df t value Pr(>|t|)    
+#   Estimate Std. Error         df t value Pr(>|t|)
 #   (Intercept)                       1.238e+00  2.005e-02  3.495e+01  61.757  < 2e-16 ***
 #   all_diff_cont                     9.980e-02  1.018e-02  4.995e+03   9.806  < 2e-16 ***
 #   prev_all_diff_cont               -4.340e-02  1.018e-02  4.995e+03  -4.261 2.07e-05 ***
-#   all_diff_cont:prev_all_diff_cont  6.464e-03  1.519e-02  4.992e+03   0.425     0.67    
+#   all_diff_cont:prev_all_diff_cont  6.464e-03  1.519e-02  4.992e+03   0.425     0.67
 
 # The effect of previous difficulty is STRONGER in low capacity people (just not sig. so)
 
@@ -1247,18 +1366,18 @@ for (s in 1:number_of_clean_subjects){
   clean_data_dm$diff_cont[subj_id] = abs(abs(clean_data_dm$choiceP[subj_id] - 0.5)*2-1); # JUST for the easy/difficult dynamic trials
   clean_data_dm$all_diff_cont[subj_id] = abs(abs(clean_data_dm$all_choiceP[subj_id] - 0.5)*2-1); # for ALL trials
   clean_data_dm$capacity_HighP1_lowN1[clean_data_dm$subjectnumber == subj_id] = capacity_HighP1_lowN1[s];
-  
-  m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx = lmer(sqrtRT ~ 1 + 
-                                                          all_diff_cont * prev_all_diff_cont + 
+
+  m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx = lmer(sqrtRT ~ 1 +
+                                                          all_diff_cont * prev_all_diff_cont +
                                                           (1 | subjectnumber),
                                                         data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == 1,]);
   summary(m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx)
-  
-  m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx = lmer(sqrtRT ~ 1 + 
-                                                         all_diff_cont * prev_all_diff_cont + 
+
+  m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx = lmer(sqrtRT ~ 1 +
+                                                         all_diff_cont * prev_all_diff_cont +
                                                          (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == -1,]);
   summary(m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx)
-} 
+}
 
 for(s in 1:number_of_clean_subjects){
   subj_id = keep_participants[s];
@@ -1279,12 +1398,12 @@ for(ind in 1:length(possible_threshold_values)){
   clean_data_dm$capacity_HighP1_lowN1_temp[clean_data_dm$complexspan < break_val] = -1;
 
   cat(sprintf('This many people are < break_val: %g\n',sum(compositeSpanScores<break_val, na.rm = T)))
-  
+
   if((sum(compositeSpanScores<break_val, na.rm = T) == 1) | (sum(compositeSpanScores>break_val, na.rm = T) == 1)){
     next # don't use any categorizations that create a 'group' with just 1 person
   }
-  
-  m3_tmp = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_temp + 
+
+  m3_tmp = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_temp +
                                                   (1 | subjectnumber), data = clean_data_dm, REML = F);
   all_aic_values[ind] = AIC(m3_tmp)
 }
@@ -1313,50 +1432,50 @@ capacity_HighP1_lowN1_Best = (compositeSpanScores[keep_participants] > break_val
 clean_data_dm$capacity_HighP1_lowN1_best[clean_data_dm$complexspan > break_val] = 1;
 clean_data_dm$capacity_HighP1_lowN1_best[clean_data_dm$complexspan < break_val] = -1;
 
-m3_best = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+m3_best = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
                  (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best)
 m3_best_summary = summary(m3_best);
 m3_best_meanlik = exp(-m3_best_summary$logLik/nobs(m3_best));
 cat(sprintf('The best mean likelihood obtained with the CompositeSpan was %0.4f\n', m3_best_meanlik))
 
-m3_best_nointxn = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+m3_best_nointxn = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best +
                  (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_nointxn)
 
 
-m3_best_HighCap_only = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont + 
+m3_best_HighCap_only = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont +
                               (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1_best == 1,], REML = F);
 summary(m3_best_HighCap_only)
 
-m3_best_LowCap_only = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont + 
+m3_best_LowCap_only = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont +
                              (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1_best == -1,], REML = F);
 summary(m3_best_LowCap_only)
 
 
 # Re-do easy/difficult regression w/ this split
-m3_capacityCat_intxn_rfx_bestcap = lmer(sqrtRT ~ 1 + easy * capacity_HighP1_lowN1_best + 
-                                          difficult * capacity_HighP1_lowN1_best + 
+m3_capacityCat_intxn_rfx_bestcap = lmer(sqrtRT ~ 1 + easy * capacity_HighP1_lowN1_best +
+                                          difficult * capacity_HighP1_lowN1_best +
                                   (1 | subjectnumber), data = clean_data_dm);
 summary(m3_capacityCat_intxn_rfx_bestcap)
 # With this "best split", BOTH easy and difficult are different by capacity?
 # This is dynamic-ONLY (using easy/difficult as categorical)
 
 
-m2_best_cap = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + 
+m2_best_cap = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best +
                   (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m2_best_cap)
 xval_plot = seq(from = 0, to = 1, by = .1);
 coef_vals = fixef(m2_best_cap)
 
-plot(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_diff_cont"] + 
-                           1*xval_plot*coef_vals["all_diff_cont:capacity_HighP1_lowN1_best"] + 
-                           1*coef_vals["capacity_HighP1_lowN1_best"])^2, 
-     type = 'l', lwd = 5, col = 'purple4', 
+plot(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_diff_cont"] +
+                           1*xval_plot*coef_vals["all_diff_cont:capacity_HighP1_lowN1_best"] +
+                           1*coef_vals["capacity_HighP1_lowN1_best"])^2,
+     type = 'l', lwd = 5, col = 'purple4',
      main = 'Effect of current difficulty', xlab = 'Difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)')
-lines(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_diff_cont"] + 
-                            -1*xval_plot*coef_vals["all_diff_cont:capacity_HighP1_lowN1_best"]+ 
-                            -1*coef_vals["capacity_HighP1_lowN1_best"])^2, 
+lines(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_diff_cont"] +
+                            -1*xval_plot*coef_vals["all_diff_cont:capacity_HighP1_lowN1_best"]+
+                            -1*coef_vals["capacity_HighP1_lowN1_best"])^2,
       lwd = 5, col = 'purple1')
 
 
@@ -1384,22 +1503,22 @@ predict_output_m3_best_L = predict(m3_best, newdata = predict_data_m3_best_L, ty
 
 #HIGH CAPACITY PLOT
 # First plot PREV easy & CAPACITY high
-plot(x = xval_plot, y = predict_output_m3_best_H[1:10], 
-     type = 'l', lwd = 5, col = 'blue', 
+plot(x = xval_plot, y = predict_output_m3_best_H[1:10],
+     type = 'l', lwd = 5, col = 'blue',
      main = 'Effect of current & previous difficulty: HIGH CAP', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
      ylim = c(1.25, 1.85))
 # Second plot PREV diff & CAPACITY high
-lines(x = xval_plot, y = predict_output_m3_best_H[11:20], 
+lines(x = xval_plot, y = predict_output_m3_best_H[11:20],
       lwd = 5, col = 'red')
 
 #SEPERATE INTO TWO PLOTS (LOW CAPACITY BELOW)
 # Third plot PREV easy & CAPACITY low
-plot(x = xval_plot, y = predict_output_m3_best_L[1:10], 
+plot(x = xval_plot, y = predict_output_m3_best_L[1:10],
      type = 'l',lwd = 5, col = 'blue',
      main = 'Effect of current & previous difficulty: LOW CAP', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
      ylim = c(1.25,1.85))
 # Fourth (last) plot PREV diff & CAPACITY low
-lines(x = xval_plot, y = predict_output_m3_best_L[11:20], 
+lines(x = xval_plot, y = predict_output_m3_best_L[11:20],
       lwd = 5, col = 'red')
 
 
@@ -1418,17 +1537,17 @@ for(ind in 1:length(possible_threshold_values_Ospan)){
   break_val = possible_threshold_values_Ospan[ind];
   clean_data_dm$capacity_HighP1_lowN1_Ospan_temp[clean_data_dm$ospan > break_val] = 1;
   clean_data_dm$capacity_HighP1_lowN1_Ospan_temp[clean_data_dm$ospan < break_val] = -1;
-  
+
   cat(sprintf('This many people are < break_val: %g\n',sum(ospanScores<break_val, na.rm = T)))
-  
+
   if((sum(ospanScores<break_val, na.rm = T) == 1) | (sum(ospanScores>break_val, na.rm = T) == 1)){
     next # don't use any categorizations that create a 'group' with just 1 person
   }
-  
-  m3_tmp = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_Ospan_temp + 
+
+  m3_tmp = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_Ospan_temp +
                   (1 | subjectnumber), data = clean_data_dm, REML = F);
   m3_tmp_summ = summary(m3_tmp);
-  
+
   all_aic_values[ind] = AIC(m3_tmp)
   all_meanLik_values[ind] = exp(-m3_tmp_summ$logLik/nobs(m3_tmp))
 }
@@ -1454,14 +1573,14 @@ for(ind in 1:length(possible_threshold_values_Symspan)){
   break_val = possible_threshold_values_Symspan[ind];
   clean_data_dm$capacity_HighP1_lowN1_Symspan_temp[clean_data_dm$symspan > break_val] = 1;
   clean_data_dm$capacity_HighP1_lowN1_Symspan_temp[clean_data_dm$symspan < break_val] = -1;
-  
+
   cat(sprintf('This many people are < break_val: %g\n',sum(symspanScores<break_val, na.rm = T)))
-  
+
   if((sum(symspanScores<break_val, na.rm = T) == 1) | (sum(symspanScores>break_val, na.rm = T) == 1)){
     next # don't use any categorizations that create a 'group' with just 1 person
   }
-  
-  m3_tmp = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_Symspan_temp + 
+
+  m3_tmp = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_Symspan_temp +
                   (1 | subjectnumber), data = clean_data_dm, REML = F);
   m3_tmp_summ = summary(m3_tmp);
 
@@ -1495,26 +1614,26 @@ cat(sprintf('The best mean likelihood obtained with the SymSpan was %0.4f\n', be
 # predict_data_m3_H$prev_all_diff_cont[1:10] = 0;
 # predict_data_m3_H$prev_all_diff_cont[11:20] = 1;
 # predict_data_m3_H$capacity_HighP1_lowN1 = 1;
-# 
+#
 # predict_data_m3_L = predict_data_m3_H;
 # predict_data_m3_L$capacity_HighP1_lowN1 = -1;
-# 
+#
 # predict_output_m3_H = predict(m3_prev_diffCont_capacityCat_intxn_rfx, newdata = predict_data_m3_H, type = 'response', re.form = NA)^2
 # predict_output_m3_L = predict(m3_prev_diffCont_capacityCat_intxn_rfx, newdata = predict_data_m3_L, type = 'response', re.form = NA)^2
-# 
+#
 # #HIGH CAPACITY PLOT
 # # First plot PREV easy & CAPACITY high
-# plot(x = xval_plot, y = predict_output_m3_H[1:10], 
-#      type = 'l', lwd = 5, col = 'blue', 
+# plot(x = xval_plot, y = predict_output_m3_H[1:10],
+#      type = 'l', lwd = 5, col = 'blue',
 #      main = 'Effect of current & previous difficulty: HIGH CAP', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
 #      ylim = c(1.25, 2))
 # # Second plot PREV diff & CAPACITY high
-# lines(x = xval_plot, y = predict_output_m3_H[11:20], 
+# lines(x = xval_plot, y = predict_output_m3_H[11:20],
 #       lwd = 5, col = 'red')
-# 
+#
 # tmpdataDyn = tmpdata$trialnumber[tmpdata$static0dynamic1 == 1];
-# tmpdataDynSamp = sample(tmpdataDyn) # use length? 
-# 
+# tmpdataDynSamp = sample(tmpdataDyn) # use length?
+#
 # trainDynData = tmpdataDynSamp[1:108]
 # testDynData = tmpdataDynSamp[109:120]
 
@@ -1522,74 +1641,94 @@ cat(sprintf('The best mean likelihood obtained with the SymSpan was %0.4f\n', be
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
-  
+
   tmpdataDyn = tmpdata[tmpdata$static0dynamic1 == 1,];
   tmpdataDynSamp = sample(tmpdataDyn$trialnumber)
-  
+
   trainDynData = tmpdataDynSamp[1:108]
-  testDynData = tmpdataDynSamp[109:120] 
-  
-  # m1_trainDynData_intxn_rfx = lmer(sqrtRT ~ 1 + 
-  #                       trainDynData + 
+  testDynData = tmpdataDynSamp[109:120]
+
+  # m1_trainDynData_intxn_rfx = lmer(sqrtRT ~ 1 +
+  #                       trainDynData +
   #                       (1 | subjectnumber), data = tmpdata);
   # summary(m1_trainDynData_intxn_rfx)
-  
+
 }
 
 # All easy trials
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
-  
+
   tmpdataEasy = tmpdata[tmpdata$easyP1difficultN1 == 1,];
   tmpdataEasySamp = sample(tmpdataEasy$trialnumber)
-  
+
   trainEasyData = tmpdataEasySamp[1:54]
   testEasyData = tmpdataEasySamp[55:60]
-  
-  
+
+
 }
 
 # All difficult trials
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
-  
+
   tmpdataDiff = tmpdata[tmpdata$easyP1difficultN1 == -1,];
   tmpdataDiffSamp = sample(tmpdataDiff$trialnumber)
-  
+
   trainDiffData = tmpdataDiffSamp[1:54]
   testDiffData = tmpdataDiffSamp[55:60]
-  
-  
-}
 
+
+}
 
 
 ### Testing the integration of Survey Data ###  - I think this is where it breaks
 
+NCS_HighP1_LowN1 = (clean_data_dm$NCS >= median(clean_data_survey$NCS, na.rm = T))*2-1;
+IUS_HighP1_LowN1 = (clean_data_dm$IUS >= median(clean_data_survey$IUS, na.rm = T))*2-1;
+SNS_HighP1_LowN1 = (clean_data_dm$SNS >= median(clean_data_survey$SNS, na.rm = T))*2-1;
+PSS_HighP1_LowN1 = (clean_data_dm$PSS >= median(clean_data_survey$PSS, na.rm = T))*2-1;
+
+clean_data_dm$NCS_HighP1_LowN1 = (clean_data_dm$NCS >= median(clean_data_survey$NCS, na.rm = T))*2-1;
+clean_data_dm$IUS_HighP1_LowN1 = (clean_data_dm$IUS >= median(clean_data_survey$IUS, na.rm = T))*2-1;
+clean_data_dm$SNS_HighP1_LowN1 = (clean_data_dm$SNS >= median(clean_data_survey$SNS, na.rm = T))*2-1;
+clean_data_dm$PSS_HighP1_LowN1 = (clean_data_dm$PSS >= median(clean_data_survey$PSS, na.rm = T))*2-1;
+
+
+clean_data_dm$NCS_HighP1_LowN1
+
+# Trying NCS as noted in thesis proposal
+sum(NCS_HighP1_LowN1 == 1, na.rm = T) # 7480 - doesn't sound right
+sum(NCS_HighP1_LowN1 == -1, na.rm = T) # 6800 - doesn't sound right
+
+
+
+
+
 # NCS, IUS, SNS, PSS
 
-m3_best_NCS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * NCS_HighP1_LowN1 + 
+m3_best_NCS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * NCS_HighP1_LowN1 +
                  (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_NCS)
 # NCS x SPAN x current difficulty interaction
 
-m3_best_IUS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * IUS_HighP1_LowN1 + 
+m3_best_IUS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * IUS_HighP1_LowN1 +
                      (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_IUS)
 # IUS x Span x current difficulty interaction
 # IUS x current difficulty interaction
 
-m3_best_SNS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * SNS_HighP1_LowN1 + 
+m3_best_SNS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * SNS_HighP1_LowN1 +
                      (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_SNS)
 # SNS main effect
 
-m3_best_PSS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * PSS_HighP1_LowN1 + 
+m3_best_PSS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * PSS_HighP1_LowN1 +
                      (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_PSS)
-# PSS x Span x current difficulty interaction 
+# PSS x Span x current difficulty interaction
 
 AIC(m3_best_NCS) # -8782.879
 AIC(m3_best_IUS) # -8794.3 <- BEST AIC = IUS categorical
@@ -1599,45 +1738,45 @@ AIC(m3_best_PSS) # -8785.113
 # NCS, IUS, and PSS all have the same interaction in their regressions - with current difficulty
 # and working memory span. These interactions look like they qualify the 2-way interaction between
 # current difficulty & working memory span (that's present in these regressions). THAT interaction
-# best characterized as a difference in the slope of current difficulty between high and low 
+# best characterized as a difference in the slope of current difficulty between high and low
 # capacity participants (high cap participants have a steeper slope with current difficulty). So
 # these 3-way interactions (+ve for NCS, -ve for IUS & PSS) can be broadly interpreted to indicate
-# that that increasing steepness with capacity is WEAKER for people low in need for cognition / 
+# that that increasing steepness with capacity is WEAKER for people low in need for cognition /
 # high in intolerance of uncertainty / high in chronic stress (conversely, the opposite is true:
-# Increasing steepness w/ increasing capacity is STRONGER in people high in need for cognition, 
-# low in intolerance of uncertainty / low in chronic stress). 
+# Increasing steepness w/ increasing capacity is STRONGER in people high in need for cognition,
+# low in intolerance of uncertainty / low in chronic stress).
 
 
-m3_best_IUS_SNS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * IUS_HighP1_LowN1 + 
-                         all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * SNS_HighP1_LowN1 + 
+m3_best_IUS_SNS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * IUS_HighP1_LowN1 +
+                         all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * SNS_HighP1_LowN1 +
                      (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_IUS_SNS) # AIC -6459
 
-# We can run this regression, but... it's a lot. Many 2- & 3-way interactions. 
+# We can run this regression, but... it's a lot. Many 2- & 3-way interactions.
 # AIC *is* better (-6459.4)
-# 
+#
 # Brief summary:
 # MAIN EFFECTS
-# current difficulty + 
-# previous difficulty - 
-# SNS score + 
+# current difficulty +
+# previous difficulty -
+# SNS score +
 #
 # TWO WAY INTERACTIONS:
-# current difficulty x capacity (weak, trend) + 
-# previous difficulty x capacity + 
-# current difficulty x IUS - 
+# current difficulty x capacity (weak, trend) +
+# previous difficulty x capacity +
+# current difficulty x IUS -
 #
 # THREE WAY INTERACTION:
-# Current difficulty x capacity x IUS - 
-# 
+# Current difficulty x capacity x IUS -
+#
 
-m3_best_IUS_SNS_simple = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best + 
-                                all_diff_cont * prev_all_diff_cont * IUS_HighP1_LowN1 + 
-                                all_diff_cont * prev_all_diff_cont * SNS_HighP1_LowN1 + 
+m3_best_IUS_SNS_simple = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                all_diff_cont * prev_all_diff_cont * IUS_HighP1_LowN1 +
+                                all_diff_cont * prev_all_diff_cont * SNS_HighP1_LowN1 +
                                 (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_IUS_SNS_simple) # AIC -6443; worse than mostly-interactive version
 
-m3_best_IUS_SNS_full = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * IUS_HighP1_LowN1 * SNS_HighP1_LowN1 + 
+m3_best_IUS_SNS_full = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * IUS_HighP1_LowN1 * SNS_HighP1_LowN1 +
                                 (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_IUS_SNS_full) # AIC -6452; worse than mostly-interactive version
 
@@ -1658,16 +1797,16 @@ lm_pvalues = array(data = NA, dim = c(number_of_clean_subjects,4)); # 4 p-values
 for (s in 1:number_of_clean_subjects){
   subj_id = keep_participants[s]
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
-  
-  indiv_model = lm(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont, 
+
+  indiv_model = lm(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont,
                    data = tmpdata);
-  
+
   model_summaries[[s]] = summary(indiv_model)
   lm_estimates[s,] = coef(indiv_model);
-  lm_pvalues[s,] = summary(indiv_model)$coefficients[,4] 
+  lm_pvalues[s,] = summary(indiv_model)$coefficients[,4]
 }
 
-# Columns... 
+# Columns...
 # 1 = intercept
 # 2 = all_diff_cont
 # 3 = prev_all_diff_cont
@@ -1689,12 +1828,12 @@ cor.test(lm_estimates[,2], compositeSpanScores[keep_participants]) # positive w/
 plot(lm_estimates[,3], compositeSpanScores[keep_participants]) # previous difficulty
 cor.test(lm_estimates[,3], compositeSpanScores[keep_participants]) # POSITIVE*, w/ p = 0.033    *unexpected!
   # given big model, mostly expect negative relationship (higher span = lower estimate)
-  # WITH A FEW EXCEPTIONS, LOOKS LIKE THAT? 
+  # WITH A FEW EXCEPTIONS, LOOKS LIKE THAT?
 
-# TAKEAWAY: Unsurprisingly, these individual-level estimates & p-values/etc are noisy. 
-# Without the stabilizing effect of a hierarchical approach, these are hard to read. 
+# TAKEAWAY: Unsurprisingly, these individual-level estimates & p-values/etc are noisy.
+# Without the stabilizing effect of a hierarchical approach, these are hard to read.
 # Additionally the magnitude and significance of an estimate are two different things
-# and this approach doesn't handle that gracefully. 
+# and this approach doesn't handle that gracefully.
 
 # PROBABLY DON'T TAKE SERIOUSLY OR USE CENTRALLY
 
@@ -1702,9 +1841,9 @@ cor.test(lm_estimates[,3], compositeSpanScores[keep_participants]) # POSITIVE*, 
 
 ### Throwing In The Towel ############################################
 
-### Explaining lower RTs (faster choices) after difficult trials: 
-# Are low-capacity participants "throwing in the towel" after difficult choices, or 
-# is their choice process *facilitated*, and thus better? 
+### Explaining lower RTs (faster choices) after difficult trials:
+# Are low-capacity participants "throwing in the towel" after difficult choices, or
+# is their choice process *facilitated*, and thus better?
 
 # APPROACH:
 #   1. Use all_choice_P values (calculated from estimates of rho & mu from static trials) to...
@@ -1714,7 +1853,7 @@ cor.test(lm_estimates[,3], compositeSpanScores[keep_participants]) # POSITIVE*, 
 #   4. Calculate the difference in MEAN LIKELIHOOD (easy - difficult), and...
 #   5. Relate that difference to capacity group and/or continuous capacity.
 
-# 1. is already done. 
+# 1. is already done.
 
 # 2. Calculate the likelihood of the choices.
 
@@ -1728,7 +1867,7 @@ mean_choice_lik_prevDiff = array(data = NA, dim = c(number_of_clean_subjects,1))
 for (s in 1:number_of_clean_subjects){
   subj_id = keep_participants[s]
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
-  
+
   mean_choice_lik_prevEasy[s] = mean(tmpdata$all_choice_likelihood[tmpdata$easyP1difficultN1_prev == 1], na.rm = T); # na.rm b/c of missed trials
   mean_choice_lik_prevDiff[s] = mean(tmpdata$all_choice_likelihood[tmpdata$easyP1difficultN1_prev == -1], na.rm = T);
 
@@ -1742,11 +1881,11 @@ for (s in 1:number_of_clean_subjects){
 }
 
 t.test(mean_choice_lik_prevEasy, mean_choice_lik_prevDiff, paired = T) # p = 0.09, 2/25/24
-wilcox.test(mean_choice_lik_prevEasy, mean_choice_lik_prevDiff, paired = T) 
+wilcox.test(mean_choice_lik_prevEasy, mean_choice_lik_prevDiff, paired = T)
 # mean choice likelihood is slightly HIGHER after difficult than after easy (0.697 vs. 0.685)
 
 cor.test(mean_choice_lik_prevEasy, mean_choice_lik_prevDiff) # r(59) = 0.33, p = 0.009
-cor.test(mean_choice_lik_prevEasy, mean_choice_lik_prevDiff, method = 'spearman') 
+cor.test(mean_choice_lik_prevEasy, mean_choice_lik_prevDiff, method = 'spearman')
 # Correlated w/ each other, unsurprisingly.
 
 plot(mean_choice_lik_prevEasy, mean_choice_lik_prevDiff)
@@ -1777,38 +1916,38 @@ wilcox.test(mean_choice_lik_relative[capacity_HighP1_lowN1_Best == 1], mean_choi
 
 
 # Try a regression-based approach to this whole question?
-likmodel_catDiff_catCap = lmer(all_choice_likelihood ~ 1 + easyP1difficultN1 * easyP1difficultN1_prev * capacity_HighP1_lowN1_best + 
+likmodel_catDiff_catCap = lmer(all_choice_likelihood ~ 1 + easyP1difficultN1 * easyP1difficultN1_prev * capacity_HighP1_lowN1_best +
                  (1 | subjectnumber), data = clean_data_dm)
 summary(likmodel_catDiff_catCap)
 # no signs of anything going on in previous difficulty
 
-likmodel_contDiff_catCap = lmer(all_choice_likelihood ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+likmodel_contDiff_catCap = lmer(all_choice_likelihood ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
                  (1 | subjectnumber), data = clean_data_dm)
 summary(likmodel_contDiff_catCap)
 # no signs of anything going on in previous difficulty
 
 
-# TAKEAWAY: 
-# There are no strong signs in peoples' choices that after difficult trials, choice likelihood 
+# TAKEAWAY:
+# There are no strong signs in peoples' choices that after difficult trials, choice likelihood
 # is relatively lower for low capacity folks than for high capacity folks. That *would* have
-# been consistent with 'giving up'. The signs are in the expected direction, but no stats 
-# reach significance. 
+# been consistent with 'giving up'. The signs are in the expected direction, but no stats
+# reach significance.
 #
 # Note that no stats are instead consistent with *facilitation* after difficult trials (which
-# might predict more internally-consistent choices after difficult trials). 
+# might predict more internally-consistent choices after difficult trials).
 
 # This analysis likely suffers from too much breaking-into-parts (and any others going down this
 # path would suffer more, e.g. is the likelihood lower, on difficult trials only, after difficult
 # trials than after easy trials?)
 
-# This analysis is ALSO fundamentally limited by our design - easy and difficult trials are 
+# This analysis is ALSO fundamentally limited by our design - easy and difficult trials are
 # DESIGNED with a particular choice likelihood. That's the literal definition of what makes an
 # easy trial easy etc. In particular, difficult trials, where we might expect to see the most
-# movement, are designed with likelihoods *right in the middle*, so biases to act in a 
+# movement, are designed with likelihoods *right in the middle*, so biases to act in a
 # particular way on those trials (e.g. always gamble; always safe) might be impossible to see
 # as *all actions are equally (un)likely*. If anything, this counterintuitively suggests that
-# EASY trials would be the place to observe unusual behavior, but we may have again hurt 
-# ourselves as easy trials are SO easy as to be obvious, and not requiring much cognitive 
+# EASY trials would be the place to observe unusual behavior, but we may have again hurt
+# ourselves as easy trials are SO easy as to be obvious, and not requiring much cognitive
 # work at all to decide about. In short, the way to have observed this might have been with
 # trials that were in-between easy and difficult.
 
@@ -1837,7 +1976,7 @@ ci_pupil_dilations = array(dim = c(2,number_of_clean_subjects)) # 95% CI
 
 for (s in keep_participants){
   s_index = which(keep_participants == s);
-  
+
   cat(sprintf('Subject CGE%03i (%i of %i)\n', s, s_index, length(keep_participants)))
 
   # find their file...
@@ -1845,7 +1984,7 @@ for (s in keep_participants){
   # and load only the most recent downsampled data file
   load(tmp_downsampled_fn[length(tmp_downsampled_fn)])
   downsampled_et_data = as.data.frame(downsampled_et_data);
-  
+
   mean_pupil_dilations[s_index] = mean(downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled, na.rm = T)
   sd_pupil_dilations[s_index] = sd(downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled, na.rm = T)
   ci_pupil_dilations[,s_index] = quantile(downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled, probs = c(0.025, 0.975), na.rm = T)
@@ -1855,7 +1994,7 @@ sort_order = order(mean_pupil_dilations)
 
 pdf(sprintf('%s/plots/mean_pupil_diameter_SDbars.pdf',config$path$data$processed),
     width = 5, height = 5)
-plot(mean_pupil_dilations[sort_order], 
+plot(mean_pupil_dilations[sort_order],
      xlab = 'Participants', ylab = 'Diameter (mm)', main = 'Mean Pupil Diameter by Subject (w/ S.D.)',
      pch = 20, ylim = c(2,7), xaxt = 'n')
 segments(x0 = 1:number_of_clean_subjects, x1 = 1:number_of_clean_subjects,
@@ -1865,7 +2004,7 @@ dev.off()
 
 pdf(sprintf('%s/plots/mean_pupil_diameter_95CIbars.pdf',config$path$data$processed),
     width = 5, height = 5)
-plot(mean_pupil_dilations[sort_order], 
+plot(mean_pupil_dilations[sort_order],
      xlab = 'Participants', ylab = 'Diameter (mm)', main = 'Mean Pupil Diameter by Subject (w/ 95% CIs)',
      pch = 20, ylim = c(2,7), xaxt = 'n')
 segments(x0 = 1:number_of_clean_subjects, x1 = 1:number_of_clean_subjects,
@@ -1889,9 +2028,15 @@ pre_dec_window_width = 1500;
 
 bin_increment = 50; # ensure bins increment by multiples of 25ms
 
+<<<<<<< Updated upstream
 decision_start_bins = seq(from = -baseline_window_width, to = 3000, by = bin_increment); 
 decision_end_bins = seq(from = -3000, to = baseline_window_width, by = bin_increment); 
 dec_isi_otc_iti_bins = seq(from = -pre_dec_window_width, to = 5000, by = bin_increment);
+=======
+decision_start_bins = seq(from = -baseline_window_width, to = 3000, by = bin_increment);
+decision_end_bins = seq(from = -3000, to = baseline_window_width, by = bin_increment);
+dec_isi_otc_iti_bins = seq(from = -baseline_window_width, to = 5000, by = bin_increment);
+>>>>>>> Stashed changes
 
 dec_isi_otc_iti_array = array(data = NA, dim = c(170, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects)) # trials x bins x subjects
 
@@ -1913,7 +2058,7 @@ mean_dec_isi_otc_iti_EvD_array = array(data = NA, dim = c(length(dec_isi_otc_iti
 
 for (s in keep_participants){
   s_index = which(keep_participants == s);
-  
+
   cat(sprintf('Subject CGE%03i (%i of %i): trial 000', s, s_index, length(keep_participants)))
   
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == s,]; # defines this person's BEHAVIORAL data
@@ -1921,21 +2066,21 @@ for (s in keep_participants){
   # Create NA-filled arrays to hold this one person's pupil trace data
   decision_start_array = array(data = NA, dim = c(170, length(decision_start_bins)-1))
   decision_end_array = array(data = NA, dim = c(170, length(decision_end_bins)-1))
-  
+
   # find their file...
   tmp_downsampled_fn = dir(pattern = glob2rx(sprintf('cge%03i_et_processed_downsampled*.RData',s)),full.names = T, recursive = T);
   # and load only the most recent downsampled data file
   load(tmp_downsampled_fn[length(tmp_downsampled_fn)])
   downsampled_et_data = as.data.frame(downsampled_et_data);
-  
+
   # Baseline correct all ET data to the MEAN PUPIL DIAMETER
-  downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled - 
+  downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled -
     mean(downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled, na.rm = T);
-  
+
   # Prep Subject-Level Decision Plot
   pdf(sprintf('%s/plots/cge%03i_downsampled_decision_plot.pdf',config$path$data$processed, s),
       width = 5, height = 8)
-  
+
   par(mfrow = c(2,1)); # Set up the individual-level plot
   # Pre-decision | Decision Start
   # Decision End | ISI | Outcome | ITI
@@ -1944,27 +2089,31 @@ for (s in keep_participants){
   abline(v = 0, lty = 'dashed')
   p1_coords = par('usr');
   # pre-dec window, up until 3000 ms into the 4000ms response window
-  
+
   plot(1, type = "n", xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", main = "Aligned to Choice",
        xlim = c(-3000, baseline_window_width), ylim = c(-2, 2))
   abline(v = 0, lty = 'dotted')
   p2_coords = par('usr');
   # the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
-  
+
   number_of_trials = length(event_timestamps[,1]);
+<<<<<<< Updated upstream
   cum_easy_trial_num = 0; # for use in indexing; will increment
   cum_diff_trial_num = 0;
   
+=======
+
+>>>>>>> Stashed changes
   for (t in 1:number_of_trials){
     cat(sprintf('\b\b\b%03i',t))
     # Pre-decision baseline
-    indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_start[t] - baseline_window_width)) & 
+    indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_start[t] - baseline_window_width)) &
       (downsampled_et_data$time_data_downsampled < event_timestamps$decision_start[t])
     pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
     time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_start[t];
     par(usr = p1_coords)
     par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-    
+
     # Put the mean values into the bins
     for (b in 1:(length(decision_start_bins)-1)){
       tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_start_bins[b]) & (time_tmp < decision_start_bins[b+1])], na.rm = T);
@@ -1972,15 +2121,15 @@ for (s in keep_participants){
         decision_start_array[t,b] = tmp_bin_mean;
       }
     }
-    
+
     # Decision (mean)
-    indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_start[t]) & 
+    indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_start[t]) &
       (downsampled_et_data$time_data_downsampled < event_timestamps$decision_end[t]);
     pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
     time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_start[t];
     par(usr = p1_coords)
     par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-    
+
     # Put the mean values into the bins
     for (b in 1:(length(decision_start_bins)-1)){
       tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_start_bins[b]) & (time_tmp < decision_start_bins[b+1])], na.rm = T);
@@ -1988,15 +2137,15 @@ for (s in keep_participants){
         decision_start_array[t,b] = tmp_bin_mean;
       }
     }
-    
+
     # Decision aligned to CHOICE (mean)
-    indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_start[t]) & 
+    indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_start[t]) &
       (downsampled_et_data$time_data_downsampled < event_timestamps$decision_end[t]);
     pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
     time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
     par(usr = p2_coords)
     par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-    
+
     # Put the mean values into the bins
     for (b in 1:(length(decision_end_bins)-1)){
       tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_end_bins[b]) & (time_tmp < decision_end_bins[b+1])], na.rm = T);
@@ -2004,16 +2153,16 @@ for (s in keep_participants){
         decision_end_array[t,b] = tmp_bin_mean;
       }
     }
-    
-    
+
+
     # Post-decision aligned to CHOICE (mean)
-    indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_end[t]) & 
+    indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_end[t]) &
       (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + baseline_window_width));
     pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
     time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
     par(usr = p2_coords)
     par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-    
+
     # Put the mean values into the bins
     for (b in 1:(length(decision_end_bins)-1)){
       tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_end_bins[b]) & (time_tmp < decision_end_bins[b+1])], na.rm = T);
@@ -2021,6 +2170,7 @@ for (s in keep_participants){
         decision_end_array[t,b] = tmp_bin_mean;
       }
     }
+<<<<<<< Updated upstream
     
 
     
@@ -2053,11 +2203,17 @@ for (s in keep_participants){
 
     # Dec/ISI/Otc/ITI
     indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_end[t] - pre_dec_window_width)) & 
+=======
+
+
+    # Dec/ISI/Otc/ITI
+    indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_end[t] - baseline_window_width)) &
+>>>>>>> Stashed changes
       (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + dec_isi_otc_iti_window_width));
     pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
     time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
     # par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-    
+
     # Put the mean values into the bins
     for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
       tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
@@ -2065,6 +2221,7 @@ for (s in keep_participants){
         dec_isi_otc_iti_array[t,b,s_index] = tmp_bin_mean;
       }
     }
+<<<<<<< Updated upstream
     
     # Put the mean values into the bins
     if(tmpdata$easyP1difficultN1[t] == 1) {
@@ -2083,19 +2240,22 @@ for (s in keep_participants){
       }
     }
     
+=======
+
+>>>>>>> Stashed changes
   }
-  
+
   par(usr = p1_coords)
-  par(mfg = c(1,1)); lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
+  par(mfg = c(1,1)); lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
                            y = colMeans(decision_start_array, na.rm = T), col = rgb(1,0,0), lwd = 3)
-  
+
   par(usr = p2_coords)
-  par(mfg = c(2,1)); lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2, 
+  par(mfg = c(2,1)); lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2,
                            y = colMeans(decision_end_array, na.rm = T), col = rgb(1,0,0), lwd = 3)
-  
-  
+
+
   dev.off() # complete the plot
-  
+
   mean_decision_start_array[,s_index] = colMeans(decision_start_array, na.rm = T)
   mean_decision_end_array[,s_index] = colMeans(decision_end_array, na.rm = T)
   mean_dec_isi_otc_iti_array[,s_index] = colMeans(dec_isi_otc_iti_array[,,s_index], na.rm = T)
@@ -2111,17 +2271,17 @@ for (s in keep_participants){
 # Plot the Dec/ISI/Otc/ITI Graphs
 for (s in keep_participants){
   s_index = which(keep_participants == s);
-  
+
   cat(sprintf('Subject CGE%03i (%i of %i): trial 000', s, s_index, length(keep_participants)))
-  
+
   pdf(sprintf('%s/plots/cge%03i_downsampled_dec_isi_otc_iti_plot.pdf',config$path$data$processed, s),
       width = 8, height = 4)
-  
+
   # Decision End | ISI | Outcome | ITI
   plot(1, type = "n", xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", main = "Aligned to Decision",
        xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(-2, 2))
   polygon(x = c(1000, 2000, 2000, 1000),
-          y = c(3, 3, -3, -3), 
+          y = c(3, 3, -3, -3),
           lty = 0, col = rgb(0,0,0,.1))
   abline(v = 0, lty = 'dashed')
 
@@ -2131,7 +2291,7 @@ for (s in keep_participants){
           y = dec_isi_otc_iti_array[t,,s_index], col = rgb(0,0,0,.05), lwd = 3)
   }
   # Add the person's average
-  lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
+  lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
         y = mean_dec_isi_otc_iti_array[,s_index], col = rgb(1,0,0), lwd = 3)
   dev.off() # complete the plot
   cat(sprintf('. Done.\n'))
@@ -2144,27 +2304,27 @@ pdf(sprintf('%s/plots/mean_downsampled_decision_plot.pdf',config$path$data$proce
 
 par(mfrow = c(2,1)); # Set up the individual-level plot
 # Pre-decision | Decision Start
-matplot(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
+matplot(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
         y = mean_decision_start_array,
         col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
-        xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
+        xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)",
         main = "Aligned to Decision Window Start",
         xlim = c(-baseline_window_width, 3000), ylim = c(-1, 1))
-lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
-     y = rowMeans(mean_decision_start_array, na.rm = T), 
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+     y = rowMeans(mean_decision_start_array, na.rm = T),
      lwd = 3, col = 'black')
 abline(v = 0, lty = 'dashed')
 
 # pre-dec window, up until 3000 ms into the 4000ms response window
 
-matplot(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2, 
+matplot(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2,
         y = mean_decision_end_array,
         col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
-        xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
+        xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)",
         main = "Aligned to Choice",
         xlim = c(-3000, baseline_window_width), ylim = c(-1, 1))
-lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2, 
-      y = rowMeans(mean_decision_end_array, na.rm = T), 
+lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_end_array, na.rm = T),
       lwd = 3, col = 'black')
 abline(v = 0, lty = 'dotted')
 
@@ -2172,18 +2332,24 @@ abline(v = 0, lty = 'dotted')
 dev.off()
 
 
-# Plot the downsampled dec/isi/otc/iti 
+# Plot the downsampled dec/isi/otc/iti
 pdf(sprintf('%s/plots/mean_downsampled_dec_isi_otc_iti_plot.pdf',config$path$data$processed),
     width = 8, height = 4)
 
-matplot(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
+matplot(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
         y = mean_dec_isi_otc_iti_array,
         col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
-        xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
+        xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)",
         main = "Aligned to Choice",
+<<<<<<< Updated upstream
         xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(-.5, .5))
 lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
       y = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T), 
+=======
+        xlim = c(-baseline_window_width, dec_isi_otc_iti_window_width), ylim = c(-1, 1))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T),
+>>>>>>> Stashed changes
       lwd = 3, col = 'black')
 abline(v = 0, lty = 'dashed')
 
@@ -2234,12 +2400,12 @@ pdf(sprintf('%s/plots/mean_downsampled_decision_plot_groupOnly.pdf',config$path$
 par(mfrow = c(2,1)); # Set up the individual-level plot
 # Pre-decision | Decision Start
 plot(1, type = 'n',
-     xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
+     xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)",
      main = "Aligned to Decision Window Start",
      xlim = c(-baseline_window_width, 3000), ylim = c(min(decision_start_lower),max(decision_start_upper)))
-polygon(x = sem_decision_start_x_vals,y = c(decision_start_upper,rev(decision_start_lower)), 
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_upper,rev(decision_start_lower)),
         lty = 0, col = rgb(0,0,0,.2))
-lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
       y = rowMeans(mean_decision_start_array, na.rm = T), type = 'l',
       lwd = 3, col = 'black')
 abline(v = 0, lty = 'dashed')
@@ -2247,12 +2413,12 @@ abline(v = 0, lty = 'dashed')
 # pre-dec window, up until 3000 ms into the 4000ms response window
 
 plot(1, type = 'n',
-     xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
+     xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)",
      main = "Aligned to Choice",
      xlim = c(-3000, baseline_window_width), ylim = c(min(decision_start_lower),max(decision_start_upper)))
-polygon(x = sem_decision_end_x_vals,y = c(decision_end_upper,rev(decision_end_lower)), 
+polygon(x = sem_decision_end_x_vals,y = c(decision_end_upper,rev(decision_end_lower)),
         lty = 0, col = rgb(0,0,0,.2))
-lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2, 
+lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2,
       y = rowMeans(mean_decision_end_array, na.rm = T), type = 'l',
       lwd = 3, col = 'black')
 abline(v = 0, lty = 'dotted')
@@ -2264,16 +2430,16 @@ dev.off()
 pdf(sprintf('%s/plots/mean_downsampled_dec_isi_otc_iti_plot_groupOnly.pdf',config$path$data$processed),
     width = 8, height = 4)
 plot(1, type = 'n',
-     xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
+     xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)",
      main = "Aligned to Choice",
      xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(min(dec_isi_otc_iti_lower),max(dec_isi_otc_iti_upper)))
 polygon(x = c(1000, 2000, 2000, 1000),
-        y = c(3, 3, -3, -3), 
+        y = c(3, 3, -3, -3),
         lty = 0, col = rgb(0,0,0,.1))
-polygon(x = sem_dec_isi_otc_iti_x_vals, 
-        y = c(dec_isi_otc_iti_upper,rev(dec_isi_otc_iti_lower)), 
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_upper,rev(dec_isi_otc_iti_lower)),
         lty = 0, col = rgb(0,0,0,.2))
-lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
       y = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T), type = 'l',
       lwd = 3, col = 'black')
 abline(v = 0, lty = 'dashed')
@@ -2344,50 +2510,50 @@ dev.off()
 ## Pupil Regressions #################
 
 ### Using continuous difficulty #################
-m0_pupil_decision_cont = lmer(decision_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+m0_pupil_decision_cont = lmer(decision_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best +
                         (1 | subjectnumber), data = clean_data_dm)
 summary(m0_pupil_decision_cont)
 # Negative effects of current and previous difficulty
 
-m0_pupil_isi_cont = lmer(isi_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+m0_pupil_isi_cont = lmer(isi_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best +
                        (1 | subjectnumber), data = clean_data_dm)
 summary(m0_pupil_isi_cont)
 # Negative effects of current & previous difficulty
 
-m0_pupil_otc_cont = lmer(outcome_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+m0_pupil_otc_cont = lmer(outcome_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best +
                            (1 | subjectnumber), data = clean_data_dm)
 summary(m0_pupil_otc_cont)
 # Negative effects of current and previous difficulty
 # INTERACTION btwn current difficulty & capacity --> higher cap have larger pupil dilation, lower cap have more constriction
 
-m0_pupil_iti_cont = lmer(iti_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+m0_pupil_iti_cont = lmer(iti_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best +
                            (1 | subjectnumber), data = clean_data_dm)
 summary(m0_pupil_iti_cont)
 # Negative effects of current and previous difficulty
 # Trend INTERACTION btwn current difficulty & capacity (like otc, see above
 
 ### Using continuous difficulty #################
-m0_pupil_decision_cat = lmer(decision_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best + 
+m0_pupil_decision_cat = lmer(decision_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best +
                                 (1 | subjectnumber), data = clean_data_dm)
 summary(m0_pupil_decision_cat)
 # trend of previous difficulty (larger on difficult)
 
-m0_pupil_isi_cat = lmer(isi_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best + 
+m0_pupil_isi_cat = lmer(isi_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best +
                            (1 | subjectnumber), data = clean_data_dm)
 summary(m0_pupil_isi_cat)
 # current difficulty (larger on easy trials)
 
-m0_pupil_otc_cat = lmer(outcome_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best + 
+m0_pupil_otc_cat = lmer(outcome_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best +
                            (1 | subjectnumber), data = clean_data_dm)
 summary(m0_pupil_otc_cat)
 # no effects
 
-m0_pupil_iti_cat = lmer(iti_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best + 
+m0_pupil_iti_cat = lmer(iti_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best +
                            (1 | subjectnumber), data = clean_data_dm)
 summary(m0_pupil_iti_cat)
 # current difficulty (larger on difficult)
 
-# These effects flip-flop and move around! 
+# These effects flip-flop and move around!
 
 
 
@@ -2398,8 +2564,8 @@ summary(m0_pupil_iti_cat)
 
 
 # Continuous difficulty (including previous) and continuous capacity and categorical capacity
-m1_prev_diffCont_capacityCont_capacityCat_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * complexspan_demeaned + 
-                                                             all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1 + 
+m1_prev_diffCont_capacityCont_capacityCat_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * complexspan_demeaned +
+                                                             all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1 +
                                                              (1 | subjectnumber), data = clean_data_dm);
 summary(m1_prev_diffCont_capacityCont_capacityCat_intxn_rfx)
 
@@ -2408,44 +2574,44 @@ summary(m1_prev_diffCont_capacityCont_capacityCat_intxn_rfx)
 
 
 ### Using Best Span Overall ###
-m1_diffCat_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 * complexspan_demeaned + 
+m1_diffCat_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 * complexspan_demeaned +
                                            (1 | subjectnumber), data = clean_data_dm);
 summary(m1_diffCat_capacityCont_intxn_rfx)
 # difficulty interacts with span - difficulty's slowing of RTs is potentiated for people with high cap.
 
-m1_prev_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                        easyP1difficultN1 * easyP1difficultN1_prev * complexspan_demeaned + 
+m1_prev_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 +
+                                        easyP1difficultN1 * easyP1difficultN1_prev * complexspan_demeaned +
                                         (1 | subjectnumber), data = clean_data_dm);
 summary(m1_prev_capacityCont_intxn_rfx)
 # same main effects (curr. difficult -> slower RTs; prev. difficulty -> faster RTs; curr. difficulty effect
 # is stronger for high cap. than low cap. folks)
 
-m1_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + easy * complexspan_demeaned + difficult * complexspan_demeaned + 
+m1_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + easy * complexspan_demeaned + difficult * complexspan_demeaned +
                                    (1 | subjectnumber), data = clean_data_dm);
 summary(m1_capacityCont_intxn_rfx)
 # easy is faster (difficult is trendingly slower); No net effect of complex span.
 # but: BOTH easy & difficult are slower with complex span, but to diff. degrees?
 
-m1_diffCont_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned + 
+m1_diffCont_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned +
                                             (1 | subjectnumber), data = clean_data_dm);
 summary(m1_diffCont_capacityCont_intxn_rfx)
 # same as observed above; span interacts with current difficulty.
 
 # Continuous difficulty (including previous) and continuous capacity
-m1_prev_diffCont_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 + 
-                                                 all_diff_cont * prev_all_diff_cont * complexspan_demeaned + 
+m1_prev_diffCont_capacityCont_intxn_rfx = lmer(sqrtRT ~ 1 +
+                                                 all_diff_cont * prev_all_diff_cont * complexspan_demeaned +
                                                  (1 | subjectnumber), data = clean_data_dm);
 summary(m1_prev_diffCont_capacityCont_intxn_rfx)
 # Curr. difficulty predicts slower
 # Prev. difficulty predicts faster
 # Span potentiates current difficulty
-# Span *trendingly* eliminates prev. difficulty? 
+# Span *trendingly* eliminates prev. difficulty?
 
 
 
 #### Average RTs by Capacity and Trial Type ####
 
-#look at average RT for different types of controllers 
+#look at average RT for different types of controllers
 meanRT_capacity_High <- numeric(number_of_clean_subjects)
 meanRT_capacity_Low <- numeric(number_of_clean_subjects)
 meanRT_diff_capacity_High <- numeric(number_of_clean_subjects)
