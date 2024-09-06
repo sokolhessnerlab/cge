@@ -19,7 +19,7 @@ Sys.setenv(R_CONFIG_ACTIVE = 'tabletas');
 et_processing_file_name = normalizePath(dir(pattern = glob2rx('cge_et_processing.R'), full.names = T, recursive = T));
 
 # Run the Eye-Tracking Processing Script ###########
-source(et_processing_file_name) # NOTE: This will take a long time!! 
+source(et_processing_file_name) # NOTE: This will take a long time!!
 
 # Prepare for the rest of the processing ###########
 setwd(config$path$data$raw);
@@ -73,12 +73,12 @@ ind_nottest = raw_qualtrics_data$EI.1 < 900; # Subject IDs should be < 900
 
 ind_overall = ind_complete & ind_nottest;
 
-# Do the #s of Subjects match? 
+# Do the #s of Subjects match?
 cat(sprintf('Qualtrics data has %g participants; decision-making data has %g participants.\n', sum(ind_overall), number_of_subjects))
 
 if (sum(ind_overall) != number_of_subjects) {
   warning('WARNING: The numbers of subjects from Qualtrics & behavioral data do not match!!')
-} 
+}
 
 # Used the rows from EI.1 (participant number) to create subject IDs
 survey_data$subjectID = as.numeric(raw_qualtrics_data$EI.1[ind_overall])
@@ -89,13 +89,14 @@ survey_data$age = as.numeric(raw_qualtrics_data$DG.1[ind_overall])
 plot(survey_data$age)
 
 # Gender of participants (1 = Man; 2 = Woman; 3 = Non-binary; 4 = Genderqueer; 5 = Gender expansive; 6 = Two-spirited; 7 = 3rd Gender; 8 = Agender; 9 = Not sure; 10 = Other(text); 11 = Prefer not to say)
-
+survey_data$gender = as.numeric(raw_qualtrics_data$DG.2[ind_overall])
+plot(survey_data$gender)
 
 # Ethnicity of participants (1 = Hispanic/Latinx; 2 = Not Hispanic/Latinx; 3 = Prefer not to say)
 survey_data$ethnicity = as.numeric(raw_qualtrics_data$DG.3[ind_overall])
 
 # Race of participants (1 = American Indian/Alaska Native; 2 = Black/African-American; 3 = East Asian; 4 = Native Hawaiian/Pacific Islander; 5 = South Asian; 6 = White; 7 = Bi-/Multi-racial (text); 8 = Other (text); 9 = Prefer not to say)
-
+survey_data$race = as.numeric(raw_qualtrics_data$DG.5[ind_overall])
 
 # Education level of participants (1 = No school; 2 = to 8th grade; 3 = Some HS, no diploma; 4 = HS/GED; 5 = Trade school; 6 = AA/S; 7 = BA/S; 8 = MA/S; 9 = Professional degree; 10 = PhD)
 survey_data$education = as.numeric(raw_qualtrics_data$DG.6[ind_overall])
@@ -218,7 +219,7 @@ survey_data$PSS = as.numeric(raw_qualtrics_data$PSS.Matrix_1[ind_overall]) +
                   PSS_7_R +
                   PSS_8_R +
                   as.numeric(raw_qualtrics_data$PSS.Matrix_9[ind_overall]) +
-                  as.numeric(raw_qualtrics_data$PSS.Matrix_10[ind_overall]); 
+                  as.numeric(raw_qualtrics_data$PSS.Matrix_10[ind_overall]);
 
 cat('Done.\n\n')
 
@@ -276,27 +277,27 @@ number_of_sspan_trials_per_person = 14;
 
 ospanExclude = c();
 sspanExclude = c();
-complexSpanExclude = as.data.frame(matrix(data=0, 
-                                          nrow = number_of_subjects, 
-                                          ncol=3, 
+complexSpanExclude = as.data.frame(matrix(data=0,
+                                          nrow = number_of_subjects,
+                                          ncol=3,
                                           dimnames=list(c(NULL), c("subjectnumber", "ospanExclude", "symspanExclude"))));
 complexSpanExclude$subjectnumber = 1:number_of_subjects;
 
-complexSpanScores = as.data.frame(matrix(data=NA, 
-                                         nrow = number_of_subjects, 
-                                         ncol=4, 
+complexSpanScores = as.data.frame(matrix(data=NA,
+                                         nrow = number_of_subjects,
+                                         ncol=4,
                                          dimnames=list(c(NULL), c("subjectnumber", "ospanScore", "symspanScore", "compositeSpanScore"))));
 complexSpanScores$subjectnumber= 1:number_of_subjects
 
 # Loop
 for(s in 1:number_of_subjects){
-  
-  ### OSPAN DATA ### 
-  
+
+  ### OSPAN DATA ###
+
   ospantmpdata = read.csv(ospfn[s]);
   ospantmpdata$subid = as.integer(substr(ospfn[s],6,8));
-  
-  
+
+
   if (any(ospantmpdata$percentCorrectMath[is.finite(ospantmpdata$percentCorrectMath)]<85)){
     ospanExclude = c(ospanExclude,ospantmpdata$subid[1]);
     complexSpanExclude$ospanExclude[s] = 1;
@@ -304,11 +305,11 @@ for(s in 1:number_of_subjects){
     correctIndospan = which(ospantmpdata$correctCount == ospantmpdata$setSize)
     complexSpanScores$ospanScore[s] = sum(ospantmpdata$correctCount[correctIndospan])/number_of_ospan_trials_per_person;
   }
-  
+
   ### SYMSPAN DATA ###
   sspantmpdata = read.csv(sspfn[s]);
   sspantmpdata$subid = as.integer(substr(sspfn[s],6,8));
-  
+
   if (any(sspantmpdata$percentCorrectSym[is.finite(sspantmpdata$percentCorrectSym)]<85)){
     sspanExclude = c(sspanExclude,sspantmpdata$subid[1]);
     complexSpanExclude$symspanExclude[s] = 1;
@@ -316,8 +317,8 @@ for(s in 1:number_of_subjects){
     correctIndsymspan = which(sspantmpdata$squareCorrectCount == sspantmpdata$setSize)
     complexSpanScores$symspanScore[s] = sum(sspantmpdata$squareCorrectCount[correctIndsymspan])/number_of_sspan_trials_per_person;
   }
-  
-  
+
+
   ### COMPOSITE SPAN ###
   if ((complexSpanExclude$ospanExclude[s] == 0) & (complexSpanExclude$symspanExclude[s] == 0)){ # if both scores available
     complexSpanScores$compositeSpanScore[s] = mean(c((complexSpanScores$ospanScore[s]),(complexSpanScores$symspanScore[s]))); # average the two scores
@@ -326,13 +327,13 @@ for(s in 1:number_of_subjects){
   } else if ((complexSpanExclude$ospanExclude[s] == 0) & (complexSpanExclude$symspanExclude[s] == 1)){ # if only OSpan
     complexSpanScores$compositeSpanScore[s] = complexSpanScores$ospanScore[s];
   }; # ... else, leave it NA
-  
-  
-  
+
+
+
   ### RDM Data ###
   # Load in the data
-  tmpdata = read.csv(rdmfn[s]); 
-  
+  tmpdata = read.csv(rdmfn[s]);
+
   # DECISION-MAKING DATA
   dm_data_to_add = array(data = NA, dim = c(number_of_dm_trials_per_person,length(column_names_dm)));
 
@@ -377,42 +378,42 @@ for(s in 1:number_of_subjects){
 
   dm_data_to_add[,13] = tmpdata$bestRho[is.finite(tmpdata$bestRho)];
   dm_data_to_add[,14] = tmpdata$bestMu[is.finite(tmpdata$bestMu)];
-  
+
   dm_data_to_add[,15] = complexSpanScores$ospanScore[s];
   dm_data_to_add[,16] = complexSpanScores$symspanScore[s];
   dm_data_to_add[,17] = complexSpanScores$compositeSpanScore[s];
-  
+
   dm_data_to_add[,18] = survey_data$age[s];
-  
+
   dm_data_to_add[,19] = survey_data$gender[s];
-  
+
   dm_data_to_add[,20] = survey_data$ethnicity[s];
-  
+
   dm_data_to_add[,21] = survey_data$race[s];
-  
+
   dm_data_to_add[,22] = survey_data$education[s];
-  
+
   dm_data_to_add[,23] = survey_data$firstgen[s];
-  
+
   dm_data_to_add[,24] = survey_data$politicalorientation[s];
-  
+
   dm_data_to_add[,25] = survey_data$IUS_prospective[s];
-  
+
   dm_data_to_add[,26] = survey_data$IUS_inhibitory[s];
-  
+
   dm_data_to_add[,27] = survey_data$IUS[s];
-  
+
   dm_data_to_add[,28] = survey_data$NCS[s];
-  
+
   dm_data_to_add[,29] = survey_data$SNS_ability[s];
-  
+
   dm_data_to_add[,30] = survey_data$SNS_preference[s];
-  
+
   dm_data_to_add[,31] = survey_data$SNS[s];
-  
+
   dm_data_to_add[,32] = survey_data$PSS[s];
-  
-  
+
+
 
   # Add this person's DM data to the total DM data.
   data_dm = rbind(data_dm,dm_data_to_add);
