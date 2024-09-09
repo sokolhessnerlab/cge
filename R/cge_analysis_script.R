@@ -282,7 +282,20 @@ data_rdm <- data.frame(mean_pgamble,static_mean_pgamble,dynamic_mean_pgamble,eas
 #Q:standard error, means, range for gambling behavior for particpants
 
 #Define function
-sem <- function(x) sd(x)/sqrt(length(x));
+# sem <- function(x) sd(x)/sqrt(length(x));
+# SEM function (FANCY)
+sem <- function(x){
+  if(!is.null(dim(x))){ # if x is 2-dimensional
+    sem_value = array(dim = dim(x)[1]) # make SEM vector assuming ROWS
+    for (row_num in 1:dim(x)[1]){
+      sem_value[row_num] = sd(x[row_num,], na.rm = T)/sqrt(sum(!is.na(x[row_num,])))
+    }
+  } else { # if unidimensional
+    sem_value = sd(x, na.rm = T)/sqrt(sum(!is.na(x)))
+  }
+  return(sem_value)
+}
+
 
 # Calculate M's and SEMs
 mean(mean_pgamble) # 0.497775
@@ -1955,19 +1968,6 @@ summary(likmodel_contDiff_catCap)
 
 # Pupillometry Analyses #################
 
-# SEM function
-sem <- function(x){
-  if(!is.null(dim(x))){ # if x is 2-dimensional
-    sem_value = array(dim = dim(x)[1]) # make SEM vector assuming ROWS
-    for (row_num in 1:dim(x)[1]){
-      sem_value[row_num] = sd(x[row_num,], na.rm = T)/sqrt(sum(!is.na(x[row_num,])))
-    }
-  } else { # if unidimensional
-    sem_value = sd(x, na.rm = T)/sqrt(sum(!is.na(x)))
-  }
-  return(sem_value)
-}
-
 ## Characterizing Overall Pupillometric Variability Across Participants ##############################
 
 mean_pupil_dilations = array(dim = c(number_of_clean_subjects)) # mean pupil dilation
@@ -2028,15 +2028,9 @@ pre_dec_window_width = 1500;
 
 bin_increment = 50; # ensure bins increment by multiples of 25ms
 
-<<<<<<< Updated upstream
 decision_start_bins = seq(from = -baseline_window_width, to = 3000, by = bin_increment); 
 decision_end_bins = seq(from = -3000, to = baseline_window_width, by = bin_increment); 
 dec_isi_otc_iti_bins = seq(from = -pre_dec_window_width, to = 5000, by = bin_increment);
-=======
-decision_start_bins = seq(from = -baseline_window_width, to = 3000, by = bin_increment);
-decision_end_bins = seq(from = -3000, to = baseline_window_width, by = bin_increment);
-dec_isi_otc_iti_bins = seq(from = -baseline_window_width, to = 5000, by = bin_increment);
->>>>>>> Stashed changes
 
 dec_isi_otc_iti_array = array(data = NA, dim = c(170, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects)) # trials x bins x subjects
 
@@ -2097,13 +2091,9 @@ for (s in keep_participants){
   # the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
 
   number_of_trials = length(event_timestamps[,1]);
-<<<<<<< Updated upstream
   cum_easy_trial_num = 0; # for use in indexing; will increment
   cum_diff_trial_num = 0;
   
-=======
-
->>>>>>> Stashed changes
   for (t in 1:number_of_trials){
     cat(sprintf('\b\b\b%03i',t))
     # Pre-decision baseline
@@ -2170,10 +2160,7 @@ for (s in keep_participants){
         decision_end_array[t,b] = tmp_bin_mean;
       }
     }
-<<<<<<< Updated upstream
-    
 
-    
     # Decision Start-Aligned x EASY/DIFF
     indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_start[t] - baseline_window_width)) & 
       (downsampled_et_data$time_data_downsampled < event_timestamps$decision_end[t])
@@ -2203,12 +2190,6 @@ for (s in keep_participants){
 
     # Dec/ISI/Otc/ITI
     indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_end[t] - pre_dec_window_width)) & 
-=======
-
-
-    # Dec/ISI/Otc/ITI
-    indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_end[t] - baseline_window_width)) &
->>>>>>> Stashed changes
       (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + dec_isi_otc_iti_window_width));
     pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
     time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
@@ -2221,8 +2202,7 @@ for (s in keep_participants){
         dec_isi_otc_iti_array[t,b,s_index] = tmp_bin_mean;
       }
     }
-<<<<<<< Updated upstream
-    
+
     # Put the mean values into the bins
     if(tmpdata$easyP1difficultN1[t] == 1) {
       for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
@@ -2239,10 +2219,6 @@ for (s in keep_participants){
         }
       }
     }
-    
-=======
-
->>>>>>> Stashed changes
   }
 
   par(usr = p1_coords)
@@ -2341,15 +2317,9 @@ matplot(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_incre
         col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
         xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)",
         main = "Aligned to Choice",
-<<<<<<< Updated upstream
         xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(-.5, .5))
 lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
       y = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T), 
-=======
-        xlim = c(-baseline_window_width, dec_isi_otc_iti_window_width), ylim = c(-1, 1))
-lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
-      y = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T),
->>>>>>> Stashed changes
       lwd = 3, col = 'black')
 abline(v = 0, lty = 'dashed')
 
