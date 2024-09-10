@@ -11,7 +11,7 @@ rm(list=ls()); # Clear the workspace
 
 # STEP 1: Set the working directory
 # On PSH's computers...
-setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
+#setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # On Von's PC Laptop "tabletas"...
 setwd('C:/Users/jvonm/Documents/GitHub/cge');
 # Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
@@ -932,7 +932,8 @@ sd((meanRT_easy_capacity_Low), na.rm = T); # 0.2483976
 t.test(meanRT_easy_capacity_High, meanRT_diff_capacity_High, na.rm = T) # t = -3.9724, df = 60.814, p-value = 0.000191 # thesis
 t.test(meanRT_easy_capacity_Low, meanRT_diff_capacity_Low, na.rm = T) # t = -3.5206, df = 74.921, p-value = 0.0007364
 
-
+t.test(meanRT_easy_capacity_High, meanRT_diff_capacity_High, paired = T) # t = -6.6327, df = 40, p-value = 6.109e-08 # thesis
+t.test(meanRT_easy_capacity_Low, meanRT_diff_capacity_Low, paired = T) # t = -8.0487, df = 40, p-value = 6.791e-10
 
 ## RT Regressions ############################################
 
@@ -2028,8 +2029,8 @@ pre_dec_window_width = 1500;
 
 bin_increment = 50; # ensure bins increment by multiples of 25ms
 
-decision_start_bins = seq(from = -baseline_window_width, to = 3000, by = bin_increment); 
-decision_end_bins = seq(from = -3000, to = baseline_window_width, by = bin_increment); 
+decision_start_bins = seq(from = -baseline_window_width, to = 3000, by = bin_increment);
+decision_end_bins = seq(from = -3000, to = baseline_window_width, by = bin_increment);
 dec_isi_otc_iti_bins = seq(from = -pre_dec_window_width, to = 5000, by = bin_increment);
 
 dec_isi_otc_iti_array = array(data = NA, dim = c(170, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects)) # trials x bins x subjects
@@ -2054,9 +2055,9 @@ for (s in keep_participants){
   s_index = which(keep_participants == s);
 
   cat(sprintf('Subject CGE%03i (%i of %i): trial 000', s, s_index, length(keep_participants)))
-  
+
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == s,]; # defines this person's BEHAVIORAL data
-  
+
   # Create NA-filled arrays to hold this one person's pupil trace data
   decision_start_array = array(data = NA, dim = c(170, length(decision_start_bins)-1))
   decision_end_array = array(data = NA, dim = c(170, length(decision_end_bins)-1))
@@ -2093,7 +2094,7 @@ for (s in keep_participants){
   number_of_trials = length(event_timestamps[,1]);
   cum_easy_trial_num = 0; # for use in indexing; will increment
   cum_diff_trial_num = 0;
-  
+
   for (t in 1:number_of_trials){
     cat(sprintf('\b\b\b%03i',t))
     # Pre-decision baseline
@@ -2162,13 +2163,13 @@ for (s in keep_participants){
     }
 
     # Decision Start-Aligned x EASY/DIFF
-    indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_start[t] - baseline_window_width)) & 
+    indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_start[t] - baseline_window_width)) &
       (downsampled_et_data$time_data_downsampled < event_timestamps$decision_end[t])
     pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
     time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_start[t];
     # par(usr = p1_coords)
     # par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-    
+
     # Put the mean values into the bins
     if(tmpdata$easyP1difficultN1[t] == 1) {
       cum_easy_trial_num = cum_easy_trial_num + 1;
@@ -2189,7 +2190,7 @@ for (s in keep_participants){
     }
 
     # Dec/ISI/Otc/ITI
-    indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_end[t] - pre_dec_window_width)) & 
+    indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_end[t] - pre_dec_window_width)) &
       (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + dec_isi_otc_iti_window_width));
     pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
     time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
@@ -2318,8 +2319,8 @@ matplot(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_incre
         xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)",
         main = "Aligned to Choice",
         xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(-.5, .5))
-lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
-      y = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T), 
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T),
       lwd = 3, col = 'black')
 abline(v = 0, lty = 'dashed')
 
@@ -2421,17 +2422,17 @@ pdf(sprintf('%s/plots/mean_downsampled_decision_plot_EvD_groupOnly.pdf',config$p
     width = 5, height = 4)
 
 plot(1, type = 'n',
-     xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
+     xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)",
      main = "Aligned to Decision Window Start",
      xlim = c(-baseline_window_width, 3000), ylim = c(min(decision_start_Easy_lower),max(decision_start_Easy_upper))) # use Easy to specify height
-polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_upper,rev(decision_start_Easy_lower)), 
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_upper,rev(decision_start_Easy_lower)),
         lty = 0, col = rgb(0,0,1,.1)) # blue for easy
-polygon(x = sem_decision_start_x_vals,y = c(decision_start_Diff_upper,rev(decision_start_Diff_lower)), 
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Diff_upper,rev(decision_start_Diff_lower)),
         lty = 0, col = rgb(1,0,0,.1)) # red for difficult
-lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
       y = rowMeans(mean_decision_start_EvD_array[,,1], na.rm = T), type = 'l',
       lwd = 3, col = rgb(0,0,1))
-lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2, 
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
       y = rowMeans(mean_decision_start_EvD_array[,,2], na.rm = T), type = 'l',
       lwd = 3, col = rgb(1,0,0))
 abline(v = 0, lty = 'dashed')
@@ -2443,22 +2444,22 @@ dev.off()
 pdf(sprintf('%s/plots/mean_downsampled_dec_isi_otc_iti_plot_EvD_groupOnly.pdf',config$path$data$processed),
     width = 8, height = 4)
 plot(1, type = 'n',
-     xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", 
+     xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)",
      main = "Aligned to Choice",
      xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(min(dec_isi_otc_iti_Easy_lower),max(dec_isi_otc_iti_Easy_upper)))
 polygon(x = c(1000, 2000, 2000, 1000), # outcome
-        y = c(3, 3, -3, -3), 
+        y = c(3, 3, -3, -3),
         lty = 0, col = rgb(0,0,0,.1))
-polygon(x = sem_dec_isi_otc_iti_x_vals, 
-        y = c(dec_isi_otc_iti_Easy_upper,rev(dec_isi_otc_iti_Easy_lower)), 
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Easy_upper,rev(dec_isi_otc_iti_Easy_lower)),
         lty = 0, col = rgb(0,0,1,.1)) # blue (easy)
-polygon(x = sem_dec_isi_otc_iti_x_vals, 
-        y = c(dec_isi_otc_iti_Diff_upper,rev(dec_isi_otc_iti_Diff_lower)), 
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Diff_upper,rev(dec_isi_otc_iti_Diff_lower)),
         lty = 0, col = rgb(1,0,0,.1)) # red (difficult)
-lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
       y = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,1], na.rm = T), type = 'l',
       lwd = 3, col = rgb(0,0,1)) # blue (easy) mean
-lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2, 
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
       y = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,2], na.rm = T), type = 'l',
       lwd = 3, col = rgb(1,0,0)) # red (diff) mean
 abline(v = 0, lty = 'dashed')
