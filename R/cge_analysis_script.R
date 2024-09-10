@@ -2029,18 +2029,23 @@ pre_dec_window_width = 1500;
 
 bin_increment = 50; # ensure bins increment by multiples of 25ms
 
+number_of_normBins = 200 ; # number of points for the normalized decision window plot
+
 decision_start_bins = seq(from = -baseline_window_width, to = 3000, by = bin_increment);
 decision_end_bins = seq(from = -3000, to = baseline_window_width, by = bin_increment);
 dec_isi_otc_iti_bins = seq(from = -pre_dec_window_width, to = 5000, by = bin_increment);
 
-dec_isi_otc_iti_array = array(data = NA, dim = c(170, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects)) # trials x bins x subjects
+dec_isi_otc_iti_array = array(data = NA, dim = c(170, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects)) # trials x bins x subjects # focusing on first for normalizing
+
+# NormBins Arrays
+decision_norm_array = array(data = NA, dim = c(170, number_of_normBins, number_of_clean_subjects))
 
 # overall arrays
 mean_decision_start_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_clean_subjects))
 mean_decision_end_array = array(data = NA, dim = c(length(decision_end_bins)-1,number_of_clean_subjects))
 mean_dec_isi_otc_iti_array = array(data = NA, dim = c(length(dec_isi_otc_iti_bins)-1,number_of_clean_subjects))
 
-# easy/difficult arrays
+# easy/difficult arrays # not doing yet for the normalized
 # TRIAL-level
 decision_start_EvD_array = array(data = NA, dim = c(60, length(decision_start_bins)-1, number_of_clean_subjects, 2)) # trials x bins x subjects x Easy/Difficult
 dec_isi_otc_iti_EvD_array = array(data = NA, dim = c(60, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects, 2)) # trials x bins x subjects x Easy/Difficult
@@ -2059,7 +2064,7 @@ for (s in keep_participants){
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == s,]; # defines this person's BEHAVIORAL data
 
   # Create NA-filled arrays to hold this one person's pupil trace data
-  decision_start_array = array(data = NA, dim = c(170, length(decision_start_bins)-1))
+  decision_start_array = array(data = NA, dim = c(170, length(decision_start_bins)-1)) # what does the -1 do again?
   decision_end_array = array(data = NA, dim = c(170, length(decision_end_bins)-1))
 
   # find their file...
@@ -2079,7 +2084,7 @@ for (s in keep_participants){
   par(mfrow = c(2,1)); # Set up the individual-level plot
   # Pre-decision | Decision Start
   # Decision End | ISI | Outcome | ITI
-  plot(1, type = "n", xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", main = "Aligned to Decision Window Start",
+  plot(1, type = "n", xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", main = "Aligned to Decision Window Start", # I don't see the graph
        xlim = c(-baseline_window_width, 3000), ylim = c(-2, 2))
   abline(v = 0, lty = 'dashed')
   p1_coords = par('usr');
@@ -2187,6 +2192,17 @@ for (s in keep_participants){
           decision_start_EvD_array[cum_diff_trial_num, b, s_index, 2] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
         }
       }
+    }
+
+    # Normalized Decision
+    if(!is.na(event_timestamps$decision_start[t])){
+      tmp_norm_time_points = seq(from = event_timestamps$decision_start[t], # set up the normalized time slices we want
+                                 to = event_timestamps$decision_end[t],
+                                 length.out = number_of_normBins)
+      tmp_norm_pupil = approx(x = downsampled_et_data$time_data_downsampled, # use approx to get them
+                              y = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled,
+                              xout = tmp_norm_time_points)$y
+      decision_norm_array[t,,s_index] = tmp_norm_pupil # store in the normalized array
     }
 
     # Dec/ISI/Otc/ITI
