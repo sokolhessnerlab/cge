@@ -671,7 +671,21 @@ points(mean(median_rt_diff), mean(median_rt_easy), pch = 16, col = rgb(1, 0, 1, 
 
 # test easy RTs vs. diff. RTs
 rt_mean_test = t.test(mean_rt_easy,mean_rt_diff, paired = T) # VERY significant (t(84) = -10.368, p = 2.2e-16) # thesis
+mean_diff = mean(mean_rt_diff, na.rm = T) # 1.686421
+sd_diff = sd(mean_rt_diff, na.rm = T) # 0.3432346
+mean_easy = mean(mean_rt_easy, na.rm = T) # 1.447765
+sd_easy = sd(mean_rt_easy, na.rm = T) # 0.223144
 rt_mean_test
+
+# Cohen's D
+Diff = length(mean_rt_diff)
+Easy = length(mean_rt_easy)
+
+pooled_sd = sqrt(((Diff - 1) * sd_diff^2 + (Easy - 1) * sd_easy^2)/ (Diff + Easy +2))
+
+cohen_d = (mean_diff - mean_easy) / pooled_sd
+cohen_d # 0.8341713
+
 rt_median_test = t.test(median_rt_easy,median_rt_diff, paired = T) # VERY significant (t(84) = -10.184, p = 2.493e-16)
 rt_median_test
 #A: yes, looks like on average rt of difficult decisions was slower than avg rt of easy decisions 4/11/24
@@ -729,6 +743,20 @@ for (subj in 1:number_of_clean_subjects){
 # test easy ACC vs. easy REJ RTs (and plot against each other)
 # Q: Can we treat easy ACC & REJ RTs as the same kind of thing?
 t.test(mean_rt_easyACC,mean_rt_easyREJ, paired = T); # not sig. diff between easy types 4/25/23 (t(84) = 0.28963, p = 0.7728) # thesis
+mean_acc = mean(mean_rt_easyACC, na.rm = T) # 1.45068
+sd_acc = sd(mean_rt_easyACC, na.rm = T) # 0.2693126
+mean_rej = mean(mean_rt_easyREJ, na.rm = T) # 1.444786
+sd_rej =sd(mean_rt_easyREJ, na.rm = T) # 0.2115278
+
+# Cohen's D
+Acc = length(mean_rt_easyACC)
+Rej = length(mean_rt_easyREJ)
+
+pooled_sd = sqrt(((Acc - 1) * sd_acc^2 + (Rej - 1) * sd_rej^2)/ (Acc + Rej +2))
+
+cohen_d = (mean_acc - mean_rej) / pooled_sd
+cohen_d # 0.02462664
+
 plot(mean_rt_easyACC, mean_rt_easyREJ, main = 'Reaction Times on Easy Trials',
      xlab = 'Easy ACCEPT trials', ylab = 'Easy REJECT trials', xlim = c(0,4), ylim = c(0,4))
 lines(c(0,4), c(0,4))
@@ -763,7 +791,36 @@ for (subj in 1:number_of_clean_subjects){
 
 # does prev. trial type influence RT on the current trial
 t.test(easy_easy_mean_rt, diff_easy_mean_rt, paired = T); # NOT for easy 4/5/24 (t(84) = 0.72255, p = 0.472) # thesis
+EE_mean = mean(easy_easy_mean_rt, na.rm = T) # 1.611737
+EE_sd = sd(easy_diff_mean_rt, na.rm = T) # 0.2656962
+DE_mean = mean(diff_easy_mean_rt, na.rm = T) # 1.603603
+DE_sd = sd(diff_easy_mean_rt, na.rm = T) # 0.2683643
+
+# Cohen's D
+EE = length(easy_easy_mean_rt)
+DE = length(easy_diff_mean_rt)
+
+pooled_sd = sqrt(((EE - 1) * EE_sd^2 + (DE - 1) * DE_sd^2)/ (EE + DE +2))
+
+cohen_d = (EE_mean - DE_mean) / pooled_sd
+cohen_d # 0.0308181
+
 t.test(diff_diff_mean_rt, easy_diff_mean_rt, paired = T); # NOT for difficult 4/5/24 (t(84) = 1.6342, p = 0.106)
+DD_mean = mean(diff_diff_mean_rt, na.rm = T) # 1.610927
+DD_sd = sd(diff_diff_mean_rt, na.rm = T) # 0.2721176
+ED_mean = mean(easy_diff_mean_rt, na.rm = T) # 1.59511
+ED_sd = sd(easy_diff_mean_rt, na.rm = T) # 0.2656962
+
+# Cohen's D
+DD = length(diff_diff_mean_rt)
+ED = length(easy_diff_mean_rt)
+
+pooled_sd = sqrt(((DD - 1) * DD_sd^2 + (ED - 1) * ED_sd^2)/ (DD + ED +2))
+
+cohen_d = (DD_mean - ED_mean) / pooled_sd
+cohen_d # 0.05951211
+
+
 # A: Not at this level.
 
 # Plot the current trial as a function of prev. trial type
@@ -774,6 +831,12 @@ plot(easy_diff_mean_rt, diff_diff_mean_rt, xlim = c(0.75,2.2), ylim = c(0.75,2.2
 
 t.test(diff_diff_mean_rt, easy_easy_mean_rt, paired = T); # not sig diff 4/5/24 (t(84) = -0.075654, p = 0.9399) # thesis
 #A: it looks like RT based upon subsequent trials is not sig different at this level
+
+# Cohen's D
+pooled_sd = sqrt(((DD - 1) * DD_sd^2 + (EE - 1) * EE_sd^2)/ (DD + EE +2))
+
+cohen_d = (DD_mean - EE_mean) / pooled_sd
+cohen_d # -0.003047055
 
 
 #Q: Does gambling behavior change based upon previous trial difficulty?
@@ -920,20 +983,40 @@ sd(meanRT_capacity_High, na.rm = T) # 0.240628
 
 t.test(meanRT_capacity_High, meanRT_capacity_Low, na.rm = T) # t = -0.5596, df = 77.995, p-value = 0.5774 # thesis
 
-mean((meanRT_diff_capacity_High), na.rm = T); # 1.703286
-sd((meanRT_diff_capacity_High), na.rm = T); # 0.3666631
-mean((meanRT_easy_capacity_High), na.rm = T); # 1.445861
-sd((meanRT_easy_capacity_High), na.rm = T); # 0.1942527
+mean_HE = mean((meanRT_easy_capacity_High), na.rm = T); # 1.445861
+sd_HE = sd((meanRT_easy_capacity_High), na.rm = T); # 0.1942527
+mean_HD = mean((meanRT_diff_capacity_High), na.rm = T); # 1.703286
+sd_HD = sd((meanRT_diff_capacity_High), na.rm = T); # 0.3666631
+
+mean_LE = mean((meanRT_easy_capacity_Low), na.rm = T); # 1.465639
+sd((meanRT_easy_capacity_Low), na.rm = T); # 0.2483976
 mean((meanRT_diff_capacity_Low), na.rm = T); # 1.690224
 sd((meanRT_diff_capacity_Low), na.rm = T); # 0.3242537
-mean((meanRT_easy_capacity_Low), na.rm = T); # 1.465639
-sd((meanRT_easy_capacity_Low), na.rm = T); # 0.2483976
 
-t.test(meanRT_easy_capacity_High, meanRT_diff_capacity_High, na.rm = T) # t = -3.9724, df = 60.814, p-value = 0.000191 # thesis
-t.test(meanRT_easy_capacity_Low, meanRT_diff_capacity_Low, na.rm = T) # t = -3.5206, df = 74.921, p-value = 0.0007364
 
 t.test(meanRT_easy_capacity_High, meanRT_diff_capacity_High, paired = T) # t = -6.6327, df = 40, p-value = 6.109e-08 # thesis
+
+# Cohen's D
+Acc = length(mean_rt_easyACC)
+Rej = length(mean_rt_easyREJ)
+
+pooled_sd = sqrt(((Acc - 1) * sd_acc^2 + (Rej - 1) * sd_rej^2)/ (Acc + Rej +2))
+
+cohen_d = (mean_acc - mean_rej) / pooled_sd
+cohen_d # 0.02462664
+
 t.test(meanRT_easy_capacity_Low, meanRT_diff_capacity_Low, paired = T) # t = -8.0487, df = 40, p-value = 6.791e-10
+
+# Cohen's D
+Acc = length(mean_rt_easyACC)
+Rej = length(mean_rt_easyREJ)
+
+pooled_sd = sqrt(((Acc - 1) * sd_acc^2 + (Rej - 1) * sd_rej^2)/ (Acc + Rej +2))
+
+cohen_d = (mean_acc - mean_rej) / pooled_sd
+cohen_d # 0.02462664
+
+
 
 ## RT Regressions ############################################
 
