@@ -155,6 +155,19 @@ sum(clean_data_survey$ethnicity == 1, na.rm = T) # 12
 sum(clean_data_survey$ethnicity == 2, na.rm = T) # 73
 sum(clean_data_survey$ethnicity == 3, na.rm = T) # 0
 
+# Education (1 = No school; 2 = to 8th grade; 3 = Some HS, no diploma; 4 = HS/GED; 5 = Trade school; 6 = AA/S; 7 = BA/S; 8 = MA/S; 9 = Professional degree; 10 = PhD)
+sum(clean_data_survey$education == 1, na.rm = T) # 0
+sum(clean_data_survey$education == 2, na.rm = T) # 0
+sum(clean_data_survey$education == 3, na.rm = T) # 0
+sum(clean_data_survey$education == 4, na.rm = T) # 78
+sum(clean_data_survey$education == 5, na.rm = T) # 0
+sum(clean_data_survey$education == 6, na.rm = T) # 1
+sum(clean_data_survey$education == 7, na.rm = T) # 5
+sum(clean_data_survey$education == 8, na.rm = T) # 1
+sum(clean_data_survey$education == 9, na.rm = T) # 0
+sum(clean_data_survey$education == 10, na.rm = T) # 0
+
+
 
 # Main Questionnaire Scores:
 
@@ -686,8 +699,26 @@ pooled_sd = sqrt(((Diff - 1) * sd_diff^2 + (Easy - 1) * sd_easy^2)/ (Diff + Easy
 cohen_d = (mean_diff - mean_easy) / pooled_sd
 cohen_d # 0.8341713
 
+se_easy = sd_easy/sqrt(length(mean_rt_easy))
+se_diff = sd_diff/sqrt(length(mean_rt_diff))
+means = c(mean_easy, mean_diff)
+ses = c(se_easy, se_diff)
+
+choiceDifficultyGraph = barplot(means, beside = T, col = c("blue", "red"),
+        ylim = c(0, 4), names.arg = c("Easy", "Difficult"),
+        ylab = "Average RTs in Seconds", main = "Choice Difficulty")
+
+arrows(choiceDifficultyGraph, means,
+       choiceDifficultyGraph, means + ses,
+       angle = 90, code = 3, length = 0.1)
+box(bty="l")
+
 rt_median_test = t.test(median_rt_easy,median_rt_diff, paired = T) # VERY significant (t(84) = -10.184, p = 2.493e-16)
 rt_median_test
+
+
+
+
 #A: yes, looks like on average rt of difficult decisions was slower than avg rt of easy decisions 4/11/24
 
 # Test for the across-participant variances in RTs by trial type
@@ -757,6 +788,13 @@ pooled_sd = sqrt(((Acc - 1) * sd_acc^2 + (Rej - 1) * sd_rej^2)/ (Acc + Rej +2))
 cohen_d = (mean_acc - mean_rej) / pooled_sd
 cohen_d # 0.02462664
 
+means = c(mean_acc, mean_rej)
+se = c(sd_acc, sd_rej)
+
+barplot(means, beside = TRUE, col = c("skyblue", "salmon"),
+        ylim = c(0, max(means + se) + 1), names.arg = c("Group 1", "Group 2"),
+        ylab = "Mean Values", main = "Barplot of Group Means with Error Bars")
+
 plot(mean_rt_easyACC, mean_rt_easyREJ, main = 'Reaction Times on Easy Trials',
      xlab = 'Easy ACCEPT trials', ylab = 'Easy REJECT trials', xlim = c(0,4), ylim = c(0,4))
 lines(c(0,4), c(0,4))
@@ -805,6 +843,13 @@ pooled_sd = sqrt(((EE - 1) * EE_sd^2 + (DE - 1) * DE_sd^2)/ (EE + DE +2))
 cohen_d = (EE_mean - DE_mean) / pooled_sd
 cohen_d # 0.0308181
 
+means = c(EE_mean, DE_mean)
+se = c(EE_sd, DE_sd)
+
+barplot(means, beside = TRUE, col = c("skyblue", "salmon"),
+        ylim = c(0, max(means + se) + 1), names.arg = c("Group 1", "Group 2"),
+        ylab = "Mean Values", main = "Barplot of Group Means with Error Bars")
+
 t.test(diff_diff_mean_rt, easy_diff_mean_rt, paired = T); # NOT for difficult 4/5/24 (t(84) = 1.6342, p = 0.106)
 DD_mean = mean(diff_diff_mean_rt, na.rm = T) # 1.610927
 DD_sd = sd(diff_diff_mean_rt, na.rm = T) # 0.2721176
@@ -820,6 +865,12 @@ pooled_sd = sqrt(((DD - 1) * DD_sd^2 + (ED - 1) * ED_sd^2)/ (DD + ED +2))
 cohen_d = (DD_mean - ED_mean) / pooled_sd
 cohen_d # 0.05951211
 
+means = c(DD_mean, ED_mean)
+se = c(DD_sd, ED_sd)
+
+barplot(means, beside = TRUE, col = c("skyblue", "salmon"),
+        ylim = c(0, max(means + se) + 1), names.arg = c("Group 1", "Group 2"),
+        ylab = "Mean Values", main = "Barplot of Group Means with Error Bars")
 
 # A: Not at this level.
 
@@ -837,6 +888,13 @@ pooled_sd = sqrt(((DD - 1) * DD_sd^2 + (EE - 1) * EE_sd^2)/ (DD + EE +2))
 
 cohen_d = (DD_mean - EE_mean) / pooled_sd
 cohen_d # -0.003047055
+
+means = c(DD_mean, EE_mean)
+se = c(DD_sd, EE_sd)
+
+barplot(means, beside = TRUE, col = c("skyblue", "salmon"),
+        ylim = c(0, max(means + se) + 1), names.arg = c("Group 1", "Group 2"),
+        ylab = "Mean Values", main = "Barplot of Group Means with Error Bars")
 
 
 #Q: Does gambling behavior change based upon previous trial difficulty?
@@ -989,34 +1047,57 @@ mean_HD = mean((meanRT_diff_capacity_High), na.rm = T); # 1.703286
 sd_HD = sd((meanRT_diff_capacity_High), na.rm = T); # 0.3666631
 
 mean_LE = mean((meanRT_easy_capacity_Low), na.rm = T); # 1.465639
-sd((meanRT_easy_capacity_Low), na.rm = T); # 0.2483976
-mean((meanRT_diff_capacity_Low), na.rm = T); # 1.690224
-sd((meanRT_diff_capacity_Low), na.rm = T); # 0.3242537
+sd_LE = sd((meanRT_easy_capacity_Low), na.rm = T); # 0.2483976
+mean_LD = mean((meanRT_diff_capacity_Low), na.rm = T); # 1.690224
+sd_LD =  sd((meanRT_diff_capacity_Low), na.rm = T); # 0.3242537
 
 
 t.test(meanRT_easy_capacity_High, meanRT_diff_capacity_High, paired = T) # t = -6.6327, df = 40, p-value = 6.109e-08 # thesis
 
 # Cohen's D
-Acc = length(mean_rt_easyACC)
-Rej = length(mean_rt_easyREJ)
+HE = length(meanRT_easy_capacity_High)
+HD = length(meanRT_diff_capacity_High)
 
-pooled_sd = sqrt(((Acc - 1) * sd_acc^2 + (Rej - 1) * sd_rej^2)/ (Acc + Rej +2))
+pooled_sd = sqrt(((HD - 1) * sd_HD^2 + (HE - 1) * sd_HE^2)/ (HD + HE +2))
 
-cohen_d = (mean_acc - mean_rej) / pooled_sd
-cohen_d # 0.02462664
+cohen_d = (mean_HD - mean_HE) / pooled_sd
+cohen_d # 0.8877452
 
 t.test(meanRT_easy_capacity_Low, meanRT_diff_capacity_Low, paired = T) # t = -8.0487, df = 40, p-value = 6.791e-10
 
 # Cohen's D
-Acc = length(mean_rt_easyACC)
-Rej = length(mean_rt_easyREJ)
+LE = length(meanRT_easy_capacity_Low)
+LD = length(meanRT_diff_capacity_Low)
 
-pooled_sd = sqrt(((Acc - 1) * sd_acc^2 + (Rej - 1) * sd_rej^2)/ (Acc + Rej +2))
+pooled_sd = sqrt(((LD - 1) * sd_LD^2 + (LE - 1) * sd_LE^2)/ (LD + LE +2))
 
-cohen_d = (mean_acc - mean_rej) / pooled_sd
-cohen_d # 0.02462664
+cohen_d = (mean_LD - mean_LE) / pooled_sd
+cohen_d # 0.7867809
 
+se_HE = sd_HE/sqrt(length(meanRT_easy_capacity_High))
+se_HD = sd_HD/sqrt(length(meanRT_diff_capacity_High))
+se_LE = sd_LE/sqrt(length(meanRT_easy_capacity_Low))
+se_LD = sd_LD/sqrt(length(meanRT_diff_capacity_Low))
+means = c(mean_LE, mean_HE, mean_LD, mean_HD)
+ses = c(se_LE, se_HE, se_LD, se_HD)
 
+means_matrix = matrix(means, nrow=2, byrow=TRUE)
+rownames(means_matrix) = c("Easy", "Difficult")
+colnames(means_matrix) = c("Low WMC", "High WMC")
+
+# Bar plot with error bars
+WMCgraph = barplot(means_matrix, beside = TRUE, col = c("blue", "red"),
+                        ylim = c(0, 4),
+                        names.arg = colnames(means_matrix),
+                        ylab = "Average RTs in Seconds",
+                        main = "Choice Difficulty x WMC Group",
+                        legend.text = rownames(means_matrix),
+                        args.legend = list(x = "topright"))
+
+arrows(WMCgraph, means_matrix,
+       WMCgraph, means_matrix + ses,
+       angle = 90, code = 3, length = 0.1)
+box(bty="l")
 
 ## RT Regressions ############################################
 
