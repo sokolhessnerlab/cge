@@ -2194,15 +2194,13 @@ pre_dec_window_width = 1500;
 bin_increment = 50; # ensure bins increment by multiples of 25ms
 
 number_of_normBins = 200 ; # number of points for the normalized decision window plot
+normBins = seq(from = 1, to = 200, by = 1)
 
 decision_start_bins = seq(from = -baseline_window_width, to = 3000, by = bin_increment);
 decision_end_bins = seq(from = -3000, to = baseline_window_width, by = bin_increment);
 dec_isi_otc_iti_bins = seq(from = -pre_dec_window_width, to = 5000, by = bin_increment);
 
 dec_isi_otc_iti_array = array(data = NA, dim = c(170, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects)) # trials x bins x subjects # focusing on first for normalizing
-
-# NormBins Arrays
-decision_norm_array = array(data = NA, dim = c(170, number_of_normBins, number_of_clean_subjects))
 
 # overall arrays
 mean_decision_start_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_clean_subjects))
@@ -2218,6 +2216,12 @@ dec_isi_otc_iti_EvD_array = array(data = NA, dim = c(60, length(dec_isi_otc_iti_
 # SUBJECT-level
 mean_decision_start_EvD_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_clean_subjects, 2)) # ... by 2 for easy/difficult
 mean_dec_isi_otc_iti_EvD_array = array(data = NA, dim = c(length(dec_isi_otc_iti_bins)-1,number_of_clean_subjects, 2)) # ... by 2 for easy/difficult
+
+# Normalized Bin Arrays
+decision_norm_array = array(data = NA, dim = c(170, number_of_normBins, number_of_clean_subjects)) # all trials
+decision_norm_EvD_array = array(data = NA, dim = c(60, number_of_normBins, number_of_clean_subjects, 2)) # trial-level (choice difficulty)
+mean_decision_norm_array = array(data = NA, dim = c(number_of_normBins, number_of_clean_subjects)) # all trials
+mean_decision_norm_EvD_array = array(data = NA, dim = c(number_of_normBins, number_of_clean_subjects, 2)) # subject-level (choice difficulty)
 
 
 for (s in keep_participants){
@@ -2358,7 +2362,7 @@ for (s in keep_participants){
       }
     }
 
-    # Normalized Decision
+    # NORMALIZED Decision
     if(!is.na(event_timestamps$decision_start[t])){
       tmp_norm_time_points = seq(from = event_timestamps$decision_start[t], # set up the normalized time slices we want
                                  to = event_timestamps$decision_end[t],
@@ -2368,6 +2372,34 @@ for (s in keep_participants){
                               xout = tmp_norm_time_points)$y
       decision_norm_array[t,,s_index] = tmp_norm_pupil # store in the normalized array
     }
+
+    # Put the mean NORMALIZED values into the bins (all trials)
+    for (b in 1:(length(number_of_normBins))){
+      tmp_bin_mean = mean(tmp_norm_pupil[(tmp_norm_time_points >= number_of_normBins[b]) & (tmp_norm_time_points < number_of_normBins[b+1])], na.rm = T);
+      if (!is.na(tmp_bin_mean)){
+        decision_norm_array[t,b,s_index] = tmp_bin_mean;
+      }
+    }
+
+    # Put the mean NORMALIZED values into the bins (choice difficulty)
+    if(tmpdata$easyP1difficultN1[t] == 1) {
+      cum_easy_trial_num = cum_easy_trial_num + 1;
+      for (b in 1:(length(number_of_normBins))){
+        tmp_bin_mean = mean(tmp_norm_pupil[(tmp_norm_time_points >= number_of_normBins[b]) & (tmp_norm_time_points < number_of_normBins[b+1])], na.rm = T);
+        if (!is.na(tmp_bin_mean)){
+          decision_norm__EvD_array[cum_easy_trial_num, b, s_index, 1] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
+        }
+      }
+    } else if (tmpdata$easyP1difficultN1[t] == -1) {
+      cum_diff_trial_num = cum_diff_trial_num + 1;
+      for (b in 1:(length(number_of_normBins))){
+        tmp_bin_mean = mean(tmp_norm_pupil[(tmp_norm_time_points >= number_of_normBins[b]) & (tmp_norm_time_points < number_of_normBins[b+1])], na.rm = T);
+        if (!is.na(tmp_bin_mean)){
+          decision_norm__EvD_array[cum_diff_trial_num, b, s_index, 2] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
+        }
+      }
+    }
+
 
     # Dec/ISI/Otc/ITI
     indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_end[t] - pre_dec_window_width)) &
@@ -2413,6 +2445,7 @@ for (s in keep_participants){
 
   dev.off() # complete the plot
 
+
   mean_decision_start_array[,s_index] = colMeans(decision_start_array, na.rm = T)
   mean_decision_end_array[,s_index] = colMeans(decision_end_array, na.rm = T)
   mean_dec_isi_otc_iti_array[,s_index] = colMeans(dec_isi_otc_iti_array[,,s_index], na.rm = T)
@@ -2421,6 +2454,12 @@ for (s in keep_participants){
   mean_decision_start_EvD_array[,s_index,2] = colMeans(decision_start_EvD_array[,,s_index,2], na.rm = T)
   mean_dec_isi_otc_iti_EvD_array[,s_index,1] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,1], na.rm = T)
   mean_dec_isi_otc_iti_EvD_array[,s_index,2] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,2], na.rm = T)
+
+  # NORMALIZED Mean Data Arrays
+  mean_decision_norm_array[,s_index] = colMeans(decision_norm_array[,,s_index], na.rm = T)
+  mean_decision_norm_EvD_array[,s_index,1] = colMeans(decision_norm_EvD_array[,,s_index,1], na.rm = T)
+  mean_decision_norm_EvD_array[,s_index,2] = colMeans(decision_norm_EvD_array[,,s_index,2], na.rm = T)
+
   cat(sprintf('. Done.\n'))
 }
 
@@ -2507,6 +2546,20 @@ abline(v = 0, lty = 'dashed')
 # the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
 dev.off()
 
+# Plot NORMALIZED - Test
+
+matplot(x = normBins[0:(length(normBins))] + bin_increment/2,
+        y = mean_decision_norm_array,
+        col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
+        xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
+        main = "Normalized Decision Window",
+        xlim = c(1, number_of_normBins), ylim = c(-.5, .5))
+lines(x = normBins[1:(length(normBins))] + bin_increment/2,
+      y = rowMeans(mean_decision_norm_array, na.rm = T),
+      lwd = 3, col = 'black')
+abline(v = 0, lty = 'dashed')
+
+###
 
 # Plot JUST the group means
 
@@ -2537,6 +2590,20 @@ dec_isi_otc_iti_Easy_upper = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,1], na.rm
 dec_isi_otc_iti_Easy_lower = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,1], na.rm = T) - sem_dec_isi_otc_iti_Easy_array
 dec_isi_otc_iti_Diff_upper = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,2], na.rm = T) + sem_dec_isi_otc_iti_Diff_array
 dec_isi_otc_iti_Diff_lower = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,2], na.rm = T) - sem_dec_isi_otc_iti_Diff_array
+
+# NORMALIZED Pupillometry
+sem_decision_norm_array = sem(mean_decision_norm_array)
+sem_decision_norm_Easy_array = sem(mean_decision_norm_EvD_array[,,1])
+sem_decision_norm_Diff_array = sem(mean_decision_norm_EvD_array[,,2])
+
+decision_norm_array_upper = rowMeans(mean_decision_norm_array, na.rm = T) + sem_decision_norm_array
+decision_norm_array_lower = rowMeans(mean_decision_norm_array, na.rm = T) - sem_decision_norm_array
+
+decision_norm_Easy_upper = rowMeans(mean_decision_norm_EvD_array[,,1], na.rm = T) + sem_decision_norm_Easy_array
+decision_norm_Easy_lower = rowMeans(mean_decision_norm_EvD_array[,,1], na.rm = T) - sem_decision_norm_Easy_array
+decision_norm_Diff_upper = rowMeans(mean_decision_norm_EvD_array[,,2], na.rm = T) + sem_decision_norm_Diff_array
+decision_norm_Diff_lower = rowMeans(mean_decision_norm_EvD_array[,,2], na.rm = T) - sem_decision_norm_Diff_array
+
 
 sem_decision_start_x_vals = c(decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
                rev(decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2))
@@ -2577,7 +2644,6 @@ abline(v = 0, lty = 'dotted')
 dev.off()
 
 
-
 pdf(sprintf('%s/plots/mean_downsampled_dec_isi_otc_iti_plot_groupOnly.pdf',config$path$data$processed),
     width = 8, height = 4)
 plot(1, type = 'n',
@@ -2596,6 +2662,20 @@ lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increme
 abline(v = 0, lty = 'dashed')
 dev.off()
 
+### Test Norm Plotting
+
+plot(1, type = 'n',
+     xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Normalized Decision Window",
+     xlim = c(1, number_of_normBins), ylim = c(min(decision_norm_array_lower),max(decision_norm_array_upper)))
+lines(x = normBins[1:(length(normBins))] + bin_increment/2,
+      y = rowMeans(decision_norm_array, na.rm = T), type = 'l',
+      lwd = 3, col = 'black')
+abline(v = 0, lty = 'dashed')
+
+
+
+###
 
 
 pdf(sprintf('%s/plots/mean_downsampled_decision_plot_EvD_groupOnly.pdf',config$path$data$processed),
