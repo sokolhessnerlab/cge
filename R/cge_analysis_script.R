@@ -2362,45 +2362,6 @@ for (s in keep_participants){
       }
     }
 
-    # NORMALIZED Decision
-    if(!is.na(event_timestamps$decision_start[t])){
-      tmp_norm_time_points = seq(from = event_timestamps$decision_start[t], # set up the normalized time slices we want
-                                 to = event_timestamps$decision_end[t],
-                                 length.out = number_of_normBins)
-      tmp_norm_pupil = approx(x = downsampled_et_data$time_data_downsampled, # use approx to get them
-                              y = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled,
-                              xout = tmp_norm_time_points)$y
-      decision_norm_array[t,,s_index] = tmp_norm_pupil # store in the normalized array
-    }
-
-    # Put the mean NORMALIZED values into the bins (all trials)
-    for (b in 1:(length(number_of_normBins))){
-      tmp_bin_mean = mean(tmp_norm_pupil[(tmp_norm_time_points >= number_of_normBins[b]) & (tmp_norm_time_points < number_of_normBins[b+1])], na.rm = T);
-      if (!is.na(tmp_bin_mean)){
-        decision_norm_array[t,b,s_index] = tmp_bin_mean;
-      }
-    }
-
-    # Put the mean NORMALIZED values into the bins (choice difficulty)
-    if(tmpdata$easyP1difficultN1[t] == 1) {
-      cum_easy_trial_num = cum_easy_trial_num + 1;
-      for (b in 1:(length(number_of_normBins))){
-        tmp_bin_mean = mean(tmp_norm_pupil[(tmp_norm_time_points >= number_of_normBins[b]) & (tmp_norm_time_points < number_of_normBins[b+1])], na.rm = T);
-        if (!is.na(tmp_bin_mean)){
-          decision_norm__EvD_array[cum_easy_trial_num, b, s_index, 1] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
-        }
-      }
-    } else if (tmpdata$easyP1difficultN1[t] == -1) {
-      cum_diff_trial_num = cum_diff_trial_num + 1;
-      for (b in 1:(length(number_of_normBins))){
-        tmp_bin_mean = mean(tmp_norm_pupil[(tmp_norm_time_points >= number_of_normBins[b]) & (tmp_norm_time_points < number_of_normBins[b+1])], na.rm = T);
-        if (!is.na(tmp_bin_mean)){
-          decision_norm__EvD_array[cum_diff_trial_num, b, s_index, 2] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
-        }
-      }
-    }
-
-
     # Dec/ISI/Otc/ITI
     indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_end[t] - pre_dec_window_width)) &
       (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + dec_isi_otc_iti_window_width));
@@ -2430,6 +2391,44 @@ for (s in keep_participants){
         if (!is.na(tmp_bin_mean)){
           dec_isi_otc_iti_EvD_array[cum_diff_trial_num, b, s_index, 2] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
         }
+      }
+    }
+  }
+
+  # NORMALIZED Decision
+  if(!is.na(event_timestamps$decision_start[t])){
+    tmp_norm_time_points = seq(from = event_timestamps$decision_start[t], # set up the normalized time slices we want
+                               to = event_timestamps$decision_end[t],
+                               length.out = number_of_normBins)
+    tmp_norm_pupil = approx(x = downsampled_et_data$time_data_downsampled, # use approx to get them
+                            y = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled,
+                            xout = tmp_norm_time_points)$y
+    decision_norm_array[t,,s_index] = tmp_norm_pupil # store in the normalized array
+  }
+
+  # Put the mean NORMALIZED values into the bins (all trials)
+  for (b in 1:(length(normBins))){
+    tmp_bin_mean = mean(tmp_norm_pupil[(tmp_norm_time_points >= normBins[b]) & (tmp_norm_time_points < normBins[b+1])], na.rm = T);
+    if (!is.na(tmp_bin_mean)){
+      decision_norm_array[t,b,s_index] = tmp_bin_mean;
+    }
+  }
+
+  # Put the mean NORMALIZED values into the bins (choice difficulty)
+  if(tmpdata$easyP1difficultN1[t] == 1) {
+    cum_easy_trial_num = cum_easy_trial_num + 1;
+    for (b in 1:(length(normBins))){
+      tmp_bin_mean = mean(tmp_norm_pupil[(tmp_norm_time_points >= normBins[b]) & (tmp_norm_time_points < normBins[b+1])], na.rm = T);
+      if (!is.na(tmp_bin_mean)){
+        decision_norm__EvD_array[cum_easy_trial_num, b, s_index, 1] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
+      }
+    }
+  } else if (tmpdata$easyP1difficultN1[t] == -1) {
+    cum_diff_trial_num = cum_diff_trial_num + 1;
+    for (b in 1:(length(normBins))){
+      tmp_bin_mean = mean(tmp_norm_pupil[(tmp_norm_time_points >= normBins[b]) & (tmp_norm_time_points < normBins[b+1])], na.rm = T);
+      if (!is.na(tmp_bin_mean)){
+        decision_norm__EvD_array[cum_diff_trial_num, b, s_index, 2] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
       }
     }
   }
@@ -2548,13 +2547,13 @@ dev.off()
 
 # Plot NORMALIZED - Test
 
-matplot(x = normBins[0:(length(normBins))] + bin_increment/2,
+matplot(x = normBins[0:(length(normBins))],
         y = mean_decision_norm_array,
         col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
         xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
         main = "Normalized Decision Window",
-        xlim = c(1, number_of_normBins), ylim = c(-.5, .5))
-lines(x = normBins[1:(length(normBins))] + bin_increment/2,
+        xlim = c(0, 200), ylim = c(-1, 1))
+lines(x = normBins[1:(length(normBins))],
       y = rowMeans(mean_decision_norm_array, na.rm = T),
       lwd = 3, col = 'black')
 abline(v = 0, lty = 'dashed')
@@ -2593,8 +2592,8 @@ dec_isi_otc_iti_Diff_lower = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,2], na.rm
 
 # NORMALIZED Pupillometry
 sem_decision_norm_array = sem(mean_decision_norm_array)
-sem_decision_norm_Easy_array = sem(mean_decision_norm_EvD_array[,,1])
-sem_decision_norm_Diff_array = sem(mean_decision_norm_EvD_array[,,2])
+sem_decision_norm_Easy_array = sem(mean_decision_norm_EvD_array[,,1]) # empty still
+sem_decision_norm_Diff_array = sem(mean_decision_norm_EvD_array[,,2]) # empty still
 
 decision_norm_array_upper = rowMeans(mean_decision_norm_array, na.rm = T) + sem_decision_norm_array
 decision_norm_array_lower = rowMeans(mean_decision_norm_array, na.rm = T) - sem_decision_norm_array
@@ -2672,7 +2671,6 @@ lines(x = normBins[1:(length(normBins))] + bin_increment/2,
       y = rowMeans(decision_norm_array, na.rm = T), type = 'l',
       lwd = 3, col = 'black')
 abline(v = 0, lty = 'dashed')
-
 
 
 ###
