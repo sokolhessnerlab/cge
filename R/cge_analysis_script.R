@@ -57,7 +57,7 @@ for (subj in 1:number_of_subjects){
   correct_answers = (0.5 * tmpdata$riskyopt1[check_trial_index] +
                        0.5 * tmpdata$riskyopt2[check_trial_index]) > tmpdata$safe[check_trial_index];
   check_trial_failurerate[subj] = length(which(!tmpdata$choice[check_trial_index] == correct_answers))/length(check_trial_index);
-  
+
   # Plot the choice data
   plot(tmpdata$riskyopt1[tmpdata$choice == 1],tmpdata$safe[tmpdata$choice == 1], col = 'green',
        xlab = 'Risky Gain $', ylab = 'Safe $', main = paste0('All Subjects; Subj ', subj),
@@ -77,7 +77,7 @@ mean_rts = array(dim = c(number_of_subjects,1));
 
 for (subj in 1:number_of_subjects){
   tmpdata = data_dm[data_dm$subjectnumber == subj,];
-  
+
   mean_rts[subj] = mean(tmpdata$reactiontime, na.rm = T)
 }
 
@@ -269,7 +269,7 @@ for (subj in 1:number_of_clean_subjects){
   diff_mean_pgamble[subj] = mean(tmpdata$choice[tmpdata$easyP1difficultN1 == -1], na.rm = T);
   easyACC_mean_pgamble[subj] = mean(tmpdata$choice[(tmpdata$easyP1difficultN1 == 1) & (tmpdata$choiceP > .5)], na.rm = T);
   easyREJ_mean_pgamble[subj] = mean(tmpdata$choice[(tmpdata$easyP1difficultN1 == 1) & (tmpdata$choiceP < .5)], na.rm = T);
-  
+
   # Plot the choice data
   plot(tmpdata$riskyopt1[tmpdata$choice == 1],tmpdata$safe[tmpdata$choice == 1], col = 'green',
        xlab = 'Risky Gain $', ylab = 'Safe $', main = paste0('Kept Subjects; Subj ', subj_id),
@@ -365,31 +365,31 @@ choice_probability <- function(parameters, choiceset) {
   # Assumes choiceset has columns riskyoption1, riskyoption2, and safeoption
   #
   # PSH & AR June 2022
-  
+
   # extract  parameters
   rho = as.double(parameters[1]); # risk attitudes
   mu = as.double(parameters[2]); # choice consistency
-  
+
   # Correct parameter bounds
   if(rho <= 0){
     rho = .Machine$double.eps;
   }
-  
+
   if(mu < 0){
     mu = 0;
   }
-  
+
   # calculate utility of the two options
   utility_risky_option = 0.5 * choiceset$riskyoption1^rho +
     0.5 * choiceset$riskyoption2^rho;
   utility_safe_option = choiceset$safeoption^rho;
-  
+
   # normalize values using this term
   div <- max(choiceset[,1:3])^rho; # decorrelates rho & mu
-  
+
   # calculate the probability of selecting the risky option
   p = 1/(1+exp(-mu/div*(utility_risky_option - utility_safe_option)));
-  
+
   return(p)
 }
 
@@ -402,12 +402,12 @@ negLLprospect_cge <- function(parameters,choiceset,choices) {
   #
   # Peter Sokol-Hessner
   # July 2021
-  
+
   choiceP = choice_probability(parameters, choiceset);
-  
+
   likelihood = choices * choiceP + (1 - choices) * (1-choiceP);
   likelihood[likelihood == 0] = 0.000000000000001; # 1e-15, i.e. 14 zeros followed by a 1
-  
+
   nll <- -sum(log(likelihood));
   return(nll)
 }
@@ -432,26 +432,26 @@ cat('Beginning Optimization\n')
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
   print(subj_id)
-  
+
   tmpdata = clean_data_dm[(clean_data_dm$subjectnumber == subj_id) &
                             (clean_data_dm$static0dynamic1 == 0) &
                             is.finite(clean_data_dm$choice),]; # defines this person's data
-  
+
   temp_parameters = array(dim = c(number_of_iterations,number_of_parameters));
   temp_hessians = array(dim = c(number_of_iterations,number_of_parameters,number_of_parameters));
   temp_NLLs = array(dim = c(number_of_iterations,1));
-  
+
   choiceset = as.data.frame(cbind(tmpdata$riskyopt1, tmpdata$riskyopt2, tmpdata$safe));
   colnames(choiceset) <- c('riskyoption1', 'riskyoption2', 'safeoption');
-  
+
   # tic() # start the timer
-  
+
   for(iter in 1:number_of_iterations){
     # Randomly set initial values within supported values
     # using uniformly-distributed values. Many ways to do this!
-    
+
     initial_values = runif(number_of_parameters, min = lower_bounds, max = upper_bounds)
-    
+
     temp_output = optim(initial_values, negLLprospect_cge,
                         choiceset = choiceset,
                         choices = tmpdata$choice,
@@ -459,27 +459,27 @@ for (subj in 1:number_of_clean_subjects){
                         upper = upper_bounds,
                         method = "L-BFGS-B",
                         hessian = T)
-    
+
     # Store the output we need access to later
     temp_parameters[iter,] = temp_output$par; # parameter values
     temp_hessians[iter,,] = temp_output$hessian; # SEs
     temp_NLLs[iter,] = temp_output$value; # the NLLs
   }
-  
+
   # Compare output; select the best one
   NLLs[subj] = min(temp_NLLs); # the best NLL for this person
   best_ind = which(temp_NLLs == NLLs[subj])[1]; # the index of that NLL
-  
+
   estimated_parameters[subj,] = temp_parameters[best_ind,] # the parameters
   estimated_parameter_errors[subj,] = sqrt(diag(solve(temp_hessians[best_ind,,]))); # the SEs
-  
+
   # Calculating all choice probabilities for this participant, given best-fit parameters
   all_choice_ind = (clean_data_dm$subjectnumber == subj_id) & is.finite(clean_data_dm$choice)
   tmpdata = clean_data_dm[all_choice_ind,]; # defines this person's data
-  
+
   choiceset = as.data.frame(cbind(tmpdata$riskyopt1, tmpdata$riskyopt2, tmpdata$safe));
   colnames(choiceset) <- c('riskyoption1', 'riskyoption2', 'safeoption');
-  
+
   clean_data_dm$all_choiceP[all_choice_ind] = choice_probability(temp_parameters[best_ind,],choiceset);
 }
 
@@ -506,21 +506,21 @@ for (subj in 1:number_of_clean_subjects){
   tmpdata = clean_data_dm[(clean_data_dm$subjectnumber == subj_id) &
                             (clean_data_dm$static0dynamic1 == 0) &
                             is.finite(clean_data_dm$choice),]; # defines this person's data
-  
+
   choiceset = as.data.frame(cbind(tmpdata$riskyopt1, tmpdata$riskyopt2, tmpdata$safe));
   colnames(choiceset) <- c('riskyoption1', 'riskyoption2', 'safeoption');
-  
+
   grid_nll_values = array(dim = c(n_rho_values, n_mu_values));
-  
+
   for(r in 1:n_rho_values){
     for(m in 1:n_mu_values){
       grid_nll_values[r,m] = negLLprospect_cge(c(rho_values[r],mu_values[m]), choiceset, tmpdata$choice)
     }
   }
-  
+
   min_nll = min(grid_nll_values); # identify the single best value
   indexes = which(grid_nll_values == min_nll, arr.ind = T); # Get indices for that single best value
-  
+
   best_rhos[subj] = rho_values[indexes[1]]; # what are the corresponding rho & mu values?
   best_mus[subj] = mu_values[indexes[2]];
 }
@@ -530,9 +530,9 @@ grid_bestRho = array(dim = c(number_of_clean_subjects,1));
 grid_bestMu = array(dim = c(number_of_clean_subjects,1));
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
-  
+
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
-  
+
   grid_bestRho[subj] = rho_values[unique(tmpdata$bestRho)];
   grid_bestMu[subj] = mu_values[unique(tmpdata$bestMu)];
 }
@@ -645,27 +645,27 @@ mean_rt_dynamic = array(dim = c(number_of_clean_subjects, 1));
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
   tmpdata = data_dm[data_dm$subjectnumber == subj_id,];
-  
+
   mean_rt_static[subj] = mean(tmpdata$reactiontime[(tmpdata$static0dynamic1 == 0)],na.rm = T);
   mean_rt_dynamic[subj] = mean(tmpdata$reactiontime[(tmpdata$static0dynamic1 == 1)], na.rm = T);
-  
+
   # Identify just EASY dynamic data
   tmpdataEasyDyn = tmpdata[tmpdata$easyP1difficultN1 == 1,];
-  
+
   # RTs within easy dynamic data
   mean_rt_easy[subj] = mean(tmpdataEasyDyn$reactiontime, na.rm = T)
   median_rt_easy[subj] = median(tmpdataEasyDyn$reactiontime, na.rm = T)
   mean_rt_easyACC[subj] = mean(tmpdataEasyDyn$reactiontime[(tmpdataEasyDyn$choiceP > .5)], na.rm = T);
   mean_rt_easyREJ[subj] = mean(tmpdataEasyDyn$reactiontime[(tmpdataEasyDyn$choiceP < .5)], na.rm = T);
   var_rt_easy[subj] = var(tmpdataEasyDyn$reactiontime, na.rm = T);
-  
+
   # Identify just DIFFICULT dynamic data
   tmpdataDiffDyn = tmpdata[tmpdata$easyP1difficultN1 == -1,];
-  
+
   mean_rt_diff[subj] = mean(tmpdataDiffDyn$reactiontime, na.rm = T)
   median_rt_diff[subj] = median(tmpdataDiffDyn$reactiontime, na.rm = T)
   var_rt_diff[subj] = var(tmpdataDiffDyn$reactiontime, na.rm = T);
-  
+
 }
 
 
@@ -758,11 +758,11 @@ lines(c(0,.6), c(0,.6), col = 'black', lty = 'dashed', lwd = 1.5)
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,]; # identify this person's data
-  
+
   # test their easy trials vs. their difficult trials
   diff_stat_result = t.test(tmpdata$reactiontime[tmpdata$easyP1difficultN1 == 1], tmpdata$reactiontime[tmpdata$easyP1difficultN1 == -1]);
   var_stat_results = var.test(tmpdata$reactiontime[tmpdata$easyP1difficultN1 == 1], tmpdata$reactiontime[tmpdata$easyP1difficultN1 == -1]);
-  
+
   hist(tmpdata$reactiontime[tmpdata$easyP1difficultN1 == -1],
        breaks = seq(from = 0, to = 4, by = .25), col = rgb(1,0,0,0.6), xlim = c(0,4), ylim = c(0,30),
        main = sprintf('Subject %g: t-test p = %.03f; var test p = %.03f', subj_id, diff_stat_result$p.value, var_stat_results$p.value));
@@ -816,13 +816,13 @@ for (subj in 1:number_of_clean_subjects){
   tmpdata = data_dm[data_dm$subjectnumber == subj_id,]
   easy_easy_mean_rt[subj] = mean(tmpdata$reactiontime[(tmpdata$easyP1difficultN1[52:170] == 1) &
                                                         (tmpdata$easyP1difficultN1[51:169] == 1)], na.rm = T);
-  
+
   diff_diff_mean_rt[subj] = mean(tmpdata$reactiontime[(tmpdata$easyP1difficultN1[52:170] == -1) &
                                                         (tmpdata$easyP1difficultN1[51:169] == -1)], na.rm = T);
-  
+
   diff_easy_mean_rt[subj] = mean(tmpdata$reactiontime[(tmpdata$easyP1difficultN1[52:170] == 1) &
                                                         (tmpdata$easyP1difficultN1[51:169] == -1)], na.rm = T);
-  
+
   easy_diff_mean_rt[subj] = mean(tmpdata$reactiontime[(tmpdata$easyP1difficultN1[52:170] == -1) &
                                                         (tmpdata$easyP1difficultN1[51:169] == 1)], na.rm = T);
 }
@@ -909,15 +909,15 @@ for (subj in 1:number_of_clean_subjects){
   tmpdata = data_dm[data_dm$subjectnumber == subj_id,]
   diff_diff_mean_pgamble[subj] = mean(tmpdata$choice[(tmpdata$easyP1difficultN1[52:170] == -1) &
                                                        (tmpdata$easyP1difficultN1[51:169] == -1)], na.rm = T);
-  
+
   easy_easy_mean_pgamble[subj] = mean(tmpdata$choice[(tmpdata$easyP1difficultN1[52:170] == 1) &
                                                        (tmpdata$easyP1difficultN1[51:169] == 1)], na.rm = T);
-  
-  
+
+
   easy_diff_mean_pgamble[subj] = mean(tmpdata$choice[(tmpdata$easyP1difficultN1[52:170] == 1) &
                                                        (tmpdata$easyP1difficultN1[51:169] == -1)], na.rm = T);
-  
-  
+
+
   diff_easy_mean_pgamble[subj] = mean(tmpdata$choice[(tmpdata$easyP1difficultN1[52:170] == -1) &
                                                        (tmpdata$easyP1difficultN1[51:169] == 1)], na.rm = T);
 }
@@ -1544,13 +1544,13 @@ for (s in 1:number_of_clean_subjects){
   clean_data_dm$diff_cont[subj_id] = abs(abs(clean_data_dm$choiceP[subj_id] - 0.5)*2-1); # JUST for the easy/difficult dynamic trials
   clean_data_dm$all_diff_cont[subj_id] = abs(abs(clean_data_dm$all_choiceP[subj_id] - 0.5)*2-1); # for ALL trials
   clean_data_dm$capacity_HighP1_lowN1[clean_data_dm$subjectnumber == subj_id] = capacity_HighP1_lowN1[s];
-  
+
   m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx = lmer(sqrtRT ~ 1 +
                                                           all_diff_cont * prev_all_diff_cont +
                                                           (1 | subjectnumber),
                                                         data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == 1,]);
   summary(m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx)
-  
+
   m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx = lmer(sqrtRT ~ 1 +
                                                          all_diff_cont * prev_all_diff_cont +
                                                          (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == -1,]);
@@ -1574,13 +1574,13 @@ for(ind in 1:length(possible_threshold_values)){
   break_val = possible_threshold_values[ind];
   clean_data_dm$capacity_HighP1_lowN1_temp[clean_data_dm$complexspan > break_val] = 1;
   clean_data_dm$capacity_HighP1_lowN1_temp[clean_data_dm$complexspan < break_val] = -1;
-  
+
   cat(sprintf('This many people are < break_val: %g\n',sum(compositeSpanScores<break_val, na.rm = T)))
-  
+
   if((sum(compositeSpanScores<break_val, na.rm = T) == 1) | (sum(compositeSpanScores>break_val, na.rm = T) == 1)){
     next # don't use any categorizations that create a 'group' with just 1 person
   }
-  
+
   m3_tmp = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_temp +
                   (1 | subjectnumber), data = clean_data_dm, REML = F);
   all_aic_values[ind] = AIC(m3_tmp)
@@ -1715,17 +1715,17 @@ for(ind in 1:length(possible_threshold_values_Ospan)){
   break_val = possible_threshold_values_Ospan[ind];
   clean_data_dm$capacity_HighP1_lowN1_Ospan_temp[clean_data_dm$ospan > break_val] = 1;
   clean_data_dm$capacity_HighP1_lowN1_Ospan_temp[clean_data_dm$ospan < break_val] = -1;
-  
+
   cat(sprintf('This many people are < break_val: %g\n',sum(ospanScores<break_val, na.rm = T)))
-  
+
   if((sum(ospanScores<break_val, na.rm = T) == 1) | (sum(ospanScores>break_val, na.rm = T) == 1)){
     next # don't use any categorizations that create a 'group' with just 1 person
   }
-  
+
   m3_tmp = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_Ospan_temp +
                   (1 | subjectnumber), data = clean_data_dm, REML = F);
   m3_tmp_summ = summary(m3_tmp);
-  
+
   all_aic_values[ind] = AIC(m3_tmp)
   all_meanLik_values[ind] = exp(-m3_tmp_summ$logLik/nobs(m3_tmp))
 }
@@ -1751,17 +1751,17 @@ for(ind in 1:length(possible_threshold_values_Symspan)){
   break_val = possible_threshold_values_Symspan[ind];
   clean_data_dm$capacity_HighP1_lowN1_Symspan_temp[clean_data_dm$symspan > break_val] = 1;
   clean_data_dm$capacity_HighP1_lowN1_Symspan_temp[clean_data_dm$symspan < break_val] = -1;
-  
+
   cat(sprintf('This many people are < break_val: %g\n',sum(symspanScores<break_val, na.rm = T)))
-  
+
   if((sum(symspanScores<break_val, na.rm = T) == 1) | (sum(symspanScores>break_val, na.rm = T) == 1)){
     next # don't use any categorizations that create a 'group' with just 1 person
   }
-  
+
   m3_tmp = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_Symspan_temp +
                   (1 | subjectnumber), data = clean_data_dm, REML = F);
   m3_tmp_summ = summary(m3_tmp);
-  
+
   all_aic_values[ind] = AIC(m3_tmp)
   all_meanLik_values[ind] = exp(-m3_tmp_summ$logLik/nobs(m3_tmp))
 }
@@ -1819,46 +1819,46 @@ cat(sprintf('The best mean likelihood obtained with the SymSpan was %0.4f\n', be
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
-  
+
   tmpdataDyn = tmpdata[tmpdata$static0dynamic1 == 1,];
   tmpdataDynSamp = sample(tmpdataDyn$trialnumber)
-  
+
   trainDynData = tmpdataDynSamp[1:108]
   testDynData = tmpdataDynSamp[109:120]
-  
+
   # m1_trainDynData_intxn_rfx = lmer(sqrtRT ~ 1 +
   #                       trainDynData +
   #                       (1 | subjectnumber), data = tmpdata);
   # summary(m1_trainDynData_intxn_rfx)
-  
+
 }
 
 # All easy trials
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
-  
+
   tmpdataEasy = tmpdata[tmpdata$easyP1difficultN1 == 1,];
   tmpdataEasySamp = sample(tmpdataEasy$trialnumber)
-  
+
   trainEasyData = tmpdataEasySamp[1:54]
   testEasyData = tmpdataEasySamp[55:60]
-  
-  
+
+
 }
 
 # All difficult trials
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
-  
+
   tmpdataDiff = tmpdata[tmpdata$easyP1difficultN1 == -1,];
   tmpdataDiffSamp = sample(tmpdataDiff$trialnumber)
-  
+
   trainDiffData = tmpdataDiffSamp[1:54]
   testDiffData = tmpdataDiffSamp[55:60]
-  
-  
+
+
 }
 
 
@@ -1975,10 +1975,10 @@ lm_pvalues = array(data = NA, dim = c(number_of_clean_subjects,4)); # 4 p-values
 for (s in 1:number_of_clean_subjects){
   subj_id = keep_participants[s]
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
-  
+
   indiv_model = lm(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont,
                    data = tmpdata);
-  
+
   model_summaries[[s]] = summary(indiv_model)
   lm_estimates[s,] = coef(indiv_model);
   lm_pvalues[s,] = summary(indiv_model)$coefficients[,4]
@@ -2045,14 +2045,14 @@ mean_choice_lik_prevDiff = array(data = NA, dim = c(number_of_clean_subjects,1))
 for (s in 1:number_of_clean_subjects){
   subj_id = keep_participants[s]
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
-  
+
   mean_choice_lik_prevEasy[s] = mean(tmpdata$all_choice_likelihood[tmpdata$easyP1difficultN1_prev == 1], na.rm = T); # na.rm b/c of missed trials
   mean_choice_lik_prevDiff[s] = mean(tmpdata$all_choice_likelihood[tmpdata$easyP1difficultN1_prev == -1], na.rm = T);
-  
+
   # Use this code to run this test ONLY on current difficult trials
   # mean_choice_lik_prevEasy[s] = mean(tmpdata$all_choice_likelihood[(tmpdata$easyP1difficultN1_prev == 1) & (tmpdata$easyP1difficultN1 == -1)], na.rm = T); # na.rm b/c of missed trials
   # mean_choice_lik_prevDiff[s] = mean(tmpdata$all_choice_likelihood[(tmpdata$easyP1difficultN1_prev == -1) & (tmpdata$easyP1difficultN1 == -1)], na.rm = T);
-  
+
   # Use this code to run this test ONLY on current easy trials
   # mean_choice_lik_prevEasy[s] = mean(tmpdata$all_choice_likelihood[(tmpdata$easyP1difficultN1_prev == 1) & (tmpdata$easyP1difficultN1 == 1)], na.rm = T); # na.rm b/c of missed trials
   # mean_choice_lik_prevDiff[s] = mean(tmpdata$all_choice_likelihood[(tmpdata$easyP1difficultN1_prev == -1) & (tmpdata$easyP1difficultN1 == 1)], na.rm = T);
@@ -2141,15 +2141,15 @@ ci_pupil_dilations = array(dim = c(2,number_of_clean_subjects)) # 95% CI
 
 for (s in keep_participants){
   s_index = which(keep_participants == s);
-  
+
   cat(sprintf('Subject CGE%03i (%i of %i)\n', s, s_index, length(keep_participants)))
-  
+
   # find their file...
   tmp_downsampled_fn = dir(pattern = glob2rx(sprintf('cge%03i_et_processed_downsampled*.RData',s)),full.names = T, recursive = T);
   # and load only the most recent downsampled data file
   load(tmp_downsampled_fn[length(tmp_downsampled_fn)])
   downsampled_et_data = as.data.frame(downsampled_et_data);
-  
+
   mean_pupil_dilations[s_index] = mean(downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled, na.rm = T)
   sd_pupil_dilations[s_index] = sd(downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled, na.rm = T)
   ci_pupil_dilations[,s_index] = quantile(downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled, probs = c(0.025, 0.975), na.rm = T)
@@ -2186,6 +2186,11 @@ dev.off()
 
 ## Plotting Downsampled Pupillometry ####################
 ### Per-Subject Plots ###########################
+
+# Wasn't sure if we had used "choice" variable elsewhere and would ruin the flow of the script above
+colnames(clean_data_dm)[colnames(clean_data_dm) == "choice"] = "choice_Safe0Risky1"
+
+
 
 baseline_window_width = 500;
 dec_isi_otc_iti_window_width = 5000; # ITIs that were 3s long end at 5s after dec; other ITIs were 3.5s long
@@ -2226,29 +2231,29 @@ mean_decision_norm_EvD_array = array(data = NA, dim = c(number_of_normBins, numb
 
 for (s in keep_participants){
   s_index = which(keep_participants == s);
-  
+
   cat(sprintf('Subject CGE%03i (%i of %i): trial 000', s, s_index, length(keep_participants)))
-  
+
   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == s,]; # defines this person's BEHAVIORAL data
-  
+
   # Create NA-filled arrays to hold this one person's pupil trace data
   decision_start_array = array(data = NA, dim = c(170, length(decision_start_bins)-1)) # what does the -1 do again?
   decision_end_array = array(data = NA, dim = c(170, length(decision_end_bins)-1))
-  
+
   # find their file...
   tmp_downsampled_fn = dir(pattern = glob2rx(sprintf('cge%03i_et_processed_downsampled*.RData',s)),full.names = T, recursive = T);
   # and load only the most recent downsampled data file
   load(tmp_downsampled_fn[length(tmp_downsampled_fn)]) # loads downsampled_et_data and event_timestamps
   downsampled_et_data = as.data.frame(downsampled_et_data);
-  
+
   # Baseline correct all ET data to the MEAN PUPIL DIAMETER
   downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled -
     mean(downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled, na.rm = T);
-  
+
   # Prep Subject-Level Decision Plot
   pdf(sprintf('%s/plots/cge%03i_downsampled_decision_plot.pdf',config$path$data$processed, s),
       width = 5, height = 8)
-  
+
   par(mfrow = c(2,1)); # Set up the individual-level plot
   # Pre-decision | Decision Start
   # Decision End | ISI | Outcome | ITI
@@ -2257,17 +2262,17 @@ for (s in keep_participants){
   abline(v = 0, lty = 'dashed')
   p1_coords = par('usr');
   # pre-dec window, up until 3000 ms into the 4000ms response window
-  
+
   plot(1, type = "n", xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", main = "Aligned to Choice",
        xlim = c(-3000, baseline_window_width), ylim = c(-2, 2))
   abline(v = 0, lty = 'dotted')
   p2_coords = par('usr');
   # the last 3000ms of the 4000ms response window, ISI (1000), Otc (1000), and ITI (3000 or 3500ms)
-  
+
   number_of_trials = length(event_timestamps[,1]);
   cum_easy_trial_num = 0; # for use in indexing; will increment
   cum_diff_trial_num = 0;
-  
+
   for (t in 1:number_of_trials){
     cat(sprintf('\b\b\b%03i',t))
     # Pre-decision baseline
@@ -2277,7 +2282,7 @@ for (s in keep_participants){
     time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_start[t];
     par(usr = p1_coords)
     par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-    
+
     # Put the mean values into the bins
     for (b in 1:(length(decision_start_bins)-1)){
       tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_start_bins[b]) & (time_tmp < decision_start_bins[b+1])], na.rm = T);
@@ -2285,7 +2290,7 @@ for (s in keep_participants){
         decision_start_array[t,b] = tmp_bin_mean;
       }
     }
-    
+
     # Decision (mean)
     indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_start[t]) &
       (downsampled_et_data$time_data_downsampled < event_timestamps$decision_end[t]);
@@ -2293,7 +2298,7 @@ for (s in keep_participants){
     time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_start[t];
     par(usr = p1_coords)
     par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-    
+
     # Put the mean values into the bins
     for (b in 1:(length(decision_start_bins)-1)){
       tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_start_bins[b]) & (time_tmp < decision_start_bins[b+1])], na.rm = T);
@@ -2301,7 +2306,7 @@ for (s in keep_participants){
         decision_start_array[t,b] = tmp_bin_mean;
       }
     }
-    
+
     # Decision aligned to CHOICE (mean)
     indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_start[t]) &
       (downsampled_et_data$time_data_downsampled < event_timestamps$decision_end[t]);
@@ -2309,7 +2314,7 @@ for (s in keep_participants){
     time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
     par(usr = p2_coords)
     par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-    
+
     # Put the mean values into the bins
     for (b in 1:(length(decision_end_bins)-1)){
       tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_end_bins[b]) & (time_tmp < decision_end_bins[b+1])], na.rm = T);
@@ -2317,8 +2322,8 @@ for (s in keep_participants){
         decision_end_array[t,b] = tmp_bin_mean;
       }
     }
-    
-    
+
+
     # Post-decision aligned to CHOICE (mean)
     indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_end[t]) &
       (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + baseline_window_width));
@@ -2326,7 +2331,7 @@ for (s in keep_participants){
     time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
     par(usr = p2_coords)
     par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-    
+
     # Put the mean values into the bins
     for (b in 1:(length(decision_end_bins)-1)){
       tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_end_bins[b]) & (time_tmp < decision_end_bins[b+1])], na.rm = T);
@@ -2334,7 +2339,7 @@ for (s in keep_participants){
         decision_end_array[t,b] = tmp_bin_mean;
       }
     }
-    
+
     # Decision Start-Aligned x EASY/DIFF
     indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_start[t] - baseline_window_width)) &
       (downsampled_et_data$time_data_downsampled < event_timestamps$decision_end[t])
@@ -2342,7 +2347,7 @@ for (s in keep_participants){
     time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_start[t];
     # par(usr = p1_coords)
     # par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-    
+
     # Put the mean values into the bins
     if(tmpdata$easyP1difficultN1[t] == 1) {
       cum_easy_trial_num = cum_easy_trial_num + 1;
@@ -2361,14 +2366,14 @@ for (s in keep_participants){
         }
       }
     }
-    
+
     # Dec/ISI/Otc/ITI
     indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_end[t] - pre_dec_window_width)) &
       (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + dec_isi_otc_iti_window_width));
     pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
     time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
     # par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
-    
+
     # Put the mean values into the bins
     for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
       tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
@@ -2376,7 +2381,7 @@ for (s in keep_participants){
         dec_isi_otc_iti_array[t,b,s_index] = tmp_bin_mean;
       }
     }
-    
+
     # Put the mean values into the bins
     if(tmpdata$easyP1difficultN1[t] == 1) {
       for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
@@ -2393,7 +2398,7 @@ for (s in keep_participants){
         }
       }
     }
-    
+
     # NORMALIZED Decision
     if(!is.na(event_timestamps$decision_start[t])){
       tmp_norm_time_points = seq(from = event_timestamps$decision_start[t], # set up the normalized time slices we want
@@ -2403,7 +2408,7 @@ for (s in keep_participants){
                               y = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled,
                               xout = tmp_norm_time_points)$y
       decision_norm_array[t,,s_index] = tmp_norm_pupil # store in the normalized array
-      
+
       if(tmpdata$easyP1difficultN1[t] == 1) {
         decision_norm_EvD_array[cum_easy_trial_num,,s_index,1] = tmp_norm_pupil; # trials x bins x subjects x Easy/Difficult
       } else if (tmpdata$easyP1difficultN1[t] == -1) {
@@ -2411,33 +2416,33 @@ for (s in keep_participants){
       }
     }
   } # end trial loop
-  
+
 
   par(usr = p1_coords)
   par(mfg = c(1,1)); lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
                            y = colMeans(decision_start_array, na.rm = T), col = rgb(1,0,0), lwd = 3)
-  
+
   par(usr = p2_coords)
   par(mfg = c(2,1)); lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2,
                            y = colMeans(decision_end_array, na.rm = T), col = rgb(1,0,0), lwd = 3)
-  
+
   dev.off() # complete the plot
-  
-  
+
+
   mean_decision_start_array[,s_index] = colMeans(decision_start_array, na.rm = T)
   mean_decision_end_array[,s_index] = colMeans(decision_end_array, na.rm = T)
   mean_dec_isi_otc_iti_array[,s_index] = colMeans(dec_isi_otc_iti_array[,,s_index], na.rm = T)
-  
+
   mean_decision_start_EvD_array[,s_index,1] = colMeans(decision_start_EvD_array[,,s_index,1], na.rm = T)
   mean_decision_start_EvD_array[,s_index,2] = colMeans(decision_start_EvD_array[,,s_index,2], na.rm = T)
   mean_dec_isi_otc_iti_EvD_array[,s_index,1] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,1], na.rm = T)
   mean_dec_isi_otc_iti_EvD_array[,s_index,2] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,2], na.rm = T)
-  
+
   # NORMALIZED Mean Data Arrays
   mean_decision_norm_array[,s_index] = colMeans(decision_norm_array[,,s_index], na.rm = T)
   mean_decision_norm_EvD_array[,s_index,1] = colMeans(decision_norm_EvD_array[,,s_index,1], na.rm = T)
   mean_decision_norm_EvD_array[,s_index,2] = colMeans(decision_norm_EvD_array[,,s_index,2], na.rm = T)
-  
+
   cat(sprintf('. Done.\n'))
 }
 
@@ -2445,12 +2450,12 @@ for (s in keep_participants){
 # Plot the Dec/ISI/Otc/ITI Graphs
 for (s in keep_participants){
   s_index = which(keep_participants == s);
-  
+
   cat(sprintf('Subject CGE%03i (%i of %i): trial 000', s, s_index, length(keep_participants)))
-  
+
   pdf(sprintf('%s/plots/cge%03i_downsampled_dec_isi_otc_iti_plot.pdf',config$path$data$processed, s),
       width = 8, height = 4)
-  
+
   # Decision End | ISI | Outcome | ITI
   plot(1, type = "n", xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)", main = "Aligned to Decision",
        xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(-2, 2))
@@ -2458,7 +2463,7 @@ for (s in keep_participants){
           y = c(3, 3, -3, -3),
           lty = 0, col = rgb(0,0,0,.1))
   abline(v = 0, lty = 'dashed')
-  
+
   for (t in 1:number_of_trials){
     cat(sprintf('\b\b\b%03i',t))
     lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
@@ -2526,6 +2531,7 @@ dev.off()
 
 # Plot NORMALIZED - Test
 
+par(mfrow = c(1,1))
 matplot(x = normBins,
         y = mean_decision_norm_array,
         col = rgb(1, 0, 0, .2), type = 'l', lwd = 3, lty = 'solid',
@@ -2644,6 +2650,7 @@ dev.off()
 
 pdf(sprintf('%s/plots/mean_downsampled_decision_normalized_plot_groupOnly.pdf',config$path$data$processed),
     width = 5, height = 4)
+par(mfrow = c(1,1))
 plot(1, type = 'n',
      xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
      main = "Normalized Decision Window",
@@ -2708,9 +2715,10 @@ abline(v = 0, lty = 'dashed')
 dev.off()
 
 
-
+# Normalized Pupillometry Split into Easy v. Difficult
 pdf(sprintf('%s/plots/mean_downsampled_decision_normalized_plot_EvD_groupOnly.pdf',config$path$data$processed),
     width = 5, height = 4)
+par(mfrow = c(1,1))
 plot(1, type = 'n',
      xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
      main = "Normalized Decision Window",
