@@ -2188,9 +2188,7 @@ dev.off()
 ### Per-Subject Plots ###########################
 
 # Wasn't sure if we had used "choice" variable elsewhere and would ruin the flow of the script above
-colnames(clean_data_dm)[colnames(clean_data_dm) == "choice"] = "choice_Safe0Risky1"
-
-
+colnames(clean_data_dm)[colnames(clean_data_dm) == "choice"] = "choice_safe0risky1"
 
 baseline_window_width = 500;
 dec_isi_otc_iti_window_width = 5000; # ITIs that were 3s long end at 5s after dec; other ITIs were 3.5s long
@@ -2225,9 +2223,10 @@ mean_dec_isi_otc_iti_EvD_array = array(data = NA, dim = c(length(dec_isi_otc_iti
 # Normalized Bin Arrays
 decision_norm_array = array(data = NA, dim = c(170, number_of_normBins, number_of_clean_subjects)) # all trials
 decision_norm_EvD_array = array(data = NA, dim = c(60, number_of_normBins, number_of_clean_subjects, 2)) # trial-level (choice difficulty)
+decision_norm_EvD_RvS_array = array(data = NA, dim = c(60, number_of_normBins, number_of_clean_subjects, 2, 2)) # trial-level (choice difficulty x choice made)
 mean_decision_norm_array = array(data = NA, dim = c(number_of_normBins, number_of_clean_subjects)) # all trials
 mean_decision_norm_EvD_array = array(data = NA, dim = c(number_of_normBins, number_of_clean_subjects, 2)) # subject-level (choice difficulty)
-
+decision_norm_EvD_RvS_array = array(data = NA, dim = c(60, number_of_normBins, number_of_clean_subjects, 2, 2)) # subject-level (choice difficulty x choice made)
 
 for (s in keep_participants){
   s_index = which(keep_participants == s);
