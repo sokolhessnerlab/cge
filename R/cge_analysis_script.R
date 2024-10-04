@@ -11,7 +11,7 @@ rm(list=ls()); # Clear the workspace
 
 # STEP 1: Set the working directory
 # On PSH's computers...
-#setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
+setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # On Von's PC Laptop "tabletas"...
 setwd('C:/Users/jvonm/Documents/GitHub/cge');
 # Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
@@ -2187,9 +2187,6 @@ dev.off()
 ## Plotting Downsampled Pupillometry ####################
 ### Per-Subject Plots ###########################
 
-# Wasn't sure if we had used "choice" variable elsewhere and would ruin the flow of the script above
-colnames(clean_data_dm)[colnames(clean_data_dm) == "choice"] = "choice_risky1safe0" # just to match flow in later analyses for risky vs. safe
-
 baseline_window_width = 500;
 dec_isi_otc_iti_window_width = 5000; # ITIs that were 3s long end at 5s after dec; other ITIs were 3.5s long
 pre_dec_window_width = 1500;
@@ -2409,35 +2406,26 @@ for (s in keep_participants){
                               y = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled,
                               xout = tmp_norm_time_points)$y
       decision_norm_array[t,,s_index] = tmp_norm_pupil # store in the normalized array
-
-      if(tmpdata$easyP1difficultN1[t] == 1) { # EASY
-        decision_norm_EvD_array[cum_easy_trial_num,,s_index,1] = tmp_norm_pupil;# trials x bins x subjects x Easy
-        if(tmpdata$choice_risky1safe0[t] == 1) {
-          decision_norm_EvD_RvS_array[cum_easy_trial_num,,s_index,1, 1] = tmp_norm_pupil; # trials x bins x subjects x Easy x Risky
+      
+      current_difficulty_index = abs((tmpdata$easyP1difficultN1[t]-1)/2)+1; # easy --> 1, difficult --> 2
+      current_choice_index = abs(tmpdata$choice[t]-2); # risky --> 1, safe --> 2
+      previous_difficulty_index = abs((tmpdata$easyP1difficultN1_prev[t]-1)/2)+1; # easy --> 1, difficult --> 2
+      
+      
+      if((tmpdata$static0dynamic1[t] == 1) & (!is.na(tmpdata$choice[t]))){
+        if(tmpdata$easyP1difficultN1[t] == 1) { # CURRENT EASY
+          cum_easyDiff_trial_num = cum_easy_trial_num
         }
-        else if (tmpdata$choice_risky1safe0[t] == 0) {
-          decision_norm_EvD_RvS_array[cum_easy_trial_num,,s_index,1, 2] = tmp_norm_pupil # trials x bins x subjects x Easy x Safe
+        else if (tmpdata$easyP1difficultN1[t] == -1) { # CURRENT DIFFICULT
+          cum_easyDiff_trial_num = cum_diff_trial_num
         }
-        if(tmpdata$easyP1difficultN1_prev[t] == 1) {
-          decision_norm_prev_EvD_array[cum_easy_trial_num,,s_index,1, 1] = tmp_norm_pupil # trials x bins x subjects x Easy x Prev Easy
-        }
-        else if (tmpdata$easyP1difficultN1_prev[t] == -1) {
-          decision_norm_prev_EvD_array[cum_easy_trial_num,,s_index,1, 2] = tmp_norm_pupil # trials x bins x subjects x Easy x Prev Diff
-        }
-      }
-      else if (tmpdata$easyP1difficultN1[t] == -1) { # DIFFICULT
-        decision_norm_EvD_array[cum_diff_trial_num,,s_index,2] = tmp_norm_pupil; # trials x bins x subjects x Difficult
-        if(tmpdata$choice_risky1safe0[t] == 1) {
-          decision_norm_EvD_RvS_array[cum_diff_trial_num,,s_index,2, 1] = tmp_norm_pupil; # trials x bins x subjects x Difficult x Risky
-        }
-        else if (tmpdata$choice_risky1safe0[t] == 0) {
-          decision_norm_EvD_RvS_array[cum_diff_trial_num,,s_index,2, 2] = tmp_norm_pupil # trials x bins x subjects x Difficult x Safe
-        }
-        if(tmpdata$easyP1difficultN1_prev[t] == 1) {
-          decision_norm_prev_EvD_array[cum_diff_trial_num,,s_index,2, 1] = tmp_norm_pupil # trials x bins x subjects x Difficult x Prev Easy
-        }
-        else if (tmpdata$easyP1difficultN1_prev[t] == -1) {
-          decision_norm_prev_EvD_array[cum_diff_trial_num,,s_index,2, 2] = tmp_norm_pupil # trials x bins x subjects x Difficult x Prev Diff
+        
+        # Use trial-wise indices to place tmp_norm_pupil into the right spot 
+        decision_norm_EvD_array[cum_easyDiff_trial_num,,s_index,current_difficulty_index] = tmp_norm_pupil;# trials x bins x subjects x Easy
+        decision_norm_EvD_RvS_array[cum_easyDiff_trial_num,,s_index,current_difficulty_index, current_choice_index] = tmp_norm_pupil; # trials x bins x subjects x Easy x Risky
+        
+        if(tmpdata$easyP1difficultN1_prev[t] != 0){
+          decision_norm_prev_EvD_array[cum_easyDiff_trial_num,,s_index,current_difficulty_index,previous_difficulty_index] = tmp_norm_pupil # trials x bins x subjects x Easy x Prev Easy
         }
       }
     }
@@ -2577,8 +2565,6 @@ lines(x = normBins,
       lwd = 3, col = 'black')
 
 ###
-
-plot(mean_decision_norm_array)
 
 # Plot JUST the group means
 
@@ -2930,7 +2916,7 @@ lines(x = normBins,
       y = rowMeans(mean_decision_norm_prev_EvD_array[,,2,2], na.rm = T), type = 'l',
       lwd = 3, col = 'red')
 legend("bottomright", legend = c("Prev Easy", "Prev Diff"),
-       col = c(rgb(0,0,.5), rgb(0,0,1)), lty = c(1, 1))
+       col = c(rgb(0,0,1), rgb(1,0,0)), lty = c(1, 1))
 
 # Choice Difficulty x Choice Made
 plot(1, type = 'n',
@@ -2968,11 +2954,14 @@ legend("bottomright", legend = c("Easy", "Prev Easy", "Prev Diff", "Difficult", 
 
 
 ### Next Steps #####################
-# 2. Make ISI/Outcome/ITI plot
-# 3. Make Relative-Time Decision Window Plot
-# 4. Make Easy & Difficult versions (separate graphs and/or combined for comparison)
-#    (including curr. ease & difficulty, trial-wise plotted w/ color for cont. difficulty,
-#     previous ease/difficulty, prev & curr ease/difficulty)
+# 1. Risky/Safe
+#      - option presentation time-locked
+#      - dec/isi/otc/iti time-locked
+# 2. Previous difficulty
+#      - option presentation time-locked
+#      - dec/isi/otc/iti time-locked
+# 3. WMC? 
+
 
 
 ## Pupil Regressions #################
