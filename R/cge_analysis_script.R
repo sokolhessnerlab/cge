@@ -2935,34 +2935,34 @@ legend("bottomright", legend = c("Prev Easy", "Prev Diff"),
 # Choice Difficulty x Choice Made
 plot(1, type = 'n',
      xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
-     main = "Normalized Decision Window: Choice Difficulty x Choice Made",
-     xlim = c(1, number_of_normBins), ylim = c(min(c(decision_norm_Diff_Risky_lower,decision_norm_Diff_Safe_lower)),
-                                               max(c(decision_norm_Diff_Risky_upper,decision_norm_Diff_Safe_upper))))
+     main = "Normalized Decision Window: Choice Difficulty x Previous Difficulty",
+     xlim = c(1, number_of_normBins), ylim = c(min(c(decision_norm_Diff_Prev_Easy_lower,decision_norm_Diff_Prev_Diff_lower)),
+                                               max(c(decision_norm_Diff_Prev_Easy_upper,decision_norm_Diff_Prev_Diff_upper))))
 polygon(x = sem_decision_norm_x_vals,
-        y = c(decision_norm_Easy_Risky_upper,rev(decision_norm_Easy_Risky_lower)),
+        y = c(decision_norm_Easy_Prev_Easy_upper,rev(decision_norm_Easy_Prev_Easy_lower)),
         lty = 0, col = rgb(0,0,1,.2))
 polygon(x = sem_decision_norm_x_vals,
-        y = c(decision_norm_Easy_Safe_upper,rev(decision_norm_Easy_Safe_lower)),
+        y = c(decision_norm_Easy_Prev_Diff_upper,rev(decision_norm_Easy_Prev_Diff_lower)),
         lty = 0, col = rgb(0,0,1,.2))
 polygon(x = sem_decision_norm_x_vals,
-        y = c(decision_norm_Diff_Risky_upper,rev(decision_norm_Diff_Risky_lower)),
+        y = c(decision_norm_Diff_Prev_Easy_upper,rev(decision_norm_Diff_Prev_Easy_lower)),
         lty = 0, col = rgb(1,0,0,.2))
 polygon(x = sem_decision_norm_x_vals,
-        y = c(decision_norm_Diff_Safe_upper,rev(decision_norm_Diff_Safe_lower)),
+        y = c(decision_norm_Diff_Prev_Diff_upper,rev(decision_norm_Diff_Prev_Diff_lower)),
         lty = 0, col = rgb(1,0,0,.2))
 lines(x = normBins,
-      y = rowMeans(mean_decision_norm_EvD_RvS_array[,,1,1], na.rm = T), type = 'l',
+      y = rowMeans(mean_decision_norm_prev_EvD_array[,,1,1], na.rm = T), type = 'l',
       lwd = 3, col = 'blue')
 lines(x = normBins,
-      y = rowMeans(mean_decision_norm_EvD_RvS_array[,,1,2], na.rm = T), type = 'l',
+      y = rowMeans(mean_decision_norm_prev_EvD_array[,,1,2], na.rm = T), type = 'l',
       lwd = 3, col = 'blue', lty = 2)
 lines(x = normBins,
-      y = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,1], na.rm = T), type = 'l',
+      y = rowMeans(mean_decision_norm_prev_EvD_array[,,2,1], na.rm = T), type = 'l',
       lwd = 3, col = 'red')
 lines(x = normBins,
-      y = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,2], na.rm = T), type = 'l',
+      y = rowMeans(mean_decision_norm_prev_EvD_array[,,2,2], na.rm = T), type = 'l',
       lwd = 3, col = 'red', lty = 2)
-legend("bottomright", legend = c("Easy", "Risky", "Safe", "Difficult", "Risky", "Safe"),  # Labels
+legend("bottomright", legend = c("Easy", "Prev Easy", "Prev Diff", "Difficult", "Prev Easy", "Prev Diff"),  # Labels
        col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
        lty = c(NA, 1, 2, NA, 1, 2))
 
