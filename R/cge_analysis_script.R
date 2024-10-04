@@ -11,7 +11,7 @@ rm(list=ls()); # Clear the workspace
 
 # STEP 1: Set the working directory
 # On PSH's computers...
-setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
+#setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # On Von's PC Laptop "tabletas"...
 setwd('C:/Users/jvonm/Documents/GitHub/cge');
 # Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
@@ -2224,9 +2224,11 @@ mean_dec_isi_otc_iti_EvD_array = array(data = NA, dim = c(length(dec_isi_otc_iti
 decision_norm_array = array(data = NA, dim = c(170, number_of_normBins, number_of_clean_subjects)) # all trials
 decision_norm_EvD_array = array(data = NA, dim = c(60, number_of_normBins, number_of_clean_subjects, 2)) # trial-level (choice difficulty)
 decision_norm_EvD_RvS_array = array(data = NA, dim = c(60, number_of_normBins, number_of_clean_subjects, 2, 2)) # trial-level (choice difficulty x choice made)
+decision_norm_prev_EvD_array = array(data = NA, dim = c(60, number_of_normBins, number_of_clean_subjects, 2, 2)) # trial-level (choice difficulty x previous choice difficulty)
 mean_decision_norm_array = array(data = NA, dim = c(number_of_normBins, number_of_clean_subjects)) # all trials
 mean_decision_norm_EvD_array = array(data = NA, dim = c(number_of_normBins, number_of_clean_subjects, 2)) # subject-level (choice difficulty)
 mean_decision_norm_EvD_RvS_array = array(data = NA, dim = c(number_of_normBins, number_of_clean_subjects, 2, 2)) # subject-level (choice difficulty x choice made)
+mean_decision_norm_prev_EvD_array = array(data = NA, dim = c(number_of_normBins, number_of_clean_subjects, 2, 2)) # subject-level (choice difficulty x previous choice difficulty)
 
 for (s in keep_participants){
   s_index = which(keep_participants == s);
@@ -2408,21 +2410,34 @@ for (s in keep_participants){
                               xout = tmp_norm_time_points)$y
       decision_norm_array[t,,s_index] = tmp_norm_pupil # store in the normalized array
 
-      if(tmpdata$easyP1difficultN1[t] == 1) {
+      if(tmpdata$easyP1difficultN1[t] == 1) { # EASY
         decision_norm_EvD_array[cum_easy_trial_num,,s_index,1] = tmp_norm_pupil;# trials x bins x subjects x Easy
         if(tmpdata$choice_risky1safe0[t] == 1) {
           decision_norm_EvD_RvS_array[cum_easy_trial_num,,s_index,1, 1] = tmp_norm_pupil; # trials x bins x subjects x Easy x Risky
-          }
-          else if (tmpdata$choice_risky1safe0[t] == 0) {
-            decision_norm_EvD_RvS_array[cum_easy_trial_num,,s_index,1, 2] = tmp_norm_pupil # trials x bins x subjects x Easy x Safe
-          }
-      } else if (tmpdata$easyP1difficultN1[t] == -1) {
-        decision_norm_EvD_array[cum_diff_trial_num,,s_index,2] = tmp_norm_pupil; # trials x bins x subjects x Difficult
-        if(tmpdata$choice_risky1safe0[t] == 1) {
-          decision_norm_EvD_RvS_array[cum_easy_trial_num,,s_index,2, 1] = tmp_norm_pupil; # trials x bins x subjects x Difficult x Risky
         }
         else if (tmpdata$choice_risky1safe0[t] == 0) {
-          decision_norm_EvD_RvS_array[cum_easy_trial_num,,s_index,2, 2] = tmp_norm_pupil # trials x bins x subjects x Difficult x Safe
+          decision_norm_EvD_RvS_array[cum_easy_trial_num,,s_index,1, 2] = tmp_norm_pupil # trials x bins x subjects x Easy x Safe
+        }
+        if(tmpdata$easyP1difficultN1_prev[t] == 1) {
+          decision_norm_prev_EvD_array[cum_easy_trial_num,,s_index,1, 1] = tmp_norm_pupil # trials x bins x subjects x Easy x Prev Easy
+        }
+        else if (tmpdata$easyP1difficultN1_prev[t] == -1) {
+          decision_norm_prev_EvD_array[cum_easy_trial_num,,s_index,1, 2] = tmp_norm_pupil # trials x bins x subjects x Easy x Prev Diff
+        }
+      }
+      else if (tmpdata$easyP1difficultN1[t] == -1) { # DIFFICULT
+        decision_norm_EvD_array[cum_diff_trial_num,,s_index,2] = tmp_norm_pupil; # trials x bins x subjects x Difficult
+        if(tmpdata$choice_risky1safe0[t] == 1) {
+          decision_norm_EvD_RvS_array[cum_diff_trial_num,,s_index,2, 1] = tmp_norm_pupil; # trials x bins x subjects x Difficult x Risky
+        }
+        else if (tmpdata$choice_risky1safe0[t] == 0) {
+          decision_norm_EvD_RvS_array[cum_diff_trial_num,,s_index,2, 2] = tmp_norm_pupil # trials x bins x subjects x Difficult x Safe
+        }
+        if(tmpdata$easyP1difficultN1_prev[t] == 1) {
+          decision_norm_prev_EvD_array[cum_diff_trial_num,,s_index,2, 1] = tmp_norm_pupil # trials x bins x subjects x Difficult x Prev Easy
+        }
+        else if (tmpdata$easyP1difficultN1_prev[t] == -1) {
+          decision_norm_prev_EvD_array[cum_diff_trial_num,,s_index,2, 2] = tmp_norm_pupil # trials x bins x subjects x Difficult x Prev Diff
         }
       }
     }
@@ -2454,9 +2469,13 @@ for (s in keep_participants){
   mean_decision_norm_EvD_array[,s_index,1] = colMeans(decision_norm_EvD_array[,,s_index,1], na.rm = T) # Easy
   mean_decision_norm_EvD_RvS_array[,s_index,1,1] = colMeans(decision_norm_EvD_RvS_array[,,s_index,1,1], na.rm = T) # Easy x Risky
   mean_decision_norm_EvD_RvS_array[,s_index,1,2] = colMeans(decision_norm_EvD_RvS_array[,,s_index,1,2], na.rm = T) # Easy x Safe
+  mean_decision_norm_prev_EvD_array[,s_index,1,1] = colMeans(decision_norm_prev_EvD_array[,,s_index,1,1], na.rm = T) # Easy x Prev Easy
+  mean_decision_norm_prev_EvD_array[,s_index,1,2] = colMeans(decision_norm_prev_EvD_array[,,s_index,1,2], na.rm = T) # Easy x Prev Diff
   mean_decision_norm_EvD_array[,s_index,2] = colMeans(decision_norm_EvD_array[,,s_index,2], na.rm = T) # Difficult
   mean_decision_norm_EvD_RvS_array[,s_index,2,1] = colMeans(decision_norm_EvD_RvS_array[,,s_index,2,1], na.rm = T) # Difficult x Risky
   mean_decision_norm_EvD_RvS_array[,s_index,2,2] = colMeans(decision_norm_EvD_RvS_array[,,s_index,2,2], na.rm = T) # Difficult x Safe
+  mean_decision_norm_prev_EvD_array[,s_index,2,1] = colMeans(decision_norm_prev_EvD_array[,,s_index,2,1], na.rm = T) # Difficult x Prev Easy
+  mean_decision_norm_prev_EvD_array[,s_index,2,2] = colMeans(decision_norm_prev_EvD_array[,,s_index,2,2], na.rm = T) # Difficult x Prev Diff
 
   cat(sprintf('. Done.\n'))
 }
@@ -2559,6 +2578,8 @@ lines(x = normBins,
 
 ###
 
+plot(mean_decision_norm_array)
+
 # Plot JUST the group means
 
 sem_decision_start_array = sem(mean_decision_start_array)
@@ -2599,6 +2620,11 @@ sem_decision_norm_Easy_Safe_array = sem(mean_decision_norm_EvD_RvS_array[,,1,2])
 sem_decision_norm_Diff_Risky_array = sem(mean_decision_norm_EvD_RvS_array[,,2,1])
 sem_decision_norm_Diff_Safe_array = sem(mean_decision_norm_EvD_RvS_array[,,2,2])
 
+sem_decision_norm_Easy_Prev_Easy_array = sem(mean_decision_norm_prev_EvD_array[,,1,1])
+sem_decision_norm_Easy_Prev_Diff_array = sem(mean_decision_norm_prev_EvD_array[,,1,2])
+sem_decision_norm_Diff_Prev_Easy_array = sem(mean_decision_norm_prev_EvD_array[,,2,1])
+sem_decision_norm_Diff_Prev_Diff_array = sem(mean_decision_norm_prev_EvD_array[,,2,2])
+
 decision_norm_array_upper = rowMeans(mean_decision_norm_array, na.rm = T) + sem_decision_norm_array
 decision_norm_array_lower = rowMeans(mean_decision_norm_array, na.rm = T) - sem_decision_norm_array
 
@@ -2608,13 +2634,22 @@ decision_norm_Diff_upper = rowMeans(mean_decision_norm_EvD_array[,,2], na.rm = T
 decision_norm_Diff_lower = rowMeans(mean_decision_norm_EvD_array[,,2], na.rm = T) - sem_decision_norm_Diff_array
 
 decision_norm_Easy_Risky_upper = rowMeans(mean_decision_norm_EvD_RvS_array[,,1,1], na.rm = T) + sem_decision_norm_Easy_Risky_array
-decision_norm_Easy_Risky_lower = rowMeans(mean_decision_norm_EvD_RvS_array[,,1,2], na.rm = T) - sem_decision_norm_Easy_Risky_array
-decision_norm_Easy_Safe_upper = rowMeans(mean_decision_norm_EvD_RvS_array[,,1,1], na.rm = T) + sem_decision_norm_Easy_Safe_array
+decision_norm_Easy_Risky_lower = rowMeans(mean_decision_norm_EvD_RvS_array[,,1,1], na.rm = T) - sem_decision_norm_Easy_Risky_array
+decision_norm_Easy_Safe_upper = rowMeans(mean_decision_norm_EvD_RvS_array[,,1,2], na.rm = T) + sem_decision_norm_Easy_Safe_array
 decision_norm_Easy_Safe_lower = rowMeans(mean_decision_norm_EvD_RvS_array[,,1,2], na.rm = T) - sem_decision_norm_Easy_Safe_array
 decision_norm_Diff_Risky_upper = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,1], na.rm = T) + sem_decision_norm_Diff_Risky_array
 decision_norm_Diff_Risky_lower = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,1], na.rm = T) - sem_decision_norm_Diff_Risky_array
 decision_norm_Diff_Safe_upper = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,2], na.rm = T) + sem_decision_norm_Diff_Safe_array
 decision_norm_Diff_Safe_lower = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,2], na.rm = T) - sem_decision_norm_Diff_Safe_array
+
+decision_norm_Easy_Prev_Easy_upper = rowMeans(mean_decision_norm_prev_EvD_array[,,1,1], na.rm = T) + sem_decision_norm_Easy_Prev_Easy_array
+decision_norm_Easy_Prev_Easy_lower = rowMeans(mean_decision_norm_prev_EvD_array[,,1,1], na.rm = T) - sem_decision_norm_Easy_Prev_Easy_array
+decision_norm_Easy_Prev_Diff_upper = rowMeans(mean_decision_norm_prev_EvD_array[,,1,2], na.rm = T) + sem_decision_norm_Easy_Prev_Diff_array
+decision_norm_Easy_Prev_Diff_lower = rowMeans(mean_decision_norm_prev_EvD_array[,,1,2], na.rm = T) - sem_decision_norm_Easy_Prev_Diff_array
+decision_norm_Diff_Prev_Easy_upper = rowMeans(mean_decision_norm_prev_EvD_array[,,2,1], na.rm = T) + sem_decision_norm_Diff_Prev_Easy_array
+decision_norm_Diff_Prev_Easy_lower = rowMeans(mean_decision_norm_prev_EvD_array[,,2,1], na.rm = T) - sem_decision_norm_Diff_Prev_Easy_array
+decision_norm_Diff_Prev_Diff_upper = rowMeans(mean_decision_norm_prev_EvD_array[,,2,2], na.rm = T) + sem_decision_norm_Diff_Prev_Diff_array
+decision_norm_Diff_Prev_Diff_lower = rowMeans(mean_decision_norm_prev_EvD_array[,,2,2], na.rm = T) - sem_decision_norm_Diff_Prev_Diff_array
 
 
 sem_decision_start_x_vals = c(decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
@@ -2749,7 +2784,7 @@ abline(v = 0, lty = 'dashed')
 dev.off()
 
 
-# Normalized Pupillometry Split into Easy v. Difficult
+# NORMALIZED Pupillometry Split into Easy v. Difficult
 pdf(sprintf('%s/plots/mean_downsampled_decision_normalized_plot_EvD_groupOnly.pdf',config$path$data$processed),
     width = 5, height = 4)
 par(mfrow = c(1,1))
@@ -2772,6 +2807,7 @@ lines(x = normBins,
       lwd = 3, col = 'red')
 dev.off()
 
+
 # NORMALIZED Pupillometry Split by Choice Difficulty into Risky v. Safe
 
 # Easy
@@ -2792,6 +2828,8 @@ lines(x = normBins,
 lines(x = normBins,
       y = rowMeans(mean_decision_norm_EvD_RvS_array[,,1,2], na.rm = T), type = 'l',
       lwd = 3, col = 'green')
+legend("bottomright", legend = c("Risky", "Safe"),
+       col = c(rgb(1,0,0), rgb(0,1,0)), lty = c(1, 1))
 
 # Difficult
 plot(1, type = 'n',
@@ -2811,13 +2849,15 @@ lines(x = normBins,
 lines(x = normBins,
       y = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,2], na.rm = T), type = 'l',
       lwd = 3, col = 'green')
+legend("bottomright", legend = c("Risky", "Safe"),
+       col = c(rgb(1,0,0), rgb(0,1,0)), lty = c(1, 1))
 
 # Choice Difficulty x Choice Made
 plot(1, type = 'n',
      xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
      main = "Normalized Decision Window: Choice Difficulty x Choice Made",
-     xlim = c(1, number_of_normBins), ylim = c(min(c(decision_norm_Easy_Risky_lower,decision_norm_Easy_Safe_lower)),
-                                               max(c(decision_norm_Easy_Risky_upper,decision_norm_Easy_Safe_upper))))
+     xlim = c(1, number_of_normBins), ylim = c(min(c(decision_norm_Diff_Risky_lower,decision_norm_Diff_Safe_lower)),
+                                               max(c(decision_norm_Diff_Risky_upper,decision_norm_Diff_Safe_upper))))
 polygon(x = sem_decision_norm_x_vals,
         y = c(decision_norm_Easy_Risky_upper,rev(decision_norm_Easy_Risky_lower)),
         lty = 0, col = rgb(0,0,1,.2))
@@ -2842,11 +2882,89 @@ lines(x = normBins,
 lines(x = normBins,
       y = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,2], na.rm = T), type = 'l',
       lwd = 3, col = 'red', lty = 2)
-legend("topright", legend = c("Risky", "Safe"),
-       col = c(rgb(0,0,1), rgb(1,0,0)), lty = c(1, 2))
+legend("bottomright", legend = c("Easy", "Risky", "Safe", "Difficult", "Risky", "Safe"),  # Labels
+       col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
+       lty = c(NA, 1, 2, NA, 1, 2))
 
 
 
+# NORMALIZED Pupillometry Split by Choice Difficulty into Previous Easy v Diff
+
+# Easy
+plot(1, type = 'n',
+     xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Normalized Decision Window: Easy Choice x Previous Difficulty",
+     xlim = c(1, number_of_normBins), ylim = c(min(c(decision_norm_Easy_Prev_Easy_lower,decision_norm_Easy_Prev_Diff_lower)),
+                                               max(c(decision_norm_Easy_Prev_Easy_upper,decision_norm_Easy_Prev_Diff_upper))))
+polygon(x = sem_decision_norm_x_vals,
+        y = c(decision_norm_Easy_Prev_Easy_upper,rev(decision_norm_Easy_Prev_Easy_lower)),
+        lty = 0, col = rgb(0,0,1,.2))
+polygon(x = sem_decision_norm_x_vals,
+        y = c(decision_norm_Easy_Prev_Diff_upper,rev(decision_norm_Easy_Prev_Diff_lower)),
+        lty = 0, col = rgb(1,0,0,.2))
+lines(x = normBins,
+      y = rowMeans(mean_decision_norm_prev_EvD_array[,,1,1], na.rm = T), type = 'l',
+      lwd = 3, col = 'blue')
+lines(x = normBins,
+      y = rowMeans(mean_decision_norm_prev_EvD_array[,,1,2], na.rm = T), type = 'l',
+      lwd = 3, col = 'red')
+legend("bottomright", legend = c("Prev Easy", "Prev Diff"),
+       col = c("blue", "red"), lty = c(1, 1))
+
+# Difficult
+plot(1, type = 'n',
+     xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Normalized Decision Window: Difficult Choice x Previous Difficulty",
+     xlim = c(1, number_of_normBins), ylim = c(min(c(decision_norm_Diff_Prev_Easy_lower,decision_norm_Diff_Prev_Diff_lower)),
+                                               max(c(decision_norm_Diff_Prev_Easy_upper,decision_norm_Diff_Prev_Diff_upper))))
+polygon(x = sem_decision_norm_x_vals,
+        y = c(decision_norm_Diff_Prev_Easy_upper,rev(decision_norm_Diff_Prev_Easy_lower)),
+        lty = 0, col = rgb(0,0,1,.2))
+polygon(x = sem_decision_norm_x_vals,
+        y = c(decision_norm_Diff_Prev_Diff_upper,rev(decision_norm_Diff_Prev_Diff_lower)),
+        lty = 0, col = rgb(1,0,0,.2))
+lines(x = normBins,
+      y = rowMeans(mean_decision_norm_prev_EvD_array[,,2,1], na.rm = T), type = 'l',
+      lwd = 3, col = 'blue')
+lines(x = normBins,
+      y = rowMeans(mean_decision_norm_prev_EvD_array[,,2,2], na.rm = T), type = 'l',
+      lwd = 3, col = 'red')
+legend("bottomright", legend = c("Prev Easy", "Prev Diff"),
+       col = c(rgb(0,0,.5), rgb(0,0,1)), lty = c(1, 1))
+
+# Choice Difficulty x Choice Made
+plot(1, type = 'n',
+     xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Normalized Decision Window: Choice Difficulty x Choice Made",
+     xlim = c(1, number_of_normBins), ylim = c(min(c(decision_norm_Diff_Risky_lower,decision_norm_Diff_Safe_lower)),
+                                               max(c(decision_norm_Diff_Risky_upper,decision_norm_Diff_Safe_upper))))
+polygon(x = sem_decision_norm_x_vals,
+        y = c(decision_norm_Easy_Risky_upper,rev(decision_norm_Easy_Risky_lower)),
+        lty = 0, col = rgb(0,0,1,.2))
+polygon(x = sem_decision_norm_x_vals,
+        y = c(decision_norm_Easy_Safe_upper,rev(decision_norm_Easy_Safe_lower)),
+        lty = 0, col = rgb(0,0,1,.2))
+polygon(x = sem_decision_norm_x_vals,
+        y = c(decision_norm_Diff_Risky_upper,rev(decision_norm_Diff_Risky_lower)),
+        lty = 0, col = rgb(1,0,0,.2))
+polygon(x = sem_decision_norm_x_vals,
+        y = c(decision_norm_Diff_Safe_upper,rev(decision_norm_Diff_Safe_lower)),
+        lty = 0, col = rgb(1,0,0,.2))
+lines(x = normBins,
+      y = rowMeans(mean_decision_norm_EvD_RvS_array[,,1,1], na.rm = T), type = 'l',
+      lwd = 3, col = 'blue')
+lines(x = normBins,
+      y = rowMeans(mean_decision_norm_EvD_RvS_array[,,1,2], na.rm = T), type = 'l',
+      lwd = 3, col = 'blue', lty = 2)
+lines(x = normBins,
+      y = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,1], na.rm = T), type = 'l',
+      lwd = 3, col = 'red')
+lines(x = normBins,
+      y = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,2], na.rm = T), type = 'l',
+      lwd = 3, col = 'red', lty = 2)
+legend("bottomright", legend = c("Easy", "Risky", "Safe", "Difficult", "Risky", "Safe"),  # Labels
+       col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
+       lty = c(NA, 1, 2, NA, 1, 2))
 
 
 ### Next Steps #####################
