@@ -2718,7 +2718,7 @@ dec_isi_otc_iti_Easy_Safe_upper = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,
 dec_isi_otc_iti_Easy_Safe_lower = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,2], na.rm = T) - sem_dec_isi_otc_iti_Easy_Safe_array
 dec_isi_otc_iti_Diff_Risky_upper = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,1], na.rm = T) + sem_dec_isi_otc_iti_Diff_Risky_array
 dec_isi_otc_iti_Diff_Risky_lower = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,1], na.rm = T) - sem_dec_isi_otc_iti_Diff_Risky_array
-dec_isi_otc_iti_Diff_Safe_upper = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,1], na.rm = T) + sem_dec_isi_otc_iti_Diff_Safe_array
+dec_isi_otc_iti_Diff_Safe_upper = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,2], na.rm = T) + sem_dec_isi_otc_iti_Diff_Safe_array
 dec_isi_otc_iti_Diff_Safe_lower = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,2], na.rm = T) - sem_dec_isi_otc_iti_Diff_Safe_array
 
 dec_isi_otc_iti_Easy_Prev_Easy_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,1,1], na.rm = T) + sem_dec_isi_otc_iti_Easy_Prev_Easy_array
