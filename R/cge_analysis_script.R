@@ -2400,136 +2400,153 @@ for (s in keep_participants){
           }
           else if (tmpdata$easyP1difficultN1_prev[t] == -1) {
             decision_start_prev_EvD_array[cum_diff_trial_num, b,s_index,1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Diff
+          }
         }
       }
     }
 
-    # Dec/ISI/Otc/ITI
-    indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_end[t] - pre_dec_window_width)) &
-      (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + dec_isi_otc_iti_window_width));
-    pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
-    time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
-    # par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
+      # Dec/ISI/Otc/ITI
+      indices = (downsampled_et_data$time_data_downsampled >= (event_timestamps$decision_end[t] - pre_dec_window_width)) &
+        (downsampled_et_data$time_data_downsampled < (event_timestamps$decision_end[t] + dec_isi_otc_iti_window_width));
+      pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices];
+      time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_end[t];
+      # par(mfg = c(2,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.05), lwd = 3)
 
-    # Put the mean values into the bins
-    for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
-      tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
-      if (!is.na(tmp_bin_mean)){
-        dec_isi_otc_iti_array[t,b,s_index] = tmp_bin_mean;
-      }
-    }
-
-    # Put the mean values into the bins
-    if(tmpdata$easyP1difficultN1[t] == 1) {
+      # Put the mean values into the bins
       for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
         tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
         if (!is.na(tmp_bin_mean)){
-          dec_isi_otc_iti_EvD_array[cum_easy_trial_num, b, s_index, 1] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
-          if(tmpdata$choice[t] == 1) {
-            dec_isi_otc_iti_EvD_RvS_array[cum_easy_trial_num, b,s_index,1, 1] = tmp_bin_mean; # trials x bins x subjects x Easy x Risky
+          dec_isi_otc_iti_array[t,b,s_index] = tmp_bin_mean;
+        }
+      }
+
+      # Put the mean values into the bins
+      if(tmpdata$easyP1difficultN1[t] == 1) {
+        for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
+          tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
+          if (!is.na(tmp_bin_mean)){
+            dec_isi_otc_iti_EvD_array[cum_easy_trial_num, b, s_index, 1] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
+            if(tmpdata$choice[t] == 1) {
+              dec_isi_otc_iti_EvD_RvS_array[cum_easy_trial_num, b,s_index,1, 1] = tmp_bin_mean; # trials x bins x subjects x Easy x Risky
+            }
+            else if (tmpdata$choice[t] == 0) {
+              dec_isi_otc_iti_EvD_RvS_array[cum_easy_trial_num, b,s_index,1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Safe
+            }
+            if(tmpdata$easyP1difficultN1_prev[t] == 1) {
+              dec_isi_otc_iti_prev_EvD_array[cum_easy_trial_num, b,s_index,1, 1] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Easy
+            }
+            else if (tmpdata$easyP1difficultN1_prev[t] == -1) {
+              dec_isi_otc_iti_prev_EvD_array[cum_easy_trial_num, b,s_index,1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Diff
+            }
           }
-          else if (tmpdata$choice[t] == 0) {
-            dec_isi_otc_iti_EvD_RvS_array[cum_easy_trial_num, b,s_index,1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Safe
-          }
-          if(tmpdata$easyP1difficultN1_prev[t] == 1) {
-            dec_isi_otc_iti_prev_EvD_array[cum_easy_trial_num, b,s_index,1, 1] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Easy
-          }
-          else if (tmpdata$easyP1difficultN1_prev[t] == -1) {
-            dec_isi_otc_iti_prev_EvD_array[cum_easy_trial_num, b,s_index,1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Diff
+        }
+      } else if (tmpdata$easyP1difficultN1[t] == -1) {
+        for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
+          tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
+          if (!is.na(tmp_bin_mean)){
+            dec_isi_otc_iti_EvD_array[cum_diff_trial_num, b, s_index, 2] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
+            if(tmpdata$choice[t] == 1) {
+              dec_isi_otc_iti_EvD_RvS_array[cum_diff_trial_num, b,s_index,2, 1] = tmp_bin_mean; # trials x bins x subjects x Easy x Risky
+            }
+            else if (tmpdata$choice[t] == 0) {
+              dec_isi_otc_iti_EvD_RvS_array[cum_diff_trial_num, b,s_index,2, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Safe
+            }
+            if(tmpdata$easyP1difficultN1_prev[t] == 1) {
+              dec_isi_otc_iti_prev_EvD_array[cum_diff_trial_num, b,s_index,2, 1] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Easy
+            }
+            else if (tmpdata$easyP1difficultN1_prev[t] == -1) {
+              dec_isi_otc_iti_prev_EvD_array[cum_diff_trial_num, b,s_index,2, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Diff
+            }
           }
         }
       }
-    } else if (tmpdata$easyP1difficultN1[t] == -1) {
-      for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
-        tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
-        if (!is.na(tmp_bin_mean)){
-          dec_isi_otc_iti_EvD_array[cum_diff_trial_num, b, s_index, 2] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
-          if(tmpdata$choice[t] == 1) {
-            dec_isi_otc_iti_EvD_RvS_array[cum_diff_trial_num, b,s_index,2, 1] = tmp_bin_mean; # trials x bins x subjects x Easy x Risky
+
+      # NORMALIZED Decision
+      if(!is.na(event_timestamps$decision_start[t])){
+        tmp_norm_time_points = seq(from = event_timestamps$decision_start[t], # set up the normalized time slices we want
+                                   to = event_timestamps$decision_end[t],
+                                   length.out = number_of_normBins)
+        tmp_norm_pupil = approx(x = downsampled_et_data$time_data_downsampled, # use approx to get them
+                                y = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled,
+                                xout = tmp_norm_time_points)$y
+        decision_norm_array[t,,s_index] = tmp_norm_pupil # store in the normalized array
+
+        current_difficulty_index = abs((tmpdata$easyP1difficultN1[t]-1)/2)+1; # easy --> 1, difficult --> 2
+        current_choice_index = abs(tmpdata$choice[t]-2); # risky --> 1, safe --> 2
+        previous_difficulty_index = abs((tmpdata$easyP1difficultN1_prev[t]-1)/2)+1; # easy --> 1, difficult --> 2
+
+
+        if((tmpdata$static0dynamic1[t] == 1) & (!is.na(tmpdata$choice[t]))){
+          if(tmpdata$easyP1difficultN1[t] == 1) { # CURRENT EASY
+            cum_easyDiff_trial_num = cum_easy_trial_num
           }
-          else if (tmpdata$choice[t] == 0) {
-            dec_isi_otc_iti_EvD_RvS_array[cum_diff_trial_num, b,s_index,2, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Safe
+          else if (tmpdata$easyP1difficultN1[t] == -1) { # CURRENT DIFFICULT
+            cum_easyDiff_trial_num = cum_diff_trial_num
           }
-          if(tmpdata$easyP1difficultN1_prev[t] == 1) {
-            dec_isi_otc_iti_prev_EvD_array[cum_diff_trial_num, b,s_index,2, 1] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Easy
-          }
-          else if (tmpdata$easyP1difficultN1_prev[t] == -1) {
-            dec_isi_otc_iti_prev_EvD_array[cum_diff_trial_num, b,s_index,2, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Diff
+
+          # Use trial-wise indices to place tmp_norm_pupil into the right spot
+          decision_norm_EvD_array[cum_easyDiff_trial_num,,s_index,current_difficulty_index] = tmp_norm_pupil;# trials x bins x subjects x Easy
+          decision_norm_EvD_RvS_array[cum_easyDiff_trial_num,,s_index,current_difficulty_index, current_choice_index] = tmp_norm_pupil; # trials x bins x subjects x Easy x Risky
+
+          if(tmpdata$easyP1difficultN1_prev[t] != 0){
+            decision_norm_prev_EvD_array[cum_easyDiff_trial_num,,s_index,current_difficulty_index,previous_difficulty_index] = tmp_norm_pupil # trials x bins x subjects x Easy x Prev Easy
           }
         }
       }
-    }
-
-    # NORMALIZED Decision
-    if(!is.na(event_timestamps$decision_start[t])){
-      tmp_norm_time_points = seq(from = event_timestamps$decision_start[t], # set up the normalized time slices we want
-                                 to = event_timestamps$decision_end[t],
-                                 length.out = number_of_normBins)
-      tmp_norm_pupil = approx(x = downsampled_et_data$time_data_downsampled, # use approx to get them
-                              y = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled,
-                              xout = tmp_norm_time_points)$y
-      decision_norm_array[t,,s_index] = tmp_norm_pupil # store in the normalized array
-
-      current_difficulty_index = abs((tmpdata$easyP1difficultN1[t]-1)/2)+1; # easy --> 1, difficult --> 2
-      current_choice_index = abs(tmpdata$choice[t]-2); # risky --> 1, safe --> 2
-      previous_difficulty_index = abs((tmpdata$easyP1difficultN1_prev[t]-1)/2)+1; # easy --> 1, difficult --> 2
+    } # end trial loop
 
 
-      if((tmpdata$static0dynamic1[t] == 1) & (!is.na(tmpdata$choice[t]))){
-        if(tmpdata$easyP1difficultN1[t] == 1) { # CURRENT EASY
-          cum_easyDiff_trial_num = cum_easy_trial_num
-        }
-        else if (tmpdata$easyP1difficultN1[t] == -1) { # CURRENT DIFFICULT
-          cum_easyDiff_trial_num = cum_diff_trial_num
-        }
+    par(usr = p1_coords)
+    par(mfg = c(1,1)); lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+                             y = colMeans(decision_start_array, na.rm = T), col = rgb(1,0,0), lwd = 3)
 
-        # Use trial-wise indices to place tmp_norm_pupil into the right spot
-        decision_norm_EvD_array[cum_easyDiff_trial_num,,s_index,current_difficulty_index] = tmp_norm_pupil;# trials x bins x subjects x Easy
-        decision_norm_EvD_RvS_array[cum_easyDiff_trial_num,,s_index,current_difficulty_index, current_choice_index] = tmp_norm_pupil; # trials x bins x subjects x Easy x Risky
+    par(usr = p2_coords)
+    par(mfg = c(2,1)); lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2,
+                             y = colMeans(decision_end_array, na.rm = T), col = rgb(1,0,0), lwd = 3)
 
-        if(tmpdata$easyP1difficultN1_prev[t] != 0){
-          decision_norm_prev_EvD_array[cum_easyDiff_trial_num,,s_index,current_difficulty_index,previous_difficulty_index] = tmp_norm_pupil # trials x bins x subjects x Easy x Prev Easy
-        }
-      }
-    }
-  } # end trial loop
+    dev.off() # complete the plot
 
 
-  par(usr = p1_coords)
-  par(mfg = c(1,1)); lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
-                           y = colMeans(decision_start_array, na.rm = T), col = rgb(1,0,0), lwd = 3)
+    mean_decision_start_array[,s_index] = colMeans(decision_start_array, na.rm = T)
+    mean_decision_end_array[,s_index] = colMeans(decision_end_array, na.rm = T)
+    mean_dec_isi_otc_iti_array[,s_index] = colMeans(dec_isi_otc_iti_array[,,s_index], na.rm = T)
 
-  par(usr = p2_coords)
-  par(mfg = c(2,1)); lines(x = decision_end_bins[1:(length(decision_end_bins)-1)] + bin_increment/2,
-                           y = colMeans(decision_end_array, na.rm = T), col = rgb(1,0,0), lwd = 3)
+    mean_decision_start_EvD_array[,s_index,1] = colMeans(decision_start_EvD_array[,,s_index,1], na.rm = T) # decision_start
+    mean_decision_start_EvD_array[,s_index,2] = colMeans(decision_start_EvD_array[,,s_index,2], na.rm = T)
+    mean_decision_start_EvD_RvS_array[,s_index,1,1] = colMeans(decision_start_EvD_RvS_array[,,s_index,1,1], na.rm = T)
+    mean_decision_start_EvD_RvS_array[,s_index,1,2] = colMeans(decision_start_EvD_RvS_array[,,s_index,1,2], na.rm = T)
+    mean_decision_start_EvD_RvS_array[,s_index,2,1] = colMeans(decision_start_EvD_RvS_array[,,s_index,2,1], na.rm = T)
+    mean_decision_start_EvD_RvS_array[,s_index,2,2] = colMeans(decision_start_EvD_RvS_array[,,s_index,2,2], na.rm = T)
+    mean_decision_start_prev_EvD_array[,s_index,2,1] = colMeans(decision_start_prev_EvD_array[,,s_index,2,1], na.rm = T)
+    mean_decision_start_prev_EvD_array[,s_index,2,2] = colMeans(decision_start_prev_EvD_array[,,s_index,2,2], na.rm = T)
+    mean_decision_start_prev_EvD_array[,s_index,2,1] = colMeans(decision_start_prev_EvD_array[,,s_index,2,1], na.rm = T)
+    mean_decision_start_prev_EvD_array[,s_index,2,2] = colMeans(decision_start_prev_EvD_array[,,s_index,2,2], na.rm = T)
+    mean_dec_isi_otc_iti_EvD_array[,s_index,1] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,1], na.rm = T) # dec_isi_otc_iti
+    mean_dec_isi_otc_iti_EvD_array[,s_index,2] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,2], na.rm = T)
+    mean_dec_isi_otc_iti_EvD_RvS_array[,s_index,1,1] = colMeans(dec_isi_otc_iti_EvD_RvS_array[,,s_index,1,1], na.rm = T)
+    mean_dec_isi_otc_iti_EvD_RvS_array[,s_index,1,2] = colMeans(dec_isi_otc_iti_EvD_RvS_array[,,s_index,1,2], na.rm = T)
+    mean_dec_isi_otc_iti_EvD_RvS_array[,s_index,2,1] = colMeans(dec_isi_otc_iti_EvD_RvS_array[,,s_index,2,1], na.rm = T)
+    mean_dec_isi_otc_iti_EvD_RvS_array[,s_index,2,2] = colMeans(dec_isi_otc_iti_EvD_RvS_array[,,s_index,2,2], na.rm = T)
+    mean_dec_isi_otc_iti_prev_EvD_array[,s_index,1,1] = colMeans(dec_isi_otc_iti_prev_EvD_array[,,s_index,1,1], na.rm = T)
+    mean_dec_isi_otc_iti_prev_EvD_array[,s_index,1,2] = colMeans(dec_isi_otc_iti_prev_EvD_array[,,s_index,1,2], na.rm = T)
+    mean_dec_isi_otc_iti_prev_EvD_array[,s_index,2,1] = colMeans(dec_isi_otc_iti_prev_EvD_array[,,s_index,2,1], na.rm = T)
+    mean_dec_isi_otc_iti_prev_EvD_array[,s_index,2,2] = colMeans(dec_isi_otc_iti_prev_EvD_array[,,s_index,2,2], na.rm = T)
 
-  dev.off() # complete the plot
+    # NORMALIZED Mean Data Arrays
+    mean_decision_norm_array[,s_index] = colMeans(decision_norm_array[,,s_index], na.rm = T) # All
+    mean_decision_norm_EvD_array[,s_index,1] = colMeans(decision_norm_EvD_array[,,s_index,1], na.rm = T) # Easy
+    mean_decision_norm_EvD_RvS_array[,s_index,1,1] = colMeans(decision_norm_EvD_RvS_array[,,s_index,1,1], na.rm = T) # Easy x Risky
+    mean_decision_norm_EvD_RvS_array[,s_index,1,2] = colMeans(decision_norm_EvD_RvS_array[,,s_index,1,2], na.rm = T) # Easy x Safe
+    mean_decision_norm_prev_EvD_array[,s_index,1,1] = colMeans(decision_norm_prev_EvD_array[,,s_index,1,1], na.rm = T) # Easy x Prev Easy
+    mean_decision_norm_prev_EvD_array[,s_index,1,2] = colMeans(decision_norm_prev_EvD_array[,,s_index,1,2], na.rm = T) # Easy x Prev Diff
+    mean_decision_norm_EvD_array[,s_index,2] = colMeans(decision_norm_EvD_array[,,s_index,2], na.rm = T) # Difficult
+    mean_decision_norm_EvD_RvS_array[,s_index,2,1] = colMeans(decision_norm_EvD_RvS_array[,,s_index,2,1], na.rm = T) # Difficult x Risky
+    mean_decision_norm_EvD_RvS_array[,s_index,2,2] = colMeans(decision_norm_EvD_RvS_array[,,s_index,2,2], na.rm = T) # Difficult x Safe
+    mean_decision_norm_prev_EvD_array[,s_index,2,1] = colMeans(decision_norm_prev_EvD_array[,,s_index,2,1], na.rm = T) # Difficult x Prev Easy
+    mean_decision_norm_prev_EvD_array[,s_index,2,2] = colMeans(decision_norm_prev_EvD_array[,,s_index,2,2], na.rm = T) # Difficult x Prev Diff
 
-
-  mean_decision_start_array[,s_index] = colMeans(decision_start_array, na.rm = T)
-  mean_decision_end_array[,s_index] = colMeans(decision_end_array, na.rm = T)
-  mean_dec_isi_otc_iti_array[,s_index] = colMeans(dec_isi_otc_iti_array[,,s_index], na.rm = T)
-
-  mean_decision_start_EvD_array[,s_index,1] = colMeans(decision_start_EvD_array[,,s_index,1], na.rm = T)
-  mean_decision_start_EvD_array[,s_index,2] = colMeans(decision_start_EvD_array[,,s_index,2], na.rm = T)
-  mean_dec_isi_otc_iti_EvD_array[,s_index,1] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,1], na.rm = T)
-  mean_dec_isi_otc_iti_EvD_array[,s_index,2] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,2], na.rm = T)
-
-  # NORMALIZED Mean Data Arrays
-  mean_decision_norm_array[,s_index] = colMeans(decision_norm_array[,,s_index], na.rm = T) # All
-  mean_decision_norm_EvD_array[,s_index,1] = colMeans(decision_norm_EvD_array[,,s_index,1], na.rm = T) # Easy
-  mean_decision_norm_EvD_RvS_array[,s_index,1,1] = colMeans(decision_norm_EvD_RvS_array[,,s_index,1,1], na.rm = T) # Easy x Risky
-  mean_decision_norm_EvD_RvS_array[,s_index,1,2] = colMeans(decision_norm_EvD_RvS_array[,,s_index,1,2], na.rm = T) # Easy x Safe
-  mean_decision_norm_prev_EvD_array[,s_index,1,1] = colMeans(decision_norm_prev_EvD_array[,,s_index,1,1], na.rm = T) # Easy x Prev Easy
-  mean_decision_norm_prev_EvD_array[,s_index,1,2] = colMeans(decision_norm_prev_EvD_array[,,s_index,1,2], na.rm = T) # Easy x Prev Diff
-  mean_decision_norm_EvD_array[,s_index,2] = colMeans(decision_norm_EvD_array[,,s_index,2], na.rm = T) # Difficult
-  mean_decision_norm_EvD_RvS_array[,s_index,2,1] = colMeans(decision_norm_EvD_RvS_array[,,s_index,2,1], na.rm = T) # Difficult x Risky
-  mean_decision_norm_EvD_RvS_array[,s_index,2,2] = colMeans(decision_norm_EvD_RvS_array[,,s_index,2,2], na.rm = T) # Difficult x Safe
-  mean_decision_norm_prev_EvD_array[,s_index,2,1] = colMeans(decision_norm_prev_EvD_array[,,s_index,2,1], na.rm = T) # Difficult x Prev Easy
-  mean_decision_norm_prev_EvD_array[,s_index,2,2] = colMeans(decision_norm_prev_EvD_array[,,s_index,2,2], na.rm = T) # Difficult x Prev Diff
-
-  cat(sprintf('. Done.\n'))
-}
+    cat(sprintf('. Done.\n'))
+  }
 
 
 # Plot the Dec/ISI/Otc/ITI Graphs
@@ -2640,6 +2657,24 @@ sem_decision_start_Diff_array = sem(mean_decision_start_EvD_array[,,2])
 sem_dec_isi_otc_iti_Easy_array = sem(mean_dec_isi_otc_iti_EvD_array[,,1])
 sem_dec_isi_otc_iti_Diff_array = sem(mean_dec_isi_otc_iti_EvD_array[,,2])
 
+sem_decision_start_Easy_Risky_array = sem(mean_decision_start_EvD_RvS_array[,,1,1])
+sem_decision_start_Easy_Safe_array = sem(mean_decision_start_EvD_RvS_array[,,1,2])
+sem_decision_start_Diff_Risky_array = sem(mean_decision_start_EvD_RvS_array[,,2,1])
+sem_decision_start_Diff_Safe_array = sem(mean_decision_start_EvD_RvS_array[,,2,2])
+sem_dec_isi_otc_iti_Easy_Risky_array = sem(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,1])
+sem_dec_isi_otc_iti_Easy_Safe_array = sem(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,2])
+sem_dec_isi_otc_iti_Diff_Risky_array = sem(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,1])
+sem_dec_isi_otc_iti_Diff_Safe_array = sem(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,2])
+
+sem_decision_start_Easy_Prev_Easy_array = sem(mean_decision_start_prev_EvD_array[,,1,1])
+sem_decision_start_Easy_Prev_Diff_array = sem(mean_decision_start_prev_EvD_array[,,1,2])
+sem_decision_start_Diff_Prev_Easy_array = sem(mean_decision_start_prev_EvD_array[,,2,1])
+sem_decision_start_Diff_Prev_Diff_array = sem(mean_decision_start_prev_EvD_array[,,2,2])
+sem_dec_isi_otc_iti_Easy_Prev_Easy_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,1,1])
+sem_dec_isi_otc_iti_Easy_Prev_Diff_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,1,2])
+sem_dec_isi_otc_iti_Diff_Prev_Easy_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,2,1])
+sem_dec_isi_otc_iti_Diff_Prev_Diff_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,2,2])
+
 decision_start_upper = rowMeans(mean_decision_start_array, na.rm = T) + sem_decision_start_array
 decision_start_lower = rowMeans(mean_decision_start_array, na.rm = T) - sem_decision_start_array
 
@@ -2658,6 +2693,42 @@ dec_isi_otc_iti_Easy_upper = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,1], na.rm
 dec_isi_otc_iti_Easy_lower = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,1], na.rm = T) - sem_dec_isi_otc_iti_Easy_array
 dec_isi_otc_iti_Diff_upper = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,2], na.rm = T) + sem_dec_isi_otc_iti_Diff_array
 dec_isi_otc_iti_Diff_lower = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,2], na.rm = T) - sem_dec_isi_otc_iti_Diff_array
+
+decision_start_Easy_Risky_upper = rowMeans(mean_decision_start_EvD_RvS_array[,,1,1], na.rm = T) + sem_decision_start_Easy_Risky_array
+decision_start_Easy_Risky_lower = rowMeans(mean_decision_start_EvD_RvS_array[,,1,1], na.rm = T) - sem_decision_start_Easy_Risky_array
+decision_start_Easy_Safe_upper = rowMeans(mean_decision_start_EvD_RvS_array[,,1,2], na.rm = T) + sem_decision_start_Easy_Safe_array
+decision_start_Easy_Safe_lower = rowMeans(mean_decision_start_EvD_RvS_array[,,1,2], na.rm = T) - sem_decision_start_Easy_Safe_array
+decision_start_Diff_Risky_upper = rowMeans(mean_decision_start_EvD_RvS_array[,,2,1], na.rm = T) + sem_decision_start_Diff_Risky_array
+decision_start_Diff_Risky_lower = rowMeans(mean_decision_start_EvD_RvS_array[,,2,1], na.rm = T) - sem_decision_start_Diff_Risky_array
+decision_start_Diff_Safe_upper = rowMeans(mean_decision_start_EvD_RvS_array[,,2,1], na.rm = T) + sem_decision_start_Diff_Safe_array
+decision_start_Diff_Safe_lower = rowMeans(mean_decision_start_EvD_RvS_array[,,2,2], na.rm = T) - sem_decision_start_Diff_Safe_array
+
+decision_start_Easy_Prev_Easy_upper = rowMeans(mean_decision_start_prev_EvD_array[,,1,1], na.rm = T) + sem_decision_start_Easy_Prev_Easy_array
+decision_start_Easy_Prev_Easy_lower = rowMeans(mean_decision_start_prev_EvD_array[,,1,1], na.rm = T) - sem_decision_start_Easy_Prev_Easy_array
+decision_start_Easy_Prev_Diff_upper = rowMeans(mean_decision_start_prev_EvD_array[,,1,2], na.rm = T) + sem_decision_start_Easy_Prev_Diff_array
+decision_start_Easy_Prev_Diff_lower = rowMeans(mean_decision_start_prev_EvD_array[,,1,2], na.rm = T) - sem_decision_start_Easy_Prev_Diff_array
+decision_start_Diff_Prev_Easy_upper = rowMeans(mean_decision_start_prev_EvD_array[,,2,1], na.rm = T) + sem_decision_start_Diff_Prev_Easy_array
+decision_start_Diff_Prev_Easy_lower = rowMeans(mean_decision_start_prev_EvD_array[,,2,1], na.rm = T) - sem_decision_start_Diff_Prev_Easy_array
+decision_start_Diff_Prev_Diff_upper = rowMeans(mean_decision_start_prev_EvD_array[,,2,1], na.rm = T) + sem_decision_start_Diff_Prev_Diff_array
+decision_start_Diff_Prev_Diff_lower = rowMeans(mean_decision_start_prev_EvD_array[,,2,2], na.rm = T) - sem_decision_start_Diff_Prev_Diff_array
+
+dec_isi_otc_iti_Easy_Risky_upper = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,1], na.rm = T) + sem_dec_isi_otc_iti_Easy_Risky_array
+dec_isi_otc_iti_Easy_Risky_lower = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,1], na.rm = T) - sem_dec_isi_otc_iti_Easy_Risky_array
+dec_isi_otc_iti_Easy_Safe_upper = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,2], na.rm = T) + sem_dec_isi_otc_iti_Easy_Safe_array
+dec_isi_otc_iti_Easy_Safe_lower = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,2], na.rm = T) - sem_dec_isi_otc_iti_Easy_Safe_array
+dec_isi_otc_iti_Diff_Risky_upper = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,1], na.rm = T) + sem_dec_isi_otc_iti_Diff_Risky_array
+dec_isi_otc_iti_Diff_Risky_lower = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,1], na.rm = T) - sem_dec_isi_otc_iti_Diff_Risky_array
+dec_isi_otc_iti_Diff_Safe_upper = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,1], na.rm = T) + sem_dec_isi_otc_iti_Diff_Safe_array
+dec_isi_otc_iti_Diff_Safe_lower = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,2], na.rm = T) - sem_dec_isi_otc_iti_Diff_Safe_array
+
+dec_isi_otc_iti_Easy_Prev_Easy_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,1,1], na.rm = T) + sem_dec_isi_otc_iti_Easy_Prev_Easy_array
+dec_isi_otc_iti_Easy_Prev_Easy_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,1,1], na.rm = T) - sem_dec_isi_otc_iti_Easy_Prev_Easy_array
+dec_isi_otc_iti_Easy_Prev_Diff_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,1,2], na.rm = T) + sem_dec_isi_otc_iti_Easy_Prev_Diff_array
+dec_isi_otc_iti_Easy_Prev_Diff_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,1,2], na.rm = T) - sem_dec_isi_otc_iti_Easy_Prev_Diff_array
+dec_isi_otc_iti_Diff_Prev_Easy_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,1], na.rm = T) + sem_dec_isi_otc_iti_Diff_Prev_Easy_array
+dec_isi_otc_iti_Diff_Prev_Easy_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,1], na.rm = T) - sem_dec_isi_otc_iti_Diff_Prev_Easy_array
+dec_isi_otc_iti_Diff_Prev_Diff_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,1], na.rm = T) + sem_dec_isi_otc_iti_Diff_Prev_Diff_array
+dec_isi_otc_iti_Diff_Prev_Diff_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,2], na.rm = T) - sem_dec_isi_otc_iti_Diff_Prev_Diff_array
 
 # NORMALIZED Pupillometry
 sem_decision_norm_array = sem(mean_decision_norm_array)
@@ -2787,7 +2858,6 @@ dev.off()
 
 pdf(sprintf('%s/plots/mean_downsampled_decision_plot_EvD_groupOnly.pdf',config$path$data$processed),
     width = 5, height = 4)
-
 plot(1, type = 'n',
      xlab = "milliseconds", ylab = "demeaned pupil diameter (mm)",
      main = "Aligned to Decision Window Start",
@@ -2803,8 +2873,46 @@ lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment
       y = rowMeans(mean_decision_start_EvD_array[,,2], na.rm = T), type = 'l',
       lwd = 3, col = rgb(1,0,0))
 abline(v = 0, lty = 'dashed')
-
 dev.off()
+
+# decision start: choice made
+plot(1, type = 'n',
+     xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Aligned to Decision Window Start: Easy Choice x Choice Made",
+     xlim = c(-baseline_window_width, 3000), ylim = c(min(c(decision_start_Easy_Risky_lower, decision_start_Easy_Safe_lower)),
+                                                      max(c(decision_start_Easy_Risky_upper, decision_start_Easy_Safe_upper)))) # use Easy to specify height
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_Risky_upper,rev(decision_start_Easy_Risky_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_Safe_upper,rev(decision_start_Easy_Safe_lower)),
+        lty = 0, col = rgb(0,0,1,.1))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_EvD_RvS_array[,,1,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_EvD_RvS_array[,,1,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1))
+abline(v = 0, lty = 'dashed')
+legend("bottomright", legend = c("Risky", "Safe"),
+       col = c("red", "blue"), lty = c(1, 1))
+
+plot(1, type = 'n',
+     xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Aligned to Decision Window Start: Difficult Choice x Choice Made",
+     xlim = c(-baseline_window_width, 3000), ylim = c(min(c(decision_start_Diff_Risky_lower, decision_start_Diff_Safe_lower)),
+                                                      max(c(decision_start_Diff_Risky_upper, decision_start_Diff_Safe_upper)))) # use Easy to specify height
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Diff_Risky_upper,rev(decision_start_Diff_Risky_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Diff_Safe_upper,rev(decision_start_Diff_Safe_lower)),
+        lty = 0, col = rgb(0,0,1,.1))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_EvD_RvS_array[,,2,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_EvD_RvS_array[,,2,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1))
+abline(v = 0, lty = 'dashed')
+legend("bottomright", legend = c("Risky", "Safe"),
+       col = c("red", "blue"), lty = c(1, 1))
 
 
 
@@ -2831,6 +2939,123 @@ lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increme
       lwd = 3, col = rgb(1,0,0)) # red (diff) mean
 abline(v = 0, lty = 'dashed')
 dev.off()
+
+
+# dec_isi_otc_iti: choice made
+plot(1, type = 'n',
+     xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Aligned to Choice: Easy Choice x Choice Made",
+     xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(min(c(dec_isi_otc_iti_Easy_Risky_lower, dec_isi_otc_iti_Easy_Safe_lower)),
+                                                                             max(c(dec_isi_otc_iti_Easy_Risky_upper, dec_isi_otc_iti_Easy_Safe_upper))))
+polygon(x = c(1000, 2000, 2000, 1000), # outcome
+        y = c(3, 3, -3, -3),
+        lty = 0, col = rgb(0,0,0,.1))
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Easy_Risky_upper,rev(dec_isi_otc_iti_Easy_Risky_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Easy_Safe_upper,rev(dec_isi_otc_iti_Easy_Safe_lower)),
+        lty = 0, col = rgb(0,0,1,.1))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1))
+abline(v = 0, lty = 'dashed')
+
+
+plot(1, type = 'n',
+     xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Aligned to Choice: Difficult Choice x Choice Made",
+     xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(min(c(dec_isi_otc_iti_Diff_Risky_lower, dec_isi_otc_iti_Diff_Safe_lower)),
+                                                                             max(c(dec_isi_otc_iti_Diff_Risky_upper, dec_isi_otc_iti_Diff_Safe_upper))))
+polygon(x = c(1000, 2000, 2000, 1000), # outcome
+        y = c(3, 3, -3, -3),
+        lty = 0, col = rgb(0,0,0,.1))
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Diff_Risky_upper,rev(dec_isi_otc_iti_Diff_Risky_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Diff_Safe_upper,rev(dec_isi_otc_iti_Diff_Safe_lower)),
+        lty = 0, col = rgb(0,0,1,.1))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1))
+abline(v = 0, lty = 'dashed')
+
+
+
+
+# previous difficulty
+plot(1, type = 'n',
+     xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Aligned to Decision Window Start: Easy Choice x Previous Difficulty",
+     xlim = c(-baseline_window_width, 3000), ylim = c(min(c(decision_start_Easy_Prev_Easy_lower, decision_start_Easy_Prev_Diff_lower)),
+                                                      max(c(decision_start_Easy_Prev_Easy_upper, decision_start_Easy_Prev_Diff_upper)))) # use Easy to specify height
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_Prev_Easy_upper,rev(decision_start_Easy_Prev_Easy_lower)),
+        lty = 0, col = rgb(0,0,1,.1))
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_Prev_Diff_upper,rev(decision_start_Easy_Prev_Diff_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_prev_EvD_array[,,1,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_prev_EvD_array[,,1,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0))
+abline(v = 0, lty = 'dashed')
+legend("bottomright", legend = c("Prev Safe", "Prev Diff"),
+       col = c("blue", "red"), lty = c(1, 1))
+
+
+plot(1, type = 'n',
+     xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Aligned to Choice: Easy Choice x Choice Made",
+     xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(min(c(dec_isi_otc_iti_Easy_Prev_Easy_lower, dec_isi_otc_iti_Easy_Prev_Diff_lower)),
+                                                                             max(c(dec_isi_otc_iti_Easy_Prev_Easy_upper, dec_isi_otc_iti_Easy_Prev_Diff_upper))))
+polygon(x = c(1000, 2000, 2000, 1000), # outcome
+        y = c(3, 3, -3, -3),
+        lty = 0, col = rgb(0,0,0,.1))
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Easy_Prev_Easy_upper,rev(dec_isi_otc_iti_Easy_Prev_Easy_lower)),
+        lty = 0, col = rgb(0,0,1,.1))
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Easy_Prev_Diff_upper,rev(dec_isi_otc_iti_Easy_Prev_Diff_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,1,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,1,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0))
+abline(v = 0, lty = 'dashed')
+
+plot(1, type = 'n',
+     xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Aligned to Choice: Easy Choice x Choice Made",
+     xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(min(c(dec_isi_otc_iti_Diff_Prev_Easy_lower, dec_isi_otc_iti_Diff_Prev_Diff_lower)),
+                                                                             max(c(dec_isi_otc_iti_Diff_Prev_Easy_upper, dec_isi_otc_iti_Diff_Prev_Diff_upper))))
+polygon(x = c(1000, 2000, 2000, 1000), # outcome
+        y = c(3, 3, -3, -3),
+        lty = 0, col = rgb(0,0,0,.1))
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Diff_Prev_Easy_upper,rev(dec_isi_otc_iti_Diff_Prev_Easy_lower)),
+        lty = 0, col = rgb(0,0,1,.1))
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Diff_Prev_Diff_upper,rev(dec_isi_otc_iti_Diff_Prev_Diff_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0))
+abline(v = 0, lty = 'dashed')
+
+
 
 
 # NORMALIZED Pupillometry Split into Easy v. Difficult
@@ -3166,4 +3391,6 @@ mean((meanRT_diff_capacity_Low), na.rm = T);
 sd((meanRT_diff_capacity_Low), na.rm = T);
 mean((meanRT_easy_capacity_Low), na.rm = T);
 sd((meanRT_easy_capacity_Low), na.rm = T);
+
+print('the end')
 
