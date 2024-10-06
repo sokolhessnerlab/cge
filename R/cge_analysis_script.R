@@ -2390,16 +2390,16 @@ for (s in keep_participants){
         if (!is.na(tmp_bin_mean)){
           decision_start_EvD_array[cum_diff_trial_num, b, s_index, 2] = tmp_bin_mean; # trials x bins x subjects x Easy/Difficult
           if(tmpdata$choice[t] == 1) {
-            decision_start_EvD_RvS_array[cum_diff_trial_num, b,s_index,1, 1] = tmp_bin_mean; # trials x bins x subjects x Easy x Risky
+            decision_start_EvD_RvS_array[cum_diff_trial_num, b,s_index,2, 1] = tmp_bin_mean; # trials x bins x subjects x Easy x Risky
           }
           else if (tmpdata$choice[t] == 0) {
-            decision_start_EvD_RvS_array[cum_diff_trial_num, b,s_index,1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Safe
+            decision_start_EvD_RvS_array[cum_diff_trial_num, b,s_index,2, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Safe
           }
           if(tmpdata$easyP1difficultN1_prev[t] == 1) {
-            decision_start_prev_EvD_array[cum_diff_trial_num, b,s_index,1, 1] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Easy
+            decision_start_prev_EvD_array[cum_diff_trial_num, b,s_index,2, 1] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Easy
           }
           else if (tmpdata$easyP1difficultN1_prev[t] == -1) {
-            decision_start_prev_EvD_array[cum_diff_trial_num, b,s_index,1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Diff
+            decision_start_prev_EvD_array[cum_diff_trial_num, b,s_index,2, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Diff
           }
         }
       }
@@ -2517,8 +2517,8 @@ for (s in keep_participants){
     mean_decision_start_EvD_RvS_array[,s_index,1,2] = colMeans(decision_start_EvD_RvS_array[,,s_index,1,2], na.rm = T)
     mean_decision_start_EvD_RvS_array[,s_index,2,1] = colMeans(decision_start_EvD_RvS_array[,,s_index,2,1], na.rm = T)
     mean_decision_start_EvD_RvS_array[,s_index,2,2] = colMeans(decision_start_EvD_RvS_array[,,s_index,2,2], na.rm = T)
-    mean_decision_start_prev_EvD_array[,s_index,2,1] = colMeans(decision_start_prev_EvD_array[,,s_index,2,1], na.rm = T)
-    mean_decision_start_prev_EvD_array[,s_index,2,2] = colMeans(decision_start_prev_EvD_array[,,s_index,2,2], na.rm = T)
+    mean_decision_start_prev_EvD_array[,s_index,1,1] = colMeans(decision_start_prev_EvD_array[,,s_index,1,1], na.rm = T) # indexed all into difficult accidentally
+    mean_decision_start_prev_EvD_array[,s_index,1,2] = colMeans(decision_start_prev_EvD_array[,,s_index,1,2], na.rm = T)
     mean_decision_start_prev_EvD_array[,s_index,2,1] = colMeans(decision_start_prev_EvD_array[,,s_index,2,1], na.rm = T)
     mean_decision_start_prev_EvD_array[,s_index,2,2] = colMeans(decision_start_prev_EvD_array[,,s_index,2,2], na.rm = T)
     mean_dec_isi_otc_iti_EvD_array[,s_index,1] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,1], na.rm = T) # dec_isi_otc_iti
@@ -2885,6 +2885,7 @@ polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_Risky_upper,rev(
         lty = 0, col = rgb(1,0,0,.1))
 polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_Safe_upper,rev(decision_start_Easy_Safe_lower)),
         lty = 0, col = rgb(0,0,1,.1))
+
 lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
       y = rowMeans(mean_decision_start_EvD_RvS_array[,,1,1], na.rm = T), type = 'l',
       lwd = 3, col = rgb(1,0,0))
@@ -2996,6 +2997,27 @@ plot(1, type = 'n',
      main = "Aligned to Decision Window Start: Easy Choice x Previous Difficulty",
      xlim = c(-baseline_window_width, 3000), ylim = c(min(c(decision_start_Easy_Prev_Easy_lower, decision_start_Easy_Prev_Diff_lower)),
                                                       max(c(decision_start_Easy_Prev_Easy_upper, decision_start_Easy_Prev_Diff_upper)))) # use Easy to specify height
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_Prev_Easy_upper,rev(decision_start_Easy_Prev_Easy_lower)),
+        lty = 0, col = rgb(0,0,1,.1))
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_Prev_Diff_upper,rev(decision_start_Easy_Prev_Diff_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_prev_EvD_array[,,1,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_prev_EvD_array[,,1,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0))
+abline(v = 0, lty = 'dashed')
+legend("bottomright", legend = c("Prev Safe", "Prev Diff"),
+       col = c("blue", "red"), lty = c(1, 1))
+
+
+
+plot(1, type = 'n',
+     xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Aligned to Decision Window Start: Easy Choice x Previous Difficulty",
+     xlim = c(-baseline_window_width, 3000), ylim = c(min(c(decision_start_Diff_Prev_Easy_lower, decision_start_Diff_Prev_Diff_lower)),
+                                                      max(c(decision_start_Diff_Prev_Easy_upper, decision_start_Diff_Prev_Diff_upper)))) # use Easy to specify height
 polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_Prev_Easy_upper,rev(decision_start_Easy_Prev_Easy_lower)),
         lty = 0, col = rgb(0,0,1,.1))
 polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_Prev_Diff_upper,rev(decision_start_Easy_Prev_Diff_lower)),
