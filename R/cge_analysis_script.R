@@ -2702,7 +2702,7 @@ decision_start_Easy_Safe_upper = rowMeans(mean_decision_start_EvD_RvS_array[,,1,
 decision_start_Easy_Safe_lower = rowMeans(mean_decision_start_EvD_RvS_array[,,1,2], na.rm = T) - sem_decision_start_Easy_Safe_array
 decision_start_Diff_Risky_upper = rowMeans(mean_decision_start_EvD_RvS_array[,,2,1], na.rm = T) + sem_decision_start_Diff_Risky_array
 decision_start_Diff_Risky_lower = rowMeans(mean_decision_start_EvD_RvS_array[,,2,1], na.rm = T) - sem_decision_start_Diff_Risky_array
-decision_start_Diff_Safe_upper = rowMeans(mean_decision_start_EvD_RvS_array[,,2,1], na.rm = T) + sem_decision_start_Diff_Safe_array
+decision_start_Diff_Safe_upper = rowMeans(mean_decision_start_EvD_RvS_array[,,2,2], na.rm = T) + sem_decision_start_Diff_Safe_array
 decision_start_Diff_Safe_lower = rowMeans(mean_decision_start_EvD_RvS_array[,,2,2], na.rm = T) - sem_decision_start_Diff_Safe_array
 
 decision_start_Easy_Prev_Easy_upper = rowMeans(mean_decision_start_prev_EvD_array[,,1,1], na.rm = T) + sem_decision_start_Easy_Prev_Easy_array
@@ -2711,7 +2711,7 @@ decision_start_Easy_Prev_Diff_upper = rowMeans(mean_decision_start_prev_EvD_arra
 decision_start_Easy_Prev_Diff_lower = rowMeans(mean_decision_start_prev_EvD_array[,,1,2], na.rm = T) - sem_decision_start_Easy_Prev_Diff_array
 decision_start_Diff_Prev_Easy_upper = rowMeans(mean_decision_start_prev_EvD_array[,,2,1], na.rm = T) + sem_decision_start_Diff_Prev_Easy_array
 decision_start_Diff_Prev_Easy_lower = rowMeans(mean_decision_start_prev_EvD_array[,,2,1], na.rm = T) - sem_decision_start_Diff_Prev_Easy_array
-decision_start_Diff_Prev_Diff_upper = rowMeans(mean_decision_start_prev_EvD_array[,,2,1], na.rm = T) + sem_decision_start_Diff_Prev_Diff_array
+decision_start_Diff_Prev_Diff_upper = rowMeans(mean_decision_start_prev_EvD_array[,,2,2], na.rm = T) + sem_decision_start_Diff_Prev_Diff_array
 decision_start_Diff_Prev_Diff_lower = rowMeans(mean_decision_start_prev_EvD_array[,,2,2], na.rm = T) - sem_decision_start_Diff_Prev_Diff_array
 
 dec_isi_otc_iti_Easy_Risky_upper = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,1], na.rm = T) + sem_dec_isi_otc_iti_Easy_Risky_array
@@ -2729,7 +2729,7 @@ dec_isi_otc_iti_Easy_Prev_Diff_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_ar
 dec_isi_otc_iti_Easy_Prev_Diff_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,1,2], na.rm = T) - sem_dec_isi_otc_iti_Easy_Prev_Diff_array
 dec_isi_otc_iti_Diff_Prev_Easy_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,1], na.rm = T) + sem_dec_isi_otc_iti_Diff_Prev_Easy_array
 dec_isi_otc_iti_Diff_Prev_Easy_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,1], na.rm = T) - sem_dec_isi_otc_iti_Diff_Prev_Easy_array
-dec_isi_otc_iti_Diff_Prev_Diff_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,1], na.rm = T) + sem_dec_isi_otc_iti_Diff_Prev_Diff_array
+dec_isi_otc_iti_Diff_Prev_Diff_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,2], na.rm = T) + sem_dec_isi_otc_iti_Diff_Prev_Diff_array
 dec_isi_otc_iti_Diff_Prev_Diff_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,2], na.rm = T) - sem_dec_isi_otc_iti_Diff_Prev_Diff_array
 
 # NORMALIZED Pupillometry
@@ -2847,6 +2847,8 @@ plot(1, type = 'n',
 polygon(x = c(1000, 2000, 2000, 1000),
         y = c(3, 3, -3, -3),
         lty = 0, col = rgb(0,0,0,.1))
+text(x = mean(c(1000, 2000)), y = min(dec_isi_otc_iti_lower),
+     labels = "Outcome")
 polygon(x = sem_dec_isi_otc_iti_x_vals,
         y = c(dec_isi_otc_iti_upper,rev(dec_isi_otc_iti_lower)),
         lty = 0, col = rgb(0,0,0,.2))
@@ -2878,6 +2880,8 @@ lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment
       y = rowMeans(mean_decision_start_EvD_array[,,2], na.rm = T), type = 'l',
       lwd = 3, col = rgb(1,0,0))
 abline(v = 0, lty = 'dashed')
+legend("bottomright", legend = c("Easy Trial", "Difficult Trial"),
+       col = c('blue', 'red'), lty = c(1, 1))
 dev.off()
 
 # Plotting NORMALIZED pupillometry: Decision Window Start to Choice:
@@ -2902,6 +2906,8 @@ lines(x = normBins,
 lines(x = normBins,
       y = rowMeans(mean_decision_norm_EvD_array[,,2], na.rm = T), type = 'l',
       lwd = 3, col = 'red')
+legend("bottomright", legend = c("Easy Trial", "Difficult Trial"),
+       col = c('blue', 'red'), lty = c(1, 1))
 dev.off()
 
 # Plotting from Choice to ITI:
@@ -2916,6 +2922,8 @@ plot(1, type = 'n',
 polygon(x = c(1000, 2000, 2000, 1000), # outcome
         y = c(3, 3, -3, -3),
         lty = 0, col = rgb(0,0,0,.1))
+text(x = mean(c(1000, 2000)), y = min(dec_isi_otc_iti_Easy_lower),
+     labels = "Outcome")
 polygon(x = sem_dec_isi_otc_iti_x_vals,
         y = c(dec_isi_otc_iti_Easy_upper,rev(dec_isi_otc_iti_Easy_lower)),
         lty = 0, col = rgb(0,0,1,.1)) # blue (easy)
@@ -2929,13 +2937,16 @@ lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increme
       y = rowMeans(mean_dec_isi_otc_iti_EvD_array[,,2], na.rm = T), type = 'l',
       lwd = 3, col = rgb(1,0,0)) # red (diff) mean
 abline(v = 0, lty = 'dashed')
+legend("bottomright", legend = c("Easy Trial", "Difficult Trial"),
+       col = c('blue', 'red'), lty = c(1, 1))
 dev.off()
 
 # - CHOICE MADE -
 
-# Plotting from Decision Window Onset to Choice & from Choice to Decision Window Outset:
+# Plotting from Decision Window Start to Choice:
 # Choice Difficulty (Easy v. Difficult Trials) x Choice Made (Risky v. Safe Choice)
 # Easy Trials x Choice Made
+par(mfrow = c(2,1))
 plot(1, type = 'n',
      xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
      main = "Aligned to Decision Window Start: Easy Trials x Choice Made",
@@ -2974,86 +2985,120 @@ lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment
 abline(v = 0, lty = 'dashed')
 legend("bottomright", legend = c("Risky", "Safe"),
        col = c("red", "blue"), lty = c(1, 1))
+# Choice Difficulty x Choice Made
+par(mfrow = c(1,1))
+plot(1, type = 'n',
+     xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Aligned to Decision Window Start: Difficult Trials x Choice Made",
+     xlim = c(-baseline_window_width, 3000), ylim = c(min(c(decision_start_Diff_Risky_lower, decision_start_Diff_Safe_lower)),
+                                                      max(c(decision_start_Diff_Risky_upper, decision_start_Diff_Safe_upper)))) # use Easy to specify height
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_Risky_upper,rev(decision_start_Easy_Risky_lower)),
+        lty = 0, col = rgb(0,0,1,.1))
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_Safe_upper,rev(decision_start_Easy_Safe_lower)),
+        lty = 0, col = rgb(0,0,1,.1))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_EvD_RvS_array[,,1,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_EvD_RvS_array[,,1,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1), lty = 2)
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Diff_Risky_upper,rev(decision_start_Diff_Risky_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Diff_Safe_upper,rev(decision_start_Diff_Safe_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_EvD_RvS_array[,,2,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_EvD_RvS_array[,,2,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0), lty = 2)
+abline(v = 0, lty = 'dashed')
+legend("bottomright", legend = c("Easy Trial", "Risky", "Safe", "Difficult Trial", "Risky", "Safe"),  # Labels
+       col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
+       lty = c(NA, 1, 2, NA, 1, 2))
 
 # Plotting NORMALIZED pupillometry: Decision Window Start to Choice:
 # Choice Difficulty (Easy v. Difficult Trials) x Choice Made (Risky v. Safe Choice)
 # Easy Trials x Choice Made
+par(mfrow = c(2,1))
 plot(1, type = 'n',
      xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
-     main = "Normalized Decision Window: Easy Trials x Choice Made",
+     main = "Normalized Decision Window: From Start to Choice: Easy Trials x Choice Made",
      xlim = c(1, number_of_normBins), ylim = c(min(c(decision_norm_Easy_Risky_lower,decision_norm_Easy_Safe_lower)),
                                                max(c(decision_norm_Easy_Risky_upper,decision_norm_Easy_Safe_upper))))
 polygon(x = sem_decision_norm_x_vals,
         y = c(decision_norm_Easy_Risky_upper,rev(decision_norm_Easy_Risky_lower)),
-        lty = 0, col = rgb(1,0,0,.2))
+        lty = 0, col = rgb(1,0,0,.1))
 polygon(x = sem_decision_norm_x_vals,
         y = c(decision_norm_Easy_Safe_upper,rev(decision_norm_Easy_Safe_lower)),
-        lty = 0, col = rgb(0,1,0,.2))
+        lty = 0, col = rgb(0,0,1,.1))
 lines(x = normBins,
       y = rowMeans(mean_decision_norm_EvD_RvS_array[,,1,1], na.rm = T), type = 'l',
-      lwd = 3, col = 'red')
+      lwd = 3, col = rgb(1,0,0))
 lines(x = normBins,
       y = rowMeans(mean_decision_norm_EvD_RvS_array[,,1,2], na.rm = T), type = 'l',
-      lwd = 3, col = 'green')
+      lwd = 3, col = rgb(0,0,1))
 legend("bottomright", legend = c("Risky", "Safe"),
-       col = c(rgb(1,0,0), rgb(0,1,0)), lty = c(1, 1))
+       col = c("red", "blue"), lty = c(1, 1))
 # Difficult Trials x Choice Made
 plot(1, type = 'n',
      xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
-     main = "Normalized Decision Window: Difficult Trials x Choice Made",
+     main = "Normalized Decision Window: From Start to Choice: Difficult Trials x Choice Made",
      xlim = c(1, number_of_normBins), ylim = c(min(c(decision_norm_Diff_Risky_lower,decision_norm_Diff_Safe_lower)),
                                                max(c(decision_norm_Diff_Risky_upper,decision_norm_Diff_Safe_upper))))
 polygon(x = sem_decision_norm_x_vals,
         y = c(decision_norm_Diff_Risky_upper,rev(decision_norm_Diff_Risky_lower)),
-        lty = 0, col = rgb(1,0,0,.2))
+        lty = 0, col = rgb(1,0,0,.1))
 polygon(x = sem_decision_norm_x_vals,
         y = c(decision_norm_Diff_Safe_upper,rev(decision_norm_Diff_Safe_lower)),
-        lty = 0, col = rgb(0,1,0,.2))
+        lty = 0, col = rgb(0,0,1,.1))
 lines(x = normBins,
       y = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,1], na.rm = T), type = 'l',
-      lwd = 3, col = 'red')
+      lwd = 3, col = rgb(1,0,0))
 lines(x = normBins,
       y = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,2], na.rm = T), type = 'l',
-      lwd = 3, col = 'green')
+      lwd = 3, col = rgb(0,0,1))
 legend("bottomright", legend = c("Risky", "Safe"),
-       col = c(rgb(1,0,0), rgb(0,1,0)), lty = c(1, 1))
+       col = c("red", "blue"), lty = c(1, 1))
 # Choice Difficulty x Choice Made
+par(mfrow = c(1,1))
 plot(1, type = 'n',
      xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
-     main = "Normalized Decision Window: Choice Difficulty x Choice Made",
+     main = "Normalized Decision Window: From Start to Choice: Choice Difficulty x Choice Made",
      xlim = c(1, number_of_normBins), ylim = c(min(c(decision_norm_Diff_Risky_lower,decision_norm_Diff_Safe_lower)),
                                                max(c(decision_norm_Diff_Risky_upper,decision_norm_Diff_Safe_upper))))
 polygon(x = sem_decision_norm_x_vals,
         y = c(decision_norm_Easy_Risky_upper,rev(decision_norm_Easy_Risky_lower)),
-        lty = 0, col = rgb(0,0,1,.2))
+        lty = 0, col = rgb(0,0,1,.1))
 polygon(x = sem_decision_norm_x_vals,
         y = c(decision_norm_Easy_Safe_upper,rev(decision_norm_Easy_Safe_lower)),
-        lty = 0, col = rgb(0,0,1,.2))
-polygon(x = sem_decision_norm_x_vals,
-        y = c(decision_norm_Diff_Risky_upper,rev(decision_norm_Diff_Risky_lower)),
-        lty = 0, col = rgb(1,0,0,.2))
-polygon(x = sem_decision_norm_x_vals,
-        y = c(decision_norm_Diff_Safe_upper,rev(decision_norm_Diff_Safe_lower)),
-        lty = 0, col = rgb(1,0,0,.2))
+        lty = 0, col = rgb(0,0,1,.1))
 lines(x = normBins,
       y = rowMeans(mean_decision_norm_EvD_RvS_array[,,1,1], na.rm = T), type = 'l',
-      lwd = 3, col = 'blue')
+      lwd = 3, col = rgb(0,0,1))
 lines(x = normBins,
       y = rowMeans(mean_decision_norm_EvD_RvS_array[,,1,2], na.rm = T), type = 'l',
-      lwd = 3, col = 'blue', lty = 2)
+      lwd = 3, col = rgb(0,0,1), lty = 2)
+polygon(x = sem_decision_norm_x_vals,
+        y = c(decision_norm_Diff_Risky_upper,rev(decision_norm_Diff_Risky_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+polygon(x = sem_decision_norm_x_vals,
+        y = c(decision_norm_Diff_Safe_upper,rev(decision_norm_Diff_Safe_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
 lines(x = normBins,
       y = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,1], na.rm = T), type = 'l',
-      lwd = 3, col = 'red')
+      lwd = 3, col = rgb(1,0,0))
 lines(x = normBins,
       y = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,2], na.rm = T), type = 'l',
-      lwd = 3, col = 'red', lty = 2)
-legend("bottomright", legend = c("Easy", "Risky", "Safe", "Difficult", "Risky", "Safe"),  # Labels
+      lwd = 3, col = rgb(1,0,0), lty = 2)
+legend("bottomright", legend = c("Easy Trial", "Risky", "Safe", "Difficult Trial", "Risky", "Safe"),  # Labels
        col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
        lty = c(NA, 1, 2, NA, 1, 2))
 
 # Plotting from Choice to ITI:
 # Choice Difficulty (Easy v. Difficult Trials) x Choice Made (Risky v. Safe Choice)
 # Easy Trials x Choice Made
+par(mfrow = c(2,1))
 plot(1, type = 'n',
      xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
      main = "Aligned to Choice: Easy Trials x Choice Made",
@@ -3062,6 +3107,8 @@ plot(1, type = 'n',
 polygon(x = c(1000, 2000, 2000, 1000), # outcome
         y = c(3, 3, -3, -3),
         lty = 0, col = rgb(0,0,0,.1))
+text(x = mean(c(1000, 2000)), y = min(c(dec_isi_otc_iti_Easy_Risky_lower, dec_isi_otc_iti_Easy_Safe_lower)),
+     labels = "Outcome")
 polygon(x = sem_dec_isi_otc_iti_x_vals,
         y = c(dec_isi_otc_iti_Easy_Risky_upper,rev(dec_isi_otc_iti_Easy_Risky_lower)),
         lty = 0, col = rgb(1,0,0,.1))
@@ -3075,6 +3122,8 @@ lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increme
       y = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,2], na.rm = T), type = 'l',
       lwd = 3, col = rgb(0,0,1))
 abline(v = 0, lty = 'dashed')
+legend("bottomright", legend = c("Risky", "Safe"),
+       col = c("red", "blue"), lty = c(1, 1))
 # Difficult Trials x Choice Made
 plot(1, type = 'n',
      xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
@@ -3084,6 +3133,8 @@ plot(1, type = 'n',
 polygon(x = c(1000, 2000, 2000, 1000), # outcome
         y = c(3, 3, -3, -3),
         lty = 0, col = rgb(0,0,0,.1))
+text(x = mean(c(1000, 2000)), y = min(c(dec_isi_otc_iti_Diff_Risky_lower, dec_isi_otc_iti_Diff_Safe_lower)),
+     labels = "Outcome")
 polygon(x = sem_dec_isi_otc_iti_x_vals,
         y = c(dec_isi_otc_iti_Diff_Risky_upper,rev(dec_isi_otc_iti_Diff_Risky_lower)),
         lty = 0, col = rgb(1,0,0,.1))
@@ -3097,12 +3148,55 @@ lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increme
       y = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,2], na.rm = T), type = 'l',
       lwd = 3, col = rgb(0,0,1))
 abline(v = 0, lty = 'dashed')
+legend("bottomright", legend = c("Risky", "Safe"),
+       col = c("red", "blue"), lty = c(1, 1))
+# Choice Difficulty x Choice Made
+par(mfrow = c(1,1))
+plot(1, type = 'n',
+     xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Aligned to Choice: Choice Difficulty x Choice Made",
+     xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(min(c(dec_isi_otc_iti_Diff_Risky_lower, dec_isi_otc_iti_Diff_Safe_lower)),
+                                                                             max(c(dec_isi_otc_iti_Diff_Risky_upper, dec_isi_otc_iti_Diff_Safe_upper))))
+polygon(x = c(1000, 2000, 2000, 1000), # outcome
+        y = c(3, 3, -3, -3),
+        lty = 0, col = rgb(0,0,0,.1))
+text(x = mean(c(1000, 2000)), y = min(c(dec_isi_otc_iti_Easy_Risky_lower, dec_isi_otc_iti_Easy_Safe_lower)),
+     labels = "Outcome")
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Easy_Risky_upper,rev(dec_isi_otc_iti_Easy_Risky_lower)),
+        lty = 0, col = rgb(0,0,1,.1))
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Easy_Safe_upper,rev(dec_isi_otc_iti_Easy_Safe_lower)),
+        lty = 0, col = rgb(0,0,1,.1))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1), lty = 2)
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Diff_Risky_upper,rev(dec_isi_otc_iti_Diff_Risky_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Diff_Safe_upper,rev(dec_isi_otc_iti_Diff_Safe_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0), lty = 2)
+abline(v = 0, lty = 'dashed')
+legend("bottomright", legend = c("Easy Trial", "Risky", "Safe", "Difficult Trial", "Risky", "Safe"),  # Labels
+       col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
+       lty = c(NA, 1, 2, NA, 1, 2))
 
 # - PREVIOUS DIFFICULTY -
 
 # Plotting from Decision Window Start to Choice:
 # Choice Difficulty (Easy v. Difficult Trials) x Previous Difficulty (Previous Easy v. Previous Difficult)
 # Easy Trials x Previous Difficult
+par(mfrow = c(2,1))
 plot(1, type = 'n',
      xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
      main = "Aligned to Decision Window Start: Easy Trials x Previous Difficulty",
@@ -3119,7 +3213,7 @@ lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment
       y = rowMeans(mean_decision_start_prev_EvD_array[,,1,2], na.rm = T), type = 'l',
       lwd = 3, col = rgb(1,0,0))
 abline(v = 0, lty = 'dashed')
-legend("bottomright", legend = c("Prev Safe", "Prev Diff"),
+legend("bottomright", legend = c("Previous Easy", "Previous Difficult"),
        col = c("blue", "red"), lty = c(1, 1))
 # Difficult Trials x Previous Difficult
 plot(1, type = 'n',
@@ -3127,23 +3221,55 @@ plot(1, type = 'n',
      main = "Aligned to Decision Window Start: Difficult Trials x Previous Difficulty",
      xlim = c(-baseline_window_width, 3000), ylim = c(min(c(decision_start_Diff_Prev_Easy_lower, decision_start_Diff_Prev_Diff_lower)),
                                                       max(c(decision_start_Diff_Prev_Easy_upper, decision_start_Diff_Prev_Diff_upper)))) # use Easy to specify height
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Diff_Prev_Easy_upper,rev(decision_start_Diff_Prev_Easy_lower)),
+        lty = 0, col = rgb(0,0,1,.1))
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Diff_Prev_Diff_upper,rev(decision_start_Diff_Prev_Diff_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_prev_EvD_array[,,2,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_prev_EvD_array[,,2,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0))
+abline(v = 0, lty = 'dashed')
+legend("bottomright", legend = c("Previous Easy", "Previous Difficult"),
+       col = c("blue", "red"), lty = c(1, 1))
+# Choice Difficulty x Previous Difficulty
+par(mfrow = c(1,1))
+plot(1, type = 'n',
+     xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Aligned to Decision Window Start: Choice Difficulty x Previous Difficulty",
+     xlim = c(-baseline_window_width, 3000), ylim = c(min(c(decision_start_Diff_Prev_Easy_lower, decision_start_Diff_Prev_Diff_lower)),
+                                                      max(c(decision_start_Diff_Prev_Easy_upper, decision_start_Diff_Prev_Diff_upper)))) # use Easy to specify height
 polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_Prev_Easy_upper,rev(decision_start_Easy_Prev_Easy_lower)),
         lty = 0, col = rgb(0,0,1,.1))
 polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_Prev_Diff_upper,rev(decision_start_Easy_Prev_Diff_lower)),
-        lty = 0, col = rgb(1,0,0,.1))
+        lty = 0, col = rgb(0,0,1,.1))
 lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
       y = rowMeans(mean_decision_start_prev_EvD_array[,,1,1], na.rm = T), type = 'l',
       lwd = 3, col = rgb(0,0,1))
 lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
       y = rowMeans(mean_decision_start_prev_EvD_array[,,1,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1), lty = 2)
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Diff_Prev_Easy_upper,rev(decision_start_Diff_Prev_Easy_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+polygon(x = sem_decision_start_x_vals,y = c(decision_start_Diff_Prev_Diff_upper,rev(decision_start_Diff_Prev_Diff_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_prev_EvD_array[,,2,1], na.rm = T), type = 'l',
       lwd = 3, col = rgb(1,0,0))
+lines(x = decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_decision_start_prev_EvD_array[,,2,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0), lty = 2)
 abline(v = 0, lty = 'dashed')
-legend("bottomright", legend = c("Prev Safe", "Prev Diff"),
-       col = c("blue", "red"), lty = c(1, 1))
+legend("bottomright", legend = c("Easy Trial", "Previous Easy", "Previous Difficult", "Difficult Trial", "Previous Easy", "Previous Difficult"),  # Labels
+       col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
+       lty = c(NA, 1, 2, NA, 1, 2))
 
 # Plotting NORMALIZED pupillometry: Decision Window Start to Choice:
 # Choice Difficulty (Easy v. Difficult Trials) x Previous Difficulty (Previous Easy v. Difficult)
 # Easy Trials x Previous Difficulty
+par(mfrow = c(2,1))
 plot(1, type = 'n',
      xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
      main = "Normalized Decision Window: From Start to Choice: Easy Trials x Previous Difficulty",
@@ -3161,7 +3287,7 @@ lines(x = normBins,
 lines(x = normBins,
       y = rowMeans(mean_decision_norm_prev_EvD_array[,,1,2], na.rm = T), type = 'l',
       lwd = 3, col = 'red')
-legend("bottomright", legend = c("Prev Easy", "Prev Diff"),
+legend("bottomright", legend = c("Previous Easy", "Previous Difficult"),
        col = c("blue", "red"), lty = c(1, 1))
 # Difficult Trials x Previous Difficulty
 plot(1, type = 'n',
@@ -3181,9 +3307,10 @@ lines(x = normBins,
 lines(x = normBins,
       y = rowMeans(mean_decision_norm_prev_EvD_array[,,2,2], na.rm = T), type = 'l',
       lwd = 3, col = 'red')
-legend("bottomright", legend = c("Prev Easy", "Prev Diff"),
-       col = c(rgb(0,0,1), rgb(1,0,0)), lty = c(1, 1))
+legend("bottomright", legend = c("Previous Easy", "Previous Difficult"),
+       col = c("blue", "red"), lty = c(1, 1))
 # Choice Difficulty x Choice Made
+par(mfrow = c(1,1))
 plot(1, type = 'n',
      xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
      main = "Normalized Decision Window: From Start to Choice: Choice Difficulty x Previous Difficulty",
@@ -3195,6 +3322,12 @@ polygon(x = sem_decision_norm_x_vals,
 polygon(x = sem_decision_norm_x_vals,
         y = c(decision_norm_Easy_Prev_Diff_upper,rev(decision_norm_Easy_Prev_Diff_lower)),
         lty = 0, col = rgb(0,0,1,.2))
+lines(x = normBins,
+      y = rowMeans(mean_decision_norm_prev_EvD_array[,,1,1], na.rm = T), type = 'l',
+      lwd = 3, col = 'blue')
+lines(x = normBins,
+      y = rowMeans(mean_decision_norm_prev_EvD_array[,,1,2], na.rm = T), type = 'l',
+      lwd = 3, col = 'blue', lty = 2)
 polygon(x = sem_decision_norm_x_vals,
         y = c(decision_norm_Diff_Prev_Easy_upper,rev(decision_norm_Diff_Prev_Easy_lower)),
         lty = 0, col = rgb(1,0,0,.2))
@@ -3202,24 +3335,19 @@ polygon(x = sem_decision_norm_x_vals,
         y = c(decision_norm_Diff_Prev_Diff_upper,rev(decision_norm_Diff_Prev_Diff_lower)),
         lty = 0, col = rgb(1,0,0,.2))
 lines(x = normBins,
-      y = rowMeans(mean_decision_norm_prev_EvD_array[,,1,1], na.rm = T), type = 'l',
-      lwd = 3, col = 'blue')
-lines(x = normBins,
-      y = rowMeans(mean_decision_norm_prev_EvD_array[,,1,2], na.rm = T), type = 'l',
-      lwd = 3, col = 'blue', lty = 2)
-lines(x = normBins,
       y = rowMeans(mean_decision_norm_prev_EvD_array[,,2,1], na.rm = T), type = 'l',
       lwd = 3, col = 'red')
 lines(x = normBins,
       y = rowMeans(mean_decision_norm_prev_EvD_array[,,2,2], na.rm = T), type = 'l',
       lwd = 3, col = 'red', lty = 2)
-legend("bottomright", legend = c("Easy", "Prev Easy", "Prev Diff", "Difficult", "Prev Easy", "Prev Diff"),  # Labels
+legend("bottomright", legend = c("Easy Trial", "Previous Easy", "Previous Difficult", "Difficult Trial", "Previous Easy", "Previous Difficult"),  # Labels
        col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
        lty = c(NA, 1, 2, NA, 1, 2))
 
 # Plotting from Choice to ITI:
 # Choice Difficulty (Easy v. Difficult Trials) x Previous Difficulty (Previous Easy v. Difficult)
-# Easy Choice x Previous Difficulty
+# Easy Trials x Previous Difficulty
+par(mfrow = c(2,1))
 plot(1, type = 'n',
      xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
      main = "Aligned to Choice: Easy Trials x Choice Made",
@@ -3228,6 +3356,8 @@ plot(1, type = 'n',
 polygon(x = c(1000, 2000, 2000, 1000), # outcome
         y = c(3, 3, -3, -3),
         lty = 0, col = rgb(0,0,0,.1))
+text(x = mean(c(1000, 2000)), y = min(c(dec_isi_otc_iti_Easy_Prev_Easy_lower, dec_isi_otc_iti_Easy_Prev_Diff_lower)),
+     labels = "Outcome")
 polygon(x = sem_dec_isi_otc_iti_x_vals,
         y = c(dec_isi_otc_iti_Easy_Prev_Easy_upper,rev(dec_isi_otc_iti_Easy_Prev_Easy_lower)),
         lty = 0, col = rgb(0,0,1,.1))
@@ -3241,15 +3371,19 @@ lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increme
       y = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,1,2], na.rm = T), type = 'l',
       lwd = 3, col = rgb(1,0,0))
 abline(v = 0, lty = 'dashed')
-# Choice Difficulty x Previous Difficulty
+legend("bottomright", legend = c("Previous Easy", "Previous Difficult"),
+       col = c("blue", "red"), lty = c(1, 1))
+# Difficult Trials x Previous Difficulty
 plot(1, type = 'n',
      xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
-     main = "Aligned to Choice: Easy Trials x Choice Made",
+     main = "Aligned to Choice: Difficult Trials x Choice Made",
      xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(min(c(dec_isi_otc_iti_Diff_Prev_Easy_lower, dec_isi_otc_iti_Diff_Prev_Diff_lower)),
                                                                              max(c(dec_isi_otc_iti_Diff_Prev_Easy_upper, dec_isi_otc_iti_Diff_Prev_Diff_upper))))
 polygon(x = c(1000, 2000, 2000, 1000), # outcome
         y = c(3, 3, -3, -3),
         lty = 0, col = rgb(0,0,0,.1))
+text(x = mean(c(1000, 2000)), y = min(c(dec_isi_otc_iti_Diff_Prev_Easy_lower, dec_isi_otc_iti_Diff_Prev_Diff_lower)),
+     labels = "Outcome")
 polygon(x = sem_dec_isi_otc_iti_x_vals,
         y = c(dec_isi_otc_iti_Diff_Prev_Easy_upper,rev(dec_isi_otc_iti_Diff_Prev_Easy_lower)),
         lty = 0, col = rgb(0,0,1,.1))
@@ -3263,8 +3397,50 @@ lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increme
       y = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,2], na.rm = T), type = 'l',
       lwd = 3, col = rgb(1,0,0))
 abline(v = 0, lty = 'dashed')
-
-
+legend("bottomright", legend = c("Previous Easy", "Previous Difficult"),
+       col = c("blue", "red"), lty = c(1, 1))
+# Choice Difficulty x Previous Difficulty
+par(mfrow = c(1,1))
+plot(1, type = 'n',
+     xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Aligned to Choice: Choice Difficulty x Choice Made",
+     xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(min(c(min(c(dec_isi_otc_iti_Easy_Prev_Easy_lower, dec_isi_otc_iti_Easy_Prev_Diff_lower)),
+                                                                                   min(c(dec_isi_otc_iti_Diff_Prev_Easy_lower, dec_isi_otc_iti_Diff_Prev_Diff_lower)))),
+                                                                             max(c(max(c(dec_isi_otc_iti_Easy_Prev_Easy_upper, dec_isi_otc_iti_Easy_Prev_Diff_upper)),
+                                                                                   max(c(dec_isi_otc_iti_Diff_Prev_Easy_upper, dec_isi_otc_iti_Diff_Prev_Diff_upper))))))
+polygon(x = c(1000, 2000, 2000, 1000), # outcome
+        y = c(3, 3, -3, -3),
+        lty = 0, col = rgb(0,0,0,.1))
+text(x = mean(c(1000, 2000)), y = min(c(min(c(dec_isi_otc_iti_Easy_Prev_Easy_lower, dec_isi_otc_iti_Easy_Prev_Diff_lower)),
+                                        min(c(dec_isi_otc_iti_Diff_Prev_Easy_lower, dec_isi_otc_iti_Diff_Prev_Diff_lower)))), labels = "Outcome")
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Easy_Prev_Easy_upper,rev(dec_isi_otc_iti_Easy_Prev_Easy_lower)),
+        lty = 0, col = rgb(0,0,1,.1))
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Easy_Prev_Diff_upper,rev(dec_isi_otc_iti_Easy_Prev_Diff_lower)),
+        lty = 0, col = rgb(0,0,1,.1))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,1,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,1,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(0,0,1), lty = 2)
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Diff_Prev_Easy_upper,rev(dec_isi_otc_iti_Diff_Prev_Easy_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_Diff_Prev_Diff_upper,rev(dec_isi_otc_iti_Diff_Prev_Diff_lower)),
+        lty = 0, col = rgb(1,0,0,.1))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,1], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,2], na.rm = T), type = 'l',
+      lwd = 3, col = rgb(1,0,0), lty = 2)
+abline(v = 0, lty = 'dashed')
+legend("bottomright", legend = c("Easy Trial", "Previous Easy", "Previous Difficult", "Difficult Trial", "Previous Easy", "Previous Difficult"),  # Labels
+       col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
+       lty = c(NA, 1, 2, NA, 1, 2))
 
 
 
