@@ -2989,7 +2989,7 @@ legend("bottomright", legend = c("Risky", "Safe"),
 par(mfrow = c(1,1))
 plot(1, type = 'n',
      xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
-     main = "Aligned to Decision Window Start: Difficult Trials x Choice Made",
+     main = "Aligned to Decision Window Start: Choice Difficulty x Choice Made",
      xlim = c(-baseline_window_width, 3000), ylim = c(min(c(decision_start_Diff_Risky_lower, decision_start_Diff_Safe_lower)),
                                                       max(c(decision_start_Diff_Risky_upper, decision_start_Diff_Safe_upper)))) # use Easy to specify height
 polygon(x = sem_decision_start_x_vals,y = c(decision_start_Easy_Risky_upper,rev(decision_start_Easy_Risky_lower)),
@@ -3309,7 +3309,7 @@ lines(x = normBins,
       lwd = 3, col = 'red')
 legend("bottomright", legend = c("Previous Easy", "Previous Difficult"),
        col = c("blue", "red"), lty = c(1, 1))
-# Choice Difficulty x Choice Made
+# Choice Difficulty x Previous Difficulty
 par(mfrow = c(1,1))
 plot(1, type = 'n',
      xlab = "Normalized Time Points (200)", ylab = "Demeaned Pupil Diameter (mm)",
