@@ -2844,14 +2844,14 @@ sem_decision_start_Diff_Prev_Easy_hWMC_array = sem(mean_decision_start_prev_EvD_
 sem_decision_start_Diff_Prev_Diff_lWMC_array = sem(mean_decision_start_prev_EvD_WMC_array[,,2,2,1])
 sem_decision_start_Diff_Prev_Diff_hWMC_array = sem(mean_decision_start_prev_EvD_WMC_array[,,2,2,2])
 
-sem_dec_isi_otc_iti_Easy_Prev_Easy_lWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,1,1,1])
-sem_dec_isi_otc_iti_Easy_Prev_Easy_hWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,1,1,2])
-sem_dec_isi_otc_iti_Easy_Prev_Diff_lWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,1,2,1])
-sem_dec_isi_otc_iti_Easy_Prev_Diff_hWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,1,2,2])
-sem_dec_isi_otc_iti_Diff_Prev_Easy_lWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,2,1,1])
-sem_dec_isi_otc_iti_Diff_Prev_Easy_hWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,2,1,2])
-sem_dec_isi_otc_iti_Diff_Prev_Diff_lWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,2,2,1])
-sem_dec_isi_otc_iti_Diff_Prev_Diff_hWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,2,2,2])
+sem_dec_isi_otc_iti_Easy_Prev_Easy_lWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,1,1,1])
+sem_dec_isi_otc_iti_Easy_Prev_Easy_hWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,1,1,2])
+sem_dec_isi_otc_iti_Easy_Prev_Diff_lWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,1,2,1])
+sem_dec_isi_otc_iti_Easy_Prev_Diff_hWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,1,2,2])
+sem_dec_isi_otc_iti_Diff_Prev_Easy_lWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,2,1,1])
+sem_dec_isi_otc_iti_Diff_Prev_Easy_hWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,2,1,2])
+sem_dec_isi_otc_iti_Diff_Prev_Diff_lWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,2,2,1])
+sem_dec_isi_otc_iti_Diff_Prev_Diff_hWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,2,2,2])
 
 decision_start_upper = rowMeans(mean_decision_start_array, na.rm = T) + sem_decision_start_array
 decision_start_lower = rowMeans(mean_decision_start_array, na.rm = T) - sem_decision_start_array
@@ -2881,6 +2881,15 @@ decision_start_Diff_Risky_lower = rowMeans(mean_decision_start_EvD_RvS_array[,,2
 decision_start_Diff_Safe_upper = rowMeans(mean_decision_start_EvD_RvS_array[,,2,2], na.rm = T) + sem_decision_start_Diff_Safe_array
 decision_start_Diff_Safe_lower = rowMeans(mean_decision_start_EvD_RvS_array[,,2,2], na.rm = T) - sem_decision_start_Diff_Safe_array
 
+decision_start_Easy_lWMC_upper = rowMeans(mean_decision_start_EvD_WMC_array[,,1,1], na.rm = T) + sem_decision_start_Easy_lWMC_array
+decision_start_Easy_lWMC_lower = rowMeans(mean_decision_start_EvD_WMC_array[,,1,1], na.rm = T) - sem_decision_start_Easy_lWMC_array
+decision_start_Easy_hWMC_upper = rowMeans(mean_decision_start_EvD_WMC_array[,,1,2], na.rm = T) + sem_decision_start_Easy_hWMC_array
+decision_start_Easy_hWMC_lower = rowMeans(mean_decision_start_EvD_WMC_array[,,1,2], na.rm = T) - sem_decision_start_Easy_hWMC_array
+decision_start_Diff_lWMC_upper = rowMeans(mean_decision_start_EvD_WMC_array[,,2,1], na.rm = T) + sem_decision_start_Diff_lWMC_array
+decision_start_Diff_lWMC_lower = rowMeans(mean_decision_start_EvD_WMC_array[,,2,1], na.rm = T) - sem_decision_start_Diff_lWMC_array
+decision_start_Diff_hWMC_upper = rowMeans(mean_decision_start_EvD_WMC_array[,,2,2], na.rm = T) + sem_decision_start_Diff_hWMC_array
+decision_start_Diff_hWMC_lower = rowMeans(mean_decision_start_EvD_WMC_array[,,2,2], na.rm = T) - sem_decision_start_Diff_hWMC_array
+
 decision_start_Easy_Prev_Easy_upper = rowMeans(mean_decision_start_prev_EvD_array[,,1,1], na.rm = T) + sem_decision_start_Easy_Prev_Easy_array
 decision_start_Easy_Prev_Easy_lower = rowMeans(mean_decision_start_prev_EvD_array[,,1,1], na.rm = T) - sem_decision_start_Easy_Prev_Easy_array
 decision_start_Easy_Prev_Diff_upper = rowMeans(mean_decision_start_prev_EvD_array[,,1,2], na.rm = T) + sem_decision_start_Easy_Prev_Diff_array
@@ -2889,6 +2898,23 @@ decision_start_Diff_Prev_Easy_upper = rowMeans(mean_decision_start_prev_EvD_arra
 decision_start_Diff_Prev_Easy_lower = rowMeans(mean_decision_start_prev_EvD_array[,,2,1], na.rm = T) - sem_decision_start_Diff_Prev_Easy_array
 decision_start_Diff_Prev_Diff_upper = rowMeans(mean_decision_start_prev_EvD_array[,,2,2], na.rm = T) + sem_decision_start_Diff_Prev_Diff_array
 decision_start_Diff_Prev_Diff_lower = rowMeans(mean_decision_start_prev_EvD_array[,,2,2], na.rm = T) - sem_decision_start_Diff_Prev_Diff_array
+
+decision_start_Easy_Prev_Easy_lWMC_upper = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,1,1,1], na.rm = T) + sem_decision_start_Easy_Prev_Easy_lWMC_array
+decision_start_Easy_Prev_Easy_lWMC_lower = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,1,1,1], na.rm = T) - sem_decision_start_Easy_Prev_Easy_lWMC_array
+decision_start_Easy_Prev_Easy_hWMC_upper = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,1,1,2], na.rm = T) + sem_decision_start_Easy_Prev_Easy_hWMC_array
+decision_start_Easy_Prev_Easy_hWMC_lower = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,1,1,2], na.rm = T) - sem_decision_start_Easy_Prev_Easy_hWMC_array
+decision_start_Easy_Prev_Diff_lWMC_upper = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,1,2,1], na.rm = T) + sem_decision_start_Easy_Prev_Diff_lWMC_array
+decision_start_Easy_Prev_Diff_lWMC_lower = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,1,2,1], na.rm = T) - sem_decision_start_Easy_Prev_Diff_lWMC_array
+decision_start_Easy_Prev_Diff_hWMC_upper = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,1,2,2], na.rm = T) + sem_decision_start_Easy_Prev_Diff_hWMC_array
+decision_start_Easy_Prev_Diff_hWMC_lower = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,1,2,2], na.rm = T) - sem_decision_start_Easy_Prev_Diff_hWMC_array
+decision_start_Diff_Prev_Easy_lWMC_upper = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,2,1,1], na.rm = T) + sem_decision_start_Diff_Prev_Easy_lWMC_array
+decision_start_Diff_Prev_Easy_lWMC_lower = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,2,1,1], na.rm = T) - sem_decision_start_Diff_Prev_Easy_lWMC_array
+decision_start_Diff_Prev_Easy_hWMC_upper = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,2,1,2], na.rm = T) + sem_decision_start_Diff_Prev_Easy_hWMC_array
+decision_start_Diff_Prev_Easy_hWMC_lower = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,2,1,2], na.rm = T) - sem_decision_start_Diff_Prev_Easy_hWMC_array
+decision_start_Diff_Prev_Diff_lWMC_upper = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,2,2,1], na.rm = T) + sem_decision_start_Diff_Prev_Diff_lWMC_array
+decision_start_Diff_Prev_Diff_lWMC_lower = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,2,2,1], na.rm = T) - sem_decision_start_Diff_Prev_Diff_lWMC_array
+decision_start_Diff_Prev_Diff_hWMC_upper = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,2,2,2], na.rm = T) + sem_decision_start_Diff_Prev_Diff_hWMC_array
+decision_start_Diff_Prev_Diff_hWMC_lower = rowMeans(mean_decision_start_prev_EvD_WMC_array[,,2,2,2], na.rm = T) - sem_decision_start_Diff_Prev_Diff_hWMC_array
 
 dec_isi_otc_iti_Easy_Risky_upper = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,1], na.rm = T) + sem_dec_isi_otc_iti_Easy_Risky_array
 dec_isi_otc_iti_Easy_Risky_lower = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,1], na.rm = T) - sem_dec_isi_otc_iti_Easy_Risky_array
@@ -2899,6 +2925,15 @@ dec_isi_otc_iti_Diff_Risky_lower = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,
 dec_isi_otc_iti_Diff_Safe_upper = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,2], na.rm = T) + sem_dec_isi_otc_iti_Diff_Safe_array
 dec_isi_otc_iti_Diff_Safe_lower = rowMeans(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,2], na.rm = T) - sem_dec_isi_otc_iti_Diff_Safe_array
 
+dec_isi_otc_iti_Easy_lWMC_upper = rowMeans(mean_dec_isi_otc_iti_EvD_WMC_array[,,1,1], na.rm = T) + sem_dec_isi_otc_iti_Easy_lWMC_array
+dec_isi_otc_iti_Easy_lWMC_lower = rowMeans(mean_dec_isi_otc_iti_EvD_WMC_array[,,1,1], na.rm = T) - sem_dec_isi_otc_iti_Easy_lWMC_array
+dec_isi_otc_iti_Easy_hWMC_upper = rowMeans(mean_dec_isi_otc_iti_EvD_WMC_array[,,1,2], na.rm = T) + sem_dec_isi_otc_iti_Easy_hWMC_array
+dec_isi_otc_iti_Easy_hWMC_lower = rowMeans(mean_dec_isi_otc_iti_EvD_WMC_array[,,1,2], na.rm = T) - sem_dec_isi_otc_iti_Easy_hWMC_array
+dec_isi_otc_iti_Diff_lWMC_upper = rowMeans(mean_dec_isi_otc_iti_EvD_WMC_array[,,2,1], na.rm = T) + sem_dec_isi_otc_iti_Diff_lWMC_array
+dec_isi_otc_iti_Diff_lWMC_lower = rowMeans(mean_dec_isi_otc_iti_EvD_WMC_array[,,2,1], na.rm = T) - sem_dec_isi_otc_iti_Diff_lWMC_array
+dec_isi_otc_iti_Diff_hWMC_upper = rowMeans(mean_dec_isi_otc_iti_EvD_WMC_array[,,2,2], na.rm = T) + sem_dec_isi_otc_iti_Diff_hWMC_array
+dec_isi_otc_iti_Diff_hWMC_lower = rowMeans(mean_dec_isi_otc_iti_EvD_WMC_array[,,2,2], na.rm = T) - sem_dec_isi_otc_iti_Diff_hWMC_array
+
 dec_isi_otc_iti_Easy_Prev_Easy_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,1,1], na.rm = T) + sem_dec_isi_otc_iti_Easy_Prev_Easy_array
 dec_isi_otc_iti_Easy_Prev_Easy_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,1,1], na.rm = T) - sem_dec_isi_otc_iti_Easy_Prev_Easy_array
 dec_isi_otc_iti_Easy_Prev_Diff_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,1,2], na.rm = T) + sem_dec_isi_otc_iti_Easy_Prev_Diff_array
@@ -2907,6 +2942,23 @@ dec_isi_otc_iti_Diff_Prev_Easy_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_ar
 dec_isi_otc_iti_Diff_Prev_Easy_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,1], na.rm = T) - sem_dec_isi_otc_iti_Diff_Prev_Easy_array
 dec_isi_otc_iti_Diff_Prev_Diff_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,2], na.rm = T) + sem_dec_isi_otc_iti_Diff_Prev_Diff_array
 dec_isi_otc_iti_Diff_Prev_Diff_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_array[,,2,2], na.rm = T) - sem_dec_isi_otc_iti_Diff_Prev_Diff_array
+
+dec_isi_otc_iti_Easy_Prev_Easy_lWMC_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,1,1,1], na.rm = T) + sem_dec_isi_otc_iti_Easy_Prev_Easy_lWMC_array
+dec_isi_otc_iti_Easy_Prev_Easy_lWMC_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,1,1,1], na.rm = T) - sem_dec_isi_otc_iti_Easy_Prev_Easy_lWMC_array
+dec_isi_otc_iti_Easy_Prev_Easy_hWMC_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,1,1,2], na.rm = T) + sem_dec_isi_otc_iti_Easy_Prev_Easy_hWMC_array
+dec_isi_otc_iti_Easy_Prev_Easy_hWMC_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,1,1,2], na.rm = T) - sem_dec_isi_otc_iti_Easy_Prev_Easy_hWMC_array
+dec_isi_otc_iti_Easy_Prev_Diff_lWMC_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,1,2,1], na.rm = T) + sem_dec_isi_otc_iti_Easy_Prev_Diff_lWMC_array
+dec_isi_otc_iti_Easy_Prev_Diff_lWMC_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,1,2,1], na.rm = T) - sem_dec_isi_otc_iti_Easy_Prev_Diff_lWMC_array
+dec_isi_otc_iti_Easy_Prev_Diff_hWMC_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,1,2,2], na.rm = T) + sem_dec_isi_otc_iti_Easy_Prev_Diff_hWMC_array
+dec_isi_otc_iti_Easy_Prev_Diff_hWMC_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,1,2,2], na.rm = T) - sem_dec_isi_otc_iti_Easy_Prev_Diff_hWMC_array
+dec_isi_otc_iti_Diff_Prev_Easy_lWMC_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,2,1,1], na.rm = T) + sem_dec_isi_otc_iti_Diff_Prev_Easy_lWMC_array
+dec_isi_otc_iti_Diff_Prev_Easy_lWMC_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,2,1,1], na.rm = T) - sem_dec_isi_otc_iti_Diff_Prev_Easy_lWMC_array
+dec_isi_otc_iti_Diff_Prev_Easy_hWMC_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,2,1,2], na.rm = T) + sem_dec_isi_otc_iti_Diff_Prev_Easy_hWMC_array
+dec_isi_otc_iti_Diff_Prev_Easy_hWMC_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,2,1,2], na.rm = T) - sem_dec_isi_otc_iti_Diff_Prev_Easy_hWMC_array
+dec_isi_otc_iti_Diff_Prev_Diff_lWMC_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,2,2,1], na.rm = T) + sem_dec_isi_otc_iti_Diff_Prev_Diff_lWMC_array
+dec_isi_otc_iti_Diff_Prev_Diff_lWMC_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,2,2,1], na.rm = T) - sem_dec_isi_otc_iti_Diff_Prev_Diff_lWMC_array
+dec_isi_otc_iti_Diff_Prev_Diff_hWMC_upper = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,2,2,2], na.rm = T) + sem_dec_isi_otc_iti_Diff_Prev_Diff_hWMC_array
+dec_isi_otc_iti_Diff_Prev_Diff_hWMC_lower = rowMeans(mean_dec_isi_otc_iti_prev_EvD_WMC_array[,,2,2,2], na.rm = T) - sem_dec_isi_otc_iti_Diff_Prev_Diff_hWMC_array
 
 # NORMALIZED Pupillometry
 sem_decision_norm_array = sem(mean_decision_norm_array)
@@ -2918,10 +2970,25 @@ sem_decision_norm_Easy_Safe_array = sem(mean_decision_norm_EvD_RvS_array[,,1,2])
 sem_decision_norm_Diff_Risky_array = sem(mean_decision_norm_EvD_RvS_array[,,2,1])
 sem_decision_norm_Diff_Safe_array = sem(mean_decision_norm_EvD_RvS_array[,,2,2])
 
+sem_decision_norm_Diff_Safe_array = sem(mean_decision_norm_EvD_RvS_array[,,2,2])
+sem_decision_norm_Easy_lWMC_array = sem(mean_decision_norm_EvD_WMC_array[,,1,1])
+sem_decision_norm_Easy_hWMC_array = sem(mean_decision_norm_EvD_WMC_array[,,1,2])
+sem_decision_norm_Diff_lWMC_array = sem(mean_decision_norm_EvD_WMC_array[,,2,1])
+sem_decision_norm_Diff_hWMC_array = sem(mean_decision_norm_EvD_WMC_array[,,2,2])
+
 sem_decision_norm_Easy_Prev_Easy_array = sem(mean_decision_norm_prev_EvD_array[,,1,1])
 sem_decision_norm_Easy_Prev_Diff_array = sem(mean_decision_norm_prev_EvD_array[,,1,2])
 sem_decision_norm_Diff_Prev_Easy_array = sem(mean_decision_norm_prev_EvD_array[,,2,1])
 sem_decision_norm_Diff_Prev_Diff_array = sem(mean_decision_norm_prev_EvD_array[,,2,2])
+
+sem_decision_norm_Easy_Prev_Easy_lWMC_array = sem(mean_decision_norm_prev_EvD_WMC_array[,,1,1,1])
+sem_decision_norm_Easy_Prev_Easy_hWMC_array = sem(mean_decision_norm_prev_EvD_WMC_array[,,1,1,2])
+sem_decision_norm_Easy_Prev_Diff_lWMC_array = sem(mean_decision_norm_prev_EvD_WMC_array[,,1,2,1])
+sem_decision_norm_Easy_Prev_Diff_hWMC_array = sem(mean_decision_norm_prev_EvD_WMC_array[,,1,2,2])
+sem_decision_norm_Diff_Prev_Easy_lWMC_array = sem(mean_decision_norm_prev_EvD_WMC_array[,,2,1,1])
+sem_decision_norm_Diff_Prev_Easy_hWMC_array = sem(mean_decision_norm_prev_EvD_WMC_array[,,2,1,2])
+sem_decision_norm_Diff_Prev_Diff_lWMC_array = sem(mean_decision_norm_prev_EvD_WMC_array[,,2,2,1])
+sem_decision_norm_Diff_Prev_Diff_hWMC_array = sem(mean_decision_norm_prev_EvD_WMC_array[,,2,2,2])
 
 decision_norm_array_upper = rowMeans(mean_decision_norm_array, na.rm = T) + sem_decision_norm_array
 decision_norm_array_lower = rowMeans(mean_decision_norm_array, na.rm = T) - sem_decision_norm_array
@@ -2940,6 +3007,15 @@ decision_norm_Diff_Risky_lower = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,1
 decision_norm_Diff_Safe_upper = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,2], na.rm = T) + sem_decision_norm_Diff_Safe_array
 decision_norm_Diff_Safe_lower = rowMeans(mean_decision_norm_EvD_RvS_array[,,2,2], na.rm = T) - sem_decision_norm_Diff_Safe_array
 
+decision_norm_Easy_lWMC_upper = rowMeans(mean_decision_norm_EvD_WMC_array[,,1,1], na.rm = T) + sem_decision_norm_Easy_lWMC_array
+decision_norm_Easy_lWMC_lower = rowMeans(mean_decision_norm_EvD_WMC_array[,,1,1], na.rm = T) - sem_decision_norm_Easy_lWMC_array
+decision_norm_Easy_hWMC_upper = rowMeans(mean_decision_norm_EvD_WMC_array[,,1,2], na.rm = T) + sem_decision_norm_Easy_hWMC_array
+decision_norm_Easy_hWMC_lower = rowMeans(mean_decision_norm_EvD_WMC_array[,,1,2], na.rm = T) - sem_decision_norm_Easy_hWMC_array
+decision_norm_Diff_lWMC_upper = rowMeans(mean_decision_norm_EvD_WMC_array[,,2,1], na.rm = T) + sem_decision_norm_Diff_lWMC_array
+decision_norm_Diff_lWMC_lower = rowMeans(mean_decision_norm_EvD_WMC_array[,,2,1], na.rm = T) - sem_decision_norm_Diff_lWMC_array
+decision_norm_Diff_hWMC_upper = rowMeans(mean_decision_norm_EvD_WMC_array[,,2,2], na.rm = T) + sem_decision_norm_Diff_hWMC_array
+decision_norm_Diff_hWMC_lower = rowMeans(mean_decision_norm_EvD_WMC_array[,,2,2], na.rm = T) - sem_decision_norm_Diff_hWMC_array
+
 decision_norm_Easy_Prev_Easy_upper = rowMeans(mean_decision_norm_prev_EvD_array[,,1,1], na.rm = T) + sem_decision_norm_Easy_Prev_Easy_array
 decision_norm_Easy_Prev_Easy_lower = rowMeans(mean_decision_norm_prev_EvD_array[,,1,1], na.rm = T) - sem_decision_norm_Easy_Prev_Easy_array
 decision_norm_Easy_Prev_Diff_upper = rowMeans(mean_decision_norm_prev_EvD_array[,,1,2], na.rm = T) + sem_decision_norm_Easy_Prev_Diff_array
@@ -2948,6 +3024,23 @@ decision_norm_Diff_Prev_Easy_upper = rowMeans(mean_decision_norm_prev_EvD_array[
 decision_norm_Diff_Prev_Easy_lower = rowMeans(mean_decision_norm_prev_EvD_array[,,2,1], na.rm = T) - sem_decision_norm_Diff_Prev_Easy_array
 decision_norm_Diff_Prev_Diff_upper = rowMeans(mean_decision_norm_prev_EvD_array[,,2,2], na.rm = T) + sem_decision_norm_Diff_Prev_Diff_array
 decision_norm_Diff_Prev_Diff_lower = rowMeans(mean_decision_norm_prev_EvD_array[,,2,2], na.rm = T) - sem_decision_norm_Diff_Prev_Diff_array
+
+decision_norm_Easy_Prev_Easy_lWMC_upper = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,1,1,1], na.rm = T) + sem_decision_norm_Easy_Prev_Easy_lWMC_array
+decision_norm_Easy_Prev_Easy_lWMC_lower = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,1,1,1], na.rm = T) - sem_decision_norm_Easy_Prev_Easy_lWMC_array
+decision_norm_Easy_Prev_Easy_hWMC_upper = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,1,1,2], na.rm = T) + sem_decision_norm_Easy_Prev_Easy_hWMC_array
+decision_norm_Easy_Prev_Easy_hWMC_lower = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,1,1,2], na.rm = T) - sem_decision_norm_Easy_Prev_Easy_hWMC_array
+decision_norm_Easy_Prev_Diff_lWMC_upper = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,1,2,1], na.rm = T) + sem_decision_norm_Easy_Prev_Diff_lWMC_array
+decision_norm_Easy_Prev_Diff_lWMC_lower = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,1,2,1], na.rm = T) - sem_decision_norm_Easy_Prev_Diff_lWMC_array
+decision_norm_Easy_Prev_Diff_hWMC_upper = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,1,2,2], na.rm = T) + sem_decision_norm_Easy_Prev_Diff_hWMC_array
+decision_norm_Easy_Prev_Diff_hWMC_lower = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,1,2,2], na.rm = T) - sem_decision_norm_Easy_Prev_Diff_hWMC_array
+decision_norm_Diff_Prev_Easy_lWMC_upper = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,2,1,1], na.rm = T) + sem_decision_norm_Diff_Prev_Easy_lWMC_array
+decision_norm_Diff_Prev_Easy_lWMC_lower = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,2,1,1], na.rm = T) - sem_decision_norm_Diff_Prev_Easy_lWMC_array
+decision_norm_Diff_Prev_Easy_hWMC_upper = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,2,1,2], na.rm = T) + sem_decision_norm_Diff_Prev_Easy_hWMC_array
+decision_norm_Diff_Prev_Easy_hWMC_lower = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,2,1,2], na.rm = T) - sem_decision_norm_Diff_Prev_Easy_hWMC_array
+decision_norm_Diff_Prev_Diff_lWMC_upper = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,2,2,1], na.rm = T) + sem_decision_norm_Diff_Prev_Diff_lWMC_array
+decision_norm_Diff_Prev_Diff_lWMC_lower = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,2,2,1], na.rm = T) - sem_decision_norm_Diff_Prev_Diff_lWMC_array
+decision_norm_Diff_Prev_Diff_hWMC_upper = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,2,2,2], na.rm = T) + sem_decision_norm_Diff_Prev_Diff_hWMC_array
+decision_norm_Diff_Prev_Diff_hWMC_lower = rowMeans(mean_decision_norm_prev_EvD_WMC_array[,,2,2,2], na.rm = T) - sem_decision_norm_Diff_Prev_Diff_hWMC_array
 
 
 sem_decision_start_x_vals = c(decision_start_bins[1:(length(decision_start_bins)-1)] + bin_increment/2,
