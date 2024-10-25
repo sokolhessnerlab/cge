@@ -2213,10 +2213,16 @@ decision_start_EvD_array = array(data = NA, dim = c(60, length(decision_start_bi
 decision_start_RvS_array = array(data = NA, dim = c(60, length(decision_start_bins)-1, number_of_clean_subjects, 2))
 decision_start_EvD_RvS_array = array(data = NA, dim = c(60, length(decision_start_bins)-1, number_of_clean_subjects, 2, 2))
 decision_start_prev_EvD_array = array(data = NA, dim = c(60, length(decision_start_bins)-1, number_of_clean_subjects, 2, 2))
+decision_start_WMC_array = array(data = NA, dim = c(60, length(decision_start_bins)-1, number_of_clean_subjects, 2))
+decision_start_EvD_WMC_array = array(data = NA, dim = c(60, length(decision_start_bins)-1, number_of_clean_subjects, 2, 2))
+decision_start_prev_EvD_WMC_array = array(data = NA, dim = c(60, length(decision_start_bins)-1, number_of_clean_subjects, 2, 2, 2))
 dec_isi_otc_iti_EvD_array = array(data = NA, dim = c(60, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects, 2)) # trials x bins x subjects x Easy/Difficult
 dec_isi_otc_iti_RvS_array = array(data = NA, dim = c(60, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects, 2))
 dec_isi_otc_iti_EvD_RvS_array = array(data = NA, dim = c(60, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects, 2, 2))
 dec_isi_otc_iti_prev_EvD_array = array(data = NA, dim = c(60, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects, 2, 2))
+dec_isi_otc_iti_WMC_array = array(data = NA, dim = c(60, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects, 2))
+dec_isi_otc_iti_EvD_WMC_array = array(data = NA, dim = c(60, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects, 2, 2))
+dec_isi_otc_iti_prev_EvD_WMC_array = array(data = NA, dim = c(60, length(dec_isi_otc_iti_bins)-1, number_of_clean_subjects, 2, 2, 2))
 # There are 120 dynamic trials: 60 easy & 60 difficult
 # There is one less trial for either a previous easy or difficult: This is for the 1st trial
 # There is uneven amount of risky v. safe choices:
@@ -2228,20 +2234,33 @@ mean_decision_start_EvD_array = array(data = NA, dim = c(length(decision_start_b
 mean_decision_start_RvS_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_clean_subjects, 2))
 mean_decision_start_EvD_RvS_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_clean_subjects, 2, 2))
 mean_decision_start_prev_EvD_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_clean_subjects, 2, 2))
+mean_decision_start_WMC_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_clean_subjects, 2))
+mean_decision_start_EvD_WMC_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_clean_subjects, 2, 2))
+mean_decision_start_prev_EvD_WMC_array = array(data = NA, dim = c(length(decision_start_bins)-1,number_of_clean_subjects, 2, 2, 2))
 mean_dec_isi_otc_iti_EvD_array = array(data = NA, dim = c(length(dec_isi_otc_iti_bins)-1,number_of_clean_subjects, 2)) # ... by 2 for easy/difficult
 mean_dec_isi_otc_iti_RvS_array = array(data = NA, dim = c(length(dec_isi_otc_iti_bins)-1,number_of_clean_subjects, 2))
 mean_dec_isi_otc_iti_EvD_RvS_array = array(data = NA, dim = c(length(dec_isi_otc_iti_bins)-1,number_of_clean_subjects, 2, 2))
 mean_dec_isi_otc_iti_prev_EvD_array = array(data = NA, dim = c(length(dec_isi_otc_iti_bins)-1,number_of_clean_subjects, 2, 2))
+mean_dec_isi_otc_iti_WMC_array = array(data = NA, dim = c(length(dec_isi_otc_iti_bins)-1,number_of_clean_subjects, 2))
+mean_dec_isi_otc_iti_EvD_WMC_array = array(data = NA, dim = c(length(dec_isi_otc_iti_bins)-1,number_of_clean_subjects, 2, 2))
+mean_dec_isi_otc_iti_prev_EvD_WMC_array = array(data = NA, dim = c(length(dec_isi_otc_iti_bins)-1,number_of_clean_subjects, 2, 2, 2))
 
 # Normalized Bin Arrays
 decision_norm_array = array(data = NA, dim = c(170, number_of_normBins, number_of_clean_subjects)) # all trials
 decision_norm_EvD_array = array(data = NA, dim = c(60, number_of_normBins, number_of_clean_subjects, 2)) # trial-level (choice difficulty)
 decision_norm_EvD_RvS_array = array(data = NA, dim = c(60, number_of_normBins, number_of_clean_subjects, 2, 2)) # trial-level (choice difficulty x choice made)
 decision_norm_prev_EvD_array = array(data = NA, dim = c(60, number_of_normBins, number_of_clean_subjects, 2, 2)) # trial-level (choice difficulty x previous choice difficulty)
+decision_norm_WMC_array = array(data = NA, dim = c(60, number_of_normBins, number_of_clean_subjects, 2)) # WMC
+decision_norm_EvD_WMC_array = array(data = NA, dim = c(60, number_of_normBins, number_of_clean_subjects, 2, 2))
+decision_norm_prev_EvD_WMC_array = array(data = NA, dim = c(60, number_of_normBins, number_of_clean_subjects, 2, 2, 2))
 mean_decision_norm_array = array(data = NA, dim = c(number_of_normBins, number_of_clean_subjects)) # all trials
 mean_decision_norm_EvD_array = array(data = NA, dim = c(number_of_normBins, number_of_clean_subjects, 2)) # subject-level (choice difficulty)
 mean_decision_norm_EvD_RvS_array = array(data = NA, dim = c(number_of_normBins, number_of_clean_subjects, 2, 2)) # subject-level (choice difficulty x choice made)
 mean_decision_norm_prev_EvD_array = array(data = NA, dim = c(number_of_normBins, number_of_clean_subjects, 2, 2)) # subject-level (choice difficulty x previous choice difficulty)
+mean_decision_norm_WMC_array = array(data = NA, dim = c(number_of_normBins, number_of_clean_subjects, 2)) # WMC
+mean_decision_norm_EvD_WMC_array = array(data = NA, dim = c(number_of_normBins, number_of_clean_subjects, 2, 2)) #
+mean_decision_norm_prev_EvD_WMC_array = array(data = NA, dim = c(number_of_normBins, number_of_clean_subjects, 2, 2, 2)) #
+
 
 for (s in keep_participants){
   s_index = which(keep_participants == s);
@@ -2375,15 +2394,40 @@ for (s in keep_participants){
           else if (tmpdata$choice[t] == 0) {
             decision_start_EvD_RvS_array[cum_easy_trial_num, b,s_index,1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Safe
           }
+          if(!is.na(tmpdata$capacity_HighP1_lowN1_best[t])){
+            if(tmpdata$capacity_HighP1_lowN1_best[t] == -1) {
+              decision_start_EvD_WMC_array[cum_easy_trial_num, b,s_index,1, 1] = tmp_bin_mean # trials x bins x subjects x Easy x low WMC
+            }
+            else if (tmpdata$capacity_HighP1_lowN1_best[t] == 1) {
+              decision_start_EvD_WMC_array[cum_easy_trial_num, b,s_index,1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x high WMC
+            }
+          }
           if(tmpdata$easyP1difficultN1_prev[t] == 1) {
             decision_start_prev_EvD_array[cum_easy_trial_num, b,s_index,1, 1] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Easy
+            if(!is.na(tmpdata$capacity_HighP1_lowN1_best[t])){
+              if(tmpdata$capacity_HighP1_lowN1_best[t] == -1) {
+                decision_start_prev_EvD_WMC_array[cum_easy_trial_num, b,s_index,1, 1, 1] = tmp_bin_mean # trials x bins x subjects x Easy x low WMC
+              }
+              else if (tmpdata$capacity_HighP1_lowN1_best[t] == 1) {
+                decision_start_prev_EvD_WMC_array[cum_easy_trial_num, b,s_index,1, 1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x high WMC
+              }
+            }
           }
           else if (tmpdata$easyP1difficultN1_prev[t] == -1) {
             decision_start_prev_EvD_array[cum_easy_trial_num, b,s_index,1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Diff
+            if(!is.na(tmpdata$capacity_HighP1_lowN1_best[t])){
+              if(tmpdata$capacity_HighP1_lowN1_best[t] == -1) {
+                decision_start_prev_EvD_WMC_array[cum_easy_trial_num, b,s_index,1, 2, 1] = tmp_bin_mean # trials x bins x subjects x Easy x low WMC
+              }
+              else if (tmpdata$capacity_HighP1_lowN1_best[t] == 1) {
+                decision_start_prev_EvD_WMC_array[cum_easy_trial_num, b,s_index,1, 2, 2] = tmp_bin_mean # trials x bins x subjects x Easy x high WMC
+              }
+            }
           }
         }
       }
-    } else if (tmpdata$easyP1difficultN1[t] == -1) {
+    }
+    else if (tmpdata$easyP1difficultN1[t] == -1) {
       cum_diff_trial_num = cum_diff_trial_num + 1;
       for (b in 1:(length(decision_start_bins)-1)){
         tmp_bin_mean = mean(pupil_tmp[(time_tmp >= decision_start_bins[b]) & (time_tmp < decision_start_bins[b+1])], na.rm = T);
@@ -2395,11 +2439,35 @@ for (s in keep_participants){
           else if (tmpdata$choice[t] == 0) {
             decision_start_EvD_RvS_array[cum_diff_trial_num, b,s_index,2, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Safe
           }
+          if(!is.na(tmpdata$capacity_HighP1_lowN1_best[t])){
+            if(tmpdata$capacity_HighP1_lowN1_best[t] == -1) {
+              decision_start_EvD_WMC_array[cum_easy_trial_num, b,s_index,2, 1] = tmp_bin_mean # trials x bins x subjects x Easy x low WMC
+            }
+            else if (tmpdata$capacity_HighP1_lowN1_best[t] == 1) {
+              decision_start_EvD_WMC_array[cum_easy_trial_num, b,s_index,2, 2] = tmp_bin_mean # trials x bins x subjects x Easy x high WMC
+            }
+          }
           if(tmpdata$easyP1difficultN1_prev[t] == 1) {
             decision_start_prev_EvD_array[cum_diff_trial_num, b,s_index,2, 1] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Easy
+            if(!is.na(tmpdata$capacity_HighP1_lowN1_best[t])){
+              if(tmpdata$capacity_HighP1_lowN1_best[t] == -1) {
+                decision_start_prev_EvD_WMC_array[cum_easy_trial_num, b,s_index,2, 1, 1] = tmp_bin_mean # trials x bins x subjects x Easy x low WMC
+              }
+              else if (tmpdata$capacity_HighP1_lowN1_best[t] == 1) {
+                decision_start_prev_EvD_WMC_array[cum_easy_trial_num, b,s_index,2, 1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x high WMC
+              }
+            }
           }
           else if (tmpdata$easyP1difficultN1_prev[t] == -1) {
             decision_start_prev_EvD_array[cum_diff_trial_num, b,s_index,2, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Diff
+            if(!is.na(tmpdata$capacity_HighP1_lowN1_best[t])){
+              if(tmpdata$capacity_HighP1_lowN1_best[t] == -1) {
+                decision_start_prev_EvD_WMC_array[cum_easy_trial_num, b,s_index,2, 2, 1] = tmp_bin_mean # trials x bins x subjects x Easy x low WMC
+              }
+              else if (tmpdata$capacity_HighP1_lowN1_best[t] == 1) {
+                decision_start_prev_EvD_WMC_array[cum_easy_trial_num, b,s_index,2, 2, 2] = tmp_bin_mean # trials x bins x subjects x Easy x high WMC
+              }
+            }
           }
         }
       }
@@ -2432,15 +2500,40 @@ for (s in keep_participants){
             else if (tmpdata$choice[t] == 0) {
               dec_isi_otc_iti_EvD_RvS_array[cum_easy_trial_num, b,s_index,1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Safe
             }
+            if(!is.na(tmpdata$capacity_HighP1_lowN1_best[t])){
+              if(tmpdata$capacity_HighP1_lowN1_best[t] == -1) {
+                dec_isi_otc_iti_EvD_WMC_array[cum_easy_trial_num, b,s_index,1, 1] = tmp_bin_mean # trials x bins x subjects x Easy x low WMC
+              }
+              else if (tmpdata$capacity_HighP1_lowN1_best[t] == 1) {
+                dec_isi_otc_iti_EvD_WMC_array[cum_easy_trial_num, b,s_index,1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x high WMC
+              }
+            }
             if(tmpdata$easyP1difficultN1_prev[t] == 1) {
               dec_isi_otc_iti_prev_EvD_array[cum_easy_trial_num, b,s_index,1, 1] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Easy
+              if(!is.na(tmpdata$capacity_HighP1_lowN1_best[t])){
+                if(tmpdata$capacity_HighP1_lowN1_best[t] == -1) {
+                  dec_isi_otc_iti_prev_EvD_WMC_array[cum_easy_trial_num, b,s_index,1, 1, 1] = tmp_bin_mean # trials x bins x subjects x Easy x low WMC
+                }
+                else if (tmpdata$capacity_HighP1_lowN1_best[t] == 1) {
+                  dec_isi_otc_iti_prev_EvD_WMC_array[cum_easy_trial_num, b,s_index,1, 1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x high WMC
+                }
+              }
             }
             else if (tmpdata$easyP1difficultN1_prev[t] == -1) {
               dec_isi_otc_iti_prev_EvD_array[cum_easy_trial_num, b,s_index,1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Diff
+              if(!is.na(tmpdata$capacity_HighP1_lowN1_best[t])){
+                if(tmpdata$capacity_HighP1_lowN1_best[t] == -1) {
+                  dec_isi_otc_iti_prev_EvD_WMC_array[cum_easy_trial_num, b,s_index,1, 2, 1] = tmp_bin_mean # trials x bins x subjects x Easy x low WMC
+                }
+                else if (tmpdata$capacity_HighP1_lowN1_best[t] == 1) {
+                  dec_isi_otc_iti_prev_EvD_WMC_array[cum_easy_trial_num, b,s_index,1, 2, 2] = tmp_bin_mean # trials x bins x subjects x Easy x high WMC
+                }
+              }
             }
           }
         }
-      } else if (tmpdata$easyP1difficultN1[t] == -1) {
+      }
+      else if (tmpdata$easyP1difficultN1[t] == -1) {
         for (b in 1:(length(dec_isi_otc_iti_bins)-1)){
           tmp_bin_mean = mean(pupil_tmp[(time_tmp >= dec_isi_otc_iti_bins[b]) & (time_tmp < dec_isi_otc_iti_bins[b+1])], na.rm = T);
           if (!is.na(tmp_bin_mean)){
@@ -2451,11 +2544,24 @@ for (s in keep_participants){
             else if (tmpdata$choice[t] == 0) {
               dec_isi_otc_iti_EvD_RvS_array[cum_diff_trial_num, b,s_index,2, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Safe
             }
+            if(!is.na(tmpdata$capacity_HighP1_lowN1_best[t])){
+              if(tmpdata$capacity_HighP1_lowN1_best[t] == -1) {
+                dec_isi_otc_iti_EvD_WMC_array[cum_easy_trial_num, b,s_index,2, 1] = tmp_bin_mean # trials x bins x subjects x Easy x low WMC
+              }
+              else if (tmpdata$capacity_HighP1_lowN1_best[t] == 1) {
+                dec_isi_otc_iti_EvD_WMC_array[cum_easy_trial_num, b,s_index,2, 2] = tmp_bin_mean # trials x bins x subjects x Easy x high WMC
+              }
+            }
             if(tmpdata$easyP1difficultN1_prev[t] == 1) {
               dec_isi_otc_iti_prev_EvD_array[cum_diff_trial_num, b,s_index,2, 1] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Easy
-            }
-            else if (tmpdata$easyP1difficultN1_prev[t] == -1) {
-              dec_isi_otc_iti_prev_EvD_array[cum_diff_trial_num, b,s_index,2, 2] = tmp_bin_mean # trials x bins x subjects x Easy x Prev Diff
+              if(!is.na(tmpdata$capacity_HighP1_lowN1_best[t])){
+                if(tmpdata$capacity_HighP1_lowN1_best[t] == -1) {
+                  dec_isi_otc_iti_prev_EvD_WMC_array[cum_easy_trial_num, b,s_index,2, 1, 1] = tmp_bin_mean # trials x bins x subjects x Easy x low WMC
+                }
+                else if (tmpdata$capacity_HighP1_lowN1_best[t] == 1) {
+                  dec_isi_otc_iti_prev_EvD_WMC_array[cum_easy_trial_num, b,s_index,2, 1, 2] = tmp_bin_mean # trials x bins x subjects x Easy x high WMC
+                }
+              }
             }
           }
         }
@@ -2474,7 +2580,7 @@ for (s in keep_participants){
         current_difficulty_index = abs((tmpdata$easyP1difficultN1[t]-1)/2)+1; # easy --> 1, difficult --> 2
         current_choice_index = abs(tmpdata$choice[t]-2); # risky --> 1, safe --> 2
         previous_difficulty_index = abs((tmpdata$easyP1difficultN1_prev[t]-1)/2)+1; # easy --> 1, difficult --> 2
-
+        wmc_index = abs(((tmpdata$capacity_HighP1_lowN1_best[t]*-1)-1)/2)+1; # low WMC --> 1, high WMC --> 2
 
         if((tmpdata$static0dynamic1[t] == 1) & (!is.na(tmpdata$choice[t]))){
           if(tmpdata$easyP1difficultN1[t] == 1) { # CURRENT EASY
@@ -2488,8 +2594,14 @@ for (s in keep_participants){
           decision_norm_EvD_array[cum_easyDiff_trial_num,,s_index,current_difficulty_index] = tmp_norm_pupil;# trials x bins x subjects x Easy
           decision_norm_EvD_RvS_array[cum_easyDiff_trial_num,,s_index,current_difficulty_index, current_choice_index] = tmp_norm_pupil; # trials x bins x subjects x Easy x Risky
 
-          if(tmpdata$easyP1difficultN1_prev[t] != 0){
+          if(!is.na(tmpdata$capacity_HighP1_lowN1_best[t])){
+            decision_norm_EvD_WMC_array[cum_easyDiff_trial_num,,s_index,current_difficulty_index, wmc_index] = tmp_norm_pupil; # trials x bins x subjects x Easy x WMC
+          }
+
+          if(tmpdata$easyP1difficultN1_prev[t] != 0 & !is.na(tmpdata$capacity_HighP1_lowN1_best[t])){
             decision_norm_prev_EvD_array[cum_easyDiff_trial_num,,s_index,current_difficulty_index,previous_difficulty_index] = tmp_norm_pupil # trials x bins x subjects x Easy x Prev Easy
+            decision_norm_prev_EvD_WMC_array[cum_easyDiff_trial_num,,s_index,current_difficulty_index,previous_difficulty_index,wmc_index] = tmp_norm_pupil # trials x bins x subjects x Easy x Prev Easy x WMC
+
           }
         }
       }
@@ -2506,44 +2618,82 @@ for (s in keep_participants){
 
     dev.off() # complete the plot
 
-
+    # all
     mean_decision_start_array[,s_index] = colMeans(decision_start_array, na.rm = T)
     mean_decision_end_array[,s_index] = colMeans(decision_end_array, na.rm = T)
     mean_dec_isi_otc_iti_array[,s_index] = colMeans(dec_isi_otc_iti_array[,,s_index], na.rm = T)
 
-    mean_decision_start_EvD_array[,s_index,1] = colMeans(decision_start_EvD_array[,,s_index,1], na.rm = T) # decision_start
+    # decision_start
+    mean_decision_start_EvD_array[,s_index,1] = colMeans(decision_start_EvD_array[,,s_index,1], na.rm = T) # Current Difficulty
     mean_decision_start_EvD_array[,s_index,2] = colMeans(decision_start_EvD_array[,,s_index,2], na.rm = T)
-    mean_decision_start_EvD_RvS_array[,s_index,1,1] = colMeans(decision_start_EvD_RvS_array[,,s_index,1,1], na.rm = T)
-    mean_decision_start_EvD_RvS_array[,s_index,1,2] = colMeans(decision_start_EvD_RvS_array[,,s_index,1,2], na.rm = T)
-    mean_decision_start_EvD_RvS_array[,s_index,2,1] = colMeans(decision_start_EvD_RvS_array[,,s_index,2,1], na.rm = T)
-    mean_decision_start_EvD_RvS_array[,s_index,2,2] = colMeans(decision_start_EvD_RvS_array[,,s_index,2,2], na.rm = T)
-    mean_decision_start_prev_EvD_array[,s_index,1,1] = colMeans(decision_start_prev_EvD_array[,,s_index,1,1], na.rm = T) # indexed all into difficult accidentally
-    mean_decision_start_prev_EvD_array[,s_index,1,2] = colMeans(decision_start_prev_EvD_array[,,s_index,1,2], na.rm = T)
-    mean_decision_start_prev_EvD_array[,s_index,2,1] = colMeans(decision_start_prev_EvD_array[,,s_index,2,1], na.rm = T)
-    mean_decision_start_prev_EvD_array[,s_index,2,2] = colMeans(decision_start_prev_EvD_array[,,s_index,2,2], na.rm = T)
-    mean_dec_isi_otc_iti_EvD_array[,s_index,1] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,1], na.rm = T) # dec_isi_otc_iti
+      mean_decision_start_EvD_RvS_array[,s_index,1,1] = colMeans(decision_start_EvD_RvS_array[,,s_index,1,1], na.rm = T) # Current Difficulty x Choice Made
+      mean_decision_start_EvD_RvS_array[,s_index,1,2] = colMeans(decision_start_EvD_RvS_array[,,s_index,1,2], na.rm = T)
+      mean_decision_start_EvD_RvS_array[,s_index,2,1] = colMeans(decision_start_EvD_RvS_array[,,s_index,2,1], na.rm = T)
+      mean_decision_start_EvD_RvS_array[,s_index,2,2] = colMeans(decision_start_EvD_RvS_array[,,s_index,2,2], na.rm = T)
+        mean_decision_start_prev_EvD_array[,s_index,1,1] = colMeans(decision_start_prev_EvD_array[,,s_index,1,1], na.rm = T) # Previous Difficulty x Current Difficulty
+        mean_decision_start_prev_EvD_array[,s_index,1,2] = colMeans(decision_start_prev_EvD_array[,,s_index,1,2], na.rm = T)
+        mean_decision_start_prev_EvD_array[,s_index,2,1] = colMeans(decision_start_prev_EvD_array[,,s_index,2,1], na.rm = T)
+        mean_decision_start_prev_EvD_array[,s_index,2,2] = colMeans(decision_start_prev_EvD_array[,,s_index,2,2], na.rm = T)
+      mean_decision_start_EvD_WMC_array[,s_index,1,1] = colMeans(decision_start_EvD_WMC_array[,,s_index,1,1], na.rm = T) # Current Difficulty x WMC
+      mean_decision_start_EvD_WMC_array[,s_index,1,2] = colMeans(decision_start_EvD_WMC_array[,,s_index,1,2], na.rm = T)
+      mean_decision_start_EvD_WMC_array[,s_index,2,1] = colMeans(decision_start_EvD_WMC_array[,,s_index,2,1], na.rm = T)
+      mean_decision_start_EvD_WMC_array[,s_index,2,2] = colMeans(decision_start_EvD_WMC_array[,,s_index,2,2], na.rm = T)
+        mean_decision_start_prev_EvD_WMC_array[,s_index,1,1,1] = colMeans(decision_start_prev_EvD_WMC_array[,,s_index,1,1,1], na.rm = T) # Previous Difficulty x Current Difficulty x WMC
+        mean_decision_start_prev_EvD_WMC_array[,s_index,1,1,2] = colMeans(decision_start_prev_EvD_WMC_array[,,s_index,1,1,2], na.rm = T)
+        mean_decision_start_prev_EvD_WMC_array[,s_index,1,2,1] = colMeans(decision_start_prev_EvD_WMC_array[,,s_index,1,2,1], na.rm = T)
+        mean_decision_start_prev_EvD_WMC_array[,s_index,1,2,2] = colMeans(decision_start_prev_EvD_WMC_array[,,s_index,1,2,2], na.rm = T)
+        mean_decision_start_prev_EvD_WMC_array[,s_index,2,1,1] = colMeans(decision_start_prev_EvD_WMC_array[,,s_index,2,1,1], na.rm = T)
+        mean_decision_start_prev_EvD_WMC_array[,s_index,2,1,2] = colMeans(decision_start_prev_EvD_WMC_array[,,s_index,2,1,2], na.rm = T)
+        mean_decision_start_prev_EvD_WMC_array[,s_index,2,2,1] = colMeans(decision_start_prev_EvD_WMC_array[,,s_index,2,2,1], na.rm = T)
+        mean_decision_start_prev_EvD_WMC_array[,s_index,2,2,2] = colMeans(decision_start_prev_EvD_WMC_array[,,s_index,2,2,2], na.rm = T)
+    # dec_isi_otc_iti
+    mean_dec_isi_otc_iti_EvD_array[,s_index,1] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,1], na.rm = T) # Current Difficulty
     mean_dec_isi_otc_iti_EvD_array[,s_index,2] = colMeans(dec_isi_otc_iti_EvD_array[,,s_index,2], na.rm = T)
-    mean_dec_isi_otc_iti_EvD_RvS_array[,s_index,1,1] = colMeans(dec_isi_otc_iti_EvD_RvS_array[,,s_index,1,1], na.rm = T)
-    mean_dec_isi_otc_iti_EvD_RvS_array[,s_index,1,2] = colMeans(dec_isi_otc_iti_EvD_RvS_array[,,s_index,1,2], na.rm = T)
-    mean_dec_isi_otc_iti_EvD_RvS_array[,s_index,2,1] = colMeans(dec_isi_otc_iti_EvD_RvS_array[,,s_index,2,1], na.rm = T)
-    mean_dec_isi_otc_iti_EvD_RvS_array[,s_index,2,2] = colMeans(dec_isi_otc_iti_EvD_RvS_array[,,s_index,2,2], na.rm = T)
-    mean_dec_isi_otc_iti_prev_EvD_array[,s_index,1,1] = colMeans(dec_isi_otc_iti_prev_EvD_array[,,s_index,1,1], na.rm = T)
-    mean_dec_isi_otc_iti_prev_EvD_array[,s_index,1,2] = colMeans(dec_isi_otc_iti_prev_EvD_array[,,s_index,1,2], na.rm = T)
-    mean_dec_isi_otc_iti_prev_EvD_array[,s_index,2,1] = colMeans(dec_isi_otc_iti_prev_EvD_array[,,s_index,2,1], na.rm = T)
-    mean_dec_isi_otc_iti_prev_EvD_array[,s_index,2,2] = colMeans(dec_isi_otc_iti_prev_EvD_array[,,s_index,2,2], na.rm = T)
+      mean_dec_isi_otc_iti_EvD_RvS_array[,s_index,1,1] = colMeans(dec_isi_otc_iti_EvD_RvS_array[,,s_index,1,1], na.rm = T) # Current Difficulty x Choice Made
+      mean_dec_isi_otc_iti_EvD_RvS_array[,s_index,1,2] = colMeans(dec_isi_otc_iti_EvD_RvS_array[,,s_index,1,2], na.rm = T)
+      mean_dec_isi_otc_iti_EvD_RvS_array[,s_index,2,1] = colMeans(dec_isi_otc_iti_EvD_RvS_array[,,s_index,2,1], na.rm = T)
+      mean_dec_isi_otc_iti_EvD_RvS_array[,s_index,2,2] = colMeans(dec_isi_otc_iti_EvD_RvS_array[,,s_index,2,2], na.rm = T)
+        mean_dec_isi_otc_iti_prev_EvD_array[,s_index,1,1] = colMeans(dec_isi_otc_iti_prev_EvD_array[,,s_index,1,1], na.rm = T) # Previous Difficulty x Current Difficulty
+        mean_dec_isi_otc_iti_prev_EvD_array[,s_index,1,2] = colMeans(dec_isi_otc_iti_prev_EvD_array[,,s_index,1,2], na.rm = T)
+        mean_dec_isi_otc_iti_prev_EvD_array[,s_index,2,1] = colMeans(dec_isi_otc_iti_prev_EvD_array[,,s_index,2,1], na.rm = T)
+        mean_dec_isi_otc_iti_prev_EvD_array[,s_index,2,2] = colMeans(dec_isi_otc_iti_prev_EvD_array[,,s_index,2,2], na.rm = T)
+      mean_dec_isi_otc_iti_EvD_WMC_array[,s_index,1,1] = colMeans(dec_isi_otc_iti_EvD_WMC_array[,,s_index,1,1], na.rm = T) # Current Difficulty x WMC
+      mean_dec_isi_otc_iti_EvD_WMC_array[,s_index,1,2] = colMeans(dec_isi_otc_iti_EvD_WMC_array[,,s_index,1,2], na.rm = T)
+      mean_dec_isi_otc_iti_EvD_WMC_array[,s_index,2,1] = colMeans(dec_isi_otc_iti_EvD_WMC_array[,,s_index,2,1], na.rm = T)
+      mean_dec_isi_otc_iti_EvD_WMC_array[,s_index,2,2] = colMeans(dec_isi_otc_iti_EvD_WMC_array[,,s_index,2,2], na.rm = T)
+        mean_dec_isi_otc_iti_prev_EvD_WMC_array[,s_index,1,1,1] = colMeans(dec_isi_otc_iti_prev_EvD_WMC_array[,,s_index,1,1,1], na.rm = T) # Previous Difficulty x Current Difficulty x WMC
+        mean_dec_isi_otc_iti_prev_EvD_WMC_array[,s_index,1,1,2] = colMeans(dec_isi_otc_iti_prev_EvD_WMC_array[,,s_index,1,1,2], na.rm = T)
+        mean_dec_isi_otc_iti_prev_EvD_WMC_array[,s_index,1,2,1] = colMeans(dec_isi_otc_iti_prev_EvD_WMC_array[,,s_index,1,2,1], na.rm = T)
+        mean_dec_isi_otc_iti_prev_EvD_WMC_array[,s_index,1,2,2] = colMeans(dec_isi_otc_iti_prev_EvD_WMC_array[,,s_index,1,2,2], na.rm = T)
+        mean_dec_isi_otc_iti_prev_EvD_WMC_array[,s_index,2,1,1] = colMeans(dec_isi_otc_iti_prev_EvD_WMC_array[,,s_index,2,1,1], na.rm = T)
+        mean_dec_isi_otc_iti_prev_EvD_WMC_array[,s_index,2,1,2] = colMeans(dec_isi_otc_iti_prev_EvD_WMC_array[,,s_index,2,1,2], na.rm = T)
+        mean_dec_isi_otc_iti_prev_EvD_WMC_array[,s_index,2,2,1] = colMeans(dec_isi_otc_iti_prev_EvD_WMC_array[,,s_index,2,2,1], na.rm = T)
+        mean_dec_isi_otc_iti_prev_EvD_WMC_array[,s_index,2,2,2] = colMeans(dec_isi_otc_iti_prev_EvD_WMC_array[,,s_index,2,2,2], na.rm = T)
 
     # NORMALIZED Mean Data Arrays
     mean_decision_norm_array[,s_index] = colMeans(decision_norm_array[,,s_index], na.rm = T) # All
-    mean_decision_norm_EvD_array[,s_index,1] = colMeans(decision_norm_EvD_array[,,s_index,1], na.rm = T) # Easy
-    mean_decision_norm_EvD_RvS_array[,s_index,1,1] = colMeans(decision_norm_EvD_RvS_array[,,s_index,1,1], na.rm = T) # Easy x Risky
-    mean_decision_norm_EvD_RvS_array[,s_index,1,2] = colMeans(decision_norm_EvD_RvS_array[,,s_index,1,2], na.rm = T) # Easy x Safe
-    mean_decision_norm_prev_EvD_array[,s_index,1,1] = colMeans(decision_norm_prev_EvD_array[,,s_index,1,1], na.rm = T) # Easy x Prev Easy
-    mean_decision_norm_prev_EvD_array[,s_index,1,2] = colMeans(decision_norm_prev_EvD_array[,,s_index,1,2], na.rm = T) # Easy x Prev Diff
-    mean_decision_norm_EvD_array[,s_index,2] = colMeans(decision_norm_EvD_array[,,s_index,2], na.rm = T) # Difficult
-    mean_decision_norm_EvD_RvS_array[,s_index,2,1] = colMeans(decision_norm_EvD_RvS_array[,,s_index,2,1], na.rm = T) # Difficult x Risky
-    mean_decision_norm_EvD_RvS_array[,s_index,2,2] = colMeans(decision_norm_EvD_RvS_array[,,s_index,2,2], na.rm = T) # Difficult x Safe
-    mean_decision_norm_prev_EvD_array[,s_index,2,1] = colMeans(decision_norm_prev_EvD_array[,,s_index,2,1], na.rm = T) # Difficult x Prev Easy
-    mean_decision_norm_prev_EvD_array[,s_index,2,2] = colMeans(decision_norm_prev_EvD_array[,,s_index,2,2], na.rm = T) # Difficult x Prev Diff
+      mean_decision_norm_EvD_array[,s_index,1] = colMeans(decision_norm_EvD_array[,,s_index,1], na.rm = T) # Current Difficulty
+      mean_decision_norm_EvD_array[,s_index,2] = colMeans(decision_norm_EvD_array[,,s_index,2], na.rm = T)
+        mean_decision_norm_EvD_RvS_array[,s_index,1,1] = colMeans(decision_norm_EvD_RvS_array[,,s_index,1,1], na.rm = T) # Current Difficulty x Choice Made
+        mean_decision_norm_EvD_RvS_array[,s_index,1,2] = colMeans(decision_norm_EvD_RvS_array[,,s_index,1,2], na.rm = T)
+        mean_decision_norm_EvD_RvS_array[,s_index,2,1] = colMeans(decision_norm_EvD_RvS_array[,,s_index,2,1], na.rm = T)
+        mean_decision_norm_EvD_RvS_array[,s_index,2,2] = colMeans(decision_norm_EvD_RvS_array[,,s_index,2,2], na.rm = T)
+          mean_decision_norm_prev_EvD_array[,s_index,1,1] = colMeans(decision_norm_prev_EvD_array[,,s_index,1,1], na.rm = T) # Previous Difficulty x Current Difficulty
+          mean_decision_norm_prev_EvD_array[,s_index,1,2] = colMeans(decision_norm_prev_EvD_array[,,s_index,1,2], na.rm = T)
+          mean_decision_norm_prev_EvD_array[,s_index,2,1] = colMeans(decision_norm_prev_EvD_array[,,s_index,2,1], na.rm = T)
+          mean_decision_norm_prev_EvD_array[,s_index,2,2] = colMeans(decision_norm_prev_EvD_array[,,s_index,2,2], na.rm = T)
+        mean_decision_norm_EvD_WMC_array[,s_index,1,1] = colMeans(decision_norm_EvD_WMC_array[,,s_index,1,1], na.rm = T) # Current Difficulty x WMC
+        mean_decision_norm_EvD_WMC_array[,s_index,1,2] = colMeans(decision_norm_EvD_WMC_array[,,s_index,1,2], na.rm = T)
+        mean_decision_norm_EvD_WMC_array[,s_index,2,1] = colMeans(decision_norm_EvD_WMC_array[,,s_index,2,1], na.rm = T)
+        mean_decision_norm_EvD_WMC_array[,s_index,2,2] = colMeans(decision_norm_EvD_WMC_array[,,s_index,2,2], na.rm = T)
+          mean_decision_norm_prev_EvD_WMC_array[,s_index,1,1,1] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,1,1,1], na.rm = T) # Previous Difficulty x Current Difficulty x WMC
+          mean_decision_norm_prev_EvD_WMC_array[,s_index,1,1,2] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,1,1,2], na.rm = T)
+          mean_decision_norm_prev_EvD_WMC_array[,s_index,1,2,1] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,1,2,1], na.rm = T)
+          mean_decision_norm_prev_EvD_WMC_array[,s_index,1,2,2] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,1,2,2], na.rm = T)
+          mean_decision_norm_prev_EvD_WMC_array[,s_index,2,1,1] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,2,1,1], na.rm = T)
+          mean_decision_norm_prev_EvD_WMC_array[,s_index,2,1,2] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,2,1,2], na.rm = T)
+          mean_decision_norm_prev_EvD_WMC_array[,s_index,2,2,1] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,2,2,1], na.rm = T)
+          mean_decision_norm_prev_EvD_WMC_array[,s_index,2,2,2] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,2,2,2], na.rm = T)
 
     cat(sprintf('. Done.\n'))
   }
@@ -2663,10 +2813,18 @@ sem_decision_start_Easy_Risky_array = sem(mean_decision_start_EvD_RvS_array[,,1,
 sem_decision_start_Easy_Safe_array = sem(mean_decision_start_EvD_RvS_array[,,1,2])
 sem_decision_start_Diff_Risky_array = sem(mean_decision_start_EvD_RvS_array[,,2,1])
 sem_decision_start_Diff_Safe_array = sem(mean_decision_start_EvD_RvS_array[,,2,2])
+sem_decision_start_Easy_lWMC_array = sem(mean_decision_start_EvD_WMC_array[,,1,1])
+sem_decision_start_Easy_hWMC_array = sem(mean_decision_start_EvD_WMC_array[,,1,2])
+sem_decision_start_Diff_lWMC_array = sem(mean_decision_start_EvD_WMC_array[,,2,1])
+sem_decision_start_Diff_hWMC_array = sem(mean_decision_start_EvD_WMC_array[,,2,2])
 sem_dec_isi_otc_iti_Easy_Risky_array = sem(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,1])
 sem_dec_isi_otc_iti_Easy_Safe_array = sem(mean_dec_isi_otc_iti_EvD_RvS_array[,,1,2])
 sem_dec_isi_otc_iti_Diff_Risky_array = sem(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,1])
 sem_dec_isi_otc_iti_Diff_Safe_array = sem(mean_dec_isi_otc_iti_EvD_RvS_array[,,2,2])
+sem_dec_isi_otc_iti_Easy_lWMC_array = sem(mean_dec_isi_otc_iti_EvD_WMC_array[,,1,1])
+sem_dec_isi_otc_iti_Easy_hWMC_array = sem(mean_dec_isi_otc_iti_EvD_WMC_array[,,1,2])
+sem_dec_isi_otc_iti_Diff_lWMC_array = sem(mean_dec_isi_otc_iti_EvD_WMC_array[,,2,1])
+sem_dec_isi_otc_iti_Diff_hWMC_array = sem(mean_dec_isi_otc_iti_EvD_WMC_array[,,2,2])
 
 sem_decision_start_Easy_Prev_Easy_array = sem(mean_decision_start_prev_EvD_array[,,1,1])
 sem_decision_start_Easy_Prev_Diff_array = sem(mean_decision_start_prev_EvD_array[,,1,2])
@@ -2676,6 +2834,24 @@ sem_dec_isi_otc_iti_Easy_Prev_Easy_array = sem(mean_dec_isi_otc_iti_prev_EvD_arr
 sem_dec_isi_otc_iti_Easy_Prev_Diff_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,1,2])
 sem_dec_isi_otc_iti_Diff_Prev_Easy_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,2,1])
 sem_dec_isi_otc_iti_Diff_Prev_Diff_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,2,2])
+
+sem_decision_start_Easy_Prev_Easy_lWMC_array = sem(mean_decision_start_prev_EvD_WMC_array[,,1,1,1])
+sem_decision_start_Easy_Prev_Easy_hWMC_array = sem(mean_decision_start_prev_EvD_WMC_array[,,1,1,2])
+sem_decision_start_Easy_Prev_Diff_lWMC_array = sem(mean_decision_start_prev_EvD_WMC_array[,,1,2,1])
+sem_decision_start_Easy_Prev_Diff_hWMC_array = sem(mean_decision_start_prev_EvD_WMC_array[,,1,2,2])
+sem_decision_start_Diff_Prev_Easy_lWMC_array = sem(mean_decision_start_prev_EvD_WMC_array[,,2,1,1])
+sem_decision_start_Diff_Prev_Easy_hWMC_array = sem(mean_decision_start_prev_EvD_WMC_array[,,2,1,2])
+sem_decision_start_Diff_Prev_Diff_lWMC_array = sem(mean_decision_start_prev_EvD_WMC_array[,,2,2,1])
+sem_decision_start_Diff_Prev_Diff_hWMC_array = sem(mean_decision_start_prev_EvD_WMC_array[,,2,2,2])
+
+sem_dec_isi_otc_iti_Easy_Prev_Easy_lWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,1,1,1])
+sem_dec_isi_otc_iti_Easy_Prev_Easy_hWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,1,1,2])
+sem_dec_isi_otc_iti_Easy_Prev_Diff_lWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,1,2,1])
+sem_dec_isi_otc_iti_Easy_Prev_Diff_hWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,1,2,2])
+sem_dec_isi_otc_iti_Diff_Prev_Easy_lWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,2,1,1])
+sem_dec_isi_otc_iti_Diff_Prev_Easy_hWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,2,1,2])
+sem_dec_isi_otc_iti_Diff_Prev_Diff_lWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,2,2,1])
+sem_dec_isi_otc_iti_Diff_Prev_Diff_hWMC_array = sem(mean_dec_isi_otc_iti_prev_EvD_array[,,2,2,2])
 
 decision_start_upper = rowMeans(mean_decision_start_array, na.rm = T) + sem_decision_start_array
 decision_start_lower = rowMeans(mean_decision_start_array, na.rm = T) - sem_decision_start_array
