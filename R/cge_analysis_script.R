@@ -3065,9 +3065,9 @@ sem_decision_norm_x_vals = c(normBins, rev(normBins));
 
 
 
-### GRAPHING GROUP PUPILLOMETRY: Splitting into Choice Difficulty, Choice Made, & Previous Difficulty ######
+# GRAPHING GROUP PUPILLOMETRY: Splitting into Choice Difficulty, Choice Made, & Previous Difficulty ########
 
-# - ALL TRIALS - #####
+## - ALL TRIALS - #####
 
 # Plotting from Decision Window Start to Choice & from Choice to Decision Window End:
 # All Trials
@@ -3138,7 +3138,7 @@ lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increme
 abline(v = 0, lty = 'dashed')
 dev.off()
 
-# - CHOICE DIFFICULTY - #####
+## - CHOICE DIFFICULTY - #####
 
 # Plotting from Decision Window Start to Choice & from Choice to Decision Window End:
 # Choice Difficulty (Easy v. Difficult Trials)
@@ -3221,7 +3221,7 @@ legend("bottomright", legend = c("Easy Trial", "Difficult Trial"),
        col = c('blue', 'red'), lty = c(1, 1))
 dev.off()
 
-# - CHOICE MADE - #####
+## - CHOICE MADE - #####
 
 # Plotting from Decision Window Start to Choice:
 # Choice Difficulty (Easy v. Difficult Trials) x Choice Made (Risky v. Safe Choice)
@@ -3297,7 +3297,7 @@ legend("bottomright", legend = c("Easy Trial", "Risky", "Safe", "Difficult Trial
        col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
        lty = c(NA, 1, 2, NA, 1, 2))
 
-# Plotting NORMALIZED pupillometry: Decision Window Start to Choice:
+# Plotting NORMALIZED pupillometry: Decision Window Start to Choice: 
 # Choice Difficulty (Easy v. Difficult Trials) x Choice Made (Risky v. Safe Choice)
 # Easy Trials x Choice Made
 par(mfrow = c(2,1))
@@ -3471,7 +3471,7 @@ legend("bottomright", legend = c("Easy Trial", "Risky", "Safe", "Difficult Trial
        col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
        lty = c(NA, 1, 2, NA, 1, 2))
 
-# - PREVIOUS DIFFICULTY - #####
+## - PREVIOUS DIFFICULTY - #####
 
 # Plotting from Decision Window Start to Choice:
 # Choice Difficulty (Easy v. Difficult Trials) x Previous Difficulty (Previous Easy v. Previous Difficult)
@@ -3722,7 +3722,7 @@ legend("bottomright", legend = c("Easy Trial", "Previous Easy", "Previous Diffic
        col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
        lty = c(NA, 1, 2, NA, 1, 2))
 
-# - WMC - ######
+## - WMC - ######
 
 # Plotting from Decision Window Start to Choice & from Choice to Decision Window End:
 # Choice Difficulty (Easy v. Difficult Trials) x WMC (Low vs. High)
@@ -3869,7 +3869,7 @@ legend("bottomright", legend = c("High", "Low"),
        col = c("red", "blue"), lty = c(1, 1))
 
 
-# - WMC x PREVIOUS DIFFICULTY x CURRENT DIFFICULTY #####
+## - WMC x PREVIOUS DIFFICULTY x CURRENT DIFFICULTY #####
 
 # Plotting from Decision Window Start to Choice & from Choice to Decision Window End:
 # Choice Difficulty (Easy v. Difficult Trials) x WMC (Low vs. High)
@@ -4191,22 +4191,13 @@ legend("bottomright", legend = c("Low WMC", "Easy", "Difficult", "High WMC", "Ea
 
 
 
-### Next Steps #####################
-# 1. Risky/Safe
-#      - option presentation time-locked
-#      - dec/isi/otc/iti time-locked
-# 2. Previous difficulty
-#      - option presentation time-locked
-#      - dec/isi/otc/iti time-locked
-# 3. WMC?
 
 
 
 
+# Pupil Regressions #################
 
-## Pupil Regressions #################
-
-### Using continuous difficulty #################
+## Using continuous difficulty #################
 m0_pupil_decision_cont = lmer(decision_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best +
                                 (1 | subjectnumber), data = clean_data_dm)
 summary(m0_pupil_decision_cont)
@@ -4229,7 +4220,9 @@ summary(m0_pupil_iti_cont)
 # Negative effects of current and previous difficulty
 # Trend INTERACTION btwn current difficulty & capacity (like otc, see above
 
-### Using continuous difficulty #################
+
+
+## Using continuous difficulty #################
 m0_pupil_decision_cat = lmer(decision_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best +
                                (1 | subjectnumber), data = clean_data_dm)
 summary(m0_pupil_decision_cat)
@@ -4256,8 +4249,9 @@ summary(m0_pupil_iti_cat)
 
 
 
-
-################ MOST STUFF BELOW HERE CAN BE IGNORED ################
+###############################################################################################
+# MOST STUFF BELOW HERE CAN BE IGNORED ########################################################
+###############################################################################################
 
 
 # Continuous difficulty (including previous) and continuous capacity and categorical capacity
