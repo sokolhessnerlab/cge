@@ -2184,6 +2184,38 @@ dev.off()
 # that may *also* need correction eventually via Z-scoring.
 
 
+## Regression on Continuous Pupillometry ################
+### Setup #########################
+
+# This analysis will seek to create one *large* pupil dilation array. 
+# Columns will be different samples during the trial.
+# Rows will be distinct trials, across all participants. 
+#
+# Then regressions can be carried out on a per-point basis, yielding moment-by-
+# moment regression results of how effects of e.g., current difficulty, previous
+# difficulty, WMC, etc interact and change to alter pupil dilation over time. 
+
+frequency_of_resampled_points = 20 # bins of 50ms width, 20/second
+point_increment = 1/frequency_of_resampled_points*1000 # in units of ms
+
+xvals_window_1 = seq(from = 0, to = 1000, by = point_increment)
+xvals_blank = seq(from = 1050, to = 1200, by = point_increment)
+xvals_window_2 = seq(from = -500, to = 5000, by = point_increment)
+
+xvals = c(
+  xvals_window_1, # the choice option presentation window
+  xvals_blank, # the BLANK
+  xvals_window_2 # the dec-isi-otc-iti window
+)
+
+window_1_ind = 1:length(xvals_window_1)
+window_2_ind = (length(xvals_window_1) + length(xvals_blank) + 1):(length(xvals_window_1) + length(xvals_blank) + length(xvals_window_2))
+
+mega_pupil_array = array(data = NA, dim = c(0, length(xvals)))
+
+
+
+
 ## Plotting Downsampled Pupillometry ####################
 ### Per-Subject Plots ###########################
 
@@ -4249,10 +4281,9 @@ summary(m0_pupil_iti_cat)
 
 
 
-###############################################################################################
+#
 # MOST STUFF BELOW HERE CAN BE IGNORED ########################################################
-###############################################################################################
-
+#
 
 # Continuous difficulty (including previous) and continuous capacity and categorical capacity
 m1_prev_diffCont_capacityCont_capacityCat_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * complexspan_demeaned +
