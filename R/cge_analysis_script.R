@@ -2327,6 +2327,7 @@ abline(v = which(xvals == 2000)/length(xvals), col = 'purple', lwd = 3, lty = 'd
 
 dev.off()
 plot(beta_vals$prev_all_diff_cont); abline(v = which(xvals == 0)[2], col = 'magenta', lwd = 3, lty = 'dotted')
+abline(h = 0, col = 'black', lwd = 2)
 abline(v = which(xvals == 1000)[2], col = 'purple', lwd = 3, lty = 'dashed')
 abline(v = which(xvals == 2000), col = 'purple', lwd = 3, lty = 'dashed')
 
