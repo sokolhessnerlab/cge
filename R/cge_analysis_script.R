@@ -11,20 +11,17 @@ rm(list=ls()); # Clear the workspace
 
 # STEP 1: Set the working directory
 # On PSH's computers...
-#setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
+setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # On Von's PC Laptop "tabletas"...
-setwd('C:/Users/jvonm/Documents/GitHub/cge');
+# setwd('C:/Users/jvonm/Documents/GitHub/cge');
 # Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
-Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
+# Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
 
 # STEP 2: then run from here on the same
 config = config::get()
 
 # Loading Data ########################################
 setwd(config$path$data$processed)
-
-# #Von's
-# setwd('S:/shlab/Projects/CGE/data/preprocessed')
 
 # Load Decision-Making Data
 fn = dir(pattern = glob2rx('cge_processed_decisionmaking*.csv'),full.names = T);
@@ -2185,6 +2182,7 @@ dev.off()
 
 
 ## Regression on Continuous Pupillometry ################
+
 ### Setup #########################
 
 # This analysis will seek to create one *large* pupil dilation array. 
@@ -2213,7 +2211,88 @@ window_2_ind = (length(xvals_window_1) + length(xvals_blank) + 1):(length(xvals_
 
 mega_pupil_array = array(data = NA, dim = c(0, length(xvals)))
 
+### Pupil Array Creation #########################
+for (s in keep_participants){
+# for (s in 1:2){
+  s_index = which(keep_participants == s);
+  
+  cat(sprintf('Subject CGE%03i (%i of %i): trial 000', s, s_index, length(keep_participants)))
+  
+  # tmpdata = clean_data_dm[clean_data_dm$subjectnumber == s,]; # defines this person's BEHAVIORAL data
+  
+  # Create NA-filled array to hold this one person's pupil trace data
+  mini_pupil_array = array(data = NA, dim = c(170, length(xvals)))
+  
+  # find their file...
+  tmp_downsampled_fn = dir(pattern = glob2rx(sprintf('cge%03i_et_processed_downsampled*.RData',s)),full.names = T, recursive = T);
+  # and load only the most recent downsampled data file
+  load(tmp_downsampled_fn[length(tmp_downsampled_fn)]) # loads downsampled_et_data and event_timestamps
+  downsampled_et_data = as.data.frame(downsampled_et_data);
+  
+  number_of_trials = length(event_timestamps[,1]);
+  for (t in 1:number_of_trials){
+    cat(sprintf('\b\b\b%03i',t))
+    
+    if(!is.na(event_timestamps$decision_start[t])){
+      # Do Window 1 (choice option presentation)
+      tmp_time_points = event_timestamps$decision_start[t] + xvals_window_1;
+      
+      tmp_norm_pupil = approx(x = downsampled_et_data$time_data_downsampled, # use approx to get them
+                              y = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled,
+                              xout = tmp_time_points)$y
+      mini_pupil_array[t,window_1_ind] = tmp_norm_pupil # store in the mini array
+      
+      # Do Window 2 (choice option presentation)
+      tmp_time_points = event_timestamps$decision_end[t] + xvals_window_2;
+      
+      tmp_norm_pupil = approx(x = downsampled_et_data$time_data_downsampled, # use approx to get them
+                              y = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled,
+                              xout = tmp_time_points)$y
+      mini_pupil_array[t,window_2_ind] = tmp_norm_pupil # store in the mini array
+    }
+  }
+  mega_pupil_array = rbind(mega_pupil_array, mini_pupil_array);
+  cat(sprintf('. Done.\n'))
+}
+cat('Mega pupil array created')
 
+### Carry out regressions #########################
+# We'll use clean_data_dm as the source of regressors.
+
+reg_rownames = c(
+  'intercept',
+  'easyP1difficultN1',
+  'trialnumber',
+  'choice');
+
+beta_vals = array(data = NA, dim = c(length(xvals),length(reg_colnames)))
+beta_vals = as.data.frame(beta_vals);
+colnames(beta_vals) <- reg_colnames;
+
+p_vals = beta_vals
+
+for (timepoint in 1:length(xvals)){
+  if (all(is.na(mega_pupil_array[,timepoint]))){
+    next
+  } else{
+    tmp_model = lmer(mega_pupil_array[,timepoint] ~ 1 + easyP1difficultN1 + trialnumber + choice + (1 | subjectnumber), 
+                     data = clean_data_dm)
+    tmp_summ = summary(tmp_model)
+    beta_vals[timepoint,] = coef(tmp_summ)[,1]
+    p_vals[timepoint,] = coef(tmp_summ)[,5]
+  }
+}
+
+p_vals_reconfig = 1-p_vals;
+p_vals_reconfig[(beta_vals < 0)&(!is.na(beta_vals))] = -p_vals_reconfig[(beta_vals < 0)&(!is.na(beta_vals))];
+# +1 = significant, positive, corresponds w/ p = 0, pos. beta
+# -1 = significant, negative, corresponds w/ p = 0, neg. beta
+
+
+# Need to ...
+#   1. decide on a better regression
+#   2. Re-run said regression
+#   3. Work on visualization of betas and/or p-values
 
 
 ## Plotting Downsampled Pupillometry ####################
@@ -2737,9 +2816,9 @@ for (s in keep_participants){
           mean_decision_norm_prev_EvD_WMC_array[,s_index,2,1,2] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,2,1,2], na.rm = T)
           mean_decision_norm_prev_EvD_WMC_array[,s_index,2,2,1] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,2,2,1], na.rm = T)
           mean_decision_norm_prev_EvD_WMC_array[,s_index,2,2,2] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,2,2,2], na.rm = T)
-
-    cat(sprintf('. Done.\n'))
-  }
+          
+          cat(sprintf('. Done.\n'))
+}
 
 
 
