@@ -11,20 +11,17 @@ rm(list=ls()); # Clear the workspace
 
 # STEP 1: Set the working directory
 # On PSH's computers...
-#setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
+setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # On Von's PC Laptop "tabletas"...
-setwd('C:/Users/jvonm/Documents/GitHub/cge');
+# setwd('C:/Users/jvonm/Documents/GitHub/cge');
 # Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
-Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
+# Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
 
 # STEP 2: then run from here on the same
 config = config::get()
 
 # Loading Data ########################################
 setwd(config$path$data$processed)
-
-# #Von's
-# setwd('S:/shlab/Projects/CGE/data/preprocessed')
 
 # Load Decision-Making Data
 fn = dir(pattern = glob2rx('cge_processed_decisionmaking*.csv'),full.names = T);
@@ -2184,6 +2181,120 @@ dev.off()
 # that may *also* need correction eventually via Z-scoring.
 
 
+## Regression on Continuous Pupillometry ################
+
+### Setup #########################
+
+# This analysis will seek to create one *large* pupil dilation array. 
+# Columns will be different samples during the trial.
+# Rows will be distinct trials, across all participants. 
+#
+# Then regressions can be carried out on a per-point basis, yielding moment-by-
+# moment regression results of how effects of e.g., current difficulty, previous
+# difficulty, WMC, etc interact and change to alter pupil dilation over time. 
+
+frequency_of_resampled_points = 20 # bins of 50ms width, 20/second
+point_increment = 1/frequency_of_resampled_points*1000 # in units of ms
+
+xvals_window_1 = seq(from = 0, to = 1000, by = point_increment)
+xvals_blank = seq(from = 1050, to = 1200, by = point_increment)
+xvals_window_2 = seq(from = -500, to = 5000, by = point_increment)
+
+xvals = c(
+  xvals_window_1, # the choice option presentation window
+  xvals_blank, # the BLANK
+  xvals_window_2 # the dec-isi-otc-iti window
+)
+
+window_1_ind = 1:length(xvals_window_1)
+window_2_ind = (length(xvals_window_1) + length(xvals_blank) + 1):(length(xvals_window_1) + length(xvals_blank) + length(xvals_window_2))
+
+mega_pupil_array = array(data = NA, dim = c(0, length(xvals)))
+
+### Pupil Array Creation #########################
+for (s in keep_participants){
+# for (s in 1:2){
+  s_index = which(keep_participants == s);
+  
+  cat(sprintf('Subject CGE%03i (%i of %i): trial 000', s, s_index, length(keep_participants)))
+  
+  # tmpdata = clean_data_dm[clean_data_dm$subjectnumber == s,]; # defines this person's BEHAVIORAL data
+  
+  # Create NA-filled array to hold this one person's pupil trace data
+  mini_pupil_array = array(data = NA, dim = c(170, length(xvals)))
+  
+  # find their file...
+  tmp_downsampled_fn = dir(pattern = glob2rx(sprintf('cge%03i_et_processed_downsampled*.RData',s)),full.names = T, recursive = T);
+  # and load only the most recent downsampled data file
+  load(tmp_downsampled_fn[length(tmp_downsampled_fn)]) # loads downsampled_et_data and event_timestamps
+  downsampled_et_data = as.data.frame(downsampled_et_data);
+  
+  number_of_trials = length(event_timestamps[,1]);
+  for (t in 1:number_of_trials){
+    cat(sprintf('\b\b\b%03i',t))
+    
+    if(!is.na(event_timestamps$decision_start[t])){
+      # Do Window 1 (choice option presentation)
+      tmp_time_points = event_timestamps$decision_start[t] + xvals_window_1;
+      
+      tmp_norm_pupil = approx(x = downsampled_et_data$time_data_downsampled, # use approx to get them
+                              y = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled,
+                              xout = tmp_time_points)$y
+      mini_pupil_array[t,window_1_ind] = tmp_norm_pupil # store in the mini array
+      
+      # Do Window 2 (choice option presentation)
+      tmp_time_points = event_timestamps$decision_end[t] + xvals_window_2;
+      
+      tmp_norm_pupil = approx(x = downsampled_et_data$time_data_downsampled, # use approx to get them
+                              y = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled,
+                              xout = tmp_time_points)$y
+      mini_pupil_array[t,window_2_ind] = tmp_norm_pupil # store in the mini array
+    }
+  }
+  mega_pupil_array = rbind(mega_pupil_array, mini_pupil_array);
+  cat(sprintf('. Done.\n'))
+}
+cat('Mega pupil array created')
+
+### Carry out regressions #########################
+# We'll use clean_data_dm as the source of regressors.
+
+reg_rownames = c(
+  'intercept',
+  'easyP1difficultN1',
+  'trialnumber',
+  'choice');
+
+beta_vals = array(data = NA, dim = c(length(xvals),length(reg_colnames)))
+beta_vals = as.data.frame(beta_vals);
+colnames(beta_vals) <- reg_colnames;
+
+p_vals = beta_vals
+
+for (timepoint in 1:length(xvals)){
+  if (all(is.na(mega_pupil_array[,timepoint]))){
+    next
+  } else{
+    tmp_model = lmer(mega_pupil_array[,timepoint] ~ 1 + easyP1difficultN1 + trialnumber + choice + (1 | subjectnumber), 
+                     data = clean_data_dm)
+    tmp_summ = summary(tmp_model)
+    beta_vals[timepoint,] = coef(tmp_summ)[,1]
+    p_vals[timepoint,] = coef(tmp_summ)[,5]
+  }
+}
+
+p_vals_reconfig = 1-p_vals;
+p_vals_reconfig[(beta_vals < 0)&(!is.na(beta_vals))] = -p_vals_reconfig[(beta_vals < 0)&(!is.na(beta_vals))];
+# +1 = significant, positive, corresponds w/ p = 0, pos. beta
+# -1 = significant, negative, corresponds w/ p = 0, neg. beta
+
+
+# Need to ...
+#   1. decide on a better regression
+#   2. Re-run said regression
+#   3. Work on visualization of betas and/or p-values
+
+
 ## Plotting Downsampled Pupillometry ####################
 ### Per-Subject Plots ###########################
 
@@ -2705,9 +2816,9 @@ for (s in keep_participants){
           mean_decision_norm_prev_EvD_WMC_array[,s_index,2,1,2] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,2,1,2], na.rm = T)
           mean_decision_norm_prev_EvD_WMC_array[,s_index,2,2,1] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,2,2,1], na.rm = T)
           mean_decision_norm_prev_EvD_WMC_array[,s_index,2,2,2] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,2,2,2], na.rm = T)
-
-    cat(sprintf('. Done.\n'))
-  }
+          
+          cat(sprintf('. Done.\n'))
+}
 
 
 
@@ -3065,9 +3176,9 @@ sem_decision_norm_x_vals = c(normBins, rev(normBins));
 
 
 
-### GRAPHING GROUP PUPILLOMETRY: Splitting into Choice Difficulty, Choice Made, & Previous Difficulty ######
+# GRAPHING GROUP PUPILLOMETRY: Splitting into Choice Difficulty, Choice Made, & Previous Difficulty ########
 
-# - ALL TRIALS - #####
+## - ALL TRIALS - #####
 
 # Plotting from Decision Window Start to Choice & from Choice to Decision Window End:
 # All Trials
@@ -3138,7 +3249,7 @@ lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increme
 abline(v = 0, lty = 'dashed')
 dev.off()
 
-# - CHOICE DIFFICULTY - #####
+## - CHOICE DIFFICULTY - #####
 
 # Plotting from Decision Window Start to Choice & from Choice to Decision Window End:
 # Choice Difficulty (Easy v. Difficult Trials)
@@ -3221,7 +3332,7 @@ legend("bottomright", legend = c("Easy Trial", "Difficult Trial"),
        col = c('blue', 'red'), lty = c(1, 1))
 dev.off()
 
-# - CHOICE MADE - #####
+## - CHOICE MADE - #####
 
 # Plotting from Decision Window Start to Choice:
 # Choice Difficulty (Easy v. Difficult Trials) x Choice Made (Risky v. Safe Choice)
@@ -3299,7 +3410,7 @@ legend("bottomright", legend = c("Easy Trial", "Risky", "Safe", "Difficult Trial
        col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
        lty = c(NA, 1, 2, NA, 1, 2))
 
-# Plotting NORMALIZED pupillometry: Decision Window Start to Choice:
+# Plotting NORMALIZED pupillometry: Decision Window Start to Choice: 
 # Choice Difficulty (Easy v. Difficult Trials) x Choice Made (Risky v. Safe Choice)
 # Easy Trials x Choice Made
 par(mfrow = c(2,1))
@@ -3473,7 +3584,7 @@ legend("bottomright", legend = c("Easy Trial", "Risky", "Safe", "Difficult Trial
        col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
        lty = c(NA, 1, 2, NA, 1, 2))
 
-# - PREVIOUS DIFFICULTY - #####
+## - PREVIOUS DIFFICULTY - #####
 
 # Plotting from Decision Window Start to Choice:
 # Choice Difficulty (Easy v. Difficult Trials) x Previous Difficulty (Previous Easy v. Previous Difficult)
@@ -3729,7 +3840,7 @@ legend("bottomright", legend = c("Easy Trial", "Previous Easy", "Previous Diffic
        col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
        lty = c(NA, 1, 2, NA, 1, 2))
 
-# - WMC - ######
+## - WMC - ######
 
 # Plotting from Decision Window Start to Choice & from Choice to Decision Window End:
 # Choice Difficulty (Easy v. Difficult Trials) x WMC (Low vs. High)
@@ -3874,7 +3985,7 @@ legend("bottomright", legend = c("Easy", "Difficult"),
        col = c("blue", "red"), lty = c(1, 1))
 
 
-# - WMC x PREVIOUS DIFFICULTY x CURRENT DIFFICULTY #####
+## - WMC x PREVIOUS DIFFICULTY x CURRENT DIFFICULTY #####
 
 # Plotting from Decision Window Start to Choice & from Choice to Decision Window End:
 # Choice Difficulty (Easy v. Difficult Trials) x WMC (Low vs. High)
@@ -4196,22 +4307,13 @@ legend("bottomright", legend = c("Low WMC", "Easy", "Difficult", "High WMC", "Ea
 
 
 
-### Next Steps #####################
-# 1. Risky/Safe
-#      - option presentation time-locked
-#      - dec/isi/otc/iti time-locked
-# 2. Previous difficulty
-#      - option presentation time-locked
-#      - dec/isi/otc/iti time-locked
-# 3. WMC?
 
 
 
 
+# Pupil Regressions #################
 
-## Pupil Regressions #################
-
-### Using continuous difficulty #################
+## Using continuous difficulty #################
 m0_pupil_decision_cont = lmer(decision_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best +
                                 (1 | subjectnumber), data = clean_data_dm)
 summary(m0_pupil_decision_cont)
@@ -4234,7 +4336,9 @@ summary(m0_pupil_iti_cont)
 # Negative effects of current and previous difficulty
 # Trend INTERACTION btwn current difficulty & capacity (like otc, see above
 
-### Using continuous difficulty #################
+
+
+## Using continuous difficulty #################
 m0_pupil_decision_cat = lmer(decision_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best +
                                (1 | subjectnumber), data = clean_data_dm)
 summary(m0_pupil_decision_cat)
@@ -4261,9 +4365,9 @@ summary(m0_pupil_iti_cat)
 
 
 
-
-################ MOST STUFF BELOW HERE CAN BE IGNORED ################
-
+#
+# MOST STUFF BELOW HERE CAN BE IGNORED ########################################################
+#
 
 # Continuous difficulty (including previous) and continuous capacity and categorical capacity
 m1_prev_diffCont_capacityCont_capacityCat_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * complexspan_demeaned +
