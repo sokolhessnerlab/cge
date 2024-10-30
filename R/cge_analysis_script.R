@@ -2193,7 +2193,7 @@ dev.off()
 # moment regression results of how effects of e.g., current difficulty, previous
 # difficulty, WMC, etc interact and change to alter pupil dilation over time. 
 
-frequency_of_resampled_points = 20 # bins of 50ms width, 20/second
+frequency_of_resampled_points = 40 # bins of 25ms width, 40/second
 point_increment = 1/frequency_of_resampled_points*1000 # in units of ms
 
 xvals_window_1 = seq(from = 0, to = 1000, by = point_increment)
@@ -2211,6 +2211,7 @@ window_2_ind = (length(xvals_window_1) + length(xvals_blank) + 1):(length(xvals_
 
 mega_pupil_array = array(data = NA, dim = c(0, length(xvals)))
 
+cat('Creating mega_pupil_array for regression.\n')
 ### Pupil Array Creation #########################
 for (s in keep_participants){
 # for (s in 1:2){
@@ -2259,11 +2260,19 @@ cat('Mega pupil array created')
 ### Carry out regressions #########################
 # We'll use clean_data_dm as the source of regressors.
 
-reg_rownames = c(
+clean_data_dm$trialnumberRS = clean_data_dm$trialnumber/max(clean_data_dm$trialnumber)
+
+reg_colnames = c(
   'intercept',
-  'easyP1difficultN1',
-  'trialnumber',
-  'choice');
+  'trialnumberRS',
+  'choice',
+  'all_diff_cont',
+  'prev_all_diff_cont',
+  'capacity_HighP1_lowN1_best',
+  'trialnumberRSXcapacity_HighP1_lowN1_best',
+  'choiceXcapacity_HighP1_lowN1_best',
+  'all_diff_contXcapacity_HighP1_lowN1_best',
+  'prev_all_diff_contXcapacity_HighP1_lowN1_best');
 
 beta_vals = array(data = NA, dim = c(length(xvals),length(reg_colnames)))
 beta_vals = as.data.frame(beta_vals);
@@ -2271,11 +2280,19 @@ colnames(beta_vals) <- reg_colnames;
 
 p_vals = beta_vals
 
+cat('Beginning regressions on mega_pupil_array\n')
+cat(sprintf('000/%03i',length(xvals)))
 for (timepoint in 1:length(xvals)){
+  cat(sprintf('\b\b\b\b\b\b\b%03i/%03i',timepoint, length(xvals)))
   if (all(is.na(mega_pupil_array[,timepoint]))){
     next
   } else{
-    tmp_model = lmer(mega_pupil_array[,timepoint] ~ 1 + easyP1difficultN1 + trialnumber + choice + (1 | subjectnumber), 
+    tmp_model = lmer(mega_pupil_array[,timepoint] ~ 1 + trialnumberRS + choice + 
+                       all_diff_cont + prev_all_diff_cont + capacity_HighP1_lowN1_best + 
+                       trialnumberRS:capacity_HighP1_lowN1_best +
+                       choice:capacity_HighP1_lowN1_best +
+                       all_diff_cont:capacity_HighP1_lowN1_best + 
+                       prev_all_diff_cont:capacity_HighP1_lowN1_best + (1 | subjectnumber), 
                      data = clean_data_dm)
     tmp_summ = summary(tmp_model)
     beta_vals[timepoint,] = coef(tmp_summ)[,1]
@@ -2287,6 +2304,25 @@ p_vals_reconfig = 1-p_vals;
 p_vals_reconfig[(beta_vals < 0)&(!is.na(beta_vals))] = -p_vals_reconfig[(beta_vals < 0)&(!is.na(beta_vals))];
 # +1 = significant, positive, corresponds w/ p = 0, pos. beta
 # -1 = significant, negative, corresponds w/ p = 0, neg. beta
+
+plot(p_vals_reconfig$prev_all_diff_contXcapacity_HighP1_lowN1_best, 
+     type = 'l', ylim = c(-1,1))
+abline(h = 0.95, lty = 'dashed')
+abline(h = -0.95, lty = 'dashed')
+
+color_palette_for_pval_reconfig = rev(c(
+  colorRampPalette(c("#FFFF00","#FF0000"))(10),
+  rep("#000000",380),
+  colorRampPalette(c("#0000FF","#12fcca"))(10)
+))
+
+par(mar=c(5,20,4,2))
+image(as.matrix(p_vals_reconfig), col = color_palette_for_pval_reconfig, axes=F)
+axis(2, at=seq(0,1,length=length(reg_colnames)), labels = reg_colnames, lwd=0, las=1)
+axis(1, seq(from=0,to=1,length.out=25), labels = xvals[round(seq(from=1,to=length(xvals),length.out=25))])
+abline(v = which(xvals == 0)[2]/length(xvals), col = 'magenta', lwd = 3, lty = 'dotted')
+abline(v = which(xvals == 1000)[2]/length(xvals), col = 'purple', lwd = 3, lty = 'dashed')
+abline(v = which(xvals == 2000)/length(xvals), col = 'purple', lwd = 3, lty = 'dashed')
 
 
 # Need to ...
