@@ -2219,8 +2219,6 @@ for (s in keep_participants){
   
   cat(sprintf('Subject CGE%03i (%i of %i): trial 000', s, s_index, length(keep_participants)))
   
-  # tmpdata = clean_data_dm[clean_data_dm$subjectnumber == s,]; # defines this person's BEHAVIORAL data
-  
   # Create NA-filled array to hold this one person's pupil trace data
   mini_pupil_array = array(data = NA, dim = c(170, length(xvals)))
   
