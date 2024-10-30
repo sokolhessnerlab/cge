@@ -2325,6 +2325,11 @@ abline(v = which(xvals == 1000)[2]/length(xvals), col = 'purple', lwd = 3, lty =
 abline(v = which(xvals == 2000)/length(xvals), col = 'purple', lwd = 3, lty = 'dashed')
 
 
+dev.off()
+plot(beta_vals$prev_all_diff_cont); abline(v = which(xvals == 0)[2], col = 'magenta', lwd = 3, lty = 'dotted')
+abline(v = which(xvals == 1000)[2], col = 'purple', lwd = 3, lty = 'dashed')
+abline(v = which(xvals == 2000), col = 'purple', lwd = 3, lty = 'dashed')
+
 # Need to ...
 #   1. decide on a better regression
 #   2. Re-run said regression
