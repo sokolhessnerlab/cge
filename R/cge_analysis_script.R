@@ -1887,29 +1887,41 @@ sum(NCS_HighP1_LowN1 == -1, na.rm = T) # 6800 - doesn't sound right
 m3_best_NCS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * NCS_HighP1_LowN1 +
                      (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_NCS)
-# NCS x SPAN x current difficulty interaction
+# OLD: NCS x SPAN x current difficulty interaction
+# New: not much; a 4-way interaction + a trend for current x capacity x NCS
 
 m3_best_IUS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * IUS_HighP1_LowN1 +
                      (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_IUS)
+# OLD:
 # IUS x Span x current difficulty interaction
 # IUS x current difficulty interaction
+#
+# NEW:
+# current difficulty x IUS (negative)
+#   -> effect of current difficulty on RTs is stronger for people low on IUS, and weaker for people high on IUS
+# previous difficulty x IUS (negative)
+#   -> effect of previous difficulty on RTs is stronger for people HIGH on IUS, and weaker for people low on IUS
+# so low IUS -> strong effect of current difficulty, weak effect of prev.
+# so high IUS -> weak effect of current difficulty, strong effect of prev.
 
 m3_best_SNS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * SNS_HighP1_LowN1 +
                      (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_SNS)
-# SNS main effect
+# SNS main effect + (high numeracy = slower)
+# previous difficulty x SNS interaction (high numeracy folks have strong prev. difficulty effect)
 
 m3_best_PSS = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * PSS_HighP1_LowN1 +
                      (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_PSS)
-# PSS x Span x current difficulty interaction
+# ... nothing...
 
 AIC(m3_best_NCS) # -8782.879
 AIC(m3_best_IUS) # -8794.3 <- BEST AIC = IUS categorical
 AIC(m3_best_SNS) # -8789.276
 AIC(m3_best_PSS) # -8785.113
 
+# OLD:
 # NCS, IUS, and PSS all have the same interaction in their regressions - with current difficulty
 # and working memory span. These interactions look like they qualify the 2-way interaction between
 # current difficulty & working memory span (that's present in these regressions). THAT interaction
