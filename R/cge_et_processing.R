@@ -105,16 +105,10 @@ colnames(pupil_QA_metrics) <- pupil_qa_metric_columns;
 et_summary_data_column_names = c(
   'subject_number',
   'trial_number',
-  'predecision_baseline_mean',
-  'pred_win_mean', # predisposition window
-  'decision_median',
-  'effort_win_mean', # effort window
-  'isi_median',
-  'preoutcome_baseline_mean',
-  'eval_win_mean', # evaluation window
-  'outcome_median',
-  'prep_win_mean', # preparation
-  'iti_median'
+  'wind1_predisp_onset_mean', # predisposition window
+  'wind2_effort_isi_mean', # effort window
+  'wind3_eval_otciti_mean', # evaluation window
+  'wind4_prep_lateiti_mean' # preparation
 )
 timestamp_column_names = c(
   'decision_start',
@@ -380,78 +374,37 @@ for (s in 1:number_of_subjects){
       next # skip analysis of this trial
     }
 
-    # Pre-decision baseline
-    indices = (time_data >= (event_timestamps$decision_start[t] - baseline_window_width)) &
-      (time_data < event_timestamps$decision_start[t])
-    pupil_tmp = pupil_data_extend_interp_smooth_mm[indices];
-    time_tmp = time_data[indices] - event_timestamps$decision_start[t];
-    # par(usr = p1_coords)
-    # par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = adjustcolor('black',.2), lwd = 5)
-    et_summary_stats$predecision_baseline_mean[t] = mean(pupil_tmp, na.rm = T)
-
-
-    # indices = (time_data >= event_timestamps$decision_start[t]) &
-    #   (time_data < event_timestamps$decision_end[t]);
-    # pupil_tmp = pupil_data_extend_interp_smooth_mm[indices];
-    # time_tmp = time_data[indices] - event_timestamps$decision_start[t];
-    # par(usr = p1_coords)
-    # par(mfg = c(1,1)); lines(x = time_tmp, y = pupil_tmp, col = rgb(0,0,0,.2), lwd = 5)
-    # Decision (mean)
-    #et_summary_stats$decision_mean[t] = mean(pupil_tmp, na.rm = T)
-
+    # WINDOW 1: PREDISPOSITION (500MS BEFORE & AFTER ONSET OF DECISION OPTIONS)
     indices = (time_data >= event_timestamps$decision_start[t] - 500) &
-      (time_data < event_timestamps$decision_end[t] + 500);
+      (time_data < event_timestamps$decision_start[t] + 500);
     pupil_tmp = pupil_data_extend_interp_smooth_mm[indices];
-    time_tmp = time_data[indices] - event_timestamps$decision_start[t];
-    # Decision (mean)
-    et_summary_stats$pred_win_mean[t] = mean(pupil_tmp, na.rm = T)
+    et_summary_stats$wind1_predisp_onset_mean[t] = mean(pupil_tmp, na.rm = T)
 
-    # # Decision (median)
-    # et_summary_stats$decision_median[t] = median(pupil_tmp, na.rm = T)
 
-    # ISI (mean)
-    et_summary_stats$effort_win_mean[t] =
-      mean(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$decision_end[t]) &
-                                                (time_data < event_timestamps$outcome_start[t])], na.rm = T)
-    # et_summary_stats$isi_median[t] =
-    #   median(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$decision_end[t]) &
-    #                                               (time_data < event_timestamps$outcome_start[t])], na.rm = T)
+    # WINDOW 2: EFFORT (DECISION END TO START OF OUTCOME, AKA ISI)
+    indices = (time_data >= event_timestamps$decision_end[t]) &
+      (time_data < event_timestamps$outcome_start[t]);
+    pupil_tmp = pupil_data_extend_interp_smooth_mm[indices];
+    et_summary_stats$wind2_effort_isi_mean[t] = mean(pupil_tmp, na.rm = T)
 
-    # # Pre-outcome baseline
-    # et_summary_stats$preoutcome_baseline_mean[t] =
-    #   mean(pupil_data_extend_interp_smooth_mm[(time_data >= (event_timestamps$outcome_start[t] - baseline_window_width)) &
-    #                                             (time_data < event_timestamps$outcome_start[t])], na.rm = T)
+    # WINDOW 3: EVALUATION (OUTCOME START TO ITI START + 1000MS)
+    indices = (time_data >= event_timestamps$outcome_start[t]) &
+      (time_data < event_timestamps$outcome_end[t]+1000);
+    pupil_tmp = pupil_data_extend_interp_smooth_mm[indices];
+    et_summary_stats$wind3_eval_otciti_mean[t] = mean(pupil_tmp, na.rm = T)
 
-    # Outcome (mean)
-    et_summary_stats$eval_win_mean[t] =
-      mean(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$outcome_start[t]) &
-                                                (time_data < event_timestamps$outcome_end[t])], na.rm = T)
-    # # Outcome (median)
-    # et_summary_stats$outcome_median[t] =
-    #   median(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$outcome_start[t]) &
-    #                                               (time_data < event_timestamps$outcome_end[t])], na.rm = T)
+    # WINDOW 4: PREPARATION (ITI START + 1000MS TO +3000MS)
+    indices = (time_data >= event_timestamps$outcome_end[t] + 1000) &
+      (time_data < event_timestamps$outcome_end[t] + 3000);
+    pupil_tmp = pupil_data_extend_interp_smooth_mm[indices];
+    et_summary_stats$prep_win_mean[t] = mean(pupil_tmp, na.rm = T)
 
-    # ITI (mean)
-    et_summary_stats$prep_win_mean[t] =
-      mean(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$outcome_end[t] + 1000) &
-                                                (time_data < event_timestamps$outcome_end[t] + 3000)], na.rm = T)
-    # et_summary_stats$prep_win_mean[t] =
-    #   mean(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$outcome_end[t]) &
-    #                                             (time_data < event_timestamps$iti_end[t])], na.rm = T)
-
-    # # ITI (median)
-    # et_summary_stats$iti_median[t] =
-    #   median(pupil_data_extend_interp_smooth_mm[(time_data >= event_timestamps$outcome_end[t]) &
-    #                                               (time_data < event_timestamps$iti_end[t])], na.rm = T)
   }
-
-  #et_summary_stats$decision_mean_cor = et_summary_stats$decision_mean - et_summary_stats$predecision_baseline_mean;
-  #et_summary_stats$outcome_mean_cor = et_summary_stats$outcome_mean - et_summary_stats$preoutcome_baseline_mean;
 
   cat('Done.\n')
   # loop_time_elapsed = toc(quiet = T); # for timing this process
 
-  number_of_missing_trials_proc = sum(is.na(et_summary_stats$predecision_baseline_mean));
+  number_of_missing_trials_proc = sum(is.na(et_summary_stats$wind1_predisp_onset_mean));
   fraction_of_missing_trials_proc = number_of_missing_trials_proc/number_of_trials;
 
   cat(sprintf('CGE%03i: RAW missing %i samples (%.1f%%); %i blinks. PROCESSED missing %i samples (%.1f%%). %i trial(s) (%.0f%%) not analyzed for missing data.\n',
