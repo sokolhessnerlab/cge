@@ -4390,7 +4390,7 @@ summary(m0_pupil_iti_cont)
 
 
 
-## Using continuous difficulty #################
+## Using categorical difficulty #################
 m0_pupil_decision_cat = lmer(decision_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best +
                                (1 | subjectnumber), data = clean_data_dm)
 summary(m0_pupil_decision_cat)

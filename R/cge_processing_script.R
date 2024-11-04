@@ -6,15 +6,15 @@
 
 # STEP 1: SET YOUR WORKING DIRECTORY!
 # # On PSH's computers...
-# setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
+setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # # On Von's PC Laptop "tabletas"...
-setwd('C:/Users/jvonm/Documents/GitHub/cge');
+# setwd('C:/Users/jvonm/Documents/GitHub/cge');
 
 
 # STEP 2: then run from here on the same
 config = config::get();
 
-Sys.setenv(R_CONFIG_ACTIVE = 'tabletas');
+# Sys.setenv(R_CONFIG_ACTIVE = 'tabletas');
 
 et_processing_file_name = normalizePath(dir(pattern = glob2rx('cge_et_processing.R'), full.names = T, recursive = T));
 
