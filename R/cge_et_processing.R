@@ -29,7 +29,7 @@
 
 #### STEP 1: SET YOUR WORKING DIRECTORY! ####
 # # On PSH's computers...
-setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
+# setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 
 # setwd('C:/Users/jvonm/Documents/GitHub/cge');
 # Sys.setenv(R_CONFIG_ACTIVE = 'tabletas');
