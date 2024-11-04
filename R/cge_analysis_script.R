@@ -11,9 +11,9 @@ rm(list=ls()); # Clear the workspace
 
 # STEP 1: Set the working directory
 # On PSH's computers...
-setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
+#setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # On Von's PC Laptop "tabletas"...
-# setwd('C:/Users/jvonm/Documents/GitHub/cge');
+setwd('C:/Users/jvonm/Documents/GitHub/cge');
 # Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
 # Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
 
@@ -2185,13 +2185,13 @@ dev.off()
 
 ### Setup #########################
 
-# This analysis will seek to create one *large* pupil dilation array. 
+# This analysis will seek to create one *large* pupil dilation array.
 # Columns will be different samples during the trial.
-# Rows will be distinct trials, across all participants. 
+# Rows will be distinct trials, across all participants.
 #
 # Then regressions can be carried out on a per-point basis, yielding moment-by-
 # moment regression results of how effects of e.g., current difficulty, previous
-# difficulty, WMC, etc interact and change to alter pupil dilation over time. 
+# difficulty, WMC, etc interact and change to alter pupil dilation over time.
 
 frequency_of_resampled_points = 40 # bins of 25ms width, 40/second
 point_increment = 1/frequency_of_resampled_points*1000 # in units of ms
@@ -2216,34 +2216,34 @@ cat('Creating mega_pupil_array for regression.\n')
 for (s in keep_participants){
 # for (s in 1:2){
   s_index = which(keep_participants == s);
-  
+
   cat(sprintf('Subject CGE%03i (%i of %i): trial 000', s, s_index, length(keep_participants)))
-  
+
   # Create NA-filled array to hold this one person's pupil trace data
   mini_pupil_array = array(data = NA, dim = c(170, length(xvals)))
-  
+
   # find their file...
   tmp_downsampled_fn = dir(pattern = glob2rx(sprintf('cge%03i_et_processed_downsampled*.RData',s)),full.names = T, recursive = T);
   # and load only the most recent downsampled data file
   load(tmp_downsampled_fn[length(tmp_downsampled_fn)]) # loads downsampled_et_data and event_timestamps
   downsampled_et_data = as.data.frame(downsampled_et_data);
-  
+
   number_of_trials = length(event_timestamps[,1]);
   for (t in 1:number_of_trials){
     cat(sprintf('\b\b\b%03i',t))
-    
+
     if(!is.na(event_timestamps$decision_start[t])){
       # Do Window 1 (choice option presentation)
       tmp_time_points = event_timestamps$decision_start[t] + xvals_window_1;
-      
+
       tmp_norm_pupil = approx(x = downsampled_et_data$time_data_downsampled, # use approx to get them
                               y = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled,
                               xout = tmp_time_points)$y
       mini_pupil_array[t,window_1_ind] = tmp_norm_pupil # store in the mini array
-      
+
       # Do Window 2 (choice option presentation)
       tmp_time_points = event_timestamps$decision_end[t] + xvals_window_2;
-      
+
       tmp_norm_pupil = approx(x = downsampled_et_data$time_data_downsampled, # use approx to get them
                               y = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled,
                               xout = tmp_time_points)$y
@@ -2285,12 +2285,12 @@ for (timepoint in 1:length(xvals)){
   if (all(is.na(mega_pupil_array[,timepoint]))){
     next
   } else{
-    tmp_model = lmer(mega_pupil_array[,timepoint] ~ 1 + trialnumberRS + choice + 
-                       all_diff_cont + prev_all_diff_cont + capacity_HighP1_lowN1_best + 
+    tmp_model = lmer(mega_pupil_array[,timepoint] ~ 1 + trialnumberRS + choice +
+                       all_diff_cont + prev_all_diff_cont + capacity_HighP1_lowN1_best +
                        trialnumberRS:capacity_HighP1_lowN1_best +
                        choice:capacity_HighP1_lowN1_best +
-                       all_diff_cont:capacity_HighP1_lowN1_best + 
-                       prev_all_diff_cont:capacity_HighP1_lowN1_best + (1 | subjectnumber), 
+                       all_diff_cont:capacity_HighP1_lowN1_best +
+                       prev_all_diff_cont:capacity_HighP1_lowN1_best + (1 | subjectnumber),
                      data = clean_data_dm)
     tmp_summ = summary(tmp_model)
     beta_vals[timepoint,] = coef(tmp_summ)[,1]
@@ -2303,7 +2303,7 @@ p_vals_reconfig[(beta_vals < 0)&(!is.na(beta_vals))] = -p_vals_reconfig[(beta_va
 # +1 = significant, positive, corresponds w/ p = 0, pos. beta
 # -1 = significant, negative, corresponds w/ p = 0, neg. beta
 
-plot(p_vals_reconfig$prev_all_diff_contXcapacity_HighP1_lowN1_best, 
+plot(p_vals_reconfig$prev_all_diff_contXcapacity_HighP1_lowN1_best,
      type = 'l', ylim = c(-1,1))
 abline(h = 0.95, lty = 'dashed')
 abline(h = -0.95, lty = 'dashed')
@@ -2856,7 +2856,7 @@ for (s in keep_participants){
           mean_decision_norm_prev_EvD_WMC_array[,s_index,2,1,2] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,2,1,2], na.rm = T)
           mean_decision_norm_prev_EvD_WMC_array[,s_index,2,2,1] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,2,2,1], na.rm = T)
           mean_decision_norm_prev_EvD_WMC_array[,s_index,2,2,2] = colMeans(decision_norm_prev_EvD_WMC_array[,,s_index,2,2,2], na.rm = T)
-          
+
           cat(sprintf('. Done.\n'))
 }
 
@@ -3450,7 +3450,7 @@ legend("bottomright", legend = c("Easy Trial", "Risky", "Safe", "Difficult Trial
        col = c(NA, "blue", "blue", NA, "red", "red"),  # Blue for Easy, Red for Difficult
        lty = c(NA, 1, 2, NA, 1, 2))
 
-# Plotting NORMALIZED pupillometry: Decision Window Start to Choice: 
+# Plotting NORMALIZED pupillometry: Decision Window Start to Choice:
 # Choice Difficulty (Easy v. Difficult Trials) x Choice Made (Risky v. Safe Choice)
 # Easy Trials x Choice Made
 par(mfrow = c(2,1))
