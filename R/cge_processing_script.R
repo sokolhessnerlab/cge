@@ -6,9 +6,11 @@
 
 # STEP 1: SET YOUR WORKING DIRECTORY!
 # # On PSH's computers...
-setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
+# setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # # On Von's PC Laptop "tabletas"...
 # setwd('C:/Users/jvonm/Documents/GitHub/cge');
+setwd('/Users/shlab/Documents/GitHub/cge')
+Sys.setenv(R_CONFIG_ACTIVE = 'default')
 
 
 # STEP 2: then run from here on the same
