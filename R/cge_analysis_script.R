@@ -15,7 +15,7 @@ rm(list=ls()); # Clear the workspace
 # On Von's PC Laptop "tabletas"...
 setwd('C:/Users/jvonm/Documents/GitHub/cge');
 # Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
-# Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
+Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
 
 # STEP 2: then run from here on the same
 config = config::get()
@@ -4364,6 +4364,117 @@ legend("bottomright", legend = c("Low WMC", "Easy", "Difficult", "High WMC", "Ea
 
 
 # Pupil Regressions #################
+
+
+
+# Window 2: Effort (isi, 1 second, right after choice before outcome)
+# ~ predictors: current difficulty, choice made, previous difficulty, WMC (all categorical)
+
+library('dplyr')
+
+
+
+# clean_data_dm = clean_data_dm %>% filter_at(vars(capacity_HighP1_lowN1_best), all_vars(!is.na(.)))
+# clean_data_dm = clean_data_dm %>% filter_at(vars(wind2_effort_isi_mean), all_vars(!is.na(.)))
+#
+# MISSING = is.na(clean_data_dm$capacity_HighP1_lowN1_best)
+# noNA = subset(clean_data_dm, subset = !MISSING)
+
+# single predictor in the model
+m2_effort_diff = lmer(wind2_effort_isi_mean ~ 1 + easyP1difficultN1 + (1 | subjectnumber), data = clean_data_dm)
+summary(m2_effort_diff)
+
+m2_effort_prev_diff = lmer(wind2_effort_isi_mean ~ 1 + easyP1difficultN1_prev + (1 | subjectnumber), data = clean_data_dm)
+summary(m2_effort_prev_diff)
+
+m2_effort_wmc = lm(wind2_effort_isi_mean ~ capacity_HighP1_lowN1_best, data = clean_data_dm)
+summary(m2_effort_wmc)
+
+m2_effort_nfc = lmer(wind2_effort_isi_mean ~ 1 + NCS_HighP1_LowN1 + (1 | subjectnumber), data = clean_data_dm)
+summary(m2_effort_nfc)
+
+m2_effort_choice = lmer(wind2_effort_isi_mean ~ 1 + choice + (1 | subjectnumber), data = clean_data_dm)
+summary(m2_effort_choice)
+
+# current difficulty x choice made
+m2_effort_diff_choice = lmer(wind2_effort_isi_mean ~ 1 + easyP1difficultN1 * choice + (1 | subjectnumber), data = clean_data_dm)
+summary(m2_effort_diff_choice)
+
+# current difficulty x previous difficulty
+m2_effort_diff_prev_diff = lmer(wind2_effort_isi_mean ~ 1 + easyP1difficultN1 * easyP1difficultN1_prev + (1 | subjectnumber), data = clean_data_dm)
+summary(m2_effort_diff_prev_diff)
+
+# current difficulty x previous difficulty x WMC
+m2_effort_diff_prev_diff_wmc = lmer(wind2_effort_isi_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(m2_effort_diff_prev_diff_wmc)
+
+# continuous current difficulty: replacing categorical current difficulty in the models above
+m2_effort_cont_diff_choice = lmer(wind2_effort_isi_mean ~ 1 + all_diff_cont * choice + (1 | subjectnumber), data = clean_data_dm)
+summary(m2_effort_cont_diff_choice)
+
+m2_effort_cont_diff_prev_diff = lmer(wind2_effort_isi_mean ~ 1 + all_diff_cont * easyP1difficultN1_prev + (1 | subjectnumber), data = clean_data_dm)
+summary(m2_effort_cont_diff_prev_diff)
+
+m2_effort_cont_diff_prev_diff_wmc = lmer(wind2_effort_isi_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(m2_effort_cont_diff_prev_diff_wmc)
+
+# continuous previous difficulty: replacing categorical previous difficulty in the models above
+m2_effort_diff_cont_prev_diff = lmer(wind2_effort_isi_mean ~ 1 + easyP1difficultN1 * prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
+summary(m2_effort_diff_cont_prev_diff)
+
+m2_effort_cont_diff_prev_diff_wmc = lmer(wind2_effort_isi_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(m2_effort_diff_cont_prev_diff_wmc)
+
+# continuous current and previous difficulty: placing both continuous predictors in the models
+m2_effort_cont_diff_cont_prev_diff = lmer(wind2_effort_isi_mean ~ 1 + all_diff_cont * prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
+summary(m2_effort_cont_diff_cont_prev_diff)
+
+m2_effort_diff_cont_prev_diff_wmc = lmer(wind2_effort_isi_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(m2_effort_diff_cont_prev_diff_wmc)
+
+
+
+
+m0_pupil_isi_cat = lmer(isi_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best +
+                          (1 | subjectnumber), data = clean_data_dm)
+summary(m0_pupil_isi_cat)
+
+m0_pupil_isi_cat = lmer(wind2_effort_isi_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best + easyP1difficultN1_prev * capacity_HighP1_lowN1_best +
+                          (1 | subjectnumber), data = clean_data_dm)
+summary(m0_pupil_isi_cat)
+
+
+
+
+
+
+
+
+
+
+
+######
+m0_pupil_decision_cont = lmer(wind2_effort_isi_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                (1 | subjectnumber), data = clean_data_dm)
+summary(m0_pupil_decision_cont)
+
+m0_pupil_decision_cont = lmer(wind3_eval_otciti_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                (1 | subjectnumber), data = clean_data_dm)
+summary(m0_pupil_decision_cont)
+
+m0_pupil_decision_cont = lmer(wind2_effort_isi_mean ~ 1 + easyP1difficultN1 +
+                                (1 | subjectnumber), data = clean_data_dm)
+summary(m0_pupil_decision_cont)
+
+m0_pupil_decision_cont = lmer(wind3_eval_otciti_mean ~ 1 + capacity_HighP1_lowN1_best +
+                                (1 | subjectnumber), data = clean_data_dm)
+summary(m0_pupil_decision_cont)
+
+m0_pupil_decision_cont = lmer(wind2_effort_isi_mean ~ 1 + capacity_HighP1_lowN1_best +
+                                (1 | subjectnumber), data = clean_data_dm)
+summary(m0_pupil_decision_cont)
+
+
 
 ## Using continuous difficulty #################
 m0_pupil_decision_cont = lmer(decision_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best +
