@@ -397,7 +397,7 @@ for (s in 1:number_of_subjects){
     indices = (time_data >= event_timestamps$outcome_end[t] + 1000) &
       (time_data < event_timestamps$outcome_end[t] + 3000);
     pupil_tmp = pupil_data_extend_interp_smooth_mm[indices];
-    et_summary_stats$prep_win_mean[t] = mean(pupil_tmp, na.rm = T)
+    et_summary_stats$wind4_prep_lateiti_mean[t] = mean(pupil_tmp, na.rm = T)
 
   }
 

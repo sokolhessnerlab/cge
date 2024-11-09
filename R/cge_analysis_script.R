@@ -13,9 +13,13 @@ rm(list=ls()); # Clear the workspace
 # On PSH's computers...
 #setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # On Von's PC Laptop "tabletas"...
-setwd('C:/Users/jvonm/Documents/GitHub/cge');
+#setwd('C:/Users/jvonm/Documents/GitHub/cge');
 # Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
-Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
+#Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
+
+setwd('/Users/shlab/Documents/GitHub/cge')
+Sys.setenv(R_CONFIG_ACTIVE = 'default')
+
 
 # STEP 2: then run from here on the same
 config = config::get()
