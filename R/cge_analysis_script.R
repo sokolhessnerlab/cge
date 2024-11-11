@@ -4360,7 +4360,7 @@ legend("bottomright", legend = c("Low WMC", "Easy", "Difficult", "High WMC", "Ea
 
 
 
-# PUPIL REGRESSIONS #################
+# PUPILLLOMETRY REGRESSIONS #################
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ### WINDOW 1 REGRESSIONS: Predisposition (1 second, -500 before choice onset to +500 after choice onset) #####
@@ -4370,87 +4370,85 @@ legend("bottomright", legend = c("Low WMC", "Easy", "Difficult", "High WMC", "Ea
 # ~ Window 1 Model 0: current difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind1_m0_diffCat = lm(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical
-summary(wind1_m0_diffCat) #
+summary(wind1_m0_diffCat) # easyP1difficultN1 0.0002106  0.0074478   0.028    0.977
 
 wind1_m0_diffCat_rfx = lmer(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1 + (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
-summary(wind1_m0_diffCat_rfx) #
+summary(wind1_m0_diffCat_rfx) # easyP1difficultN1 3.227e-04  3.112e-03 9.822e+03   0.104    0.917
 
 wind1_m0_diffCont = lm(wind1_predisp_onset_mean ~ 1 + diff_cont, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # continuous dynamic only
-summary(wind1_m0_diffCont) #
+summary(wind1_m0_diffCont) # diff_cont   -0.003317   0.016043  -0.207    0.836
 
 wind1_m0_diffCont_rfx = lmer(wind1_predisp_onset_mean ~ 1 + diff_cont + (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
-summary(wind1_m0_diffCont_rfx) #
+summary(wind1_m0_diffCont_rfx) # diff_cont   -9.499e-04  6.707e-03  9.822e+03  -0.142    0.887
 
 wind1_m0_diffContAll = lm(wind1_predisp_onset_mean ~ 1 + all_diff_cont, data = clean_data_dm) # continuous all
-summary(wind1_m0_diffContAll) #
+summary(wind1_m0_diffContAll) # all_diff_cont -0.07009    0.01534  -4.568 4.96e-06 ***
 
 wind1_m0_diffContAll_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
-summary(wind1_m0_diffContAll_rfx) #
+summary(wind1_m0_diffContAll_rfx) # all_diff_cont -3.794e-02  6.507e-03  1.395e+04  -5.831 5.63e-09 ***
 
-AIC(wind1_m0_diffCat_rfx) #
-AIC(wind1_m0_diffContAll_rfx) #
+AIC(wind1_m0_diffContAll) # 31664.36
+AIC(wind1_m0_diffContAll_rfx) # 7647.008 - the better model
 
 # ~ Window 1 Model 0: previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind1_m0_prevdiffCat = lm(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1_prev, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical
-summary(wind1_m0_prevdiffCat) #
+summary(wind1_m0_prevdiffCat) # easyP1difficultN1_prev -0.010688   0.007478  -1.429    0.153
 
 wind1_m0_prevdiffCat_rfx = lmer(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1_prev + (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
-summary(wind1_m0_prevdiffCat_rfx) #
+summary(wind1_m0_prevdiffCat_rfx) # easyP1difficultN1_prev -9.630e-03  3.124e-03  9.822e+03  -3.082  0.00206 **
 
 wind1_m0_prevdiffContAll = lm(wind1_predisp_onset_mean ~ 1 + prev_all_diff_cont, data = clean_data_dm) # continuous all
-summary(wind1_m0_prevdiffContAll) #
+summary(wind1_m0_prevdiffContAll) # prev_all_diff_cont -0.04873    0.01545  -3.154  0.00162 **
 
 wind1_m0_prevdiffContAll_rfx = lmer(wind1_predisp_onset_mean ~ 1 + prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
-summary(wind1_m0_prevdiffContAll_rfx) #
+summary(wind1_m0_prevdiffContAll_rfx) # prev_all_diff_cont -1.690e-02  6.535e-03  1.381e+04  -2.586  0.00973 **
 
-AIC(wind1_m0_prevdiffContAll) #
-AIC(wind1_m0_prevdiffContAll_rfx) #
+AIC(wind1_m0_prevdiffCat_rfx) # 5430.5
+AIC(wind1_m0_prevdiffContAll_rfx) # 7542.62
 
 # ~ Window 1 Model 0: capacity (wmc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind1_m0_wmcCat = lm(wind1_predisp_onset_mean ~ 1 + capacity_HighP1_lowN1_best, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical
-summary(wind1_m0_wmcCat) #
+summary(wind1_m0_wmcCat) # capacity_HighP1_lowN1_best 0.117947   0.007987   14.77   <2e-16 ***
 
 wind1_m0_wmcCat_rfx = lmer(wind1_predisp_onset_mean ~ 1 + capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
-summary(wind1_m0_wmcCat_rfx) #
+summary(wind1_m0_wmcCat_rfx) # capacity_HighP1_lowN1_best  0.11906    0.08007 79.00058   1.487    0.141
 
 wind1_m0_wmcCont = lm(wind1_predisp_onset_mean ~ 1 + wmc_cont, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # continuous
-summary(wind1_m0_wmcCont) #
+summary(wind1_m0_wmcCont) # wmc_cont    -0.002115   0.039234  -0.054    0.957
 
 wind1_m0_wmcCont_rfx = lmer(wind1_predisp_onset_mean ~ 1 + wmc_cont + (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
-summary(wind1_m0_wmcCont_rfx) #
+summary(wind1_m0_wmcCont_rfx) # wmc_cont    -2.542e-03  1.643e-02  9.413e+03  -0.155    0.877
 
-AIC(wind1_m0_wmcCat_rfx) #
-AIC(wind1_m0_wmcCont_rfx) #
+AIC(wind1_m0_wmcCat) # 21448.59
 
 # ~ Window 1 Model 0: need for cognition scale (ncs -> nfc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind1_m0_nfcCat = lm(wind1_predisp_onset_mean ~ 1 + NCS_HighP1_LowN1, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical
-summary(wind1_m0_nfcCat) #
+summary(wind1_m0_nfcCat) # NCS_HighP1_LowN1 -0.031024   0.007539  -4.115  3.9e-05 ***
 
 wind1_m0_nfcCat_rfx = lmer(wind1_predisp_onset_mean ~ 1 + NCS_HighP1_LowN1 + (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
-summary(wind1_m0_nfcCat_rfx) #
+summary(wind1_m0_nfcCat_rfx) # NCS_HighP1_LowN1 -0.03073    0.07572 80.00065  -0.406    0.686
 
 wind1_m0_nfcCont = lm(wind1_predisp_onset_mean ~ 1 + NCS, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # continuous
-summary(wind1_m0_nfcCont) #
+summary(wind1_m0_nfcCont) # NCS         0.0008047  0.0007061    1.14    0.254
 
 wind1_m0_nfcCont_rfx = lmer(wind1_predisp_onset_mean ~ 1 + NCS + (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
-summary(wind1_m0_nfcCont_rfx) #
+summary(wind1_m0_nfcCont_rfx) # NCS         8.067e-04  7.094e-03 8.000e+01   0.114     0.91
 
-AIC(wind1_m0_nfcCat) #
-AIC(wind1_m0_nfcCont) #
+AIC(wind1_m0_nfcCat) # 21986.32
 
 # ~ Window 2 Model 0: choice made ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind1_m0_optCat = lm(wind1_predisp_onset_mean ~ 1 + choice, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical choice made
-summary(wind1_m0_optCat) #
+summary(wind1_m0_optCat) # choice       0.06560    0.01488   4.408 1.05e-05 ***
 
 wind1_m0_optCat_rfx = lmer(wind1_predisp_onset_mean ~ 1 + choice + (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
-summary(wind1_m0_optCat_rfx) #
+summary(wind1_m0_optCat_rfx) # choice      1.326e-02  6.461e-03 9.825e+03   2.053   0.0401 *
 
-AIC(wind1_m0_optCat) #
-AIC(wind1_m0_optCat_rfx) #
+AIC(wind1_m0_optCat) # 22165.01
+AIC(wind1_m0_optCat_rfx) # 5434.33 - the better model
 
 ### main & interaction effects
 # ~ Window 1 Model 1: current difficulty x choice made ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4458,162 +4456,247 @@ AIC(wind1_m0_optCat_rfx) #
 wind1_m1_diffCat_optCat_rfx = lmer(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1 + choice +
                                      (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical current difficulty & choice made
 summary(wind1_m1_diffCat_optCat_rfx)
-
+# easyP1difficultN1 2.318e-04  3.112e-03 9.821e+03   0.074   0.9406
+# choice            1.326e-02  6.462e-03 9.824e+03   2.051   0.0403 *
 
 wind1_m1_diffCat_optCat_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1 * choice +
                                            (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
 summary(wind1_m1_diffCat_optCat_intxn_rfx)
-
+# easyP1difficultN1         1.528e-03  4.429e-03  9.821e+03   0.345   0.7301
+# choice                    1.342e-02  6.474e-03  9.823e+03   2.073   0.0382 *
+# easyP1difficultN1:choice -2.632e-03  6.398e-03  9.822e+03  -0.411   0.6808
 
 wind1_m1_diffContAll_optCat_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont + choice +
                                          (1 | subjectnumber), data = clean_data_dm) # continuous all current difficulty & categorical choice made
 summary(wind1_m1_diffContAll_optCat_rfx)
-
+# all_diff_cont -3.767e-02  6.518e-03  1.395e+04   -5.78 7.63e-09 ***
+# choice         3.878e-03  5.388e-03  1.395e+04    0.72    0.472
 
 wind1_m1_diffContAll_optCat_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont * choice +
                                                (1 | subjectnumber), data = clean_data_dm)
 summary(wind1_m1_diffContAll_optCat_intxn_rfx)
-
+# all_diff_cont        -3.976e-02  9.426e-03  1.394e+04  -4.218 2.48e-05 ***
+# choice                1.888e-03  8.443e-03  1.394e+04   0.224    0.823
+# all_diff_cont:choice  4.014e-03  1.311e-02  1.394e+04   0.306    0.759
 
 # ~ Window 1 Model 2: current difficulty x previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind1_m2_diffCat_prevdiffCat_rfx = lmer(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1 + easyP1difficultN1_prev +
                                           (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical current difficulty & previous difficulty
 summary(wind1_m2_diffCat_prevdiffCat_rfx)
-
+# easyP1difficultN1       1.584e-04  3.112e-03  9.821e+03   0.051  0.95940
+# easyP1difficultN1_prev -9.627e-03  3.125e-03  9.821e+03  -3.081  0.00207 **
 
 wind1_m2_diffCat_prevdiffCat_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1 * easyP1difficultN1_prev +
                                                 (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
 summary(wind1_m2_diffCat_prevdiffCat_intxn_rfx)
-
+# easyP1difficultN1                         1.584e-04  3.112e-03  9.820e+03   0.051  0.95942
+# easyP1difficultN1_prev                   -9.628e-03  3.125e-03  9.820e+03  -3.081  0.00207 **
+# easyP1difficultN1:easyP1difficultN1_prev  3.532e-04  3.139e-03  9.820e+03   0.113  0.91041
 
 wind1_m2_diffContAll_prevdiffContAll_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont + prev_all_diff_cont +
                                                   (1 | subjectnumber), data = clean_data_dm) # continuous all current difficulty & previous difficulty
 summary(wind1_m2_diffContAll_prevdiffContAll_rfx)
-
+# all_diff_cont      -3.659e-02  6.524e-03  1.381e+04  -5.608 2.08e-08 ***
+# prev_all_diff_cont -1.517e-02  6.535e-03  1.381e+04  -2.322   0.0203 *
 
 wind1_m2_diffContAll_prevdiffContAll_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont * prev_all_diff_cont +
                                                         (1 | subjectnumber), data = clean_data_dm)
 summary(wind1_m2_diffContAll_prevdiffContAll_intxn_rfx)
-
+# all_diff_cont                    -5.144e-02  1.018e-02  1.381e+04  -5.052 4.44e-07 ***
+# prev_all_diff_cont               -3.007e-02  1.021e-02  1.381e+04  -2.945  0.00323 **
+# all_diff_cont:prev_all_diff_cont  2.906e-02  1.530e-02  1.381e+04   1.899  0.05757 .
 
 # ~ Window 1 Model 3: current difficulty x capacity (wmc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind1_m3_diffCat_wmcCat_rfx = lmer(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1 + capacity_HighP1_lowN1_best +
                                      (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical current difficulty & wmc
 summary(wind1_m3_diffCat_wmcCat_rfx)
-
+# easyP1difficultN1          -9.626e-05  3.150e-03  9.586e+03  -0.031    0.976
+# capacity_HighP1_lowN1_best  1.191e-01  8.007e-02  7.900e+01   1.487    0.141
 
 wind1_m3_diffCat_wmcCat_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1 * capacity_HighP1_lowN1_best +
                                            (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
 summary(wind1_m3_diffCat_wmcCat_intxn_rfx)
-
+# easyP1difficultN1                            1.839e-03  3.372e-03 9.585e+03   0.545    0.585
+# capacity_HighP1_lowN1_best                   1.191e-01  8.007e-02 7.900e+01   1.487    0.141
+# easyP1difficultN1:capacity_HighP1_lowN1_best 5.420e-03  3.372e-03 9.585e+03   1.608    0.108
 
 wind1_m3_diffContAll_wmcCat_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont + capacity_HighP1_lowN1_best +
                                          (1 | subjectnumber), data = clean_data_dm) # continuous all current difficulty & categorical wmc
 summary(wind1_m3_diffContAll_wmcCat_rfx)
-
+# all_diff_cont              -3.652e-02  6.591e-03  1.361e+04  -5.541 3.06e-08 ***
+# capacity_HighP1_lowN1_best  1.141e-01  8.100e-02  7.900e+01   1.408    0.163
 
 wind1_m3_diffContAll_wmcCat_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best +
                                                (1 | subjectnumber), data = clean_data_dm)
 summary(wind1_m3_diffContAll_wmcCat_intxn_rfx)
-
+# all_diff_cont                            -3.820e-02  6.946e-03  1.361e+04  -5.499 3.89e-08 ***
+# capacity_HighP1_lowN1_best                1.167e-01  8.107e-02  7.928e+01   1.439    0.154
+# all_diff_cont:capacity_HighP1_lowN1_best -5.307e-03  6.946e-03  1.361e+04  -0.764    0.445
 
 wind1_m3_diffContAll_wmcCont_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont + wmc_cont +
                                           (1 | subjectnumber), data = clean_data_dm) # continuous all current difficulty & wmc
 summary(wind1_m3_diffContAll_wmcCont_rfx)
-
+# all_diff_cont -4.000e-02  6.651e-03  1.345e+04  -6.014 1.86e-09 ***
+# wmc_cont      -3.012e-02  1.349e-02  1.345e+04  -2.232   0.0256 *
 
 wind1_m3_diffContAll_wmcCont_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont * wmc_cont +
                                                 (1 | subjectnumber), data = clean_data_dm)
 summary(wind1_m3_diffContAll_wmcCont_intxn_rfx)
-
+# all_diff_cont          -3.737e-02  2.008e-02  1.345e+04  -1.861   0.0627 .
+# wmc_cont               -2.786e-02  2.118e-02  1.345e+04  -1.315   0.1885
+# all_diff_cont:wmc_cont -4.566e-03  3.302e-02  1.345e+04  -0.138   0.8900
 
 # ~ Window 1 Model 4: current difficulty x choice x previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind1_m4_diffCat_optCat_prevdiffCat_rfx = lmer(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1 + choice + easyP1difficultN1_prev +
                                                  (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical current difficulty, choice made, & previous difficulty
 summary(wind1_m4_diffCat_optCat_prevdiffCat_rfx)
-
+# easyP1difficultN1       6.851e-05  3.111e-03  9.820e+03   0.022  0.98243
+# choice                  1.318e-02  6.459e-03  9.823e+03   2.040  0.04140 *
+# easyP1difficultN1_prev -9.601e-03  3.124e-03  9.820e+03  -3.073  0.00212 **
 
 wind1_m4_diffCat_optCat_prevdiffCat_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1 * choice * easyP1difficultN1_prev +
                                                        (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
 summary(wind1_m4_diffCat_optCat_prevdiffCat_intxn_rfx)
-
+# easyP1difficultN1                                1.379e-03  4.428e-03  9.817e+03   0.311   0.7555
+# choice                                           1.331e-02  6.473e-03  9.819e+03   2.056   0.0398 *
+# easyP1difficultN1_prev                          -9.106e-03  4.393e-03  9.816e+03  -2.073   0.0382 *
+# easyP1difficultN1:choice                        -2.672e-03  6.398e-03  9.818e+03  -0.418   0.6762
+# easyP1difficultN1:easyP1difficultN1_prev         1.406e-03  4.402e-03  9.816e+03   0.319   0.7495
+# choice:easyP1difficultN1_prev                   -9.792e-04  6.266e-03  9.816e+03  -0.156   0.8758
+# easyP1difficultN1:choice:easyP1difficultN1_prev -2.183e-03  6.279e-03  9.816e+03  -0.348   0.7281
 
 wind1_m4_diffContAll_optCat_prevdiffContAll_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont + choice + prev_all_diff_cont +
                                                          (1 | subjectnumber), data = clean_data_dm) # continuous current difficulty and previous difficulty & categorical choice made
 summary(wind1_m4_diffContAll_optCat_prevdiffContAll_rfx)
-
+# all_diff_cont      -3.635e-02  6.535e-03  1.381e+04  -5.562 2.71e-08 ***
+# choice              3.434e-03  5.402e-03  1.381e+04   0.636   0.5250
+# prev_all_diff_cont -1.522e-02  6.535e-03  1.381e+04  -2.328   0.0199 *
 
 wind1_m4_diffContAll_optCat_prevdiffContAll_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont * choice * prev_all_diff_cont +
                                                                (1 | subjectnumber), data = clean_data_dm)
 summary(wind1_m4_diffContAll_optCat_prevdiffContAll_intxn_rfx)
-
+# all_diff_cont                           -5.817e-02  1.458e-02  1.380e+04  -3.989 6.67e-05 ***
+# choice                                  -6.180e-03  1.287e-02  1.380e+04  -0.480  0.63104
+# prev_all_diff_cont                      -3.827e-02  1.481e-02  1.380e+04  -2.583  0.00979 **
+# all_diff_cont:choice                     1.335e-02  2.048e-02  1.380e+04   0.652  0.51456
+# all_diff_cont:prev_all_diff_cont         3.869e-02  2.190e-02  1.380e+04   1.767  0.07733 .
+# choice:prev_all_diff_cont                1.545e-02  2.030e-02  1.380e+04   0.761  0.44684
+# all_diff_cont:choice:prev_all_diff_cont -1.823e-02  3.064e-02  1.380e+04  -0.595  0.55189
 
 # ~ Window 1 Model 5: current difficulty x choice x capacity (wmc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind1_m5_diffCat_optCat_wmcCat_rfx = lmer(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1 + choice + capacity_HighP1_lowN1_best +
                                             (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical current difficulty, choice made, & wmc
 summary(wind1_m5_diffCat_optCat_wmcCat_rfx)
-
+# easyP1difficultN1          -1.665e-04  3.149e-03  9.585e+03  -0.053   0.9578
+# choice                      1.133e-02  6.540e-03  9.588e+03   1.733   0.0832 .
+# capacity_HighP1_lowN1_best  1.191e-01  8.005e-02  7.900e+01   1.488   0.1407
 
 wind1_m5_diffCat_optCat_wmcCat_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1 * choice * capacity_HighP1_lowN1_best +
                                                   (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
 summary(wind1_m5_diffCat_optCat_wmcCat_intxn_rfx)
-
+# easyP1difficultN1                                   -4.132e-04  4.793e-03  9.582e+03  -0.086   0.9313
+# choice                                               1.044e-02  7.070e-03  9.585e+03   1.476   0.1399
+# capacity_HighP1_lowN1_best                           1.198e-01  8.016e-02  7.929e+01   1.495   0.1389
+# easyP1difficultN1:choice                             4.630e-03  6.975e-03  9.584e+03   0.664   0.5068
+# easyP1difficultN1:capacity_HighP1_lowN1_best        -2.232e-03  4.793e-03  9.582e+03  -0.466   0.6414
+# choice:capacity_HighP1_lowN1_best                   -1.742e-03  7.070e-03  9.585e+03  -0.246   0.8054
+# easyP1difficultN1:choice:capacity_HighP1_lowN1_best  1.557e-02  6.975e-03  9.584e+03   2.232   0.0256 *
 
 wind1_m5_diffContAll_optCat_wmcCat_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont + choice + capacity_HighP1_lowN1_best +
                                                 (1 | subjectnumber), data = clean_data_dm) # continuous current difficulty & categorical choice and wmc
 summary(wind1_m5_diffContAll_optCat_wmcCat_rfx)
-
+# all_diff_cont              -3.634e-02  6.602e-03  1.361e+04  -5.505 3.75e-08 ***
+# choice                      2.677e-03  5.457e-03  1.361e+04   0.491    0.624
+# capacity_HighP1_lowN1_best  1.141e-01  8.100e-02  7.900e+01   1.409    0.163
 
 wind1_m5_diffContAll_optCat_wmcCat_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont * choice * capacity_HighP1_lowN1_best +
                                                       (1 | subjectnumber), data = clean_data_dm)
 summary(wind1_m5_diffContAll_optCat_wmcCat_intxn_rfx)
-
+# all_diff_cont                                   -3.593e-02  1.002e-02  1.361e+04  -3.587 0.000335 ***
+# choice                                           4.959e-03  8.925e-03  1.361e+04   0.556 0.578423
+# capacity_HighP1_lowN1_best                       1.121e-01  8.120e-02  7.982e+01   1.381 0.171171
+# all_diff_cont:choice                            -4.465e-03  1.415e-02  1.361e+04  -0.316 0.752358
+# all_diff_cont:capacity_HighP1_lowN1_best         2.306e-03  1.002e-02  1.361e+04   0.230 0.817885
+# choice:capacity_HighP1_lowN1_best                8.574e-03  8.925e-03  1.361e+04   0.961 0.336727
+# all_diff_cont:choice:capacity_HighP1_lowN1_best -1.470e-02  1.415e-02  1.361e+04  -1.039 0.298959
 
 wind1_m5_diffContAll_optCat_wmcCont_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont + choice + wmc_cont +
                                                  (1 | subjectnumber), data = clean_data_dm) # continuous current difficulty and wmc & categorical choice
 summary(wind1_m5_diffContAll_optCat_wmcCont_rfx)
-
+# all_diff_cont -3.962e-02  6.661e-03  1.345e+04  -5.948 2.79e-09 ***
+# choice         5.399e-03  5.493e-03  1.345e+04   0.983   0.3257
+# wmc_cont      -3.014e-02  1.349e-02  1.345e+04  -2.233   0.0255 *
 
 wind1_m5_diffContAll_optCat_wmcCont_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont * choice * wmc_cont +
                                                        (1 | subjectnumber), data = clean_data_dm)
 summary(wind1_m5_diffContAll_optCat_wmcCont_intxn_rfx)
-
+# all_diff_cont                 -5.833e-02  2.918e-02  1.345e+04  -1.999   0.0457 *
+# choice                        -3.563e-03  2.601e-02  1.345e+04  -0.137   0.8910
+# wmc_cont                      -3.628e-02  3.119e-02  1.345e+04  -1.163   0.2447
+# all_diff_cont:choice           4.143e-02  4.032e-02  1.345e+04   1.027   0.3043
+# all_diff_cont:wmc_cont         3.179e-02  4.797e-02  1.345e+04   0.663   0.5076
+# choice:wmc_cont                1.486e-02  4.255e-02  1.345e+04   0.349   0.7269
+# all_diff_cont:choice:wmc_cont -7.087e-02  6.622e-02  1.345e+04  -1.070   0.2845
 
 # ~ Window 1 Model 6: current difficulty x previous difficulty x capacity (wmc) ~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind1_m6_diffCat_prevdiffCat_wmcCat_rfx = lmer(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1 + easyP1difficultN1_prev + capacity_HighP1_lowN1_best +
                                                  (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical current difficulty and wmc
 summary(wind1_m6_diffCat_prevdiffCat_wmcCat_rfx)
-
+# easyP1difficultN1          -2.528e-04  3.148e-03  9.585e+03  -0.080  0.93600
+# easyP1difficultN1_prev     -1.002e-02  3.162e-03  9.585e+03  -3.170  0.00153 **
+# capacity_HighP1_lowN1_best  1.191e-01  8.007e-02  7.900e+01   1.487  0.14103
 
 wind1_m6_diffCat_prevdiffCat_wmcCat_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + easyP1difficultN1 * easyP1difficultN1_prev * capacity_HighP1_lowN1_best +
                                                        (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
 summary(wind1_m6_diffCat_prevdiffCat_wmcCat_intxn_rfx)
-
+# easyP1difficultN1                                                    1.632e-03  3.371e-03  9.581e+03   0.484  0.62822
+# easyP1difficultN1_prev                                              -1.091e-02  3.385e-03  9.581e+03  -3.224  0.00127 **
+# capacity_HighP1_lowN1_best                                           1.191e-01  8.007e-02  7.900e+01   1.487  0.14087
+# easyP1difficultN1:easyP1difficultN1_prev                             1.147e-03  3.401e-03  9.581e+03   0.337  0.73593
+# easyP1difficultN1:capacity_HighP1_lowN1_best                         5.313e-03  3.371e-03  9.581e+03   1.576  0.11501
+# easyP1difficultN1_prev:capacity_HighP1_lowN1_best                   -2.573e-03  3.385e-03  9.581e+03  -0.760  0.44720
+# easyP1difficultN1:easyP1difficultN1_prev:capacity_HighP1_lowN1_best  2.762e-03  3.401e-03  9.581e+03   0.812  0.41676
 
 wind1_m6_diffContAll_prevdiffContAll_wmcCat_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont + prev_all_diff_cont + capacity_HighP1_lowN1_best +
                                                          (1 | subjectnumber), data = clean_data_dm) # continuous current difficulty and previous difficulty and categorical wmc
 summary(wind1_m6_diffContAll_prevdiffContAll_wmcCat_rfx)
-
+# all_diff_cont              -3.521e-02  6.612e-03  1.348e+04  -5.325 1.02e-07 ***
+# prev_all_diff_cont         -1.398e-02  6.623e-03  1.348e+04  -2.111   0.0348 *
+# capacity_HighP1_lowN1_best  1.142e-01  8.111e-02  7.900e+01   1.408   0.1629
 
 wind1_m6_diffContAll_prevdiffContAll_wmcCat_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
                                                                (1 | subjectnumber), data = clean_data_dm)
 summary(wind1_m6_diffContAll_prevdiffContAll_wmcCat_intxn_rfx)
-
+# all_diff_cont                                               -5.362e-02  1.072e-02  1.347e+04  -5.004  5.7e-07 ***
+# prev_all_diff_cont                                          -2.938e-02  1.075e-02  1.347e+04  -2.732  0.00631 **
+# capacity_HighP1_lowN1_best                                   1.163e-01  8.136e-02  7.990e+01   1.430  0.15665
+# all_diff_cont:prev_all_diff_cont                             3.348e-02  1.628e-02  1.347e+04   2.057  0.03974 *
+# all_diff_cont:capacity_HighP1_lowN1_best                    -9.412e-03  1.072e-02  1.347e+04  -0.878  0.37982
+# prev_all_diff_cont:capacity_HighP1_lowN1_best                2.915e-04  1.075e-02  1.347e+04   0.027  0.97838
+# all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1_best  9.476e-03  1.628e-02  1.347e+04   0.582  0.56053
 
 wind1_m6_diffContAll_prevdiffContAll_wmcCont_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont + prev_all_diff_cont + wmc_cont +
                                                           (1 | subjectnumber), data = clean_data_dm) # continuous current difficulty, previous difficulty, & wmc
 summary(wind1_m6_diffContAll_prevdiffContAll_wmcCont_rfx)
-
+# all_diff_cont      -3.859e-02  6.670e-03  1.332e+04  -5.786 7.39e-09 ***
+# prev_all_diff_cont -1.619e-02  6.675e-03  1.332e+04  -2.426   0.0153 *
+# wmc_cont           -2.504e-02  1.352e-02  1.332e+04  -1.852   0.0641 .
 
 wind1_m6_diffContAll_prevdiffContAll_wmcCont_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + all_diff_cont * prev_all_diff_cont * wmc_cont +
                                                                 (1 | subjectnumber), data = clean_data_dm)
 summary(wind1_m6_diffContAll_prevdiffContAll_wmcCont_intxn_rfx)
-
+# all_diff_cont                             -5.564e-02  3.161e-02  1.331e+04  -1.760   0.0784 .
+# prev_all_diff_cont                        -6.111e-02  3.162e-02  1.331e+04  -1.933   0.0533 .
+# wmc_cont                                  -4.477e-02  3.222e-02  1.331e+04  -1.390   0.1647
+# all_diff_cont:prev_all_diff_cont           4.612e-02  4.819e-02  1.331e+04   0.957   0.3386
+# all_diff_cont:wmc_cont                     2.771e-03  5.203e-02  1.331e+04   0.053   0.9575
+# prev_all_diff_cont:wmc_cont                5.117e-02  5.173e-02  1.331e+04   0.989   0.3226
+# all_diff_cont:prev_all_diff_cont:wmc_cont -2.767e-02  7.927e-02  1.331e+04  -0.349   0.7270
 
 
 
