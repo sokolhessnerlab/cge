@@ -4362,6 +4362,53 @@ legend("bottomright", legend = c("Low WMC", "Easy", "Difficult", "High WMC", "Ea
 
 # PUPILLLOMETRY REGRESSIONS #################
 
+cor_matrix = cor(clean_data_dm[,c('wind1_predisp_onset_mean','wind2_effort_isi_mean','wind3_eval_otciti_mean','wind4_prep_lateiti_mean')],
+                 +                  use = 'complete.obs')
+corrplot(cor_matrix, type = 'lower')
+
+sqrtRT_m0_diffCat_optCat_prevdiffCat_intxn_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 * choice * easyP1difficultN1_prev +
+                                                                (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
+summary(sqrtRT_m0_diffCat_optCat_prevdiffCat_intxn_rfx)
+# easyP1difficultN1                               -4.994e-02  2.394e-03  1.009e+04 -20.864  < 2e-16 ***
+# choice                                          -6.453e-03  3.494e-03  1.011e+04  -1.847  0.06483 .
+# easyP1difficultN1_prev                           5.943e-04  2.376e-03  1.008e+04   0.250  0.80248
+# easyP1difficultN1:choice                         9.383e-03  3.455e-03  1.010e+04   2.716  0.00663 **
+# easyP1difficultN1:easyP1difficultN1_prev        -2.381e-03  2.381e-03  1.008e+04  -1.000  0.31726
+# choice:easyP1difficultN1_prev                    6.160e-03  3.389e-03  1.008e+04   1.818  0.06913 .
+# easyP1difficultN1:choice:easyP1difficultN1_prev  3.555e-03  3.395e-03  1.008e+04   1.047  0.29502
+
+sqrtRT_m1_diffContAll_optCat_prevdiffContAll_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * choice * prev_all_diff_cont +
+                                                                (1 | subjectnumber), data = clean_data_dm)
+summary(sqrtRT_m1_diffContAll_optCat_prevdiffContAll_intxn_rfx)
+# all_diff_cont                            1.259e-01  8.150e-03  1.417e+04  15.446  < 2e-16 ***
+# choice                                   2.194e-02  7.199e-03  1.416e+04   3.047 0.002314 **
+# prev_all_diff_cont                      -2.525e-02  8.279e-03  1.416e+04  -3.049 0.002297 **
+# all_diff_cont:choice                    -3.802e-02  1.145e-02  1.416e+04  -3.322 0.000896 ***
+# all_diff_cont:prev_all_diff_cont        -3.727e-03  1.225e-02  1.416e+04  -0.304 0.760843
+# choice:prev_all_diff_cont               -1.573e-02  1.135e-02  1.415e+04  -1.386 0.165711
+# all_diff_cont:choice:prev_all_diff_cont  1.647e-02  1.712e-02  1.415e+04   0.962 0.336069
+
+sqrtRT_m1.2_diffContAll_optCat_prevdiffContAll_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * choice + prev_all_diff_cont * choice +
+                                                                (1 | subjectnumber), data = clean_data_dm)
+summary(sqrtRT_m1.2_diffContAll_optCat_prevdiffContAll_intxn_rfx)
+# all_diff_cont              1.240e-01  5.283e-03  1.417e+04  23.471  < 2e-16 ***
+# choice                     1.792e-02  5.805e-03  1.416e+04   3.087  0.00203 **
+# prev_all_diff_cont        -2.723e-02  5.099e-03  1.416e+04  -5.340 9.42e-08 ***
+# all_diff_cont:choice      -2.954e-02  7.353e-03  1.417e+04  -4.018 5.91e-05 ***
+# choice:prev_all_diff_cont -7.490e-03  7.201e-03  1.415e+04  -1.040  0.29828
+
+sqrtRT_m1_diffContAll_optCat_wmcCat_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * choice * capacity_HighP1_lowN1_best +
+                                                                (1 | subjectnumber), data = clean_data_dm)
+summary(sqrtRT_m1_diffContAll_optCat_wmcCat_intxn_rfx)
+# all_diff_cont                                    1.301e-01  5.531e-03  1.382e+04  23.520  < 2e-16 ***
+# choice                                           1.019e-02  4.927e-03  1.381e+04   2.067 0.038708 *
+# capacity_HighP1_lowN1_best                      -5.589e-03  1.259e-02  9.160e+01  -0.444 0.658256
+# all_diff_cont:choice                            -3.142e-02  7.799e-03  1.382e+04  -4.029 5.63e-05 ***
+# all_diff_cont:capacity_HighP1_lowN1_best         2.056e-02  5.531e-03  1.382e+04   3.718 0.000202 ***
+# choice:capacity_HighP1_lowN1_best               -1.545e-02  4.927e-03  1.381e+04  -3.136 0.001716 **
+# all_diff_cont:choice:capacity_HighP1_lowN1_best  6.806e-03  7.799e-03  1.382e+04   0.873 0.382802
+
+
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ### WINDOW 1 REGRESSIONS: Predisposition (1 second, -500 before choice onset to +500 after choice onset) #####
 # ~ predictors: current difficulty, choice made, previous difficulty, WMC, NFC, and choice
