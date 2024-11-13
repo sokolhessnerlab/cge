@@ -4410,6 +4410,37 @@ summary(sqrtRT_m1_diffContAll_optCat_wmcCat_intxn_rfx)
 # all_diff_cont:choice:capacity_HighP1_lowN1_best  6.806e-03  7.799e-03  1.382e+04   0.873 0.382802
 
 
+# TODO
+# FIXME
+# CHANGED
+
+
+
+# PREDICTORS
+# ~ trial number
+# ~ Current Difficulty and Previous Difficulty
+# ~ Choice and Outcome
+# ~ WMC, NCS, PSS, and SNS
+
+# W1 - WMC, CD, PD
+# W2 - WMC, CD, PD
+# W3 - WMC, CD, PD
+# W4 - WMC, CD, PD
+
+# Question: What difference is there between predisposition and preparation?
+# - predisposition takes 500ms from the iti of the previous trial and 500ms from the instructions before the first trial
+# -- from the second trial onward, they are being influenced by the previous trial, which is like preparation
+# -- some of the iti are 3000ms while others are 3500ms, which makes the 500ms not match for everyone exactly, but may not matter
+# -- only the first trial is different from all the other trials, which might reflect a a predisposition not influenced by previous difficulty
+# - preparation is from +1000ms to +3000ms into the iti
+
+
+# Outcome - we have the monetary value but not coded whether or not received the gain or the loss
+# For each participant I need to get what choice they made (safe = 0 or risky = 1) and whether their outcome was a gain (more than 0) or a loss (0)
+
+
+
+
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ### WINDOW 1 REGRESSIONS: Predisposition (1 second, -500 before choice onset to +500 after choice onset) #####
 # ~ predictors: current difficulty, choice made, previous difficulty, WMC, NFC, and choice
