@@ -966,7 +966,8 @@ variance_compositespan = var(complexSpanScores$compositeSpanScore, na.rm = T)
 ospanScores = complexSpanScores$ospanScore
 symspanScores = complexSpanScores$symspanScore
 compositeSpanScores = complexSpanScores$compositeSpanScore
-clean_data_dm$wmc_cont = compositeSpanScores[keep_participants]
+# clean_data_dm$wmc_cont = compositeSpanScores[keep_participants]
+# SEE: clean_data_dm$complexspan or clean_data_dm$complexspan_demeaned
 
 cor.test(ospanScores, symspanScores) # r(60) = 0.3703213, p = 0.00305 (as of 2/25/24)
 var.test(ospanScores, symspanScores) # similar variance (F(72) = 0.95278, p = 0.8378 as of 2/25/24)
@@ -4359,11 +4360,11 @@ legend("bottomright", legend = c("Low WMC", "Easy", "Difficult", "High WMC", "Ea
 
 
 
-
+dev.off()
 # PUPILLLOMETRY REGRESSIONS #################
 
 cor_matrix = cor(clean_data_dm[,c('wind1_predisp_onset_mean','wind2_effort_isi_mean','wind3_eval_otciti_mean','wind4_prep_lateiti_mean')],
-                 +                  use = 'complete.obs')
+                                   use = 'complete.obs')
 corrplot(cor_matrix, type = 'lower')
 
 sqrtRT_m0_diffCat_optCat_prevdiffCat_intxn_rfx = lmer(sqrtRT ~ 1 + easyP1difficultN1 * choice * easyP1difficultN1_prev +
@@ -4801,11 +4802,11 @@ summary(wind2_m0_wmcCat) # capacity_HighP1_lowN1_best 0.136904   0.007617   17.9
 wind2_m0_wmcCat_rfx = lmer(wind2_effort_isi_mean ~ 1 + capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
 summary(wind2_m0_wmcCat_rfx) # capacity_HighP1_lowN1_best  0.13819    0.07976 79.00021   1.733   0.0871 .
 
-wind2_m0_wmcCont = lm(wind2_effort_isi_mean ~ 1 + wmc_cont, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # continuous
-summary(wind2_m0_wmcCont) # wmc_cont    -0.02497    0.03746  -0.667    0.505
+wind2_m0_wmcCont = lm(wind2_effort_isi_mean ~ 1 + complexspan_demeaned, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # continuous
+summary(wind2_m0_wmcCont) # complexspan_demeaned 0.722551   0.036490    19.8   <2e-16 ***
 
-wind2_m0_wmcCont_rfx = lmer(wind2_effort_isi_mean ~ 1 + wmc_cont + (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
-summary(wind2_m0_wmcCont_rfx) # wmc_cont      -0.02672    0.01190 9408.00074  -2.246   0.0247 *
+wind2_m0_wmcCont_rfx = lmer(wind2_effort_isi_mean ~ 1 + complexspan_demeaned + (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
+summary(wind2_m0_wmcCont_rfx) # complexspan_demeaned  0.72819    0.38186 79.00021   1.907   0.0602 .  
 
 AIC(wind2_m0_wmcCat_rfx) # -846.2197
 AIC(wind2_m0_wmcCont_rfx) # -783.5134
@@ -4837,6 +4838,23 @@ summary(wind2_m0_optCat_rfx) # choice      2.305e-02  4.683e-03 9.819e+03   4.92
 
 AIC(wind2_m0_optCat) # 21256.67
 AIC(wind2_m0_optCat_rfx) # -893.4146
+
+# ~ Window 2 Model 0: time ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wind2_m0_time = lm(wind2_effort_isi_mean ~ 1 + trialnumberRS, data = clean_data_dm)
+summary(wind2_m0_time) # trialnumberRS -0.29989    0.02094  -14.32   <2e-16 ***
+
+wind2_m0_time_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m0_time_rfx) # trialnumberRS -2.991e-01  6.548e-03  1.394e+04  -45.67   <2e-16 ***
+
+# Time has a strong negative effect on pupil dilation during Window 2
+
+wind2_m0_time_Fullyrfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS + (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+summary(wind2_m0_time_Fullyrfx) # trialnumberRS -0.29927    0.02970 81.96775  -10.08 5.31e-16 ***
+
+AIC(wind2_m0_time_rfx)
+AIC(wind2_m0_time_Fullyrfx) # waaaay better AIC
+
 
 ### main & interaction effects
 # ~ Window 2 Model 1: current difficulty x choice made ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4923,7 +4941,7 @@ summary(wind2_m3_diffContAll_wmcCat_intxn_rfx)
 # capacity_HighP1_lowN1_best                1.327e-01  8.080e-02  7.916e+01   1.642    0.105
 # all_diff_cont:capacity_HighP1_lowN1_best  4.136e-03  5.328e-03  1.360e+04   0.776    0.438
 
-wind2_m3_diffContAll_wmcCont_rfx = lmer(wind2_effort_isi_mean ~ 1 + all_diff_cont + wmc_cont +
+wind2_m3_diffContAll_wmcCont_rfx = lmer(wind2_effort_isi_mean ~ 1 + all_diff_cont + wmc_cont + 
                                                   (1 | subjectnumber), data = clean_data_dm) # continuous all current difficulty & wmc
 summary(wind2_m3_diffContAll_wmcCont_rfx)
 # all_diff_cont -6.270e-02  5.100e-03  1.345e+04 -12.294  < 2e-16 ***
@@ -5085,6 +5103,49 @@ summary(wind2_m6_diffContAll_prevdiffContAll_wmcCont_intxn_rfx)
 # all_diff_cont:wmc_cont                     2.171e-02  3.964e-02  1.331e+04   0.548 0.583967
 # prev_all_diff_cont:wmc_cont                5.171e-02  3.940e-02  1.331e+04   1.312 0.189397
 # all_diff_cont:prev_all_diff_cont:wmc_cont -3.039e-03  6.037e-02  1.331e+04  -0.050 0.959851
+
+
+
+
+
+wind2_m0_time_choice_currDiff_prevDiff_span_Fullyrfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS + choice + all_diff_cont * prev_all_diff_cont * complexspan_demeaned + 
+                                (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+summary(wind2_m0_time_choice_currDiff_prevDiff_span_Fullyrfx) 
+# trialnumberRS                                         -2.831e-01  3.025e-02  8.039e+01  -9.359 1.66e-14 ***
+# choice                                                 2.822e-02  3.740e-03  1.342e+04   7.546 4.76e-14 ***
+# all_diff_cont                                         -2.010e-02  7.206e-03  1.341e+04  -2.789  0.00529 ** 
+# prev_all_diff_cont                                    -8.449e-04  7.217e-03  1.341e+04  -0.117  0.90680    
+# complexspan_demeaned                                   7.072e-01  3.738e-01  7.996e+01   1.892  0.06212 .  
+# all_diff_cont:prev_all_diff_cont                      -7.779e-03  1.067e-02  1.340e+04  -0.729  0.46584    
+# all_diff_cont:complexspan_demeaned                     4.255e-02  3.894e-02  1.344e+04   1.093  0.27449    
+# prev_all_diff_cont:complexspan_demeaned                4.621e-02  3.910e-02  1.344e+04   1.182  0.23732    
+# all_diff_cont:prev_all_diff_cont:complexspan_demeaned -3.660e-02  5.781e-02  1.342e+04  -0.633  0.52664    
+
+wind2_m0_time_choice_currDiff_prevDiff_capacity_Fullyrfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS + choice + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+                                                              (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+summary(wind2_m0_time_choice_currDiff_prevDiff_capacity_Fullyrfx) # trialnumberRS -0.29927    0.02970 81.96775  -10.08 5.31e-16 ***
+# trialnumberRS                                               -2.830e-01  3.024e-02  8.039e+01  -9.357 1.67e-14 ***
+# choice                                                       2.823e-02  3.740e-03  1.342e+04   7.549 4.68e-14 ***
+# all_diff_cont                                               -1.690e-02  7.417e-03  1.341e+04  -2.278   0.0227 *  
+# prev_all_diff_cont                                           2.440e-03  7.440e-03  1.341e+04   0.328   0.7430    
+# capacity_HighP1_lowN1_best                                   1.312e-01  7.815e-02  7.975e+01   1.679   0.0971 .  
+# all_diff_cont:prev_all_diff_cont                            -1.108e-02  1.111e-02  1.341e+04  -0.997   0.3189    
+# all_diff_cont:capacity_HighP1_lowN1_best                     7.424e-03  7.407e-03  1.344e+04   1.002   0.3162    
+# prev_all_diff_cont:capacity_HighP1_lowN1_best                7.581e-03  7.436e-03  1.344e+04   1.020   0.3079    
+# all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1_best -7.243e-03  1.111e-02  1.341e+04  -0.652   0.5145    
+
+# In window 2:
+# - Smaller pupil with time
+# - Larger pupil with risky choice
+# - Smaller pupil with increasing difficulty (i.e. easier choices >>> difficult choices) 
+#
+# - weak (?) effect of capacity (larger pupil with increasing cog. capacity)
+
+
+# TODO: there are some signs that reducing model complexity strengthens all_diff_cont 
+# effect. Might be worth comparing AICs to pick "best model" from this class of
+# models for Window 2. 
+
 
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
