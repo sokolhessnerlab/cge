@@ -4421,6 +4421,7 @@ summary(sqrtRT_m1_diffContAll_optCat_wmcCat_intxn_rfx)
 # ~ Current Difficulty and Previous Difficulty
 # ~ Choice and Outcome
 # ~ WMC, NCS, PSS, and SNS
+# ~ quantitative post-study questionnaire
 
 # W1 - WMC, CD, PD
 # W2 - WMC, CD, PD
@@ -4437,6 +4438,9 @@ summary(sqrtRT_m1_diffContAll_optCat_wmcCat_intxn_rfx)
 
 # Outcome - we have the monetary value but not coded whether or not received the gain or the loss
 # For each participant I need to get what choice they made (safe = 0 or risky = 1) and whether their outcome was a gain (more than 0) or a loss (0)
+# if choice == 0 & outcome > 0 then 0 = safeGain
+# if choice == 1 & outcome = 0 then 1 = riskyGain
+# if choice == 1 & outcome > 0 then -1 = riskyLoss
 
 
 
