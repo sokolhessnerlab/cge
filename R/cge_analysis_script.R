@@ -2269,18 +2269,29 @@ cat('Mega pupil array created')
 # We'll use clean_data_dm as the source of regressors.
 
 clean_data_dm$trialnumberRS = clean_data_dm$trialnumber/max(clean_data_dm$trialnumber)
+clean_data_dm$riskywinP1_loseN1 = clean_data_dm$choice*(  # on trials where the risky option was chosen...
+  1*(clean_data_dm$outcome == clean_data_dm$riskyopt1) -  # +1 when they 'won'
+  1*(clean_data_dm$outcome == clean_data_dm$riskyopt2))   # -1 when they 'lost'
 
 reg_colnames = c(
   'intercept',
   'trialnumberRS',
   'choice',
+  'riskywinP1_loseN1',
   'all_diff_cont',
   'prev_all_diff_cont',
-  'capacity_HighP1_lowN1_best',
-  'trialnumberRSXcapacity_HighP1_lowN1_best',
-  'choiceXcapacity_HighP1_lowN1_best',
-  'all_diff_contXcapacity_HighP1_lowN1_best',
-  'prev_all_diff_contXcapacity_HighP1_lowN1_best');
+  'capacity_HighP1_LowN1_best',
+  'all_diff_cont_X_prev_all_diff_cont',
+  'all_diff_cont_X_capacity_HighP1_LowN1_best',
+  'prev_all_diff_cont_X_capacity_HighP1_lowN1_best',
+  'trialnumberRS_X_choice',
+  'trialnumberRS_X_all_diff_cont',
+  'trialnumberRS_X_prev_all_diff_cont',
+  'trialnumberRS_X_capacity_HighP1_LowN1_best',
+  'choice_X_all_diff_cont',
+  'choice_X_prev_all_diff_cont',
+  'choice_X_capacity_HighP1_lowN1_best'
+);
 
 beta_vals = array(data = NA, dim = c(length(xvals),length(reg_colnames)))
 beta_vals = as.data.frame(beta_vals);
@@ -2295,12 +2306,13 @@ for (timepoint in 1:length(xvals)){
   if (all(is.na(mega_pupil_array[,timepoint]))){
     next
   } else{
-    tmp_model = lmer(mega_pupil_array[,timepoint] ~ 1 + trialnumberRS + choice +
+    tmp_model = lmer(mega_pupil_array[,timepoint] ~ 1 + trialnumberRS + choice + riskywinP1_loseN1 +
                        all_diff_cont + prev_all_diff_cont + capacity_HighP1_lowN1_best +
-                       trialnumberRS:capacity_HighP1_lowN1_best +
-                       choice:capacity_HighP1_lowN1_best +
-                       all_diff_cont:capacity_HighP1_lowN1_best +
-                       prev_all_diff_cont:capacity_HighP1_lowN1_best + (1 | subjectnumber),
+                       all_diff_cont:prev_all_diff_cont + all_diff_cont:capacity_HighP1_lowN1_best + 
+                       prev_all_diff_cont:capacity_HighP1_lowN1_best + 
+                       trialnumberRS:choice + trialnumberRS:all_diff_cont + trialnumberRS:prev_all_diff_cont + trialnumberRS:capacity_HighP1_lowN1_best +
+                       choice:all_diff_cont + choice:prev_all_diff_cont + choice:capacity_HighP1_lowN1_best +
+                       (1 + trialnumberRS | subjectnumber),
                      data = clean_data_dm)
     tmp_summ = summary(tmp_model)
     beta_vals[timepoint,] = coef(tmp_summ)[,1]
@@ -2313,10 +2325,10 @@ p_vals_reconfig[(beta_vals < 0)&(!is.na(beta_vals))] = -p_vals_reconfig[(beta_va
 # +1 = significant, positive, corresponds w/ p = 0, pos. beta
 # -1 = significant, negative, corresponds w/ p = 0, neg. beta
 
-plot(p_vals_reconfig$prev_all_diff_contXcapacity_HighP1_lowN1_best,
-     type = 'l', ylim = c(-1,1))
-abline(h = 0.95, lty = 'dashed')
-abline(h = -0.95, lty = 'dashed')
+# plot(p_vals_reconfig$prev_all_diff_contXcapacity_HighP1_lowN1_best,
+#      type = 'l', ylim = c(-1,1))
+# abline(h = 0.95, lty = 'dashed')
+# abline(h = -0.95, lty = 'dashed')
 
 color_palette_for_pval_reconfig = rev(c(
   colorRampPalette(c("#FFFF00","#FF0000"))(10),
@@ -2334,7 +2346,7 @@ abline(v = which(xvals == 2000)/length(xvals), col = 'purple', lwd = 3, lty = 'd
 
 
 dev.off()
-plot(beta_vals$prev_all_diff_cont); abline(v = which(xvals == 0)[2], col = 'magenta', lwd = 3, lty = 'dotted')
+plot(beta_vals$choice); abline(v = which(xvals == 0)[2], col = 'magenta', lwd = 3, lty = 'dotted')
 abline(h = 0, col = 'black', lwd = 2)
 abline(v = which(xvals == 1000)[2], col = 'purple', lwd = 3, lty = 'dashed')
 abline(v = which(xvals == 2000), col = 'purple', lwd = 3, lty = 'dashed')
