@@ -2330,7 +2330,7 @@ p_vals_reconfig[(beta_vals < 0)&(!is.na(beta_vals))] = -p_vals_reconfig[(beta_va
 # abline(h = 0.95, lty = 'dashed')
 # abline(h = -0.95, lty = 'dashed')
 
-deconv_pval_threshold = 0.05 # a normal p-value at which to threshold the visualization
+deconv_pval_threshold = 0.05 # the p-value at which to threshold the visualization
 
 # turn a p-value threshold into the appropriate coloring
 n_pval_levels = 1e8; # think of this as the resolution of p-value thresholding
