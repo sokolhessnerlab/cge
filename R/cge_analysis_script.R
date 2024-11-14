@@ -2333,7 +2333,7 @@ p_vals_reconfig[(beta_vals < 0)&(!is.na(beta_vals))] = -p_vals_reconfig[(beta_va
 deconv_pval_threshold = 0.05
 
 # turn a p-value threshold into the appropriate coloring
-n_pval_levels = 1000;
+n_pval_levels = 10000;
 n_deconv_pval_sig_levels = (n_pval_levels/2)*deconv_pval_threshold;
 
 if(n_deconv_pval_sig_levels%%1!=0){
