@@ -2330,10 +2330,20 @@ p_vals_reconfig[(beta_vals < 0)&(!is.na(beta_vals))] = -p_vals_reconfig[(beta_va
 # abline(h = 0.95, lty = 'dashed')
 # abline(h = -0.95, lty = 'dashed')
 
+deconv_pval_threshold = 0.05
+
+# turn a p-value threshold into the appropriate coloring
+n_pval_levels = 1000;
+n_deconv_pval_sig_levels = (n_pval_levels/2)*deconv_pval_threshold;
+
+if(n_deconv_pval_sig_levels%%1!=0){
+  warning('p-value selection does not result in a whole integer value')
+}
+
 color_palette_for_pval_reconfig = rev(c(
-  colorRampPalette(c("#FFFF00","#FF0000"))(10),
-  rep("#000000",380),
-  colorRampPalette(c("#0000FF","#12fcca"))(10)
+  colorRampPalette(c("#FFFF00","#FF0000"))(n_deconv_pval_sig_levels),
+  rep("#000000",n_pval_levels-2*n_deconv_pval_sig_levels),
+  colorRampPalette(c("#0000FF","#12fcca"))(n_deconv_pval_sig_levels)
 ))
 
 par(mar=c(5,20,4,2))
