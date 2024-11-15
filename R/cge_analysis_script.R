@@ -6093,8 +6093,8 @@ AIC(wind4_m9_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx) # 4417.294
 # summary(wind1_mX_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx)
 #
 # wind2_mX_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS *
-#                                                                     all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
-#                                                                     (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+#                                                                      all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+#                                                                      (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
 # summary(wind2_mX_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx)
 #
 # wind3_mX_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx = lmer(wind3_eval_otciti_mean ~ 1 + trialnumberRS *
@@ -6112,6 +6112,7 @@ AIC(wind4_m9_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx) # 4417.294
 # McLaughlin's fatigue method will probably be important to do
 # Does the interaction effect between trial and difficulty speak to the importance that difficulty does reflect a slower more drawn out timecourse effect?
 
+# In the same models that don't have trial number, there are consistent main effects of current and previous difficulty. In some models they also interact
 
 
 
