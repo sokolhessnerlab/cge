@@ -2308,8 +2308,8 @@ for (timepoint in 1:length(xvals)){
   } else{
     tmp_model = lmer(mega_pupil_array[,timepoint] ~ 1 + trialnumberRS + choice + riskywinP1_loseN1 +
                        all_diff_cont + prev_all_diff_cont + capacity_HighP1_lowN1_best +
-                       all_diff_cont:prev_all_diff_cont + all_diff_cont:capacity_HighP1_lowN1_best + 
-                       prev_all_diff_cont:capacity_HighP1_lowN1_best + 
+                       all_diff_cont:prev_all_diff_cont + all_diff_cont:capacity_HighP1_lowN1_best +
+                       prev_all_diff_cont:capacity_HighP1_lowN1_best +
                        trialnumberRS:choice + trialnumberRS:all_diff_cont + trialnumberRS:prev_all_diff_cont + trialnumberRS:capacity_HighP1_lowN1_best +
                        choice:all_diff_cont + choice:prev_all_diff_cont + choice:capacity_HighP1_lowN1_best +
                        (1 + trialnumberRS | subjectnumber),
@@ -4465,6 +4465,14 @@ summary(sqrtRT_m1_diffContAll_optCat_wmcCat_intxn_rfx)
 # if choice == 1 & outcome > 0 then -1 = riskyLoss
 
 
+# Considerations for SANS
+# Pupillometry regressions that mirror similar models used for RTs
+# ~ Current Difficulty
+# ~ Current Difficulty x  Previous Difficulty
+# ~ Current Difficulty x Previous Difficulty x WMC
+# The main difference being trial number as a predictor
+
+
 
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -4802,6 +4810,54 @@ summary(wind1_m6_diffContAll_prevdiffContAll_wmcCont_intxn_rfx)
 # all_diff_cont:complexspan_demeaned                    -8.051e-02  5.614e-02  1.347e+04  -1.434  0.15156
 # prev_all_diff_cont:complexspan_demeaned               -4.432e-02  5.632e-02  1.347e+04  -0.787  0.43130
 # all_diff_cont:prev_all_diff_cont:complexspan_demeaned  7.879e-02  8.442e-02  1.347e+04   0.933  0.35072
+
+# ~ Window 1 Model 7: trial number x current difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+wind1_m7_time_diffContAll_rfx = lmer(wind1_predisp_onset_mean ~ 1 + trialnumberRS +
+                                                            all_diff_cont +
+                                                            (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+summary(wind1_m7_time_diffContAll_rfx)
+# trialnumberRS -2.559e-01  3.416e-02  8.226e+01  -7.491 6.96e-11 ***
+# all_diff_cont -6.643e-03  6.182e-03  1.388e+04  -1.075    0.283
+
+AIC(wind1_m0_diffContAll_rfx) # 7647.008
+AIC(wind1_m7_time_diffContAll_rfx) # 5912.285
+
+
+# ~ Window 1 Model 8: trial number x current difficulty x previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+wind1_m8_time_diffContAll_prevdiffContAll_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + trialnumberRS +
+                                                                   all_diff_cont * prev_all_diff_cont +
+                                                                   (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+summary(wind1_m8_time_diffContAll_prevdiffContAll_intxn_rfx)
+# trialnumberRS                    -2.555e-01  3.420e-02  8.260e+01  -7.472 7.42e-11 ***
+# all_diff_cont                    -8.586e-03  9.728e-03  1.376e+04  -0.883    0.377
+# prev_all_diff_cont                1.310e-02  9.757e-03  1.376e+04   1.342    0.180
+# all_diff_cont:prev_all_diff_cont  3.045e-03  1.444e-02  1.375e+04   0.211    0.833
+
+AIC(wind1_m2_diffContAll_prevdiffContAll_intxn_rfx) # 7526.341
+AIC(wind1_m8_time_diffContAll_prevdiffContAll_intxn_rfx) # 5856.812
+
+# ~ Window 1 Model 9: trial number x current difficulty x previous difficulty x wmc ~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+wind1_m9_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + trialnumberRS +
+                                                                   all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                                                   (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+summary(wind1_m9_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx)
+# trialnumberRS                                               -2.545e-01  3.502e-02  8.054e+01  -7.268 2.09e-10 ***
+# all_diff_cont                                               -1.197e-02  1.024e-02  1.343e+04  -1.169    0.242
+# prev_all_diff_cont                                           1.261e-02  1.029e-02  1.343e+04   1.226    0.220
+# capacity_HighP1_lowN1_best                                   1.236e-01  7.952e-02  8.025e+01   1.555    0.124
+# all_diff_cont:prev_all_diff_cont                             7.220e-03  1.536e-02  1.342e+04   0.470    0.638
+# all_diff_cont:capacity_HighP1_lowN1_best                    -8.771e-03  1.023e-02  1.346e+04  -0.857    0.391
+# prev_all_diff_cont:capacity_HighP1_lowN1_best                1.029e-03  1.028e-02  1.346e+04   0.100    0.920
+# all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1_best  5.425e-03  1.536e-02  1.343e+04   0.353    0.724
+
+AIC(wind1_m6_diffContAll_prevdiffContAll_wmcCat_intxn_rfx) # 7409.359
+AIC(wind1_m9_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx) # 5760.773
 
 
 
@@ -5160,6 +5216,62 @@ summary(wind2_m6_diffContAll_prevdiffContAll_wmcCont_intxn_rfx)
 # all_diff_cont:complexspan_demeaned                     2.873e-02  4.276e-02  1.347e+04   0.672   0.5018
 # prev_all_diff_cont:complexspan_demeaned                2.772e-02  4.291e-02  1.347e+04   0.646   0.5184
 # all_diff_cont:prev_all_diff_cont:complexspan_demeaned -9.861e-03  6.432e-02  1.347e+04  -0.153   0.8782
+
+# ~ Window 2 Model 7: trial number x current difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+wind2_m7_time_diffContAll_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS +
+                                       all_diff_cont +
+                                       (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+summary(wind2_m7_time_diffContAll_rfx)
+# trialnumberRS -2.934e-01  2.970e-02  8.218e+01  -9.878 1.27e-15 ***
+# all_diff_cont -2.475e-02  4.482e-03  1.387e+04  -5.523 3.39e-08 ***
+
+AIC(wind2_m0_diffContAll_rfx) # 229.9473
+AIC(wind2_m7_time_diffContAll_rfx) # -3033.568
+
+
+# ~ Window 2 Model 8: trial number x current difficulty x previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+wind2_m8_time_diffContAll_prevdiffContAll_intxn_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS +
+                                                             all_diff_cont * prev_all_diff_cont +
+                                                             (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+summary(wind2_m8_time_diffContAll_prevdiffContAll_intxn_rfx)
+# trialnumberRS                    -2.854e-01  2.960e-02  8.243e+01  -9.642 3.63e-15 ***
+# all_diff_cont                    -2.071e-02  7.042e-03  1.374e+04  -2.940  0.00328 **
+# prev_all_diff_cont                4.662e-04  7.061e-03  1.374e+04   0.066  0.94736
+# all_diff_cont:prev_all_diff_cont -8.562e-03  1.045e-02  1.374e+04  -0.819  0.41252
+
+AIC(wind2_m2_diffContAll_prevdiffContAll_intxn_rfx) # 4.161395
+AIC(wind2_m8_time_diffContAll_prevdiffContAll_intxn_rfx) # -3050.916
+
+# ~ Window 2 Model 9: trial number x current difficulty x previous difficulty x wmc ~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+wind2_m9_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS +
+                                                                    all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                                                    (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+summary(wind2_m9_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx)
+# trialnumberRS                                               -2.832e-01  3.020e-02  8.039e+01  -9.379 1.52e-14 ***
+# all_diff_cont                                               -1.920e-02  7.427e-03  1.342e+04  -2.586  0.00973 **
+# prev_all_diff_cont                                           2.500e-03  7.455e-03  1.342e+04   0.335  0.73734
+# capacity_HighP1_lowN1_best                                   1.312e-01  7.817e-02  7.976e+01   1.679  0.09706 .
+# all_diff_cont:prev_all_diff_cont                            -1.039e-02  1.114e-02  1.341e+04  -0.933  0.35101
+# all_diff_cont:capacity_HighP1_lowN1_best                     6.918e-03  7.422e-03  1.344e+04   0.932  0.35134
+# prev_all_diff_cont:capacity_HighP1_lowN1_best                7.459e-03  7.451e-03  1.344e+04   1.001  0.31680
+# all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1_best -6.466e-03  1.113e-02  1.341e+04  -0.581  0.56143
+
+AIC(wind2_m6_diffContAll_prevdiffContAll_wmcCat_intxn_rfx) # 79.807
+AIC(wind2_m9_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx) # -2894.476
+
+
+
+
+
+
+
+
 
 
 wind2_m0_time_choice_currDiff_prevDiff_span_Fullyrfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS + choice + all_diff_cont * prev_all_diff_cont * complexspan_demeaned +
@@ -5540,6 +5652,55 @@ summary(wind3_m6_diffContAll_prevdiffContAll_wmcCont_intxn_rfx)
 # all_diff_cont:prev_all_diff_cont:complexspan_demeaned -7.725e-03  7.043e-02  1.347e+04  -0.110 0.912663
 
 
+# ~ Window 3 Model 7: trial number x current difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+wind3_m7_time_diffContAll_rfx = lmer(wind3_eval_otciti_mean ~ 1 + trialnumberRS +
+                                       all_diff_cont +
+                                       (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+summary(wind3_m7_time_diffContAll_rfx)
+# trialnumberRS -2.788e-01  3.121e-02  8.221e+01  -8.933 9.58e-14 ***
+# all_diff_cont -1.430e-02  4.990e-03  1.387e+04  -2.866  0.00416 **
+
+AIC(wind3_m0_diffContAll_rfx) # 2591.443
+AIC(wind3_m7_time_diffContAll_rfx) # -43.13793
+
+
+# ~ Window 3 Model 8: trial number x current difficulty x previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+wind3_m8_time_diffContAll_prevdiffContAll_intxn_rfx = lmer(wind3_eval_otciti_mean ~ 1 + trialnumberRS +
+                                                             all_diff_cont * prev_all_diff_cont +
+                                                             (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+summary(wind3_m8_time_diffContAll_prevdiffContAll_intxn_rfx)
+# trialnumberRS                    -2.739e-01  3.117e-02  8.248e+01  -8.788 1.82e-13 ***
+# all_diff_cont                    -4.831e-03  7.845e-03  1.375e+04  -0.616    0.538
+# prev_all_diff_cont                1.187e-02  7.867e-03  1.375e+04   1.508    0.132
+# all_diff_cont:prev_all_diff_cont -1.904e-02  1.164e-02  1.374e+04  -1.635    0.102
+
+AIC(wind3_m2_diffContAll_prevdiffContAll_intxn_rfx) # 2421.331
+AIC(wind3_m8_time_diffContAll_prevdiffContAll_intxn_rfx) # -74.10818
+
+# ~ Window 3 Model 9: trial number x current difficulty x previous difficulty x wmc ~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+wind3_m9_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx = lmer(wind3_eval_otciti_mean ~ 1 + trialnumberRS +
+                                                                    all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                                                    (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+summary(wind3_m9_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx)
+# trialnumberRS                                               -2.750e-01  3.177e-02  8.044e+01  -8.658 3.98e-13 ***
+# all_diff_cont                                                3.322e-05  8.292e-03  1.342e+04   0.004   0.9968
+# prev_all_diff_cont                                           1.297e-02  8.325e-03  1.342e+04   1.557   0.1194
+# capacity_HighP1_lowN1_best                                   1.153e-01  7.654e-02  7.992e+01   1.506   0.1359
+# all_diff_cont:prev_all_diff_cont                            -1.976e-02  1.243e-02  1.341e+04  -1.589   0.1121
+# all_diff_cont:capacity_HighP1_lowN1_best                     1.831e-02  8.286e-03  1.344e+04   2.209   0.0272 *
+# prev_all_diff_cont:capacity_HighP1_lowN1_best                5.703e-03  8.320e-03  1.344e+04   0.686   0.4930
+# all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1_best -5.635e-03  1.243e-02  1.342e+04  -0.453   0.6504
+
+AIC(wind3_m6_diffContAll_prevdiffContAll_wmcCat_intxn_rfx) # 2515.433
+AIC(wind3_m9_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx) # 69.66496
+
+
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ### WINDOW 4 REGRESSIONS: Preparation (2 seconds, +1000 after iti start to +3000 after iti start) #####
@@ -5877,12 +6038,79 @@ summary(wind4_m6_diffContAll_prevdiffContAll_wmcCont_intxn_rfx)
 # prev_all_diff_cont:complexspan_demeaned                9.384e-03  5.422e-02  1.348e+04   0.173  0.86259
 # all_diff_cont:prev_all_diff_cont:complexspan_demeaned  1.773e-02  8.125e-02  1.348e+04   0.218  0.82727
 
+# ~ Window 4 Model 7: trial number x current difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+wind4_m7_time_diffContAll_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + trialnumberRS +
+                                       all_diff_cont +
+                                       (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+summary(wind4_m7_time_diffContAll_rfx)
+# trialnumberRS -2.775e-01  3.462e-02  8.222e+01  -8.015 6.42e-12 ***
+# all_diff_cont  6.448e-03  5.878e-03  1.389e+04   1.097    0.273
+
+AIC(wind4_m0_diffContAll_rfx) # 6632.549
+AIC(wind4_m7_time_diffContAll_rfx) # 4528.01
 
 
+# ~ Window 4 Model 8: trial number x current difficulty x previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+wind4_m8_time_diffContAll_prevdiffContAll_intxn_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + trialnumberRS +
+                                                             all_diff_cont * prev_all_diff_cont +
+                                                             (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+summary(wind4_m8_time_diffContAll_prevdiffContAll_intxn_rfx)
+# trialnumberRS                    -2.706e-01  3.468e-02  8.251e+01  -7.804 1.65e-11 ***
+# all_diff_cont                    -2.313e-03  9.244e-03  1.376e+04  -0.250    0.802
+# prev_all_diff_cont               -1.132e-02  9.271e-03  1.376e+04  -1.221    0.222
+# all_diff_cont:prev_all_diff_cont  1.603e-02  1.372e-02  1.376e+04   1.168    0.243
+
+AIC(wind4_m2_diffContAll_prevdiffContAll_intxn_rfx) # 6450.738
+AIC(wind4_m8_time_diffContAll_prevdiffContAll_intxn_rfx) # 4461.615
+
+# ~ Window 4 Model 9: trial number x current difficulty x previous difficulty x wmc ~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+wind4_m9_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + trialnumberRS +
+                                                                    all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                                                    (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+summary(wind4_m9_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx)
+# trialnumberRS                                               -2.714e-01  3.551e-02  8.046e+01  -7.644  3.9e-11 ***
+# all_diff_cont                                                7.028e-04  9.741e-03  1.344e+04   0.072    0.942
+# prev_all_diff_cont                                          -1.022e-02  9.782e-03  1.344e+04  -1.044    0.296
+# capacity_HighP1_lowN1_best                                   1.158e-01  7.722e-02  8.025e+01   1.499    0.138
+# all_diff_cont:prev_all_diff_cont                             1.456e-02  1.461e-02  1.343e+04   0.997    0.319
+# all_diff_cont:capacity_HighP1_lowN1_best                     1.219e-02  9.734e-03  1.346e+04   1.253    0.210
+# prev_all_diff_cont:capacity_HighP1_lowN1_best                4.992e-03  9.775e-03  1.346e+04   0.511    0.610
+# all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1_best -6.375e-03  1.460e-02  1.344e+04  -0.436    0.662
+
+AIC(wind4_m6_diffContAll_prevdiffContAll_wmcCat_intxn_rfx) # 6387.207
+AIC(wind4_m9_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx) # 4417.294
 
 
+# wind1_mX_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + trialnumberRS *
+#                                                                     all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+#                                                                     (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+# summary(wind1_mX_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx)
+#
+# wind2_mX_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS *
+#                                                                     all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+#                                                                     (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+# summary(wind2_mX_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx)
+#
+# wind3_mX_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx = lmer(wind3_eval_otciti_mean ~ 1 + trialnumberRS *
+#                                                                     all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+#                                                                     (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+# summary(wind3_mX_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx)
 
+# wind4_mX_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + trialnumberRS *
+#                                                                     all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+#                                                                     (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+# summary(wind4_mX_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx)
 
+# when trial number is not interacted, there are no effects of our other predictors in almost all our models
+# when it is interacted, there are some main effects and interaction with trial effects
+# McLaughlin's fatigue method will probably be important to do
+# Does the interaction effect between trial and difficulty speak to the importance that difficulty does reflect a slower more drawn out timecourse effect?
 
 
 
