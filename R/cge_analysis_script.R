@@ -6154,6 +6154,173 @@ summary(wind4_m5_diffContAll_prevdiffContAll_wmcCont_intxn_rfx)
 
 
 
+##### Regression Loop and Plotting a Predictor across all Pupillometry Windows #####
+
+pupilWinds = c("wind1_predisp_onset_mean", "wind2_effort_isi_mean",
+               "wind3_eval_otciti_mean", "wind4_prep_lateiti_mean") # All the pupillometry windows for analysis
+
+columns = c("outcome", "predictor", "beta", "pval")
+
+# current difficulty
+mX_df = data.frame(matrix(NA, nrow = 1 * length(pupilWinds), ncol = 4))
+colnames(mX_df) = columns
+
+mX_allSum = list()
+
+for (i in 1:length(pupilWinds)) {
+
+  outcome = pupilWinds[i]
+
+  # create the regression model
+  model = as.formula(paste(outcome, "~ 1 + all_diff_cont + (1 | subjectnumber)"))
+  mX = lmer(model, data = clean_data_dm)
+
+  # save the model summaries
+  mX_sum = summary(mX)
+  mX_allSum[[outcome]] = mX_sum
+
+  # save out the model summaries into the data frame
+  row_index = 1 * (i - 1) + 1
+
+  mX_df[row_index,] = c(outcome, rownames(mX_sum$coefficients)[2], mX_sum$coefficients[2,1], mX_sum$coefficients[2,5])
+
+}
+
+predictors = c(unique(mX_df$predictor))
+
+for (i in predictors) {
+
+  # set up plot parameters
+  betas = as.numeric(mX_df[mX_df$predictor == i, "beta"])
+  pvals = as.numeric(mX_df[mX_df$predictor == i, "pval"])
+  otcs = mX_df[mX_df$predictor == i, "outcome"]
+
+  # plotting single predictor across all pupillometry models
+  plot(betas, ylim = range(betas, na.rm = T), xaxt = "n",
+       type = "o", pch = 16, cex = 1, # added cex cause it kept making the circles into a diamond
+       xlab = "Pupillometry Windows", ylab = "Beta Values",
+       main = paste(i, "Betas across Pupillometry Windows"))
+  axis(1, at = 1:length(otcs), labels = otcs)
+
+  # marking each significant beta
+  pval_indices <- which(pvals < 0.05)
+  points(pval_indices, betas[pval_indices], pch = 16, cex = 3, col = "red")
+
+}
+
+# current difficulty x previous difficulty
+mX_df = data.frame(matrix(NA, nrow = 3 * length(pupilWinds), ncol = 4))
+colnames(mX_df) = columns
+
+mX_allSum = list()
+
+for (i in 1:length(pupilWinds)) {
+
+  outcome = pupilWinds[i]
+
+  # create the regression model
+  model = as.formula(paste(outcome, "~ 1 + all_diff_cont * prev_all_diff_cont + (1 | subjectnumber)"))
+  mX = lmer(model, data = clean_data_dm)
+
+  # save the model summaries
+  mX_sum = summary(mX)
+  mX_allSum[[outcome]] = mX_sum
+
+  # save out the model summaries into the data frame
+  row_index = 3 * (i - 1) + 1
+
+  mX_df[row_index,] = c(outcome, rownames(mX_sum$coefficients)[2], mX_sum$coefficients[2,1], mX_sum$coefficients[2,5])
+  mX_df[row_index+1,] = c(outcome, rownames(mX_sum$coefficients)[3], mX_sum$coefficients[3,1], mX_sum$coefficients[3,5])
+  mX_df[row_index+2,] = c(outcome, rownames(mX_sum$coefficients)[4], mX_sum$coefficients[4,1], mX_sum$coefficients[4,5])
+
+}
+
+predictors = c(unique(mX_df$predictor))
+
+for (i in predictors) {
+
+  # set up plot parameters
+  betas = as.numeric(mX_df[mX_df$predictor == i, "beta"])
+  pvals = as.numeric(mX_df[mX_df$predictor == i, "pval"])
+  otcs = mX_df[mX_df$predictor == i, "outcome"]
+
+  # plotting single predictor across all pupillometry models
+  plot(betas, ylim = range(betas, na.rm = T), xaxt = "n",
+       type = "o", pch = 16, cex = 1, # added cex cause it kept making the circles into a diamond
+       xlab = "Pupillometry Windows", ylab = "Beta Values",
+       main = paste(i, "Betas across Pupillometry Windows"))
+  axis(1, at = 1:length(otcs), labels = otcs)
+
+  # marking each significant beta
+  pval_indices <- which(pvals < 0.05)
+  points(pval_indices, betas[pval_indices], pch = 16, cex = 3, col = "red")
+
+}
+
+# current difficulty x previous difficulty x wmc
+mX_df = data.frame(matrix(NA, nrow = 7 * length(pupilWinds), ncol = 4)) # nrow needs to change based on how much saving out
+colnames(mX_df) = columns
+
+mX_allSum = list()
+
+for (i in 1:length(pupilWinds)) {
+
+  outcome = pupilWinds[i]
+
+  # create the regression model
+  model = as.formula(paste(outcome, "~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber)")) # add or remove predictors as needed
+  mX = lmer(model, data = clean_data_dm)
+
+  # save the model summaries
+  mX_sum = summary(mX)
+  mX_allSum[[outcome]] = mX_sum
+
+  # save out the model summaries into the data frame
+  row_index = 7 * (i - 1) + 1 # increase like nrows
+
+  mX_df[row_index,] = c(outcome, rownames(mX_sum$coefficients)[2], mX_sum$coefficients[2,1], mX_sum$coefficients[2,5]) # increase like nrows
+  mX_df[row_index+1,] = c(outcome, rownames(mX_sum$coefficients)[3], mX_sum$coefficients[3,1], mX_sum$coefficients[3,5])
+  mX_df[row_index+2,] = c(outcome, rownames(mX_sum$coefficients)[4], mX_sum$coefficients[4,1], mX_sum$coefficients[4,5])
+  mX_df[row_index+3,] = c(outcome, rownames(mX_sum$coefficients)[5], mX_sum$coefficients[5,1], mX_sum$coefficients[5,5])
+  mX_df[row_index+4,] = c(outcome, rownames(mX_sum$coefficients)[6], mX_sum$coefficients[6,1], mX_sum$coefficients[6,5])
+  mX_df[row_index+5,] = c(outcome, rownames(mX_sum$coefficients)[7], mX_sum$coefficients[7,1], mX_sum$coefficients[7,5])
+  mX_df[row_index+6,] = c(outcome, rownames(mX_sum$coefficients)[8], mX_sum$coefficients[8,1], mX_sum$coefficients[8,5])
+
+}
+
+predictors = c(unique(mX_df$predictor))
+
+for (i in predictors) {
+
+  # set up plot parameters
+  betas = as.numeric(mX_df[mX_df$predictor == i, "beta"])
+  pvals = as.numeric(mX_df[mX_df$predictor == i, "pval"])
+  otcs = mX_df[mX_df$predictor == i, "outcome"]
+
+  # plotting single predictor across all pupillometry models
+  plot(betas, ylim = range(betas, na.rm = T), xaxt = "n",
+       type = "o", pch = 16, cex = 1, # added cex cause it kept making the circles into a diamond
+       xlab = "Pupillometry Windows", ylab = "Beta Values",
+       main = paste(i, "Betas across Pupillometry Windows"))
+  axis(1, at = 1:length(otcs), labels = otcs)
+
+  # marking each significant beta
+  pval_indices <- which(pvals < 0.05)
+  points(pval_indices, betas[pval_indices], pch = 16, cex = 3, col = "red")
+
+}
+
+
+
+
+# pvals = as.numeric(m0_currDiff_df[m0_currDiff_df$predictor == "all_diff_cont", "pval"])
+# pvals
+#
+# betas = as.numeric(m0_currDiff_df[m0_currDiff_df$predictor == "all_diff_cont", "beta"])
+# betas
+# is.finite(betas)
+
+#
 
 
 
@@ -6191,21 +6358,7 @@ summary(wind4_m5_diffContAll_prevdiffContAll_wmcCont_intxn_rfx)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# IGNORE # MOVE ON
+# IGNORE # MOVE ON #############
 
 
 ######
