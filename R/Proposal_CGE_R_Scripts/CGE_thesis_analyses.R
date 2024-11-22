@@ -7,7 +7,7 @@
 
 ## Setting Up
 
-rm(list=ls())
+#rm(list=ls())
 
 library(dplyr)
 library(lme4)

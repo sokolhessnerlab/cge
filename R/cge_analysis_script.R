@@ -646,7 +646,7 @@ mean_rt_dynamic = array(dim = c(number_of_clean_subjects, 1));
 
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
-  tmpdata = data_dm[data_dm$subjectnumber == subj_id,];
+  tmpdata = data_dm[data_dm$subjectnumber == subj_id,]; # needs to be clean data dm not data dm????
 
   mean_rt_static[subj] = mean(tmpdata$reactiontime[(tmpdata$static0dynamic1 == 0)],na.rm = T);
   mean_rt_dynamic[subj] = mean(tmpdata$reactiontime[(tmpdata$static0dynamic1 == 1)], na.rm = T);
@@ -1980,13 +1980,13 @@ summary(m3_best_IUS_SNS_full) # AIC -6452; worse than mostly-interactive version
 ### Adding in TrialNumber (time) to RT regressions ############################################
 
 # The best-fitting model behaviorally uses current diffculty, previous
-# difficulty, and the best-fitting split between high and low capacity. 
+# difficulty, and the best-fitting split between high and low capacity.
 #
 # The goal of these regressions is to establish the extent to which including
-# trial number (as a stand-in for time) improves model fit and/or changes any 
-# of the main results in an important way. 
+# trial number (as a stand-in for time) improves model fit and/or changes any
+# of the main results in an important way.
 #
-# The motivation for this is twofold: 1) it might matter and we haven't tested 
+# The motivation for this is twofold: 1) it might matter and we haven't tested
 # it, and 2) it matters for pupillometry.
 
 # m3_best
@@ -2001,7 +2001,7 @@ summary(m3_best_trialNum_MEonly)
 # - trial number (neg.; faster with increasing time in task)
 # - current difficulty (pos.; slower with increasing curr. difficulty)
 # - previous difficulty (MARGINAL; neg.; faster with increasing prev. difficulty)
-# 
+#
 # Interaction Effects of...
 # - curr diff & Capacity (pos.; more of an effect for current difficulty if high cap)
 # - prev diff & Capacity (pos.; less of the negative effect of prev. diff. if high cap)
@@ -2009,9 +2009,9 @@ summary(m3_best_trialNum_MEonly)
 # TAKEAWAY: the story remains the same if the simple main effect of trialnumber is included
 
 m3_best_trialNum_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
-                                       all_diff_cont * trialnumberRS + 
-                                       prev_all_diff_cont * trialnumberRS + 
-                                       capacity_HighP1_lowN1_best * trialnumberRS + 
+                                       all_diff_cont * trialnumberRS +
+                                       prev_all_diff_cont * trialnumberRS +
+                                       capacity_HighP1_lowN1_best * trialnumberRS +
                                  (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_trialNum_2WayIntxOnly)
 # AIC -9459.3 (a little better)
@@ -2323,10 +2323,10 @@ clean_data_dm$riskywinP1_loseN1 = clean_data_dm$choice*(  # on trials where the 
 # value. Regressor must be DEMEANED to handle this slight bias.
 clean_data_dm$riskywinP1_loseN1_DM = clean_data_dm$riskywinP1_loseN1 - mean(clean_data_dm$riskywinP1_loseN1, na.rm = T)
 
-reg_formula_full = as.formula("mega_pupil_array[,timepoint] ~ 1 + 
-trialnumberRS + choice_riskyP1_safeN1 + riskywinP1_loseN1 + 
-all_diff_cont*capacity_HighP1_lowN1_best*trialnumberRS + 
-prev_all_diff_cont*capacity_HighP1_lowN1_best*trialnumberRS + 
+reg_formula_full = as.formula("mega_pupil_array[,timepoint] ~ 1 +
+trialnumberRS + choice_riskyP1_safeN1 + riskywinP1_loseN1 +
+all_diff_cont*capacity_HighP1_lowN1_best*trialnumberRS +
+prev_all_diff_cont*capacity_HighP1_lowN1_best*trialnumberRS +
 (1 | subjectnumber)")
 
 reg_all_terms = labels(terms(reg_formula_full)) # this contains the RFX terms, which we don't want
@@ -6871,7 +6871,15 @@ anova(wind2_m10_T_CD_PD_intfx_noTrialRFX, wind2_m10_T_CD_PD_intfx_TrialRFX)
 # Outcomes: Average RTs, Trial-by-Trial RTs, and SD RTs
 # Predictors: current difficulty (cat v. cont), previous difficulty (cont v. cont), wmc, and nfc
 
-clean_data_dm$meanRT = mean(clean_data_dm$reactiontime)
+
+for (subj in 1:number_of_clean_subjects) {
+  subj_id = keep_participants[subj]
+  tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id, ]
+  clean_data_dm$meanRT[subj] = mean(tmpdata$reactiontime, na.rm = T)
+}
+
+
+
 
 m1_meanRT_allNoNFC_intfx = lmer(meanRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
                              (1 | subjectnumber), data = clean_data_dm)
