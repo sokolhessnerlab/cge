@@ -2184,6 +2184,11 @@ summary(likmodel_contDiff_catCap)
 
 # Pupillometry Analyses #################
 
+tmp_pupil_QA_metrics_fn = dir(pattern = glob2rx(sprintf('cge_pupil_QA_metrics*.csv',s)),full.names = T, recursive = T);
+pupil_QA_metrics = read.csv(tmp_pupil_QA_metrics_fn[length(tmp_pupil_QA_metrics_fn)])
+keep_subj_pupil = as.logical(pupil_QA_metrics$keep_subj_pupil[keep_participants]); # focusing on those individuals
+# we are retaining for behavioral analysis, which do we ALSO retain for pupil analysis
+
 ## Characterizing Overall Pupillometric Variability Across Participants ##############################
 
 mean_pupil_dilations = array(dim = c(number_of_clean_subjects)) # mean pupil dilation
@@ -4420,7 +4425,7 @@ legend("bottomright", legend = c("Low WMC", "Easy", "Difficult", "High WMC", "Ea
 
 
 dev.off()
-# PUPILLLOMETRY REGRESSIONS #################
+# PUPILLOMETRY REGRESSIONS #################
 par(mfrow = c(1,1))
 
 cor_matrix = cor(clean_data_dm[,c('wind1_predisp_onset_mean','wind2_effort_isi_mean','wind3_eval_otciti_mean','wind4_prep_lateiti_mean')],
@@ -6817,29 +6822,51 @@ for (i in predictors) {
 }
 
 
-###
+### RFX for Trial Number? ###################################################
 
 wind2_m10_T_CD_PD_intfx_noTrialRFX = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS +
                                             all_diff_cont * prev_all_diff_cont +
                                             (1 | subjectnumber), data = clean_data_dm)
 w2_m10_noTrialRFX_sum = summary(wind2_m10_T_CD_PD_intfx_noTrialRFX)
 coef(w2_m10_noTrialRFX_sum)
-
+# coef(wind2_m10_T_CD_PD_intfx_noTrialRFX)
 
 wind2_m10_T_CD_PD_intfx_TrialRFX = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS +
                                             all_diff_cont * prev_all_diff_cont +
                                             (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
 w2_m10_TrialRFX_sum = summary(wind2_m10_T_CD_PD_intfx_TrialRFX)
 coef(w2_m10_TrialRFX_sum)
+tmp_coefficients = coef(wind2_m10_T_CD_PD_intfx_TrialRFX);
+mfx_estimates_trialnumberRS = tmp_coefficients$subjectnumber$trialnumberRS
+
+# Does this basic regression do better or worse with the random effects of trial
+# number (standing in for time-on-task)?
+anova(wind2_m10_T_CD_PD_intfx_noTrialRFX, wind2_m10_T_CD_PD_intfx_TrialRFX)
+# It does better *WITH* RFX for trialnumberRS (time-on-task).
 
 
-cor_matrix = cor(clean_data_dm[,c('trialnumberRS','complexspan_demeaned','NCS', 'PSS', 'SNS')],
+# cor_matrix = cor(clean_data_dm[,c('trialnumberRS','complexspan_demeaned','NCS', 'IUS', 'PSS', 'SNS')],
+#                  use = 'complete.obs')
+cor_matrix = cor(cbind(mfx_estimates_trialnumberRS,
+                       clean_data_complexspan$compositeSpanScore[keep_subj_pupil],
+                       clean_data_survey$NCS[keep_subj_pupil],
+                       clean_data_survey$IUS[keep_subj_pupil],
+                       clean_data_survey$PSS[keep_subj_pupil],
+                       clean_data_survey$SNS[keep_subj_pupil]
+                       ),
                  use = 'complete.obs')
 corrplot(cor_matrix, type = 'lower')
 
-anova(wind2_m10_T_CD_PD_intfx_noTrialRFX, wind2_m10_T_CD_PD_intfx_TrialRFX)
+# There is no consistent relationship between the effect of time on pupil dilation
+# and individual differences measures including composite span, NCS, IUS, PSS,
+# or SNS. Double-checked with Spearman's in a few cases, and visually checked all
+# pairwise correlations, no concerns re: distributions or outliers. 
 
+# TAKEAWAY: Effect of time-on-task on pupil dilation is its own effect.
 
+# Overall, it seems like the random effects of trial number on pupil dilation are
+# primary, unique effects, and meaningful in terms of fitting pupil dilation
+# data. This RFX might need to stay in our regressions! 
 
 
 
