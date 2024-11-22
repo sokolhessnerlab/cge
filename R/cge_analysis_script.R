@@ -4384,6 +4384,7 @@ legend("bottomright", legend = c("Low WMC", "Easy", "Difficult", "High WMC", "Ea
 
 dev.off()
 # PUPILLLOMETRY REGRESSIONS #################
+par(mfrow = c(1,1))
 
 cor_matrix = cor(clean_data_dm[,c('wind1_predisp_onset_mean','wind2_effort_isi_mean','wind3_eval_otciti_mean','wind4_prep_lateiti_mean')],
                                    use = 'complete.obs')
@@ -6164,7 +6165,7 @@ pupilWinds = c("wind1_predisp_onset_mean", "wind2_effort_isi_mean",
 
 columns = c("outcome", "predictor", "beta", "pval")
 
-# current difficulty categorical ================================================
+# current difficulty categorical ================================================ # ALL CATEGORICAL
 mX_df = data.frame(matrix(NA, nrow = 1 * length(pupilWinds), ncol = 4))
 colnames(mX_df) = columns
 
@@ -6313,7 +6314,7 @@ for (i in predictors) {
 
 }
 
-# current difficulty continuous ================================================
+# current difficulty continuous ================================================ TRIALS NOT INCLUDED
 mX_df = data.frame(matrix(NA, nrow = 1 * length(pupilWinds), ncol = 4))
 colnames(mX_df) = columns
 
@@ -6462,7 +6463,7 @@ for (i in predictors) {
 
 }
 
-# current difficulty continuous ================================================
+# current difficulty continuous ================================================ MAIN EFFECTS OF TRIALS
 mX_df = data.frame(matrix(NA, nrow = 2 * length(pupilWinds), ncol = 4))
 colnames(mX_df) = columns
 
@@ -6614,7 +6615,7 @@ for (i in predictors) {
 
 }
 
-# current difficulty continuous ================================================
+# current difficulty continuous ================================================ INTERACTION EFFECTS W/ TRIALS
 mX_df = data.frame(matrix(NA, nrow = 3 * length(pupilWinds), ncol = 4))
 colnames(mX_df) = columns
 
@@ -6779,18 +6780,27 @@ for (i in predictors) {
 }
 
 
-#
+###
+
+wind2_m10_T_CD_PD_intfx_noTrialRFX = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS +
+                                            all_diff_cont * prev_all_diff_cont +
+                                            (1 | subjectnumber), data = clean_data_dm)
+w2_m10_noTrialRFX_sum = summary(wind2_m10_T_CD_PD_intfx_noTrialRFX)
+coef(w2_m10_noTrialRFX_sum)
 
 
+wind2_m10_T_CD_PD_intfx_TrialRFX = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS +
+                                            all_diff_cont * prev_all_diff_cont +
+                                            (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
+w2_m10_TrialRFX_sum = summary(wind2_m10_T_CD_PD_intfx_TrialRFX)
+coef(w2_m10_TrialRFX_sum)
 
 
+cor_matrix = cor(clean_data_dm[,c('trialnumberRS','complexspan_demeaned','NCS', 'PSS', 'SNS')],
+                 use = 'complete.obs')
+corrplot(cor_matrix, type = 'lower')
 
-
-
-
-
-
-
+anova(wind2_m10_T_CD_PD_intfx_noTrialRFX, wind2_m10_T_CD_PD_intfx_TrialRFX)
 
 
 
@@ -6817,6 +6827,32 @@ for (i in predictors) {
 
 
 # IGNORE # MOVE ON #############
+
+
+
+# Proposed RT regression models
+# Outcomes: Average RTs, Trial-by-Trial RTs, and SD RTs
+# Predictors: current difficulty (cat v. cont), previous difficulty (cont v. cont), wmc, and nfc
+
+clean_data_dm$meanRT = mean(clean_data_dm$reactiontime)
+
+m1_meanRT_allNoNFC_intfx = lmer(meanRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                             (1 | subjectnumber), data = clean_data_dm)
+summary(m1_meanRT_allNoNFC_intfx)
+
+m1_meanRT_allNoWMC_intfx = lmer(meanRT ~ 1 + all_diff_cont * prev_all_diff_cont * NCS_HighP1_LowN1 +
+                                  (1 | subjectnumber), data = clean_data_dm)
+summary(m1_meanRT_allNoWMC_intfx)
+
+
+
+
+
+
+
+
+
+
 
 
 ######
