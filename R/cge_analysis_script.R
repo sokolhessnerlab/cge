@@ -2269,33 +2269,30 @@ cat('Mega pupil array created')
 # We'll use clean_data_dm as the source of regressors.
 
 clean_data_dm$trialnumberRS = clean_data_dm$trialnumber/max(clean_data_dm$trialnumber)
+clean_data_dm$choice_riskyP1_safeN1 = clean_data_dm$choice*2-1
 clean_data_dm$riskywinP1_loseN1 = clean_data_dm$choice*(  # on trials where the risky option was chosen...
   1*(clean_data_dm$outcome == clean_data_dm$riskyopt1) -  # +1 when they 'won'
   1*(clean_data_dm$outcome == clean_data_dm$riskyopt2))   # -1 when they 'lost'
+# Because the mean probability of winning was slightly *below* 0.5 (0.4896),
+# it's technically possible to *predict* on a per trial basis that participants
+# are more likely to lose than win, and when used as-is, this regressor
+# is capturing a small slice of risk-taking activity in its non-zero mean
+# value. Regressor must be DEMEANED to handle this slight bias.
+clean_data_dm$riskywinP1_loseN1_DM = clean_data_dm$riskywinP1_loseN1 - mean(clean_data_dm$riskywinP1_loseN1, na.rm = T)
 
-reg_colnames = c(
-  'intercept',
-  'trialnumberRS',
-  'choice',
-  'riskywinP1_loseN1',
-  'all_diff_cont',
-  'prev_all_diff_cont',
-  'capacity_HighP1_LowN1_best',
-  'all_diff_cont_X_prev_all_diff_cont',
-  'all_diff_cont_X_capacity_HighP1_LowN1_best',
-  'prev_all_diff_cont_X_capacity_HighP1_lowN1_best',
-  'trialnumberRS_X_choice',
-  'trialnumberRS_X_all_diff_cont',
-  'trialnumberRS_X_prev_all_diff_cont',
-  'trialnumberRS_X_capacity_HighP1_LowN1_best',
-  'choice_X_all_diff_cont',
-  'choice_X_prev_all_diff_cont',
-  'choice_X_capacity_HighP1_lowN1_best'
-);
+reg_formula_full = as.formula("mega_pupil_array[,timepoint] ~ 1 + 
+trialnumberRS + choice_riskyP1_safeN1 + riskywinP1_loseN1 + 
+all_diff_cont*capacity_HighP1_lowN1_best*trialnumberRS + 
+prev_all_diff_cont*capacity_HighP1_lowN1_best*trialnumberRS + 
+(1 | subjectnumber)")
 
-beta_vals = array(data = NA, dim = c(length(xvals),length(reg_colnames)))
+reg_all_terms = labels(terms(reg_formula_full)) # this contains the RFX terms, which we don't want
+keep_reg_terms = !grepl("subjectnumber", reg_all) # find the RFX term...
+reg_all_terms = c('intercept',reg_all_terms[keep_reg_terms]) #... and remove it and add the intercept term
+
+beta_vals = array(data = NA, dim = c(length(xvals),length(reg_all_terms)))
 beta_vals = as.data.frame(beta_vals);
-colnames(beta_vals) <- reg_colnames;
+colnames(beta_vals) <- reg_all_terms;
 
 p_vals = beta_vals
 
@@ -2306,14 +2303,7 @@ for (timepoint in 1:length(xvals)){
   if (all(is.na(mega_pupil_array[,timepoint]))){
     next
   } else{
-    tmp_model = lmer(mega_pupil_array[,timepoint] ~ 1 + trialnumberRS + choice + riskywinP1_loseN1 +
-                       all_diff_cont + prev_all_diff_cont + capacity_HighP1_lowN1_best +
-                       all_diff_cont:prev_all_diff_cont + all_diff_cont:capacity_HighP1_lowN1_best +
-                       prev_all_diff_cont:capacity_HighP1_lowN1_best +
-                       trialnumberRS:choice + trialnumberRS:all_diff_cont + trialnumberRS:prev_all_diff_cont + trialnumberRS:capacity_HighP1_lowN1_best +
-                       choice:all_diff_cont + choice:prev_all_diff_cont + choice:capacity_HighP1_lowN1_best +
-                       (1 + trialnumberRS | subjectnumber),
-                     data = clean_data_dm)
+    tmp_model = lmer(reg_formula_full,data = clean_data_dm)
     tmp_summ = summary(tmp_model)
     beta_vals[timepoint,] = coef(tmp_summ)[,1]
     p_vals[timepoint,] = coef(tmp_summ)[,5]
@@ -2348,18 +2338,22 @@ color_palette_for_pval_reconfig = rev(c(
 
 par(mar=c(5,20,4,2))
 image(as.matrix(p_vals_reconfig), col = color_palette_for_pval_reconfig, axes=F)
-axis(2, at=seq(0,1,length=length(reg_colnames)), labels = reg_colnames, lwd=0, las=1)
+axis(2, at=seq(0,1,length=length(reg_all_terms)), labels = reg_all_terms, lwd=0, las=1)
 axis(1, seq(from=0,to=1,length.out=25), labels = xvals[round(seq(from=1,to=length(xvals),length.out=25))])
 abline(v = which(xvals == 0)[2]/length(xvals), col = 'magenta', lwd = 3, lty = 'dotted')
 abline(v = which(xvals == 1000)[2]/length(xvals), col = 'purple', lwd = 3, lty = 'dashed')
 abline(v = which(xvals == 2000)/length(xvals), col = 'purple', lwd = 3, lty = 'dashed')
 
 
-dev.off()
-plot(beta_vals$choice); abline(v = which(xvals == 0)[2], col = 'magenta', lwd = 3, lty = 'dotted')
+par(mar = c(5.1, 4.1, 4.1, 2.1))
+plot(beta_vals$choice_riskyP1_safeN1 + beta_vals$riskywinP1_loseN1, ylim = c(-0.1,0.1));
+lines(beta_vals$choice_riskyP1_safeN1 - beta_vals$riskywinP1_loseN1, lwd = 2)
+lines(-beta_vals$choice_riskyP1_safeN1,col = 'red', lwd = 2)
+abline(v = which(xvals == 0)[2], col = 'magenta', lwd = 3, lty = 'dotted')
 abline(h = 0, col = 'black', lwd = 2)
 abline(v = which(xvals == 1000)[2], col = 'purple', lwd = 3, lty = 'dashed')
 abline(v = which(xvals == 2000), col = 'purple', lwd = 3, lty = 'dashed')
+legend('topleft',legend = c('risky win', 'risky loss', 'safe'))
 
 # Need to ...
 #   1. decide on a better regression
@@ -6155,7 +6149,7 @@ summary(wind4_m5_diffContAll_prevdiffContAll_wmcCont_intxn_rfx)
 
 
 
-##### Regression Loop and Plotting a Predictor across all Pupillometry Windows #####
+### LOOP: Regression Loop and Plotting a Predictor across all Pupillometry Windows #####
 
 dev.off()
 
