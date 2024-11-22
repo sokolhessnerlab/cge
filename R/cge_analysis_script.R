@@ -105,7 +105,8 @@ clean_data_survey = survey_data[survey_data$subjectID %in% keep_participants,]
 number_of_clean_subjects = length(keep_participants);
 number_of_clean_subjects # 85 participants (4/5/24)
 
-
+# Create a re-scaled version of trial number for use in subsequent analyses
+clean_data_dm$trialnumberRS = clean_data_dm$trialnumber/max(clean_data_dm$trialnumber)
 
 # BASIC DATA ANALYSIS ############################################
 
@@ -1970,7 +1971,50 @@ summary(m3_best_IUS_SNS_full) # AIC -6452; worse than mostly-interactive version
 # m3_best_meanlik = exp(-m3_best_summary$logLik/nobs(m3_best));
 # cat(sprintf('The best mean likelihood obtained with the CompositeSpan was %0.4f\n', m3_best_meanlik))
 
+# m3_best
+# sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber)
+# AIC -8760.373
 
+
+
+### Adding in TrialNumber (time) to RT regressions ############################################
+
+# The best-fitting model behaviorally uses current diffculty, previous
+# difficulty, and the best-fitting split between high and low capacity. 
+#
+# The goal of these regressions is to establish the extent to which including
+# trial number (as a stand-in for time) improves model fit and/or changes any 
+# of the main results in an important way. 
+#
+# The motivation for this is twofold: 1) it might matter and we haven't tested 
+# it, and 2) it matters for pupillometry.
+
+# m3_best
+# sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber)
+# AIC -8760.373
+
+m3_best_trialNum_MEonly = lmer(sqrtRT ~ 1 + trialnumberRS + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                 (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_trialNum_MEonly)
+# AIC -9347.1 (better)
+# Main Effects of...
+# - trial number (neg.; faster with increasing time in task)
+# - current difficulty (pos.; slower with increasing curr. difficulty)
+# - previous difficulty (MARGINAL; neg.; faster with increasing prev. difficulty)
+# 
+# Interaction Effects of...
+# - curr diff & Capacity (pos.; more of an effect for current difficulty if high cap)
+# - prev diff & Capacity (pos.; less of the negative effect of prev. diff. if high cap)
+
+# TAKEAWAY: the story remains the same if the simple main effect of trialnumber is included
+
+m3_best_trialNum_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                       all_diff_cont * trialnumberRS + 
+                                       prev_all_diff_cont * trialnumberRS + 
+                                       capacity_HighP1_lowN1_best * trialnumberRS + 
+                                 (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_trialNum_2WayIntxOnly)
+# AIC -9459.3 (a little better)
 
 
 ### Individual Regressions ############################################
@@ -2268,7 +2312,6 @@ cat('Mega pupil array created')
 ### Carry out regressions #########################
 # We'll use clean_data_dm as the source of regressors.
 
-clean_data_dm$trialnumberRS = clean_data_dm$trialnumber/max(clean_data_dm$trialnumber)
 clean_data_dm$choice_riskyP1_safeN1 = clean_data_dm$choice*2-1
 clean_data_dm$riskywinP1_loseN1 = clean_data_dm$choice*(  # on trials where the risky option was chosen...
   1*(clean_data_dm$outcome == clean_data_dm$riskyopt1) -  # +1 when they 'won'
@@ -2287,7 +2330,7 @@ prev_all_diff_cont*capacity_HighP1_lowN1_best*trialnumberRS +
 (1 | subjectnumber)")
 
 reg_all_terms = labels(terms(reg_formula_full)) # this contains the RFX terms, which we don't want
-keep_reg_terms = !grepl("subjectnumber", reg_all) # find the RFX term...
+keep_reg_terms = !grepl("subjectnumber", reg_all_terms) # find the RFX term...
 reg_all_terms = c('intercept',reg_all_terms[keep_reg_terms]) #... and remove it and add the intercept term
 
 beta_vals = array(data = NA, dim = c(length(xvals),length(reg_all_terms)))
