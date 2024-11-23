@@ -6860,13 +6860,13 @@ corrplot(cor_matrix, type = 'lower')
 # There is no consistent relationship between the effect of time on pupil dilation
 # and individual differences measures including composite span, NCS, IUS, PSS,
 # or SNS. Double-checked with Spearman's in a few cases, and visually checked all
-# pairwise correlations, no concerns re: distributions or outliers. 
+# pairwise correlations, no concerns re: distributions or outliers.
 
 # TAKEAWAY: Effect of time-on-task on pupil dilation is its own effect.
 
 # Overall, it seems like the random effects of trial number on pupil dilation are
 # primary, unique effects, and meaningful in terms of fitting pupil dilation
-# data. This RFX might need to stay in our regressions! 
+# data. This RFX might need to stay in our regressions!
 
 
 
@@ -6899,12 +6899,19 @@ corrplot(cor_matrix, type = 'lower')
 # Predictors: current difficulty (cat v. cont), previous difficulty (cont v. cont), wmc, and nfc
 
 
+
+
+
+# Mean RT Loop
 for (subj in 1:number_of_clean_subjects) {
   subj_id = keep_participants[subj]
-  tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id, ]
-  clean_data_dm$meanRT[subj] = mean(tmpdata$reactiontime, na.rm = T)
-}
 
+  tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id, ]
+
+  mean_RT = mean(tmpdata$reactiontime, na.rm = T)
+
+  clean_data_dm$meanRT[clean_data_dm$subjectnumber == subj_id] = mean_RT
+}
 
 
 
@@ -7072,4 +7079,3 @@ mean((meanRT_easy_capacity_Low), na.rm = T);
 sd((meanRT_easy_capacity_Low), na.rm = T);
 
 print('the end')
-

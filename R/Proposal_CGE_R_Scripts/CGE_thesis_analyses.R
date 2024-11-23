@@ -16,7 +16,8 @@ library(nlme)
 library(tidyverse)
 
 # Loading Data
-clean_data_dm_vonkim <- read.csv("C:\\Users\\jvonm\\Documents\\CGE_R_Scripts\\clean_data_dm_090424.csv")
+#clean_data_dm_vonkim <- read.csv("C:\\Users\\jvonm\\Documents\\CGE_R_Scripts\\clean_data_dm_090424.csv")
+clean_data_dm_vonkim <- read.csv("C:\\Users\\jvonm\\Documents\\GitHub\\cge\\R\\Proposal_CGE_R_Scripts\\clean_data_dm_112224.csv")
 
 # Excluding Subjects
 clean_data_dm_vonkim <- clean_data_dm_vonkim[clean_data_dm_vonkim$subjectnumber != 16, ]
@@ -77,16 +78,16 @@ data_currprev_diff <- clean_data_dm_vonkim %>% # current and previous difficulty
     sdRT = sd(reactiontime, na.rm = T)
   )
 
-data_cont_diff <- clean_data_dm_vonkim %>% # current and previous difficulty
-  group_by(subjectnumber, easyP1difficultN1_prev) %>%
-  summarize(
-    n = n(),
-    currDiffCont = all_diff_cont,
-    WMCgroup = mean(capacity_HighP1_lowN1_best, na.rm = T),
-    NFCgroup = mean(NCS_HighP1_LowN1, na.rm = T),
-    meanRT = mean(reactiontime, na.rm = T),
-    sdRT = sd(reactiontime, na.rm = T)
-  )
+# data_cont_diff <- clean_data_dm_vonkim %>% # current and previous difficulty
+#   group_by(subjectnumber, easyP1difficultN1_prev) %>%
+#   summarize(
+#     n = n(),
+#     currDiffCont = all_diff_cont,
+#     WMCgroup = mean(capacity_HighP1_lowN1_best, na.rm = T),
+#     NFCgroup = mean(NCS_HighP1_LowN1, na.rm = T),
+#     meanRT = mean(reactiontime, na.rm = T),
+#     sdRT = sd(reactiontime, na.rm = T)
+#   )
 
 
 ##### Model 1: Subject Level Average RTs #####
@@ -106,7 +107,7 @@ data_cont_diff <- clean_data_dm_vonkim %>% # current and previous difficulty
 #       lwd = 5, col = 'purple1')
 
 
-# Subject Level Average RTs ~ Current Difficulty
+# Subject Level Average RTs ~ Current Difficulty ####
 m1_curr_meanRT <- lmer(meanRT ~ 1 +
                          curr_diff +
                          (1 | subjectnumber), data = data_curr_diff)
@@ -203,18 +204,64 @@ m1_all_meanRT_intfx <- lmer(meanRT ~ 1 +
                         (1 | subjectnumber), data = data_currprev_diff)
 summary(m1_all_meanRT_intfx)
 
+# (Intercept)                                             1.685e+00  3.276e-02  8.645e+01  51.450  < 2e-16 ***
+# curr_diffeasy                                          -2.507e-01  1.561e-02  2.310e+02 -16.061  < 2e-16 ***
+# easyP1difficultN1_prev                                  6.502e-03  1.104e-02  2.310e+02   0.589    0.556
+# WMCgroup                                                5.077e-02  3.276e-02  8.645e+01   1.550    0.125
+# NFCgroup                                                8.112e-03  3.276e-02  8.645e+01   0.248    0.805
+# curr_diffeasy:easyP1difficultN1_prev                    1.306e-03  1.561e-02  2.310e+02   0.084    0.933
+# curr_diffeasy:WMCgroup                                 -6.248e-02  1.561e-02  2.310e+02  -4.002 8.47e-05 ***
+# easyP1difficultN1_prev:WMCgroup                        -1.635e-02  1.104e-02  2.310e+02  -1.481    0.140
+# curr_diffeasy:NFCgroup                                  8.968e-03  1.561e-02  2.310e+02   0.574    0.566
+# easyP1difficultN1_prev:NFCgroup                        -7.466e-04  1.104e-02  2.310e+02  -0.068    0.946
+# WMCgroup:NFCgroup                                       4.821e-03  3.276e-02  8.645e+01   0.147    0.883
+# curr_diffeasy:easyP1difficultN1_prev:WMCgroup           1.018e-02  1.561e-02  2.310e+02   0.652    0.515
+# curr_diffeasy:easyP1difficultN1_prev:NFCgroup          -6.671e-03  1.561e-02  2.310e+02  -0.427    0.670
+# curr_diffeasy:WMCgroup:NFCgroup                         1.432e-03  1.561e-02  2.310e+02   0.092    0.927
+# easyP1difficultN1_prev:WMCgroup:NFCgroup                1.251e-02  1.104e-02  2.310e+02   1.134    0.258
+# curr_diffeasy:easyP1difficultN1_prev:WMCgroup:NFCgroup -1.852e-02  1.561e-02  2.310e+02  -1.186    0.237
+
+m1_allNoNFC_meanRT_intfx <- lmer(meanRT ~ 1 +
+                              curr_diff *
+                              easyP1difficultN1_prev *
+                              WMCgroup +
+                              (1 | subjectnumber), data = data_currprev_diff)
+summary(m1_allNoNFC_meanRT_intfx)
+
+# (Intercept)                                     1.693902   0.032701  90.825390  51.799  < 2e-16 ***
+# curr_diffeasy                                  -0.256514   0.016308 240.000001 -15.730  < 2e-16 ***
+# easyP1difficultN1_prev                          0.005523   0.011531 240.000001   0.479 0.632407
+# WMCgroup                                        0.043706   0.032701  90.825390   1.337 0.184720
+# curr_diffeasy:easyP1difficultN1_prev            0.002355   0.016308 240.000001   0.144 0.885287
+# curr_diffeasy:WMCgroup                         -0.055550   0.016308 240.000001  -3.406 0.000772 ***
+# easyP1difficultN1_prev:WMCgroup                -0.014061   0.011531 240.000001  -1.219 0.223910
+# curr_diffeasy:easyP1difficultN1_prev:WMCgroup   0.006332   0.016308 240.000001   0.388 0.698138
+
+m1_allNoNFCprev_meanRT_intfx <- lmer(meanRT ~ 1 +
+                                       curr_diff *
+                                       WMCgroup +
+                                       (1 | subjectnumber), data = data_currprev_diff)
+summary(m1_allNoNFCprev_meanRT_intfx) # the better model
+
+# curr_diffeasy           -0.25651    0.01630 244.00000 -15.737  < 2e-16 ***
+# WMCgroup                 0.04371    0.03270  90.81785   1.337 0.184708
+# curr_diffeasy:WMCgroup  -0.05555    0.01630 244.00000  -3.408 0.000766 ***
+
 # ~ When regressing current and previous difficulty, WMC, and NFC on average subject level RTs,
 # regression coefficients revealed an effect of current difficulty, β = -0.23(0.02) , p < .001,
 # but not previous difficulty, β = 0.01(0.01), p = .16, WMC, β = 0.02(0.03), p =.53, or NFC, β = 0.01(0.03), p = 0.72.
 
 # Compare m1 models
-AIC(m1_curr_meanRT) # 13.04949 - the better model???
+AIC(m1_curr_meanRT) # 13.04949
 AIC(m1_prev_meanRT) # 42.95589
 AIC(m1_WMC_meanRT) # 89.44398
 AIC(m1_NFC_meanRT) # 85.45728
 AIC(m1_all_meanRT) # 22.97317
+AIC(m1_all_meanRT_intfx) # -41.01238
+AIC(m1_allNoNFC_meanRT_intfx) # -78.32277
+AIC(m1_allNoNFCprev_meanRT_intfx) # -111.1359 - the better model???
 
-## Model 2: Trial-by-Trial RTs
+## Model 2: Trial-by-Trial RTs ####
 
 # Current Difficulty
 m2_curr_trialRT <- lmer(sqrtRT ~ 1 +
@@ -306,6 +353,21 @@ m2_all_trialRT_intfx <- lmer(sqrtRT ~ 1 +
                          (1 | subjectnumber), data = clean_data_dm_vonkim)
 summary(m2_all_trialRT_intfx)
 
+# easyP1difficultN1                                                                    -4.777e-02  1.818e-03  9.520e+03 -26.276  < 2e-16 ***
+# easyP1difficultN1_prev                                                                3.002e-03  1.818e-03  9.520e+03   1.651   0.0987 .
+# capacity_HighP1_lowN1_best                                                            7.509e-03  1.250e-02  7.700e+01   0.601   0.5497
+# NCS_HighP1_LowN1                                                                      5.427e-03  1.250e-02  7.700e+01   0.434   0.6653
+# easyP1difficultN1:easyP1difficultN1_prev                                             -1.539e-04  1.827e-03  9.524e+03  -0.084   0.9329
+# easyP1difficultN1:capacity_HighP1_lowN1_best                                         -1.148e-02  1.818e-03  9.520e+03  -6.312 2.88e-10 ***
+# easyP1difficultN1_prev:capacity_HighP1_lowN1_best                                    -4.213e-03  1.818e-03  9.520e+03  -2.318   0.0205 *
+# easyP1difficultN1:NCS_HighP1_LowN1                                                    1.346e-03  1.818e-03  9.520e+03   0.740   0.4591
+# easyP1difficultN1_prev:NCS_HighP1_LowN1                                              -1.716e-03  1.818e-03  9.520e+03  -0.944   0.3452
+# capacity_HighP1_lowN1_best:NCS_HighP1_LowN1                                           1.690e-03  1.250e-02  7.700e+01   0.135   0.8928
+# easyP1difficultN1:easyP1difficultN1_prev:capacity_HighP1_lowN1_best                   1.864e-03  1.827e-03  9.524e+03   1.020   0.3077
+# easyP1difficultN1:easyP1difficultN1_prev:NCS_HighP1_LowN1                            -1.294e-03  1.827e-03  9.524e+03  -0.708   0.4788
+# easyP1difficultN1:capacity_HighP1_lowN1_best:NCS_HighP1_LowN1                         1.501e-04  1.818e-03  9.520e+03   0.083   0.9342
+# easyP1difficultN1_prev:capacity_HighP1_lowN1_best:NCS_HighP1_LowN1                    1.237e-03  1.818e-03  9.520e+03   0.680   0.4963
+# easyP1difficultN1:easyP1difficultN1_prev:capacity_HighP1_lowN1_best:NCS_HighP1_LowN1 -3.392e-03  1.827e-03  9.524e+03  -1.857   0.0634 .
 
 m2_allNoNFC_trialRT_intfx <- lmer(sqrtRT ~ 1 +
                                easyP1difficultN1 *
@@ -314,15 +376,13 @@ m2_allNoNFC_trialRT_intfx <- lmer(sqrtRT ~ 1 +
                                (1 | subjectnumber), data = clean_data_dm_vonkim)
 summary(m2_allNoNFC_trialRT_intfx)
 
-m2_allNoWMC_trialRT_intfx <- lmer(sqrtRT ~ 1 +
-                               easyP1difficultN1 *
-                               easyP1difficultN1_prev *
-                               NCS_HighP1_LowN1 +
-                               (1 | subjectnumber), data = clean_data_dm_vonkim)
-summary(m2_allNoWMC_trialRT_intfx)
-
-
-
+# easyP1difficultN1                                                   -4.874e-02  1.816e-03  9.642e+03 -26.841  < 2e-16 ***
+# easyP1difficultN1_prev                                               2.827e-03  1.816e-03  9.642e+03   1.557   0.1195
+# capacity_HighP1_lowN1_best                                           6.192e-03  1.241e-02  7.999e+01   0.499   0.6191
+# easyP1difficultN1:easyP1difficultN1_prev                             9.080e-06  1.824e-03  9.646e+03   0.005   0.9960
+# easyP1difficultN1:capacity_HighP1_lowN1_best                        -1.034e-02  1.816e-03  9.642e+03  -5.694 1.28e-08 ***
+# easyP1difficultN1_prev:capacity_HighP1_lowN1_best                   -4.073e-03  1.816e-03  9.642e+03  -2.243   0.0249 *
+# easyP1difficultN1:easyP1difficultN1_prev:capacity_HighP1_lowN1_best  1.157e-03  1.824e-03  9.646e+03   0.634   0.5261
 
 # ~ When regressing current and previous difficulty, WMC, and NFC on trial-by-trial RTs,
 # regression coefficients revealed an effect of current, β = -0.04(0.002), p < .001, and
@@ -330,26 +390,53 @@ summary(m2_allNoWMC_trialRT_intfx)
 # but not WMC, β = -0.003(0.01), p = 0.8 or NFC, β = 0.1(0.01), p = 0.4
 
 # Removed NFC, & WMC
-m2_remove1_trialRT <- lmer(sqrtRT ~ 1 +
-                         easyP1difficultN1 +
-                         easyP1difficultN1_prev +
-                         (1 | subjectnumber), data = clean_data_dm_vonkim)
-summary(m2_remove1_trialRT)
+# m2_remove1_trialRT <- lmer(sqrtRT ~ 1 +
+#                          easyP1difficultN1 +
+#                          easyP1difficultN1_prev +
+#                          (1 | subjectnumber), data = clean_data_dm_vonkim)
+# summary(m2_remove1_trialRT)
 
 # ~ After removing WMC and NFC from the model, the new model regression coefficients revealed an effect of current, β = -0.05(0.002), p < .001, and
 # previous difficulty, β = 0.004(0.002), p < .01.
 
 
-AIC(m2_curr_trialRT) # -8603.169 - the best model???
-AIC(m2_prev_trialRT) # -7955.998
-AIC(m2_wmc_trialRT) # -7867.486
-AIC(m2_nfc_trialRT) # -8007.781
-AIC(m2_all_trialRT) # -8494.012
-AIC(m2_remove1_trialRT) # -8594.652
+AIC(m2_curr_trialRT) # -6787.401
+AIC(m2_prev_trialRT) # -6101.914
+AIC(m2_wmc_trialRT) # -6013.362
+AIC(m2_nfc_trialRT) # -6169.615
+AIC(m2_all_trialRT) # -6694.464
+#AIC(m2_remove1_trialRT) # -8594.652
+AIC(m2_all_trialRT_intfx) # -6608.797
+AIC(m2_allNoNFC_trialRT_intfx) # -6656.221 - the best model???
 
 
 
-## Model 4: RT Variability
+
+## Model 3: Pupil Window 2 ####
+
+m3_wind2_all_intfx = lmer(wind2_effort_isi_mean ~
+                            easyP1difficultN1 *
+                            easyP1difficultN1_prev *
+                            capacity_HighP1_lowN1_best *
+                            NCS_HighP1_LowN1 +
+                            (1 | subjectnumber), data = clean_data_dm_vonkim)
+summary(m3_wind2_all_intfx)
+
+m3_wind2_allNoPrev_intfx = lmer(wind2_effort_isi_mean ~
+                            easyP1difficultN1 *
+                            capacity_HighP1_lowN1_best *
+                            NCS_HighP1_LowN1 +
+                            (1 | subjectnumber), data = clean_data_dm_vonkim)
+summary(m3_wind2_allNoPrev_intfx)
+
+AIC(m3_wind2_all_intfx) # 592.9789
+AIC(m3_wind2_allNoPrev_intfx) # 500.4526 - the better model???
+
+# plot(x = clean_data_dm_vonkim$easyP1difficultN1, y = clean_data_dm_vonkim$wind2_effort_isi_mean,
+#      ylim = c(min(clean_data_dm_vonkim$wind2_effort_isi_mean), max(clean_data_dm_vonkim$wind2_effort_isi_mean)))
+
+
+## Model 4: RT Variability ####
 
 # Current Difficulty
 m4_curr_sdRT <- lmer(sdRT ~ 1 +
@@ -427,17 +514,41 @@ m4_all_sdRT_intfx <- lmer(sdRT ~ 1 +
                       (1 | subjectnumber), data = data_currprev_diff)
 summary(m4_all_sdRT_intfx)
 
+# curr_diffeasy                                           -0.063227   0.009780 231.000000  -6.465 5.97e-10 ***
+# easyP1difficultN1_prev                                  -0.010033   0.006916 231.000000  -1.451    0.148
+# WMCgroup                                                -0.001623   0.014734  96.748043  -0.110    0.913
+# NFCgroup                                                -0.003170   0.014734  96.748043  -0.215    0.830
+# curr_diffeasy:easyP1difficultN1_prev                     0.012023   0.009780 231.000000   1.229    0.220
+# curr_diffeasy:WMCgroup                                  -0.011075   0.009780 231.000000  -1.132    0.259
+# easyP1difficultN1_prev:WMCgroup                         -0.002939   0.006916 231.000000  -0.425    0.671
+# curr_diffeasy:NFCgroup                                  -0.005775   0.009780 231.000000  -0.591    0.555
+# easyP1difficultN1_prev:NFCgroup                         -0.003061   0.006916 231.000000  -0.443    0.659
+# WMCgroup:NFCgroup                                        0.015222   0.014734  96.748043   1.033    0.304
+# curr_diffeasy:easyP1difficultN1_prev:WMCgroup           -0.002544   0.009780 231.000000  -0.260    0.795
+# curr_diffeasy:easyP1difficultN1_prev:NFCgroup            0.005359   0.009780 231.000000   0.548    0.584
+# curr_diffeasy:WMCgroup:NFCgroup                         -0.009939   0.009780 231.000000  -1.016    0.311
+# easyP1difficultN1_prev:WMCgroup:NFCgroup                 0.002351   0.006916 231.000000   0.340    0.734
+# curr_diffeasy:easyP1difficultN1_prev:WMCgroup:NFCgroup  -0.003279   0.009780 231.000000  -0.335    0.738
+
+m4_currDiff_sdRT <- lmer(sdRT ~ 1 +
+                            curr_diff +
+                            (1 | subjectnumber), data = data_currprev_diff)
+summary(m4_currDiff_sdRT)
+
+# curr_diffeasy  -0.062505   0.009013 254.000003  -6.935 3.35e-11 ***
+
 # ~ When regressing current and previous difficulty, WMC and NFC on RT variability,
 # regression coefficients revealed an effect of current difficulty, β = -0.06(0.009) , p < .001, but not
 # previous difficulty β = -0.003(0.005), p = .56, WMC, β = -0.006(0.01), p = .65, or NFC, β = -0.009(0.01), p = 0.47.
 
 # Compare m4 models
-AIC(m4_curr_sdRT) # -345.8712
-AIC(m4_prev_sdRT) # -352.31 - the better model???
-AIC(m4_WMC_sdRT) # -318.9577
-AIC(m4_NFC_sdRT) # -324.1173
-AIC(m4_all_sdRT) # -314.3598
-
+AIC(m4_curr_sdRT) # -259.3117
+AIC(m4_prev_sdRT) # -273.2531
+AIC(m4_WMC_sdRT) # -92.11725
+AIC(m4_NFC_sdRT) # -97.32521
+AIC(m4_all_sdRT) # -485.5346
+AIC(m4_all_sdRT_intfx) # -384.6197
+AIC(m4_currDiff_sdRT) # -525.2445 - the better model???
 
 
 
