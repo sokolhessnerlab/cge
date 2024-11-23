@@ -2008,14 +2008,35 @@ summary(m3_best_trialNum_MEonly)
 
 # TAKEAWAY: the story remains the same if the simple main effect of trialnumber is included
 
+m3_best_trialNum_MEonly_trialRFX = lmer(sqrtRT ~ 1 + trialnumberRS + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                 (1 + trialnumberRS | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_trialNum_MEonly_trialRFX)
+# AIC -9741.4 (better)
+# Main effects are same as above (trialnum, curr diff, prev diff)
+#
+# Interaction effects are weakened or eliminated (which figures, given RFX & indiv. diffs measures). 
+# - curr diff & Capacity (pos; p = 0.052)
+# - curr diff & prev diff & Capacity (pos; p = 0.08)
+# 
+# prev diff & Capacity is GONE (p = 0.68)
+
+# Including trial number RFX might eliminate some individual differences terms. 
+# Unclear how to proceed. 
+
+
 m3_best_trialNum_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
                                        all_diff_cont * trialnumberRS + 
                                        prev_all_diff_cont * trialnumberRS + 
                                        capacity_HighP1_lowN1_best * trialnumberRS + 
                                  (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_trialNum_2WayIntxOnly)
-# AIC -9459.3 (a little better)
-
+# AIC -9459.3 (a little better than commensurate model)
+# Main effects of...
+# - curr diff, prev diff, capacity (-), trial number
+# Interaction Effects...
+# - curr diff & Capacity (pos, p = 0.055)
+# - prev diff & Trial Number (pos)
+# - capacity & trial number (pos)
 
 ### Individual Regressions ############################################
 
