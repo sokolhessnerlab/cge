@@ -4960,6 +4960,7 @@ summary(wind2_m0_trial_currDiff_rfx)
 # all_diff_cont -2.580e-02  4.742e-03  1.394e+04  -5.439 5.44e-08 ***
 
 # As the current trial increases in choice difficulty, pupil dilation is more constricted in window 2
+# Also it is the opposite of what we hypothesized - constriction instead of dilation
 
 # ~ Window 2 Model 0: previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
