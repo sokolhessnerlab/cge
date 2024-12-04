@@ -2014,14 +2014,14 @@ summary(m3_best_trialNum_MEonly_trialRFX)
 # AIC -9741.4 (better)
 # Main effects are same as above (trialnum, curr diff, prev diff)
 #
-# Interaction effects are weakened or eliminated (which figures, given RFX & indiv. diffs measures). 
+# Interaction effects are weakened or eliminated (which figures, given RFX & indiv. diffs measures).
 # - curr diff & Capacity (pos; p = 0.052)
 # - curr diff & prev diff & Capacity (pos; p = 0.08)
-# 
+#
 # prev diff & Capacity is GONE (p = 0.68)
 
-# Including trial number RFX might eliminate some individual differences terms. 
-# Unclear how to proceed. 
+# Including trial number RFX might eliminate some individual differences terms.
+# Unclear how to proceed.
 
 
 m3_best_trialNum_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
@@ -4954,6 +4954,13 @@ AIC(wind2_m0_diffCat_rfx) # -882.7885
 AIC(wind2_m0_diffCont_rfx) # -885.094
 AIC(wind2_m0_diffContAll_rfx) # 229.9473
 
+wind2_m0_trial_currDiff_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS + all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m0_trial_currDiff_rfx)
+# trialnumberRS -2.929e-01  6.639e-03  1.394e+04 -44.120  < 2e-16 ***
+# all_diff_cont -2.580e-02  4.742e-03  1.394e+04  -5.439 5.44e-08 ***
+
+# As the current trial increases in choice difficulty, pupil dilation is more constricted in window 2
+
 # ~ Window 2 Model 0: previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind2_m0_prevdiffCat = lm(wind2_effort_isi_mean ~ 1 + easyP1difficultN1_prev, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical
@@ -4970,6 +4977,11 @@ summary(wind2_m0_prevdiffContAll_rfx) # prev_all_diff_cont -4.070e-02  4.997e-03
 
 AIC(wind2_m0_prevdiffContAll) # 30293.03
 AIC(wind2_m0_prevdiffContAll_rfx) # 126.3741
+
+wind2_m0_trial_prevDiff_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS + prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m0_trial_prevDiff_rfx)
+# trialnumberRS      -2.908e-01  6.697e-03  1.380e+04 -43.417   <2e-16 ***
+# prev_all_diff_cont -5.343e-03  4.757e-03  1.380e+04  -1.123    0.261
 
 # ~ Window 2 Model 0: capacity (wmc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -5090,6 +5102,15 @@ summary(wind2_m2_diffContAll_prevdiffContAll_intxn_rfx)
 # prev_all_diff_cont               -4.804e-02  7.776e-03  1.380e+04  -6.177 6.71e-10 ***
 # all_diff_cont:prev_all_diff_cont  1.972e-02  1.165e-02  1.380e+04   1.693   0.0906 .
 
+wind2_m2_trial_currDiff_prevDiff_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS + all_diff_cont * prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m2_trial_currDiff_prevDiff_rfx)
+# trialnumberRS                    -2.853e-01  6.800e-03  1.380e+04 -41.959   <2e-16 ***
+# all_diff_cont                    -1.862e-02  7.403e-03  1.380e+04  -2.515   0.0119 *
+# prev_all_diff_cont                2.772e-03  7.423e-03  1.380e+04   0.373   0.7088
+# all_diff_cont:prev_all_diff_cont -1.471e-02  1.101e-02  1.380e+04  -1.337   0.1814
+
+# there is still an effect of current difficulty where the more difficult the current choice is, the more constricted, but there is no interaction with previous difficulty
+
 # ~ Window 2 Model 3: current difficulty x capacity (wmc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind2_m3_diffCat_wmcCat_rfx = lmer(wind2_effort_isi_mean ~ 1 + easyP1difficultN1 + capacity_HighP1_lowN1_best +
@@ -5130,6 +5151,15 @@ summary(wind2_m3_diffContAll_wmcCont_intxn_rfx)
 # all_diff_cont                      -6.103e-02  5.068e-03  1.360e+04 -12.042   <2e-16 ***
 # complexspan_demeaned                6.932e-01  3.872e-01  7.921e+01   1.790   0.0772 .
 # all_diff_cont:complexspan_demeaned  1.796e-02  2.713e-02  1.361e+04   0.662   0.5079
+
+wind2_m3_trial_currDiff_wmcCat_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS + all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m3_trial_currDiff_wmcCat_rfx)
+# trialnumberRS                            -2.905e-01  6.733e-03  1.360e+04 -43.142  < 2e-16 ***
+# all_diff_cont                            -2.413e-02  5.064e-03  1.360e+04  -4.764 1.91e-06 ***
+# capacity_HighP1_lowN1_best                1.327e-01  8.081e-02  7.914e+01   1.642    0.105
+# all_diff_cont:capacity_HighP1_lowN1_best  5.654e-03  4.997e-03  1.360e+04   1.131    0.258
+
+# still an effect of current difficulty, but it doesn't interact with wmc
 
 # ~ Window 2 Model 4: current difficulty x choice x previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -5280,6 +5310,30 @@ summary(wind2_m6_diffContAll_prevdiffContAll_wmcCont_intxn_rfx)
 # all_diff_cont:complexspan_demeaned                     2.873e-02  4.276e-02  1.347e+04   0.672   0.5018
 # prev_all_diff_cont:complexspan_demeaned                2.772e-02  4.291e-02  1.347e+04   0.646   0.5184
 # all_diff_cont:prev_all_diff_cont:complexspan_demeaned -9.861e-03  6.432e-02  1.347e+04  -0.153   0.8782
+
+wind2_m6_trial_currDiff_prevDiff_wmcCat_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m6_trial_currDiff_prevDiff_wmcCat_rfx)
+# trialnumberRS                                               -2.834e-01  6.894e-03  1.347e+04 -41.110   <2e-16 ***
+# all_diff_cont                                               -1.530e-02  7.795e-03  1.347e+04  -1.963   0.0496 *
+# prev_all_diff_cont                                           6.709e-03  7.822e-03  1.347e+04   0.858   0.3911
+# capacity_HighP1_lowN1_best                                   1.278e-01  8.089e-02  7.947e+01   1.579   0.1182
+# all_diff_cont:prev_all_diff_cont                            -1.835e-02  1.172e-02  1.347e+04  -1.565   0.1177
+# all_diff_cont:capacity_HighP1_lowN1_best                     1.054e-02  7.700e-03  1.347e+04   1.369   0.1710
+# prev_all_diff_cont:capacity_HighP1_lowN1_best                1.140e-02  7.725e-03  1.347e+04   1.476   0.1399
+# all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1_best -1.046e-02  1.170e-02  1.347e+04  -0.895   0.3711
+
+# still only an effect of current difficulty
+
+wind2_m65_trial_currDiff_prevDiff_wmcCat_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m65_trial_currDiff_prevDiff_wmcCat_rfx)
+# trialnumberRS                                 -2.827e-01  6.875e-03  1.347e+04 -41.112  < 2e-16 ***
+# all_diff_cont                                 -2.447e-02  5.065e-03  1.347e+04  -4.831 1.38e-06 ***
+# capacity_HighP1_lowN1_best                     1.300e-01  8.085e-02  7.928e+01   1.608    0.112
+# prev_all_diff_cont                            -2.505e-03  5.075e-03  1.347e+04  -0.494    0.622
+# all_diff_cont:capacity_HighP1_lowN1_best       5.594e-03  5.005e-03  1.347e+04   1.118    0.264
+# capacity_HighP1_lowN1_best:prev_all_diff_cont  6.414e-03  5.012e-03  1.347e+04   1.280    0.201
+
+# same
 
 # ~ Window 2 Model 7: trial number x current difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -5794,6 +5848,13 @@ summary(wind4_m0_diffContAll_rfx) # all_diff_cont -2.724e-02  6.271e-03  1.396e+
 AIC(wind4_m0_diffCat_rfx) # 4514.823
 AIC(wind4_m0_diffContAll_rfx) # 6632.549
 
+wind4_m0_trial_currDiff_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + trialnumberRS + all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m0_trial_currDiff_rfx)
+# trialnumberRS -2.773e-01  8.597e-03  1.395e+04  -32.25   <2e-16 ***
+# all_diff_cont  6.510e-03  6.140e-03  1.396e+04    1.06    0.289
+
+# no effect of current difficulty for window 4
+
 # ~ Window 4 Model 0: previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind4_m0_prevdiffCat = lm(wind4_prep_lateiti_mean ~ 1 + easyP1difficultN1_prev, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical
@@ -5810,6 +5871,13 @@ summary(wind4_m0_prevdiffContAll_rfx) # prev_all_diff_cont -3.543e-02  6.279e-03
 
 AIC(wind4_m0_prevdiffContAll) # 30811.58
 AIC(wind4_m0_prevdiffContAll_rfx) # 6455.823
+
+wind4_m0_trial_prevDiff_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + trialnumberRS + prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m0_trial_prevDiff_rfx)
+# trialnumberRS      -2.701e-01  8.675e-03  1.382e+04 -31.140   <2e-16 ***
+# prev_all_diff_cont -2.717e-03  6.160e-03  1.382e+04  -0.441    0.659
+
+# no effect of previous difficulty either
 
 # ~ Window 4 Model 0: capacity (wmc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -5910,6 +5978,15 @@ summary(wind4_m2_diffContAll_prevdiffContAll_intxn_rfx)
 # all_diff_cont                    -4.645e-02  9.791e-03  1.382e+04  -4.745 2.11e-06 ***
 # prev_all_diff_cont               -5.582e-02  9.816e-03  1.382e+04  -5.687 1.32e-08 ***
 # all_diff_cont:prev_all_diff_cont  4.207e-02  1.471e-02  1.382e+04   2.860  0.00424 **
+
+wind4_m2_trial_currDiff_prevDiff_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + trialnumberRS + all_diff_cont * prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m2_trial_currDiff_prevDiff_rfx)
+# trialnumberRS                    -2.711e-01  8.818e-03  1.381e+04 -30.747   <2e-16 ***
+# all_diff_cont                     1.238e-03  9.598e-03  1.381e+04   0.129    0.897
+# prev_all_diff_cont               -7.631e-03  9.625e-03  1.381e+04  -0.793    0.428
+# all_diff_cont:prev_all_diff_cont  9.262e-03  1.427e-02  1.381e+04   0.649    0.516
+
+# no effect of current or previous or an interaction
 
 # ~ Window 4 Model 3: current difficulty x capacity (wmc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -6101,6 +6178,27 @@ summary(wind4_m6_diffContAll_prevdiffContAll_wmcCont_intxn_rfx)
 # all_diff_cont:complexspan_demeaned                     2.694e-02  5.402e-02  1.348e+04   0.499  0.61796
 # prev_all_diff_cont:complexspan_demeaned                9.384e-03  5.422e-02  1.348e+04   0.173  0.86259
 # all_diff_cont:prev_all_diff_cont:complexspan_demeaned  1.773e-02  8.125e-02  1.348e+04   0.218  0.82727
+
+wind4_m6_trial_currDiff_prevDiff_wmcCat_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + trialnumberRS + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m6_trial_currDiff_prevDiff_wmcCat_rfx)
+# trialnumberRS                                               -2.719e-01  8.935e-03  1.348e+04 -30.433   <2e-16 ***
+# all_diff_cont                                                4.736e-03  1.010e-02  1.348e+04   0.469    0.639
+# prev_all_diff_cont                                          -5.873e-03  1.014e-02  1.348e+04  -0.579    0.562
+# capacity_HighP1_lowN1_best                                   1.084e-01  7.978e-02  7.981e+01   1.359    0.178
+# all_diff_cont:prev_all_diff_cont                             7.930e-03  1.520e-02  1.348e+04   0.522    0.602
+# all_diff_cont:capacity_HighP1_lowN1_best                     1.412e-02  9.978e-03  1.348e+04   1.415    0.157
+# prev_all_diff_cont:capacity_HighP1_lowN1_best                7.505e-03  1.001e-02  1.348e+04   0.749    0.454
+# all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1_best -6.678e-03  1.516e-02  1.348e+04  -0.441    0.659
+
+# I think window 1 might be a better candidate to examine the effect of previous difficulty
+# Window 4 is reflecting what has happened within a trial while window 1 is capturing what has happened previous going into the next trial
+# But how to account in differences between 3s and 3.5s when window 1 captures the last 500ms - does that matter here?
+# surprised that current difficulty didn't have an effect at all across all the models
+
+wind4_m65_trial_currDiff_prevDiff_wmcCat_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + trialnumberRS + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m65_trial_currDiff_prevDiff_wmcCat_rfx)
+
+# same thing... nothing
 
 # ~ Window 4 Model 7: trial number x current difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
