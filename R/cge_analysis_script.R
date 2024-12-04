@@ -5336,6 +5336,31 @@ summary(wind2_m65_trial_currDiff_prevDiff_wmcCat_rfx)
 
 # same
 
+
+# SO:
+# - current difficulty reliably matters
+# - prev. difficulty only sometimes matters, and only when trial number is not included
+# - trial number matters.
+# - capacity does not seem to matter (and if it does, it's a weak main effect)
+
+
+wind2_m8_time_diffContAll_prevdiffContAll_intxnwTime = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS * all_diff_cont +
+                                                              prev_all_diff_cont * trialnumberRS +
+                                                              (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$prev_all_diff_cont),])
+summary(wind2_m8_time_diffContAll_prevdiffContAll_intxnwTime)
+AIC(wind2_m8_time_diffContAll_prevdiffContAll_intxnwTime)
+
+
+wind2_m8_time_diffContAll_intxnwTime = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS * all_diff_cont +
+                                              (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$prev_all_diff_cont),])
+summary(wind2_m8_time_diffContAll_intxnwTime)
+AIC(wind2_m8_time_diffContAll_intxnwTime)
+
+anova(wind2_m8_time_diffContAll_prevdiffContAll_intxnwTime,wind2_m8_time_diffContAll_intxnwTime)
+# The better model includes current difficulty interacting with trial number
+
+
+
 # ~ Window 2 Model 7: trial number x current difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -6200,6 +6225,11 @@ wind4_m65_trial_currDiff_prevDiff_wmcCat_rfx = lmer(wind4_prep_lateiti_mean ~ 1 
 summary(wind4_m65_trial_currDiff_prevDiff_wmcCat_rfx)
 
 # same thing... nothing
+
+wind4_m65_trial_currDiff_prevDiff_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                                                      trialnumberRS * all_diff_cont +
+                                                      trialnumberRS * prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m65_trial_currDiff_prevDiff_rfx)
 
 # ~ Window 4 Model 7: trial number x current difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
