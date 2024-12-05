@@ -5204,6 +5204,8 @@ summary(wind2_m3_time_currDiffcont_wmcCont_intfx_rfx)
 ### categorical wmc has stronger but still marginal interaction effects
 ### continuous wmc has stronger and significant two-way effects and marginal three-way
 
+anova(wind2_m3_time_currDiffcont_wmcCat_intfx_rfx, wind2_m3_time_currDiffcont_wmcCont_intfx_rfx)
+
 # what if I interact with previous difficulty
 wind2_m35_time_prevDiffcont_wmcCat_intfx_rfx = lmer(wind2_effort_isi_mean ~ 1 +
                                                      trialnumberRS * prev_all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
@@ -5231,6 +5233,7 @@ summary(wind2_m35_time_prevDiffcont_wmcCont_intfx_rfx)
 ### categorical wmc seems to have stronger effects, plus a 2 way with previous difficulty and 3 way effect with trial
 ### continuous wmc has weaker effects. 2 way with trial remains, but none with previous and no 3 way
 
+anova(wind2_m35_time_prevDiffcont_wmcCat_intfx_rfx, wind2_m35_time_prevDiffcont_wmcCont_intfx_rfx)
 
 # ~ Window 2 Model 4: current difficulty x choice x previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -6199,6 +6202,7 @@ summary(wind4_m35_time_prevDiffcont_wmcCont_intfx_rfx)
 # trialnumberRS:prev_all_diff_cont:complexspan_demeaned -5.953e-03  1.198e-01  1.348e+04  -0.050 0.960385
 
 # if interacting with trial and previous difficulty, there is a 2 way for categorical (continuous) wmc and trial
+
 
 # ~ Window 4 Model 4: current difficulty x choice x previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
