@@ -5001,6 +5001,22 @@ summary(wind2_m0_wmcCont_rfx) # complexspan_demeaned  0.72819    0.38186 79.0002
 AIC(wind2_m0_wmcCat_rfx) # -846.2197
 AIC(wind2_m0_wmcCont_rfx) # -783.5134
 
+wind2_m0_time_wmcCat_intfx_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                        trialnumberRS * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m0_time_wmcCat_intfx_rfx)
+# trialnumberRS                            -2.945e-01  7.113e-03  1.360e+04 -41.405   <2e-16 ***
+# capacity_HighP1_lowN1_best                1.333e-01  8.086e-02  7.931e+01   1.648    0.103
+# trialnumberRS:capacity_HighP1_lowN1_best  5.685e-03  7.113e-03  1.360e+04   0.799    0.424
+
+wind2_m0_time_wmcCont_intfx_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                         trialnumberRS * complexspan_demeaned + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m0_time_wmcCont_intfx_rfx)
+# trialnumberRS                      -2.966e-01  6.643e-03  1.360e+04 -44.643   <2e-16 ***
+# complexspan_demeaned                6.738e-01  3.874e-01  7.931e+01   1.740   0.0858 .
+# trialnumberRS:complexspan_demeaned  7.465e-02  3.417e-02  1.360e+04   2.184   0.0290 *
+
+# similar pattern as window 4 - interaction between trial and continuous but not categorical wmc
+
 # ~ Window 2 Model 0: need for cognition scale (ncs -> nfc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind2_m0_nfcCat = lm(wind2_effort_isi_mean ~ 1 + NCS_HighP1_LowN1, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical
@@ -5161,6 +5177,33 @@ summary(wind2_m3_trial_currDiff_wmcCat_rfx)
 # all_diff_cont:capacity_HighP1_lowN1_best  5.654e-03  4.997e-03  1.360e+04   1.131    0.258
 
 # still an effect of current difficulty, but it doesn't interact with wmc
+
+wind2_m0_time_currDiffcont_wmcCat_intfx_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                        trialnumberRS * all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m0_time_currDiffcont_wmcCat_intfx_rfx)
+# trialnumberRS                                          -3.122e-01  1.077e-02  1.360e+04 -28.991  < 2e-16 ***
+# all_diff_cont                                          -5.216e-02  1.146e-02  1.360e+04  -4.552 5.36e-06 ***
+# capacity_HighP1_lowN1_best                              1.223e-01  8.098e-02  7.980e+01   1.510  0.13491
+# trialnumberRS:all_diff_cont                             5.028e-02  1.853e-02  1.360e+04   2.713  0.00667 **
+# trialnumberRS:capacity_HighP1_lowN1_best                2.074e-02  1.077e-02  1.360e+04   1.926  0.05417 .   # marginal
+# all_diff_cont:capacity_HighP1_lowN1_best                2.211e-02  1.146e-02  1.360e+04   1.930  0.05366 .   # marginal
+# trialnumberRS:all_diff_cont:capacity_HighP1_lowN1_best -3.100e-02  1.853e-02  1.360e+04  -1.673  0.09443 .
+
+wind2_m0_time_currDiffcont_wmcCont_intfx_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                         trialnumberRS * all_diff_cont * complexspan_demeaned + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m0_time_currDiffcont_wmcCont_intfx_rfx)
+# trialnumberRS                                    -3.221e-01  1.050e-02  1.360e+04 -30.687  < 2e-16 ***
+# all_diff_cont                                    -6.279e-02  1.079e-02  1.360e+04  -5.821 5.97e-09 ***
+# complexspan_demeaned                              6.085e-01  3.882e-01  7.995e+01   1.568 0.120910
+# trialnumberRS:all_diff_cont                       6.581e-02  1.744e-02  1.360e+04   3.774 0.000161 ***
+# trialnumberRS:complexspan_demeaned                1.698e-01  5.531e-02  1.360e+04   3.070 0.002145 **
+# all_diff_cont:complexspan_demeaned                1.166e-01  5.657e-02  1.360e+04   2.062 0.039263 *
+# trialnumberRS:all_diff_cont:complexspan_demeaned -1.736e-01  9.166e-02  1.360e+04  -1.894 0.058281 . # marginal
+
+# if interacting with trial
+### categorical wmc has stronger but still marginal interaction effects
+### continuous wmc has stronger and significant two-way effects and marginal three-way
+
 
 # ~ Window 2 Model 4: current difficulty x choice x previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -5921,6 +5964,22 @@ summary(wind4_m0_wmcCont_rfx) # complexspan_demeaned  0.67694    0.37483 79.0006
 
 AIC(wind4_m0_wmcCat) # 20967.2
 
+wind4_m0_time_wmcCat_intfx_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                                               trialnumberRS * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m0_time_wmcCat_intfx_rfx)
+# trialnumberRS                            -2.711e-01  9.200e-03  1.362e+04 -29.467   <2e-16 ***
+# capacity_HighP1_lowN1_best                1.095e-01  7.973e-02  7.953e+01   1.374    0.173
+# trialnumberRS:capacity_HighP1_lowN1_best  1.481e-02  9.200e-03  1.362e+04   1.610    0.108
+
+wind4_m0_time_wmcCont_intfx_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                               trialnumberRS * complexspan_demeaned + (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m0_time_wmcCont_intfx_rfx)
+# trialnumberRS                      -2.764e-01  8.593e-03  1.362e+04 -32.172   <2e-16 ***
+# complexspan_demeaned                5.974e-01  3.814e-01  7.954e+01   1.566   0.1213
+# trialnumberRS:complexspan_demeaned  1.031e-01  4.421e-02  1.362e+04   2.332   0.0197 *
+
+# if interacting with trial, there is an interaction effect between trial and continuous but not categorical wmc
+
 # ~ Window 4 Model 0: need for cognition scale (ncs -> nfc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind4_m0_nfcCat = lm(wind4_prep_lateiti_mean ~ 1 + NCS_HighP1_LowN1, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical
@@ -6055,6 +6114,40 @@ summary(wind4_m3_diffContAll_wmcCont_intxn_rfx)
 # complexspan_demeaned                6.315e-01  3.812e-01  7.935e+01   1.657    0.102
 # all_diff_cont:complexspan_demeaned  2.738e-02  3.416e-02  1.362e+04   0.802    0.423
 
+wind4_m3_time_currDiff_wmcCat_intxn_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + trialnumberRS + all_diff_cont * capacity_HighP1_lowN1_best +
+                                                (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m3_time_currDiff_wmcCat_intxn_rfx)
+# trialnumberRS                            -2.779e-01  8.717e-03  1.362e+04 -31.879   <2e-16 ***
+# all_diff_cont                             9.432e-03  6.555e-03  1.362e+04   1.439   0.1502
+# capacity_HighP1_lowN1_best                1.119e-01  7.968e-02  7.925e+01   1.404   0.1642
+# all_diff_cont:capacity_HighP1_lowN1_best  1.077e-02  6.469e-03  1.362e+04   1.665   0.0959 .
+
+# similar to window 2: no effects of wmc
+
+wind4_m0_time_currDiffcont_wmcCat_intfx_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                                                     trialnumberRS * all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m0_time_currDiffcont_wmcCat_intfx_rfx)
+# trialnumberRS                                          -2.983e-01  1.395e-02  1.362e+04 -21.388   <2e-16 ***
+# all_diff_cont                                          -2.209e-02  1.485e-02  1.362e+04  -1.488   0.1368
+# capacity_HighP1_lowN1_best                              1.043e-01  7.996e-02  8.039e+01   1.304   0.1959
+# trialnumberRS:all_diff_cont                             5.582e-02  2.401e-02  1.362e+04   2.325   0.0201 *
+# trialnumberRS:capacity_HighP1_lowN1_best                1.626e-02  1.395e-02  1.362e+04   1.166   0.2437
+# all_diff_cont:capacity_HighP1_lowN1_best                1.125e-02  1.485e-02  1.362e+04   0.758   0.4487
+# trialnumberRS:all_diff_cont:capacity_HighP1_lowN1_best -3.794e-03  2.401e-02  1.362e+04  -0.158   0.8744
+
+wind4_m0_time_currDiffcont_wmcCont_intfx_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                                                      trialnumberRS * all_diff_cont * complexspan_demeaned + (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m0_time_currDiffcont_wmcCont_intfx_rfx)
+# trialnumberRS                                    -3.056e-01  1.359e-02  1.362e+04 -22.482  < 2e-16 ***
+# all_diff_cont                                    -2.792e-02  1.397e-02  1.362e+04  -1.998  0.04572 *
+# complexspan_demeaned                              5.731e-01  3.828e-01  8.065e+01   1.497  0.13832
+# trialnumberRS:all_diff_cont                       6.013e-02  2.259e-02  1.362e+04   2.662  0.00779 **
+# trialnumberRS:complexspan_demeaned                1.218e-01  7.168e-02  1.362e+04   1.699  0.08943 .
+# all_diff_cont:complexspan_demeaned                4.234e-02  7.330e-02  1.362e+04   0.578  0.56350
+# trialnumberRS:all_diff_cont:complexspan_demeaned -2.672e-02  1.188e-01  1.362e+04  -0.225  0.82202
+
+# if interacting with trial, no effect of wmc - though without current difficulty, continuous appeared to have an interaction effect
+
 # ~ Window 4 Model 4: current difficulty x choice x previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind4_m4_diffCat_optCat_prevdiffCat_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + easyP1difficultN1 + choice + easyP1difficultN1_prev +
@@ -6092,6 +6185,11 @@ summary(wind4_m4_diffContAll_optCat_prevdiffContAll_intxn_rfx)
 # all_diff_cont:prev_all_diff_cont         4.819e-02  2.104e-02  1.381e+04   2.291   0.0220 *
 # choice:prev_all_diff_cont                1.093e-02  1.950e-02  1.381e+04   0.560   0.5753
 # all_diff_cont:choice:prev_all_diff_cont -1.115e-02  2.943e-02  1.381e+04  -0.379   0.7049
+
+wind4_m65_trial_currDiff_prevDiff_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                                               trialnumberRS * all_diff_cont +
+                                               trialnumberRS * prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m65_trial_currDiff_prevDiff_rfx)
 
 # ~ Window 4 Model 5: current difficulty x choice x capacity (wmc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -6226,10 +6324,6 @@ summary(wind4_m65_trial_currDiff_prevDiff_wmcCat_rfx)
 
 # same thing... nothing
 
-wind4_m65_trial_currDiff_prevDiff_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
-                                                      trialnumberRS * all_diff_cont +
-                                                      trialnumberRS * prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
-summary(wind4_m65_trial_currDiff_prevDiff_rfx)
 
 # ~ Window 4 Model 7: trial number x current difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
