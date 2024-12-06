@@ -33,6 +33,9 @@ clean_data_dm_vonkim$curr_diff <- factor(clean_data_dm_vonkim$easyP1difficultN1,
                                          levels = c(-1, 1),
                                          labels = c("difficult", "easy"))
 
+# fixing capacity
+clean_data_dm_vonkim$capacity_HighP1_lowN1_best = round(clean_data_dm_vonkim$capacity_HighP1_lowN1_best)
+
 # Creating Data Frames for Regressions
 data_curr_diff <- clean_data_dm_vonkim %>% # only current difficulty
   group_by(subjectnumber, curr_diff) %>%
@@ -69,7 +72,7 @@ data_NFC <- clean_data_dm_vonkim %>% # only NFC
   )
 
 data_currprev_diff <- clean_data_dm_vonkim %>% # current and previous difficulty
-  group_by(subjectnumber, curr_diff, easyP1difficultN1_prev) %>%
+  group_by(subjectnumber, easyP1difficultN1, easyP1difficultN1_prev) %>%
   summarize(
     n = n(),
     WMCgroup = mean(capacity_HighP1_lowN1_best, na.rm = T),
@@ -77,6 +80,7 @@ data_currprev_diff <- clean_data_dm_vonkim %>% # current and previous difficulty
     meanRT = mean(reactiontime, na.rm = T),
     sdRT = sd(reactiontime, na.rm = T)
   )
+
 
 # data_cont_diff <- clean_data_dm_vonkim %>% # current and previous difficulty
 #   group_by(subjectnumber, easyP1difficultN1_prev) %>%
@@ -353,6 +357,7 @@ m2_all_trialRT_intfx <- lmer(sqrtRT ~ 1 +
                          (1 | subjectnumber), data = clean_data_dm_vonkim)
 summary(m2_all_trialRT_intfx)
 
+# TODO VONFIXVALUES
 # easyP1difficultN1                                                                    -4.777e-02  1.818e-03  9.520e+03 -26.276  < 2e-16 ***
 # easyP1difficultN1_prev                                                                3.002e-03  1.818e-03  9.520e+03   1.651   0.0987 .
 # capacity_HighP1_lowN1_best                                                            7.509e-03  1.250e-02  7.700e+01   0.601   0.5497
@@ -369,13 +374,56 @@ summary(m2_all_trialRT_intfx)
 # easyP1difficultN1_prev:capacity_HighP1_lowN1_best:NCS_HighP1_LowN1                    1.237e-03  1.818e-03  9.520e+03   0.680   0.4963
 # easyP1difficultN1:easyP1difficultN1_prev:capacity_HighP1_lowN1_best:NCS_HighP1_LowN1 -3.392e-03  1.827e-03  9.524e+03  -1.857   0.0634 .
 
-m2_allNoNFC_trialRT_intfx <- lmer(sqrtRT ~ 1 +
-                               easyP1difficultN1 *
-                               easyP1difficultN1_prev *
-                               capacity_HighP1_lowN1_best +
+m2_all_trialRT_intfx_2wayOnly <- lmer(sqrtRT ~ 1 +
+                               easyP1difficultN1 * capacity_HighP1_lowN1_best +
+                               easyP1difficultN1_prev * capacity_HighP1_lowN1_best +
+                               easyP1difficultN1 * NCS_HighP1_LowN1 +
+                               easyP1difficultN1_prev * NCS_HighP1_LowN1 +
                                (1 | subjectnumber), data = clean_data_dm_vonkim)
-summary(m2_allNoNFC_trialRT_intfx)
+summary(m2_all_trialRT_intfx_2wayOnly)
 
+anova(m2_all_trialRT_intfx,m2_all_trialRT_intfx_2wayOnly) # the fully-interactive model is NOT significantly better
+# the 2-way model performs best
+#                                                     Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                                        1.233e+00  1.240e-02  7.799e+01  99.423  < 2e-16 ***
+# easyP1difficultN1                                 -4.774e-02  1.814e-03  9.526e+03 -26.316  < 2e-16 ***
+# capacity_HighP1_lowN1_best                         7.604e-03  1.238e-02  7.799e+01   0.614   0.5407
+# easyP1difficultN1_prev                             3.080e-03  1.814e-03  9.526e+03   1.698   0.0896 .
+# NCS_HighP1_LowN1                                   4.914e-03  1.169e-02  7.800e+01   0.420   0.6754
+# easyP1difficultN1:capacity_HighP1_lowN1_best      -1.145e-02  1.811e-03  9.526e+03  -6.322 2.69e-10 ***
+# capacity_HighP1_lowN1_best:easyP1difficultN1_prev -4.102e-03  1.811e-03  9.526e+03  -2.265   0.0235 *
+# easyP1difficultN1:NCS_HighP1_LowN1                 1.286e-03  1.711e-03  9.526e+03   0.752   0.4523
+# easyP1difficultN1_prev:NCS_HighP1_LowN1           -2.135e-03  1.711e-03  9.526e+03  -1.248   0.2121
+
+# decision time... VONFIXVALUES
+# - increases with current difficulty (which is stronger in high vs. low capacity folks; -0.055 for high cap; -0.033 for low cap)
+# - decreases with previous difficulty ONLY in low capacity folks (0.0083 for low cap; 0.00062 for high cap)
+# Need for cognition does NOT affect decision time alone or in interaction w/ other variables.
+
+
+
+m2_allNoNFC_trialRT_intfx_2wayonly <- lmer(sqrtRT ~ 1 +
+                               easyP1difficultN1 * capacity_HighP1_lowN1_best +
+                               easyP1difficultN1_prev * capacity_HighP1_lowN1_best +
+                               (1 | subjectnumber), data = clean_data_dm_vonkim)
+summary(m2_allNoNFC_trialRT_intfx_2wayonly)
+
+
+# MUST RE-FIT THIS MODEL AND THE PREVIOUS ONE TO LIMIT TO THE FOLKS W/ NFC SCORES FOR ANOVA-BASED COMPARISON
+m2_allNoNFC_trialRT_intfx_2wayonly_subset <- lmer(sqrtRT ~ 1 +
+                                             easyP1difficultN1 * capacity_HighP1_lowN1_best +
+                                             easyP1difficultN1_prev * capacity_HighP1_lowN1_best +
+                                             (1 | subjectnumber), data = clean_data_dm_vonkim[is.finite(clean_data_dm_vonkim$NCS_HighP1_LowN1),])
+m2_all_trialRT_intfx_2wayOnly_subset <- lmer(sqrtRT ~ 1 +
+                                        easyP1difficultN1 * capacity_HighP1_lowN1_best +
+                                        easyP1difficultN1_prev * capacity_HighP1_lowN1_best +
+                                        easyP1difficultN1 * NCS_HighP1_LowN1 +
+                                        easyP1difficultN1_prev * NCS_HighP1_LowN1 +
+                                        (1 | subjectnumber), data = clean_data_dm_vonkim[is.finite(clean_data_dm_vonkim$NCS_HighP1_LowN1),])
+
+
+anova(m2_all_trialRT_intfx_2wayOnly_subset,m2_allNoNFC_trialRT_intfx_2wayonly_subset) # IT'S NOT BETTER W/ NCS IN IT!
+# TODO VONFIXVALUES
 # easyP1difficultN1                                                   -4.874e-02  1.816e-03  9.642e+03 -26.841  < 2e-16 ***
 # easyP1difficultN1_prev                                               2.827e-03  1.816e-03  9.642e+03   1.557   0.1195
 # capacity_HighP1_lowN1_best                                           6.192e-03  1.241e-02  7.999e+01   0.499   0.6191
@@ -506,8 +554,16 @@ m4_all_sdRT <- lmer(sdRT ~ 1 +
                       (1 | subjectnumber), data = data_currprev_diff)
 summary(m4_all_sdRT)
 
+m4_all_sdRT_intfx_2wayonly <- lmer(sdRT ~ 1 +
+                            easyP1difficultN1 * WMCgroup +
+                            easyP1difficultN1_prev * WMCgroup +
+                            easyP1difficultN1 * NFCgroup +
+                            easyP1difficultN1_prev * NFCgroup +
+                            (1 | subjectnumber), data = data_currprev_diff)
+summary(m4_all_sdRT_intfx_2wayonly)
+
 m4_all_sdRT_intfx <- lmer(sdRT ~ 1 +
-                      curr_diff *
+                      easyP1difficultN1 *
                       easyP1difficultN1_prev *
                       WMCgroup *
                       NFCgroup +
@@ -531,7 +587,7 @@ summary(m4_all_sdRT_intfx)
 # curr_diffeasy:easyP1difficultN1_prev:WMCgroup:NFCgroup  -0.003279   0.009780 231.000000  -0.335    0.738
 
 m4_currDiff_sdRT <- lmer(sdRT ~ 1 +
-                            curr_diff +
+                            easyP1difficultN1 +
                             (1 | subjectnumber), data = data_currprev_diff)
 summary(m4_currDiff_sdRT)
 
