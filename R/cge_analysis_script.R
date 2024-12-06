@@ -2028,27 +2028,27 @@ summary(m3_best_trialNum_MEonly_trialRFX)
 # Including trial number RFX might eliminate some individual differences terms.
 # Unclear how to proceed.
 
+m3_best_trialNum_full = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * trialnumberRS +
+                                       (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_trialNum_full) # FULL regression w/ all interactions
+# SIGNIFICANT EFFECTS:
+# all_diff_cont                                                              1.348e-01  1.282e-02  1.368e+04  10.512  < 2e-16 ***
+# prev_all_diff_cont                                                        -3.813e-02  1.288e-02  1.368e+04  -2.959  0.00309 ** 
+# capacity_HighP1_lowN1_best                                                -3.712e-02  1.371e-02  1.356e+02  -2.706  0.00768 ** 
+# trialnumberRS                                                             -1.336e-01  1.218e-02  1.368e+04 -10.966  < 2e-16 ***
+# prev_all_diff_cont:trialnumberRS                                           4.872e-02  2.110e-02  1.368e+04   2.309  0.02093 *  
+# capacity_HighP1_lowN1_best:trialnumberRS                                   4.915e-02  1.218e-02  1.368e+04   4.035  5.5e-05 ***
 
-m3_best_trialNum_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
-                                       all_diff_cont * trialnumberRS +
-                                       prev_all_diff_cont * trialnumberRS +
-                                       capacity_HighP1_lowN1_best * trialnumberRS +
-                                 (1 | subjectnumber), data = clean_data_dm, REML = F);
-summary(m3_best_trialNum_2WayIntxOnly)
-# AIC -9459.3 (a little better than commensurate model)
-# Main effects of...
-# - curr diff, prev diff, capacity (-), trial number
-# Interaction Effects...
-# - curr diff & Capacity (pos, p = 0.055)
-# - prev diff & Trial Number (pos)
-# - capacity & trial number (pos)
 
 m3_best_trialNum_3WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
                                        all_diff_cont * prev_all_diff_cont * trialnumberRS +
                                        all_diff_cont * capacity_HighP1_lowN1_best * trialnumberRS +
                                        prev_all_diff_cont * capacity_HighP1_lowN1_best * trialnumberRS +
                                        (1 | subjectnumber), data = clean_data_dm, REML = F);
-summary(m3_best_trialNum_3WayIntxOnly) # no 4-way interaction
+summary(m3_best_trialNum_3WayIntxOnly) # no 4-way interaction, otherwise identical
+
+anova(m3_best_trialNum_full,m3_best_trialNum_3WayIntxOnly) # FULL IS NOT BETTER
+
 # AIC -9455.5 (a little better)
 # Main effects of...
 # - curr diff (+), prev diff (-), capacity (-), and trial (-)
@@ -2064,14 +2064,70 @@ summary(m3_best_trialNum_3WayIntxOnly) # no 4-way interaction
 m3_best_trialNum_contWMC_3WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned * trialnumberRS +
                                        prev_all_diff_cont * complexspan_demeaned * trialnumberRS +
                                        (1 | subjectnumber), data = clean_data_dm, REML = F);
-summary(m3_best_trialNum_contWMC_3WayIntxOnly) # Does worse than categorical.
+summary(m3_best_trialNum_contWMC_3WayIntxOnly) 
+
+AIC(m3_best_trialNum_3WayIntxOnly) # does better
+AIC(m3_best_trialNum_contWMC_3WayIntxOnly)
 
 m3_best_trialNum_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + 
                                        all_diff_cont * trialnumberRS +
                                        prev_all_diff_cont * capacity_HighP1_lowN1_best + 
                                        prev_all_diff_cont * trialnumberRS +
+                                       capacity_HighP1_lowN1_best * trialnumberRS + 
                                        (1 | subjectnumber), data = clean_data_dm, REML = F);
-summary(m3_best_trialNum_2WayIntxOnly) # no 3-way interaction
+summary(m3_best_trialNum_2WayIntxOnly)
+
+m3_best_trialNum_contWMC_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned + 
+                                               all_diff_cont * trialnumberRS +
+                                               prev_all_diff_cont * complexspan_demeaned + 
+                                               prev_all_diff_cont * trialnumberRS +
+                                               complexspan_demeaned * trialnumberRS + 
+                                               (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_trialNum_contWMC_2WayIntxOnly) # no 3-way interaction
+
+AIC(m3_best_trialNum_2WayIntxOnly) # better
+AIC(m3_best_trialNum_contWMC_2WayIntxOnly)
+
+
+AIC(m3_best_trialNum_3WayIntxOnly) # better
+AIC(m3_best_trialNum_2WayIntxOnly) 
+anova(m3_best_trialNum_3WayIntxOnly, m3_best_trialNum_2WayIntxOnly_timecap)
+
+anova(m3_best_trialNum_full, m3_best_trialNum_3WayIntxOnly, m3_best_trialNum_2WayIntxOnly)
+
+# The best model has only 2-way interactions (models with 3 & 4-way interactions do
+# not perform significantly better). 
+
+summary(m3_best_trialNum_2WayIntxOnly)
+
+
+
+m3_best_trialNum_2WayIntxOnly_highCap = lmer(sqrtRT ~ 1 + 
+                                       all_diff_cont * trialnumberRS +
+                                       prev_all_diff_cont * trialnumberRS +
+                                       (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1_best == 1,], REML = F);
+m3_best_trialNum_2WayIntxOnly_lowCap = lmer(sqrtRT ~ 1 + 
+                                               all_diff_cont * trialnumberRS +
+                                               prev_all_diff_cont * trialnumberRS +
+                                               (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1_best == -1,], REML = F);
+summary(m3_best_trialNum_2WayIntxOnly_highCap)
+#                                    Estimate Std. Error         df t value Pr(>|t|)    
+# (Intercept)                         1.21667    0.02088   36.84603  58.271  < 2e-16 ***
+# all_diff_cont                       0.13573    0.01349 4519.82565  10.059  < 2e-16 ***
+# trialnumberRS                      -0.08487    0.01501 4518.81187  -5.652 1.68e-08 ***
+# prev_all_diff_cont                 -0.03204    0.01353 4520.06777  -2.368   0.0179 *  
+# all_diff_cont:trialnumberRS         0.02277    0.02173 4518.68947   1.048   0.2948    
+# trialnumberRS:prev_all_diff_cont    0.04970    0.02177 4518.83446   2.283   0.0225 *  
+summary(m3_best_trialNum_2WayIntxOnly_lowCap)
+#                                    Estimate Std. Error         df t value Pr(>|t|)    
+# (Intercept)                         1.30134    0.01564   84.48435  83.186  < 2e-16 ***
+# all_diff_cont                       0.11698    0.01033 9160.23098  11.326  < 2e-16 ***
+# trialnumberRS                      -0.18815    0.01259 9155.27608 -14.940  < 2e-16 ***
+# prev_all_diff_cont                 -0.06116    0.01036 9160.44232  -5.905 3.64e-09 ***
+# all_diff_cont:trialnumberRS        -0.01230    0.01664 9155.07098  -0.740 0.459550    
+# trialnumberRS:prev_all_diff_cont    0.06458    0.01665 9155.11543   3.878 0.000106 ***
+
+
 
 ### Individual Regressions ############################################
 
@@ -2386,8 +2442,8 @@ clean_data_dm$riskywinP1_loseN1_DM = clean_data_dm$riskywinP1_loseN1 - mean(clea
 
 reg_formula_full = as.formula("mega_pupil_array[,timepoint] ~ 1 +
 trialnumberRS + choice_riskyP1_safeN1 + riskywinP1_loseN1 +
-all_diff_cont*capacity_HighP1_lowN1_best*trialnumberRS +
-prev_all_diff_cont*capacity_HighP1_lowN1_best*trialnumberRS +
+all_diff_cont*capacity_HighP1_lowN1_best + all_diff_cont * trialnumberRS +
+prev_all_diff_cont*capacity_HighP1_lowN1_best + prev_all_diff_cont * trialnumberRS +
 (1 | subjectnumber)")
 
 reg_all_terms = labels(terms(reg_formula_full)) # this contains the RFX terms, which we don't want
