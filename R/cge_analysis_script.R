@@ -1615,7 +1615,12 @@ cat(sprintf('The best mean likelihood obtained with the CompositeSpan was %0.4f\
 
 m3_best_nointxn = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best +
                          (1 | subjectnumber), data = clean_data_dm, REML = F);
-summary(m3_best_nointxn)
+summary(m3_best_nointxn) # THIS OUTPERFORMS THE FULLY-INTERACTIVE VERSION
+
+
+m3_best_continuousWMC_nointxn = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned + prev_all_diff_cont * complexspan_demeaned +
+                         (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_continuousWMC_nointxn) # THIS OUTPERFORMS THE FULLY-INTERACTIVE VERSION
 
 
 m3_best_HighCap_only = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont +
@@ -2037,6 +2042,36 @@ summary(m3_best_trialNum_2WayIntxOnly)
 # - curr diff & Capacity (pos, p = 0.055)
 # - prev diff & Trial Number (pos)
 # - capacity & trial number (pos)
+
+m3_best_trialNum_3WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                       all_diff_cont * prev_all_diff_cont * trialnumberRS +
+                                       all_diff_cont * capacity_HighP1_lowN1_best * trialnumberRS +
+                                       prev_all_diff_cont * capacity_HighP1_lowN1_best * trialnumberRS +
+                                       (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_trialNum_3WayIntxOnly) # no 4-way interaction
+# AIC -9455.5 (a little better)
+# Main effects of...
+# - curr diff (+), prev diff (-), capacity (-), and trial (-)
+# Two Way Interactions of...
+# - prev. diff & trial number (+) (less of a - prev. diff effect with increasing trial)
+# - capacity & trial number (+) (faster with increasing trial # if low capacity)
+
+m3_best_trialNum_3WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best * trialnumberRS +
+                                       prev_all_diff_cont * capacity_HighP1_lowN1_best * trialnumberRS +
+                                       (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_trialNum_3WayIntxOnly) # no 4-way interaction
+
+m3_best_trialNum_contWMC_3WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned * trialnumberRS +
+                                       prev_all_diff_cont * complexspan_demeaned * trialnumberRS +
+                                       (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_trialNum_contWMC_3WayIntxOnly) # Does worse than categorical.
+
+m3_best_trialNum_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + 
+                                       all_diff_cont * trialnumberRS +
+                                       prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+                                       prev_all_diff_cont * trialnumberRS +
+                                       (1 | subjectnumber), data = clean_data_dm, REML = F);
+summary(m3_best_trialNum_2WayIntxOnly) # no 3-way interaction
 
 ### Individual Regressions ############################################
 
