@@ -6246,6 +6246,11 @@ wind4_m65_trial_currDiff_prevDiff_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
                                                trialnumberRS * all_diff_cont +
                                                trialnumberRS * prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
 summary(wind4_m65_trial_currDiff_prevDiff_rfx)
+# trialnumberRS                    -3.231e-01  1.647e-02  1.381e+04 -19.618  < 2e-16 ***
+# all_diff_cont                    -1.809e-02  1.391e-02  1.381e+04  -1.301  0.19344
+# prev_all_diff_cont               -3.924e-02  1.395e-02  1.381e+04  -2.813  0.00491 **
+# trialnumberRS:all_diff_cont       4.506e-02  2.240e-02  1.381e+04   2.012  0.04427 *
+# trialnumberRS:prev_all_diff_cont  6.653e-02  2.242e-02  1.381e+04   2.967  0.00301 **
 
 # ~ Window 4 Model 5: current difficulty x choice x capacity (wmc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -6458,7 +6463,10 @@ summary(wind3_mX_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx)
 # In the same models that don't have trial number, there are consistent main effects of current and previous difficulty. In some models they also interact
 
 
-
+wind2_mX5_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS *
+                                                                    all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                                                    (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_mX5_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx)
 
 
 
