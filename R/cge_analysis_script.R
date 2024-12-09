@@ -6831,6 +6831,29 @@ AIC(wind4_m6_diffContAll_prevdiffContAll_wmcCat_intxn_rfx) # 6387.207
 AIC(wind4_m9_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx) # 4417.294
 
 
+# ~ "All" 2-way & 3-way interaction model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+wind4_m11_allIntfx_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                                trialnumberRS * all_diff_cont +
+                                trialnumberRS * prev_all_diff_cont +
+                                trialnumberRS * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m11_allIntfx_rfx)
+# trialnumberRS                                               -3.184e-01  1.702e-02  1.348e+04 -18.704   <2e-16 ***
+# all_diff_cont                                               -2.098e-02  1.416e-02  1.348e+04  -1.482   0.1384
+# prev_all_diff_cont                                          -3.636e-02  1.511e-02  1.348e+04  -2.407   0.0161 *
+# capacity_HighP1_lowN1_best                                   9.947e-02  7.992e-02  8.043e+01   1.245   0.2169
+# trialnumberRS:all_diff_cont                                  4.921e-02  2.282e-02  1.348e+04   2.157   0.0310 *
+# trialnumberRS:prev_all_diff_cont                             6.258e-02  2.431e-02  1.348e+04   2.574   0.0101 *
+# trialnumberRS:capacity_HighP1_lowN1_best                     3.163e-02  1.407e-02  1.348e+04   2.248   0.0246 *
+# prev_all_diff_cont:capacity_HighP1_lowN1_best                1.964e-02  1.503e-02  1.348e+04   1.306   0.1914
+# trialnumberRS:prev_all_diff_cont:capacity_HighP1_lowN1_best -3.032e-02  2.422e-02  1.348e+04  -1.252   0.2108
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # wind1_mX_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx = lmer(wind1_predisp_onset_mean ~ 1 + trialnumberRS *
 #                                                                     all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
 #                                                                     (1 + trialnumberRS | subjectnumber), data = clean_data_dm)
@@ -6863,8 +6886,6 @@ wind2_mX5_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx = lmer(wind2_effort_
                                                                     all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
                                                                     (1 | subjectnumber), data = clean_data_dm)
 summary(wind2_mX5_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx)
-
-
 
 
 
