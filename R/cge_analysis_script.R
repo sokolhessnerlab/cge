@@ -5391,6 +5391,12 @@ summary(wind2_m35_time_prevDiffcont_wmcCat_intfx_rfx)
 # prev_all_diff_cont:capacity_HighP1_lowN1_best                3.028e-02  1.161e-02  1.347e+04   2.609  0.00909 **
 # trialnumberRS:prev_all_diff_cont:capacity_HighP1_lowN1_best -4.319e-02  1.870e-02  1.347e+04  -2.309  0.02093 *
 
+# seems like previous interacts with wmc categorical
+# no mfx of previous or wmc
+# interacting effect of previous and wmc
+# no interacting effect of previous and trial
+# 3 way interacting effect
+
 wind2_m35_time_prevDiffcont_wmcCont_intfx_rfx = lmer(wind2_effort_isi_mean ~ 1 +
                                                       trialnumberRS * prev_all_diff_cont * complexspan_demeaned + (1 | subjectnumber), data = clean_data_dm)
 summary(wind2_m35_time_prevDiffcont_wmcCont_intfx_rfx)
@@ -5747,9 +5753,33 @@ summary(wind2_m0_time_choice_currDiff_prevDiff_capacity_Fullyrfx) # trialnumberR
 # effect. Might be worth comparing AICs to pick "best model" from this class of
 # models for Window 2.
 
-# ~ "All" 2-way interaction model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~ "All" 2-way & 3-way interaction model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+wind2_m11_allIntfx_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                  trialnumberRS * all_diff_cont +
+                                  trialnumberRS * prev_all_diff_cont +
+                                  trialnumberRS * all_diff_cont * capacity_HighP1_lowN1_best +
+                                  trialnumberRS * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                  (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m11_allIntfx_rfx)
+# trialnumberRS                                               -3.093e-01  1.332e-02  1.346e+04 -23.218  < 2e-16 ***
+# all_diff_cont                                               -5.066e-02  1.162e-02  1.346e+04  -4.360 1.31e-05 ***
+# prev_all_diff_cont                                          -6.843e-03  1.165e-02  1.346e+04  -0.587   0.5571
+# capacity_HighP1_lowN1_best                                   1.130e-01  8.110e-02  8.023e+01   1.394   0.1673
+# trialnumberRS:all_diff_cont                                  4.709e-02  1.873e-02  1.346e+04   2.515   0.0119 *
+# trialnumberRS:prev_all_diff_cont                             8.784e-03  1.875e-02  1.346e+04   0.468   0.6395
+# trialnumberRS:capacity_HighP1_lowN1_best                     3.398e-02  1.332e-02  1.346e+04   2.551   0.0108 *
+# all_diff_cont:capacity_HighP1_lowN1_best                     1.929e-02  1.162e-02  1.346e+04   1.660   0.0970 .
+# prev_all_diff_cont:capacity_HighP1_lowN1_best                2.795e-02  1.165e-02  1.346e+04   2.399   0.0165 *
+# trialnumberRS:all_diff_cont:capacity_HighP1_lowN1_best      -2.620e-02  1.873e-02  1.346e+04  -1.399   0.1618
+# trialnumberRS:prev_all_diff_cont:capacity_HighP1_lowN1_best -3.972e-02  1.875e-02  1.346e+04  -2.118   0.0342 *
+
+wind2_m11_simpler_allIntfx_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                trialnumberRS * all_diff_cont +
+                                trialnumberRS * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m11_simpler_allIntfx_rfx)
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ### WINDOW 3 REGRESSIONS: Evaluation (2 seconds, outcome start to +1000 after iti start) #####
