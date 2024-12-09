@@ -2033,10 +2033,10 @@ m3_best_trialNum_full = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * c
 summary(m3_best_trialNum_full) # FULL regression w/ all interactions
 # SIGNIFICANT EFFECTS:
 # all_diff_cont                                                              1.348e-01  1.282e-02  1.368e+04  10.512  < 2e-16 ***
-# prev_all_diff_cont                                                        -3.813e-02  1.288e-02  1.368e+04  -2.959  0.00309 ** 
-# capacity_HighP1_lowN1_best                                                -3.712e-02  1.371e-02  1.356e+02  -2.706  0.00768 ** 
+# prev_all_diff_cont                                                        -3.813e-02  1.288e-02  1.368e+04  -2.959  0.00309 **
+# capacity_HighP1_lowN1_best                                                -3.712e-02  1.371e-02  1.356e+02  -2.706  0.00768 **
 # trialnumberRS                                                             -1.336e-01  1.218e-02  1.368e+04 -10.966  < 2e-16 ***
-# prev_all_diff_cont:trialnumberRS                                           4.872e-02  2.110e-02  1.368e+04   2.309  0.02093 *  
+# prev_all_diff_cont:trialnumberRS                                           4.872e-02  2.110e-02  1.368e+04   2.309  0.02093 *
 # capacity_HighP1_lowN1_best:trialnumberRS                                   4.915e-02  1.218e-02  1.368e+04   4.035  5.5e-05 ***
 
 
@@ -2064,24 +2064,24 @@ summary(m3_best_trialNum_3WayIntxOnly) # no 4-way interaction
 m3_best_trialNum_contWMC_3WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned * trialnumberRS +
                                        prev_all_diff_cont * complexspan_demeaned * trialnumberRS +
                                        (1 | subjectnumber), data = clean_data_dm, REML = F);
-summary(m3_best_trialNum_contWMC_3WayIntxOnly) 
+summary(m3_best_trialNum_contWMC_3WayIntxOnly)
 
 AIC(m3_best_trialNum_3WayIntxOnly) # does better
 AIC(m3_best_trialNum_contWMC_3WayIntxOnly)
 
-m3_best_trialNum_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + 
+m3_best_trialNum_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best +
                                        all_diff_cont * trialnumberRS +
-                                       prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+                                       prev_all_diff_cont * capacity_HighP1_lowN1_best +
                                        prev_all_diff_cont * trialnumberRS +
-                                       capacity_HighP1_lowN1_best * trialnumberRS + 
+                                       capacity_HighP1_lowN1_best * trialnumberRS +
                                        (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_trialNum_2WayIntxOnly)
 
-m3_best_trialNum_contWMC_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned + 
+m3_best_trialNum_contWMC_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned +
                                                all_diff_cont * trialnumberRS +
-                                               prev_all_diff_cont * complexspan_demeaned + 
+                                               prev_all_diff_cont * complexspan_demeaned +
                                                prev_all_diff_cont * trialnumberRS +
-                                               complexspan_demeaned * trialnumberRS + 
+                                               complexspan_demeaned * trialnumberRS +
                                                (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_trialNum_contWMC_2WayIntxOnly) # no 3-way interaction
 
@@ -2090,41 +2090,41 @@ AIC(m3_best_trialNum_contWMC_2WayIntxOnly)
 
 
 AIC(m3_best_trialNum_3WayIntxOnly) # better
-AIC(m3_best_trialNum_2WayIntxOnly) 
+AIC(m3_best_trialNum_2WayIntxOnly)
 anova(m3_best_trialNum_3WayIntxOnly, m3_best_trialNum_2WayIntxOnly_timecap)
 
 anova(m3_best_trialNum_full, m3_best_trialNum_3WayIntxOnly, m3_best_trialNum_2WayIntxOnly)
 
 # The best model has only 2-way interactions (models with 3 & 4-way interactions do
-# not perform significantly better). 
+# not perform significantly better).
 
 summary(m3_best_trialNum_2WayIntxOnly)
 
 
 
-m3_best_trialNum_2WayIntxOnly_highCap = lmer(sqrtRT ~ 1 + 
+m3_best_trialNum_2WayIntxOnly_highCap = lmer(sqrtRT ~ 1 +
                                        all_diff_cont * trialnumberRS +
                                        prev_all_diff_cont * trialnumberRS +
                                        (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1_best == 1,], REML = F);
-m3_best_trialNum_2WayIntxOnly_lowCap = lmer(sqrtRT ~ 1 + 
+m3_best_trialNum_2WayIntxOnly_lowCap = lmer(sqrtRT ~ 1 +
                                                all_diff_cont * trialnumberRS +
                                                prev_all_diff_cont * trialnumberRS +
                                                (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1_best == -1,], REML = F);
 summary(m3_best_trialNum_2WayIntxOnly_highCap)
-#                                    Estimate Std. Error         df t value Pr(>|t|)    
+#                                    Estimate Std. Error         df t value Pr(>|t|)
 # (Intercept)                         1.21667    0.02088   36.84603  58.271  < 2e-16 ***
 # all_diff_cont                       0.13573    0.01349 4519.82565  10.059  < 2e-16 ***
 # trialnumberRS                      -0.08487    0.01501 4518.81187  -5.652 1.68e-08 ***
-# prev_all_diff_cont                 -0.03204    0.01353 4520.06777  -2.368   0.0179 *  
-# all_diff_cont:trialnumberRS         0.02277    0.02173 4518.68947   1.048   0.2948    
-# trialnumberRS:prev_all_diff_cont    0.04970    0.02177 4518.83446   2.283   0.0225 *  
+# prev_all_diff_cont                 -0.03204    0.01353 4520.06777  -2.368   0.0179 *
+# all_diff_cont:trialnumberRS         0.02277    0.02173 4518.68947   1.048   0.2948
+# trialnumberRS:prev_all_diff_cont    0.04970    0.02177 4518.83446   2.283   0.0225 *
 summary(m3_best_trialNum_2WayIntxOnly_lowCap)
-#                                    Estimate Std. Error         df t value Pr(>|t|)    
+#                                    Estimate Std. Error         df t value Pr(>|t|)
 # (Intercept)                         1.30134    0.01564   84.48435  83.186  < 2e-16 ***
 # all_diff_cont                       0.11698    0.01033 9160.23098  11.326  < 2e-16 ***
 # trialnumberRS                      -0.18815    0.01259 9155.27608 -14.940  < 2e-16 ***
 # prev_all_diff_cont                 -0.06116    0.01036 9160.44232  -5.905 3.64e-09 ***
-# all_diff_cont:trialnumberRS        -0.01230    0.01664 9155.07098  -0.740 0.459550    
+# all_diff_cont:trialnumberRS        -0.01230    0.01664 9155.07098  -0.740 0.459550
 # trialnumberRS:prev_all_diff_cont    0.06458    0.01665 9155.11543   3.878 0.000106 ***
 
 
@@ -5050,8 +5050,30 @@ summary(wind2_m0_trial_currDiff_rfx)
 # trialnumberRS -2.929e-01  6.639e-03  1.394e+04 -44.120  < 2e-16 ***
 # all_diff_cont -2.580e-02  4.742e-03  1.394e+04  -5.439 5.44e-08 ***
 
+anova(wind2_m0_diffContAll_rfx,wind2_m0_trial_currDiff_rfx)
+#                             npar      AIC      BIC  logLik deviance  Chisq Df Pr(>Chisq)
+# wind2_m0_diffContAll_rfx       4   217.83   248.03 -104.92   209.83
+# wind2_m0_trial_currDiff_rfx    5 -1602.57 -1564.82  806.28 -1612.57 1822.4  1  < 2.2e-16 ***
+
+# including trial makes for a stronger model
 # As the current trial increases in choice difficulty, pupil dilation is more constricted in window 2
 # Also it is the opposite of what we hypothesized - constriction instead of dilation
+
+wind2_m0_trial_currDiff_intfx_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS * all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m0_trial_currDiff_intfx_rfx)
+# trialnumberRS               -3.192e-01  1.026e-02  1.394e+04 -31.105  < 2e-16 ***
+# all_diff_cont               -5.741e-02  1.055e-02  1.394e+04  -5.441  5.4e-08 ***
+# trialnumberRS:all_diff_cont  5.719e-02  1.705e-02  1.394e+04   3.354    8e-04 ***
+
+# as trial progresses, pupil is more constricted
+# as difficulty increases, pupil is more constricted
+
+anova(wind2_m0_trial_currDiff_rfx,wind2_m0_trial_currDiff_intfx_rfx)
+#                                   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+# wind2_m0_trial_currDiff_rfx          5 -1602.6 -1564.8 806.28  -1612.6
+# wind2_m0_trial_currDiff_intfx_rfx    6 -1611.8 -1566.5 811.91  -1623.8 11.244  1  0.0007987 ***
+
+# interacting trial makes for a slightly better model
 
 # ~ Window 2 Model 0: previous difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -5075,6 +5097,26 @@ summary(wind2_m0_trial_prevDiff_rfx)
 # trialnumberRS      -2.908e-01  6.697e-03  1.380e+04 -43.417   <2e-16 ***
 # prev_all_diff_cont -5.343e-03  4.757e-03  1.380e+04  -1.123    0.261
 
+anova(wind2_m0_prevdiffContAll_rfx,wind2_m0_trial_prevDiff_rfx)
+#                              npar      AIC      BIC logLik deviance  Chisq Df Pr(>Chisq)
+# wind2_m0_prevdiffContAll_rfx    4   114.27   144.42 -53.13   106.27
+# wind2_m0_trial_prevDiff_rfx     5 -1650.92 -1613.23 830.46 -1660.92 1767.2  1  < 2.2e-16 ***
+
+# including trial makes a better model
+
+wind2_m0_trial_prevDiff_intfx_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS * prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m0_trial_prevDiff_intfx_rfx)
+# trialnumberRS                    -3.050e-01  1.035e-02  1.380e+04 -29.477   <2e-16 ***
+# prev_all_diff_cont               -2.265e-02  1.069e-02  1.380e+04  -2.119   0.0341 *
+# trialnumberRS:prev_all_diff_cont  3.113e-02  1.721e-02  1.380e+04   1.808   0.0706 .
+
+anova(wind2_m0_trial_prevDiff_rfx,wind2_m0_trial_prevDiff_intfx_rfx)
+#                                   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+# wind2_m0_trial_prevDiff_rfx          5 -1650.9 -1613.2 830.46  -1660.9
+# wind2_m0_trial_prevDiff_intfx_rfx    6 -1652.2 -1607.0 832.10  -1664.2 3.2694  1    0.07058 .
+
+# interacting trial does not make for a significantly better model
+
 # ~ Window 2 Model 0: capacity (wmc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind2_m0_wmcCat = lm(wind2_effort_isi_mean ~ 1 + capacity_HighP1_lowN1_best, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # categorical
@@ -5082,6 +5124,9 @@ summary(wind2_m0_wmcCat) # capacity_HighP1_lowN1_best 0.136904   0.007617   17.9
 
 wind2_m0_wmcCat_rfx = lmer(wind2_effort_isi_mean ~ 1 + capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
 summary(wind2_m0_wmcCat_rfx) # capacity_HighP1_lowN1_best  0.13819    0.07976 79.00021   1.733   0.0871 .
+
+wind2_m0_all_wmcCat_rfx = lmer(wind2_effort_isi_mean ~ 1 + capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m0_all_wmcCat_rfx) # capacity_HighP1_lowN1_best  0.13626    0.08078 79.00008   1.687   0.0956 .
 
 wind2_m0_wmcCont = lm(wind2_effort_isi_mean ~ 1 + complexspan_demeaned, data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,]) # continuous
 summary(wind2_m0_wmcCont) # complexspan_demeaned 0.722551   0.036490    19.8   <2e-16 ***
@@ -5092,12 +5137,26 @@ summary(wind2_m0_wmcCont_rfx) # complexspan_demeaned  0.72819    0.38186 79.0002
 AIC(wind2_m0_wmcCat_rfx) # -846.2197
 AIC(wind2_m0_wmcCont_rfx) # -783.5134
 
+wind2_m0_time_wmcCat_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                        trialnumberRS + capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m0_time_wmcCat_rfx)
+# trialnumberRS              -2.965e-01  6.644e-03  1.361e+04 -44.630   <2e-16 ***
+# capacity_HighP1_lowN1_best  1.361e-01  8.078e-02  7.900e+01   1.685   0.0959 .
+
 wind2_m0_time_wmcCat_intfx_rfx = lmer(wind2_effort_isi_mean ~ 1 +
                                         trialnumberRS * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
 summary(wind2_m0_time_wmcCat_intfx_rfx)
 # trialnumberRS                            -2.945e-01  7.113e-03  1.360e+04 -41.405   <2e-16 ***
 # capacity_HighP1_lowN1_best                1.333e-01  8.086e-02  7.931e+01   1.648    0.103
 # trialnumberRS:capacity_HighP1_lowN1_best  5.685e-03  7.113e-03  1.360e+04   0.799    0.424
+
+anova(wind2_m0_time_wmcCat_rfx,wind2_m0_time_wmcCat_intfx_rfx)
+#                                npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+# wind2_m0_time_wmcCat_rfx          5 -1472.5 -1434.9 741.27  -1482.5
+# wind2_m0_time_wmcCat_intfx_rfx    6 -1471.2 -1426.0 741.59  -1483.2 0.6389  1     0.4241
+
+# interacting trials does not make for better models
+# wmc doesn't have any mfx
 
 wind2_m0_time_wmcCont_intfx_rfx = lmer(wind2_effort_isi_mean ~ 1 +
                                          trialnumberRS * complexspan_demeaned + (1 | subjectnumber), data = clean_data_dm)
@@ -5107,6 +5166,8 @@ summary(wind2_m0_time_wmcCont_intfx_rfx)
 # trialnumberRS:complexspan_demeaned  7.465e-02  3.417e-02  1.360e+04   2.184   0.0290 *
 
 # similar pattern as window 4 - interaction between trial and continuous but not categorical wmc
+# effect of wmc is dependent - but will focus on categorical for the SANS abstract
+
 
 # ~ Window 2 Model 0: need for cognition scale (ncs -> nfc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -5219,6 +5280,20 @@ summary(wind2_m2_trial_currDiff_prevDiff_rfx)
 
 # there is still an effect of current difficulty where the more difficult the current choice is, the more constricted, but there is no interaction with previous difficulty
 
+wind2_m2_trial_currDiff_prevDiff_intfx_rfx = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS * all_diff_cont * prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
+summary(wind2_m2_trial_currDiff_prevDiff_intfx_rfx)
+# trialnumberRS                                  -3.297e-01  1.567e-02  1.380e+04 -21.036  < 2e-16 ***
+# all_diff_cont                                  -5.351e-02  1.620e-02  1.380e+04  -3.304 0.000955 ***
+# prev_all_diff_cont                             -1.372e-02  1.628e-02  1.380e+04  -0.843 0.399259
+# trialnumberRS:all_diff_cont                     7.031e-02  2.664e-02  1.380e+04   2.639 0.008325 **
+# trialnumberRS:prev_all_diff_cont                3.795e-02  2.673e-02  1.380e+04   1.420 0.155736
+# all_diff_cont:prev_all_diff_cont               -6.731e-03  2.774e-02  1.380e+04  -0.243 0.808252
+# trialnumberRS:all_diff_cont:prev_all_diff_cont -2.637e-02  4.346e-02  1.380e+04  -0.607 0.543970
+
+# consistent no interaction between current and previous difficulty
+# ~ future models will probably not interact them
+
+
 # ~ Window 2 Model 3: current difficulty x capacity (wmc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wind2_m3_diffCat_wmcCat_rfx = lmer(wind2_effort_isi_mean ~ 1 + easyP1difficultN1 + capacity_HighP1_lowN1_best +
@@ -5291,9 +5366,16 @@ summary(wind2_m3_time_currDiffcont_wmcCont_intfx_rfx)
 # all_diff_cont:complexspan_demeaned                1.166e-01  5.657e-02  1.360e+04   2.062 0.039263 *
 # trialnumberRS:all_diff_cont:complexspan_demeaned -1.736e-01  9.166e-02  1.360e+04  -1.894 0.058281 . # marginal
 
+anova(wind2_m3_trial_currDiff_wmcCat_rfx,wind2_m3_time_currDiffcont_wmcCat_intfx_rfx)
+#                                             npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+# wind2_m3_trial_currDiff_wmcCat_rfx             7 -1498.8 -1446.2 756.42  -1512.8
+# wind2_m3_time_currDiffcont_wmcCat_intfx_rfx   10 -1508.4 -1433.2 764.20  -1528.4 15.572  3   0.001388 **
+
+
 # if interacting with trial
 ### categorical wmc has stronger but still marginal interaction effects
 ### continuous wmc has stronger and significant two-way effects and marginal three-way
+# the non-interacting trial model is better - less complex model is better?
 
 anova(wind2_m3_time_currDiffcont_wmcCat_intfx_rfx, wind2_m3_time_currDiffcont_wmcCont_intfx_rfx)
 
