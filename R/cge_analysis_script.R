@@ -5860,6 +5860,10 @@ wind2_m11_2ways_rfx = lmer(wind2_effort_isi_mean ~ 1 +
 summary(wind2_m11_2ways_rfx)
 
 anova(wind2_m11_full_rfx, wind2_m11_sepdifficulties_4ways_rfx, wind2_m11_sepdifficulties_3ways_rfx, wind2_m11_2ways_rfx)
+# pairwise model comparisons to best-performing model
+anova(wind2_m11_full_rfx, wind2_m11_sepdifficulties_3ways_rfx)
+anova(wind2_m11_2ways_rfx, wind2_m11_sepdifficulties_3ways_rfx)
+anova(wind2_m11_sepdifficulties_4ways_rfx, wind2_m11_sepdifficulties_3ways_rfx)
 # The 3-way regression 'wins', doing much better than the 2-way regression, and 
 # virtually the same as the 4-way & full regressions
 
@@ -5927,6 +5931,40 @@ chc * 7.751e-02 + chc * trialn * -1.125e-01 + chc * adc * -5.991e-02 + chc * adc
 
 
 
+
+# For thesis: INCLUDE NCS
+wind2_m11_sepdifficulties_3ways_rfx_NCS = lmer(wind2_effort_isi_mean ~ 1 +
+                                                 trialnumberRS * capacity_HighP1_lowN1_best * choice +
+                                                 trialnumberRS * NCS_HighP1_LowN1 +
+                                                 all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best + 
+                                                 all_diff_cont * trialnumberRS * choice + 
+                                                 all_diff_cont * capacity_HighP1_lowN1_best * choice + 
+                                                 all_diff_cont * NCS_HighP1_LowN1 + 
+                                                 prev_all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best + 
+                                                 prev_all_diff_cont * trialnumberRS * choice + 
+                                                 prev_all_diff_cont * capacity_HighP1_lowN1_best * choice + 
+                                                 prev_all_diff_cont * NCS_HighP1_LowN1 + 
+                                                 (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$NCS_HighP1_LowN1),], REML = F)
+summary(wind2_m11_sepdifficulties_3ways_rfx_NCS)
+# ^^^ Can use this model! NCS interacts with time - stronger effect of time for 
+# higher NCS people (lesser effect of time for lower NCS folks), modulating the
+# non-specific changes in pupil dilation over time in the study. 
+#
+# No interactions with current or prev. difficulty, and no main effect. 
+
+
+wind2_m11_sepdifficulties_3ways_rfx_limNCS = lmer(wind2_effort_isi_mean ~ 1 +
+                                             trialnumberRS * capacity_HighP1_lowN1_best * choice +
+                                             all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best + 
+                                             all_diff_cont * trialnumberRS * choice + 
+                                             all_diff_cont * capacity_HighP1_lowN1_best * choice + 
+                                             prev_all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best + 
+                                             prev_all_diff_cont * trialnumberRS * choice + 
+                                             prev_all_diff_cont * capacity_HighP1_lowN1_best * choice + 
+                                             (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$NCS_HighP1_LowN1),], REML = F)
+summary(wind2_m11_sepdifficulties_3ways_rfx_limNCS)
+anova(wind2_m11_sepdifficulties_3ways_rfx_NCS, wind2_m11_sepdifficulties_3ways_rfx_limNCS)
+# 
 
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
