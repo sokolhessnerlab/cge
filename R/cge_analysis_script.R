@@ -2091,7 +2091,7 @@ AIC(m3_best_trialNum_contWMC_2WayIntxOnly)
 
 AIC(m3_best_trialNum_3WayIntxOnly) # better
 AIC(m3_best_trialNum_2WayIntxOnly)
-anova(m3_best_trialNum_3WayIntxOnly, m3_best_trialNum_2WayIntxOnly_timecap)
+anova(m3_best_trialNum_3WayIntxOnly, m3_best_trialNum_2WayIntxOnly)
 
 anova(m3_best_trialNum_full, m3_best_trialNum_3WayIntxOnly, m3_best_trialNum_2WayIntxOnly)
 
@@ -5664,6 +5664,11 @@ summary(wind2_m8_all_intfxTime_rfx)
 # all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1_best                4.443e-03  2.983e-02  1.346e+04   0.149  0.88159
 # trialnumberRS:all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1_best -1.543e-02  4.682e-02  1.346e+04  -0.330  0.74170
 
+wind2_m8_all_intfxTime_fulldatafit_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                    trialnumberRS * all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                    (1 | subjectnumber), data = clean_data_dm, REML = F)
+
+
 # Fully interacting models (4-way) are not any better
 # seems like the simpler models are better
 
@@ -5757,11 +5762,9 @@ summary(wind2_m0_time_choice_currDiff_prevDiff_capacity_Fullyrfx) # trialnumberR
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 wind2_m11_allIntfx_rfx = lmer(wind2_effort_isi_mean ~ 1 +
-                                  trialnumberRS * all_diff_cont +
-                                  trialnumberRS * prev_all_diff_cont +
                                   trialnumberRS * all_diff_cont * capacity_HighP1_lowN1_best +
                                   trialnumberRS * prev_all_diff_cont * capacity_HighP1_lowN1_best +
-                                  (1 | subjectnumber), data = clean_data_dm)
+                                  (1 | subjectnumber), data = clean_data_dm, REML = F)
 summary(wind2_m11_allIntfx_rfx)
 # trialnumberRS                                               -3.093e-01  1.332e-02  1.346e+04 -23.218  < 2e-16 ***
 # all_diff_cont                                               -5.066e-02  1.162e-02  1.346e+04  -4.360 1.31e-05 ***
@@ -5778,17 +5781,19 @@ summary(wind2_m11_allIntfx_rfx)
 wind2_m11_simpler_allIntfx_rfx = lmer(wind2_effort_isi_mean ~ 1 +
                                 trialnumberRS * all_diff_cont +
                                 trialnumberRS * prev_all_diff_cont * capacity_HighP1_lowN1_best +
-                                (1 | subjectnumber), data = clean_data_dm)
+                                (1 | subjectnumber), data = clean_data_dm, REML = F)
 summary(wind2_m11_simpler_allIntfx_rfx)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-wind2_m11_2way_Intfx_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+wind2_m11_all2way_Intfx_rfx = lmer(wind2_effort_isi_mean ~ 1 +
                                 trialnumberRS * all_diff_cont +
+                                all_diff_cont * capacity_HighP1_lowN1_best +
                                 trialnumberRS * prev_all_diff_cont +
                                 trialnumberRS * capacity_HighP1_lowN1_best +
-                                (1 | subjectnumber), data = clean_data_dm)
-summary(wind2_m11_2way_Intfx_rfx)
+                                prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+                                (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(wind2_m11_all2way_Intfx_rfx)
 # trialnumberRS                            -3.164e-01  1.293e-02  1.347e+04 -24.476  < 2e-16 ***
 # all_diff_cont                            -5.758e-02  1.092e-02  1.347e+04  -5.272 1.37e-07 ***
 # prev_all_diff_cont                       -1.662e-02  1.095e-02  1.347e+04  -1.517  0.12919
@@ -5797,22 +5802,132 @@ summary(wind2_m11_2way_Intfx_rfx)
 # trialnumberRS:prev_all_diff_cont          2.297e-02  1.762e-02  1.347e+04   1.304  0.19241
 # trialnumberRS:capacity_HighP1_lowN1_best  8.280e-03  7.210e-03  1.347e+04   1.148  0.25082
 
-wind2_m11_3way_Intfx_rfx = lmer(wind2_effort_isi_mean ~ 1 +
-                                  trialnumberRS * all_diff_cont * capacity_HighP1_lowN1_best +
-                                  trialnumberRS * prev_all_diff_cont * capacity_HighP1_lowN1_best +
-                                  (1 | subjectnumber), data = clean_data_dm)
-summary(wind2_m11_3way_Intfx_rfx)
-# trialnumberRS                                               -3.093e-01  1.332e-02  1.346e+04 -23.218  < 2e-16 ***
-# all_diff_cont                                               -5.066e-02  1.162e-02  1.346e+04  -4.360 1.31e-05 ***
-# capacity_HighP1_lowN1_best                                   1.130e-01  8.110e-02  8.023e+01   1.394   0.1673
-# prev_all_diff_cont                                          -6.843e-03  1.165e-02  1.346e+04  -0.587   0.5571
-# trialnumberRS:all_diff_cont                                  4.709e-02  1.873e-02  1.346e+04   2.515   0.0119 *
-# trialnumberRS:capacity_HighP1_lowN1_best                     3.398e-02  1.332e-02  1.346e+04   2.551   0.0108 *
-# all_diff_cont:capacity_HighP1_lowN1_best                     1.929e-02  1.162e-02  1.346e+04   1.660   0.0970 .
-# trialnumberRS:prev_all_diff_cont                             8.784e-03  1.875e-02  1.346e+04   0.468   0.6395
-# capacity_HighP1_lowN1_best:prev_all_diff_cont                2.795e-02  1.165e-02  1.346e+04   2.399   0.0165 *
-# trialnumberRS:all_diff_cont:capacity_HighP1_lowN1_best      -2.620e-02  1.873e-02  1.346e+04  -1.399   0.1618
-# trialnumberRS:capacity_HighP1_lowN1_best:prev_all_diff_cont -3.972e-02  1.875e-02  1.346e+04  -2.118   0.0342 *
+
+# full: wind2_m8_all_intfxTime_rfx
+# 3-ways: wind2_m11_allIntfx_rfx
+# 2-ways: wind2_m11_all2way_Intfx_rfx
+
+anova(wind2_m8_all_intfxTime_fulldatafit_rfx, wind2_m11_allIntfx_rfx, wind2_m11_all2way_Intfx_rfx)
+# 3-way regression is performing the best (SO FAR).
+
+
+summary(wind2_m11_allIntfx_rfx)
+# AIC -1577.7
+# Finds that...
+# - pupil constricts with increasing current difficulty (and this effect goes away by the end of the study)
+#    - ... and this might be stronger for low capacity folks than high capacity folks (p = 0.10)
+# - pupil constricts in general over time (more so for low capacity than high capacity folks)
+# - pupil constricts with previous difficulty in low capacity folks (and dilates for high capacity folks)
+#    - ... and this effect goes away with time-in-study.
+#
+
+
+# adding in choice
+
+wind2_m11_full_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                trialnumberRS * all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * choice +
+                                (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(wind2_m11_full_rfx)
+
+wind2_m11_sepdifficulties_4ways_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                            trialnumberRS * all_diff_cont * capacity_HighP1_lowN1_best * choice +
+                            trialnumberRS * prev_all_diff_cont * capacity_HighP1_lowN1_best * choice +
+                            (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(wind2_m11_sepdifficulties_4ways_rfx)
+
+wind2_m11_sepdifficulties_3ways_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                             trialnumberRS * capacity_HighP1_lowN1_best * choice +
+                                             all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best + 
+                                             all_diff_cont * trialnumberRS * choice + 
+                                             all_diff_cont * capacity_HighP1_lowN1_best * choice + 
+                                             prev_all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best + 
+                                             prev_all_diff_cont * trialnumberRS * choice + 
+                                             prev_all_diff_cont * capacity_HighP1_lowN1_best * choice + 
+                                             (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(wind2_m11_sepdifficulties_3ways_rfx)
+
+wind2_m11_2ways_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                             trialnumberRS * capacity_HighP1_lowN1_best + 
+                             trialnumberRS * choice + 
+                             capacity_HighP1_lowN1_best * choice + 
+                             all_diff_cont * trialnumberRS +
+                             all_diff_cont * capacity_HighP1_lowN1_best + 
+                             all_diff_cont * choice +
+                             prev_all_diff_cont * trialnumberRS +
+                             prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                             prev_all_diff_cont * choice +
+                             (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(wind2_m11_2ways_rfx)
+
+anova(wind2_m11_full_rfx, wind2_m11_sepdifficulties_4ways_rfx, wind2_m11_sepdifficulties_3ways_rfx, wind2_m11_2ways_rfx)
+# The 3-way regression 'wins', doing much better than the 2-way regression, and 
+# virtually the same as the 4-way & full regressions
+
+summary(wind2_m11_sepdifficulties_3ways_rfx)
+#                                                               Estimate Std. Error         df t value Pr(>|t|)    
+# (Intercept)                                                  4.118e+00  8.038e-02  8.375e+01  51.225  < 2e-16 ***
+# trialnumberRS                                               -2.512e-01  1.879e-02  1.347e+04 -13.367  < 2e-16 ***
+# choice                                                       7.751e-02  1.445e-02  1.347e+04   5.365 8.24e-08 ***
+# trialnumberRS:capacity_HighP1_lowN1_best                     3.278e-02  1.535e-02  1.347e+04   2.135  0.03276 *  
+# trialnumberRS:choice                                        -1.125e-01  2.591e-02  1.347e+04  -4.341 1.43e-05 ***
+# choice:all_diff_cont                                        -5.991e-02  2.205e-02  1.347e+04  -2.717  0.00659 ** 
+# trialnumberRS:choice:all_diff_cont                           1.231e-01  3.524e-02  1.347e+04   3.493  0.00048 ***
+# trialnumberRS:capacity_HighP1_lowN1_best:prev_all_diff_cont -3.855e-02  1.872e-02  1.347e+04  -2.059  0.03951 *  
+# capacity_HighP1_lowN1_best:choice:prev_all_diff_cont         2.350e-02  1.005e-02  1.347e+04   2.338  0.01943 *  
+
+# TREND?
+# trialnumberRS:choice:prev_all_diff_cont                      5.919e-02  3.511e-02  1.347e+04   1.686  0.09188 .  
+
+
+# NON-SIGNIFICANT TERMS:
+# capacity_HighP1_lowN1_best                                   1.206e-01  8.020e-02  8.298e+01   1.504  0.13637    
+# all_diff_cont                                               -1.557e-02  1.649e-02  1.347e+04  -0.944  0.34514    
+# prev_all_diff_cont                                           3.267e-03  1.607e-02  1.347e+04   0.203  0.83886    
+# capacity_HighP1_lowN1_best:choice                           -1.224e-02  9.951e-03  1.347e+04  -1.230  0.21878    
+# trialnumberRS:all_diff_cont                                 -1.972e-02  2.626e-02  1.347e+04  -0.751  0.45274    
+# capacity_HighP1_lowN1_best:all_diff_cont                     1.491e-02  1.286e-02  1.347e+04   1.159  0.24646    
+# trialnumberRS:prev_all_diff_cont                            -1.676e-02  2.570e-02  1.347e+04  -0.652  0.51435    
+# capacity_HighP1_lowN1_best:prev_all_diff_cont                1.561e-02  1.269e-02  1.347e+04   1.231  0.21851    
+# choice:prev_all_diff_cont                                   -2.488e-02  2.194e-02  1.347e+04  -1.134  0.25689    
+# trialnumberRS:capacity_HighP1_lowN1_best:choice             -2.218e-03  1.501e-02  1.347e+04  -0.148  0.88250    
+# trialnumberRS:capacity_HighP1_lowN1_best:all_diff_cont      -2.315e-02  1.873e-02  1.347e+04  -1.236  0.21639    
+# capacity_HighP1_lowN1_best:choice:all_diff_cont              5.444e-03  1.027e-02  1.347e+04   0.530  0.59613    
+
+
+# SO
+# In window 2 (the ISI immediately following choice & preceding outcome), pupil...
+# - constricts over time (more for low vs. high capacity folks)
+# - dilates after risky choices (this happens less with time, and is mostly on easy choices)
+# - exhibits a complex pattern depending prev. difficulty (modified by time, capacity, and choice),
+#   dominated by a shift to dilation for prev. difficulty for low capacity people late (and
+#   constriction for prev. difficulty for high capacity people late). 
+
+# - HIGHER LEVEL OF TAKEAWAY -
+# Exhibits patterns of dilation/constriction that appear to reflect effort AND arousal
+# (related to risky choices and current difficulty) that change over time, and 
+# are affected by individual cognitive differences. 
+
+
+
+# Difficulty & Choice effect calculations
+adc = 1
+chc = 1
+trialn = 1
+
+chc * 7.751e-02 + chc * trialn * -1.125e-01 + chc * adc * -5.991e-02 + chc * adc * trialn * 1.231e-01
+
+# easy, risky, early --> 0.08
+# diff, risky, early --> 0.02
+
+# easy, risky, late --> -0.03
+# diff, risky, late --> 0.03
+
+# --> This is mostly about changes in EASY risky choices. 
+# for those trials --> Early, big dilation; late, constriction.
+
+
+
+
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ### WINDOW 3 REGRESSIONS: Evaluation (2 seconds, outcome start to +1000 after iti start) #####
