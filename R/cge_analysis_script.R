@@ -6418,7 +6418,10 @@ summary(wind4_m2_diffContAll_prevdiffContAll_intxn_rfx)
 # prev_all_diff_cont               -5.582e-02  9.816e-03  1.382e+04  -5.687 1.32e-08 ***
 # all_diff_cont:prev_all_diff_cont  4.207e-02  1.471e-02  1.382e+04   2.860  0.00424 **
 
-wind4_m2_trial_currDiff_prevDiff_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + trialnumberRS + all_diff_cont * prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
+# there seems to be an intfx between current and previous difficulty for window 4 unlike window 2
+
+wind4_m2_trial_currDiff_prevDiff_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + trialnumberRS +
+                                              all_diff_cont * prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
 summary(wind4_m2_trial_currDiff_prevDiff_rfx)
 # trialnumberRS                    -2.711e-01  8.818e-03  1.381e+04 -30.747   <2e-16 ***
 # all_diff_cont                     1.238e-03  9.598e-03  1.381e+04   0.129    0.897
@@ -6426,6 +6429,31 @@ summary(wind4_m2_trial_currDiff_prevDiff_rfx)
 # all_diff_cont:prev_all_diff_cont  9.262e-03  1.427e-02  1.381e+04   0.649    0.516
 
 # no effect of current or previous or an interaction
+
+anova(wind4_m2_diffContAll_prevdiffContAll_intxn_rfx,wind4_m2_trial_currDiff_prevDiff_rfx)
+#                                                npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)
+# wind4_m2_diffContAll_prevdiffContAll_intxn_rfx    6 6424.1 6469.4 -3206.1   6412.1
+# wind4_m2_trial_currDiff_prevDiff_rfx              7 5511.4 5564.2 -2748.7   5497.4 914.71  1  < 2.2e-16 ***
+
+wind4_m2_trial_currDiff_prevDiff_intfx_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + trialnumberRS *
+                                              all_diff_cont * prev_all_diff_cont + (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m2_trial_currDiff_prevDiff_intfx_rfx)
+# trialnumberRS                                  -3.236e-01  2.033e-02  1.381e+04 -15.923   <2e-16 ***
+# all_diff_cont                                  -1.846e-02  2.101e-02  1.381e+04  -0.878   0.3797
+# prev_all_diff_cont                             -3.961e-02  2.112e-02  1.381e+04  -1.875   0.0608 .
+# trialnumberRS:all_diff_cont                     4.624e-02  3.456e-02  1.381e+04   1.338   0.1809
+# trialnumberRS:prev_all_diff_cont                6.772e-02  3.467e-02  1.381e+04   1.953   0.0508 .
+# all_diff_cont:prev_all_diff_cont                7.742e-04  3.598e-02  1.381e+04   0.022   0.9828
+# trialnumberRS:all_diff_cont:prev_all_diff_cont -2.300e-03  5.638e-02  1.381e+04  -0.041   0.9675
+
+anova(wind4_m2_trial_currDiff_prevDiff_rfx,wind4_m2_trial_currDiff_prevDiff_intfx_rfx)
+#                                            npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)
+# wind4_m2_trial_currDiff_prevDiff_rfx          7 5511.4 5564.2 -2748.7   5497.4
+# wind4_m2_trial_currDiff_prevDiff_intfx_rfx   10 5503.8 5579.2 -2741.9   5483.8 13.676  3   0.003381 **
+
+# seems like the intfx model is better
+# the intfx between current and previous difficulty is gone
+# marginal effect of previous and intfx with trial
 
 # ~ Window 4 Model 3: current difficulty x capacity (wmc) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -6489,6 +6517,13 @@ summary(wind4_m0_time_currDiffcont_wmcCat_intfx_rfx)
 # all_diff_cont:capacity_HighP1_lowN1_best                1.125e-02  1.485e-02  1.362e+04   0.758   0.4487
 # trialnumberRS:all_diff_cont:capacity_HighP1_lowN1_best -3.794e-03  2.401e-02  1.362e+04  -0.158   0.8744
 
+anova(wind4_m3_time_currDiff_wmcCat_intxn_rfx,wind4_m0_time_currDiffcont_wmcCat_intfx_rfx)
+#                                             npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)
+# wind4_m3_time_currDiff_wmcCat_intxn_rfx        7 5544.8 5597.4 -2765.4   5530.8
+# wind4_m0_time_currDiffcont_wmcCat_intfx_rfx   10 5542.6 5617.8 -2761.3   5522.6 8.2093  3    0.04188 *
+
+# intfx model seems to be better? but there is no effect of wmc
+
 wind4_m0_time_currDiffcont_wmcCont_intfx_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
                                                       trialnumberRS * all_diff_cont * complexspan_demeaned + (1 | subjectnumber), data = clean_data_dm)
 summary(wind4_m0_time_currDiffcont_wmcCont_intfx_rfx)
@@ -6503,6 +6538,14 @@ summary(wind4_m0_time_currDiffcont_wmcCont_intfx_rfx)
 # if interacting with trial, no effect of wmc - though without current difficulty, continuous appeared to have an interaction effect
 
 # what if I interact with previous difficulty
+wind4_m35_time_prevDiffcont_wmcCat_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                                                      trialnumberRS + prev_all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m35_time_prevDiffcont_wmcCat_rfx)
+# trialnumberRS                                 -2.710e-01  8.795e-03  1.349e+04 -30.809   <2e-16 ***
+# prev_all_diff_cont                            -1.374e-03  6.574e-03  1.349e+04  -0.209    0.834
+# capacity_HighP1_lowN1_best                     1.150e-01  7.962e-02  7.925e+01   1.444    0.153
+# prev_all_diff_cont:capacity_HighP1_lowN1_best  4.517e-03  6.487e-03  1.349e+04   0.696    0.486
+
 wind4_m35_time_prevDiffcont_wmcCat_intfx_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
                                                       trialnumberRS * prev_all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
 summary(wind4_m35_time_prevDiffcont_wmcCat_intfx_rfx)
@@ -6513,6 +6556,16 @@ summary(wind4_m35_time_prevDiffcont_wmcCat_intfx_rfx)
 # trialnumberRS:capacity_HighP1_lowN1_best                     3.060e-02  1.406e-02  1.348e+04   2.176  0.02959 *
 # prev_all_diff_cont:capacity_HighP1_lowN1_best                2.028e-02  1.503e-02  1.348e+04   1.349  0.17731
 # trialnumberRS:prev_all_diff_cont:capacity_HighP1_lowN1_best -3.159e-02  2.422e-02  1.348e+04  -1.304  0.19221
+
+anova(wind4_m35_time_prevDiffcont_wmcCat_rfx,wind4_m35_time_prevDiffcont_wmcCat_intfx_rfx)
+#                                              npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)
+# wind4_m35_time_prevDiffcont_wmcCat_rfx          7 5436.6 5489.2 -2711.3   5422.6
+# wind4_m35_time_prevDiffcont_wmcCat_intfx_rfx   10 5427.4 5502.6 -2703.7   5407.4 15.151  3   0.001692 **
+
+# non-intfx model seems to be the better mode???
+# in the intfx model
+# ~ when previous is difficult more constricted
+# ~ intfx with previous and wmc
 
 wind4_m35_time_prevDiffcont_wmcCont_intfx_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
                                                        trialnumberRS * prev_all_diff_cont * complexspan_demeaned + (1 | subjectnumber), data = clean_data_dm)
@@ -6704,11 +6757,30 @@ summary(wind4_m6_trial_currDiff_prevDiff_wmcCat_rfx)
 # But how to account in differences between 3s and 3.5s when window 1 captures the last 500ms - does that matter here?
 # surprised that current difficulty didn't have an effect at all across all the models
 
-wind4_m65_trial_currDiff_prevDiff_wmcCat_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + trialnumberRS + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
-summary(wind4_m65_trial_currDiff_prevDiff_wmcCat_rfx)
+wind4_m6_trial_currDiff_prevDiff_wmcCat_intfx_rfx = lmer(wind4_prep_lateiti_mean ~ 1 + trialnumberRS * all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best + (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m6_trial_currDiff_prevDiff_wmcCat_intfx_rfx)
+# trialnumberRS                                                             -3.217e-01  2.104e-02  1.347e+04 -15.291   <2e-16 ***
+# all_diff_cont                                                             -2.082e-02  2.219e-02  1.347e+04  -0.938   0.3481
+# prev_all_diff_cont                                                        -3.929e-02  2.235e-02  1.347e+04  -1.758   0.0788 .
+# capacity_HighP1_lowN1_best                                                 9.862e-02  8.036e-02  8.215e+01   1.227   0.2232
+# trialnumberRS:all_diff_cont                                                5.466e-02  3.642e-02  1.347e+04   1.501   0.1334
+# trialnumberRS:prev_all_diff_cont                                           6.844e-02  3.661e-02  1.347e+04   1.869   0.0616 .
+# all_diff_cont:prev_all_diff_cont                                           6.237e-03  3.869e-02  1.347e+04   0.161   0.8719
+# trialnumberRS:capacity_HighP1_lowN1_best                                   2.384e-02  2.104e-02  1.347e+04   1.133   0.2571
+# all_diff_cont:capacity_HighP1_lowN1_best                                   3.893e-03  2.219e-02  1.347e+04   0.175   0.8607
+# prev_all_diff_cont:capacity_HighP1_lowN1_best                              1.449e-02  2.235e-02  1.347e+04   0.648   0.5167
+# trialnumberRS:all_diff_cont:prev_all_diff_cont                            -1.212e-02  6.073e-02  1.347e+04  -0.199   0.8419
+# trialnumberRS:all_diff_cont:capacity_HighP1_lowN1_best                     1.103e-02  3.642e-02  1.347e+04   0.303   0.7621
+# trialnumberRS:prev_all_diff_cont:capacity_HighP1_lowN1_best               -1.924e-02  3.661e-02  1.347e+04  -0.525   0.5993
+# all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1_best                9.645e-03  3.869e-02  1.347e+04   0.249   0.8031
+# trialnumberRS:all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1_best -2.056e-02  6.073e-02  1.347e+04  -0.338   0.7350
 
-# same thing... nothing
+anova(wind4_m6_trial_currDiff_prevDiff_wmcCat_rfx,wind4_m6_trial_currDiff_prevDiff_wmcCat_intfx_rfx)
+#                                                   npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)
+# wind4_m6_trial_currDiff_prevDiff_wmcCat_rfx         11 5440.4 5523.1 -2709.2   5418.4
+# wind4_m6_trial_currDiff_prevDiff_wmcCat_intfx_rfx   18 5435.7 5571.0 -2699.9   5399.7 18.706  7   0.009162 **
 
+# more complex models don't really do anything better
 
 # ~ Window 4 Model 7: trial number x current difficulty ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
