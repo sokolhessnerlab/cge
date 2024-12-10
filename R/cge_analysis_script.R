@@ -7043,18 +7043,159 @@ summary(wind2_mX5_time_diffContAll_prevdiffContAll_wmcCat_intxn_rfx)
 
 
 
+wind4_m11_fullintxn_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                                trialnumberRS * all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * choice +
+                                trialnumberRS * all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best * riskywinP1_loseN1 +
+                                (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m11_allIntfx_rfx)
+
+
+wind4_m11_4way_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                            trialnumberRS * capacity_HighP1_lowN1_best * choice + 
+                            trialnumberRS * capacity_HighP1_lowN1_best * riskywinP1_loseN1 + 
+                            all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best * choice +
+                            all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best * riskywinP1_loseN1 +
+                            prev_all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best * choice +
+                            prev_all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best * riskywinP1_loseN1 +
+                            (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m11_4way_rfx)
+
+wind4_m11_3way_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                            trialnumberRS * capacity_HighP1_lowN1_best * choice +
+                            trialnumberRS * capacity_HighP1_lowN1_best * riskywinP1_loseN1 + 
+                            all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
+                            all_diff_cont * trialnumberRS * choice + 
+                            all_diff_cont * trialnumberRS * riskywinP1_loseN1 + 
+                            all_diff_cont * capacity_HighP1_lowN1_best * choice + 
+                            all_diff_cont * capacity_HighP1_lowN1_best * riskywinP1_loseN1 + 
+                            prev_all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
+                            prev_all_diff_cont * trialnumberRS * choice + 
+                            prev_all_diff_cont * trialnumberRS * riskywinP1_loseN1 + 
+                            prev_all_diff_cont * capacity_HighP1_lowN1_best * choice + 
+                            prev_all_diff_cont * capacity_HighP1_lowN1_best * riskywinP1_loseN1 + 
+                            (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m11_3way_rfx)
+
+wind4_m11_2way_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                            trialnumberRS * capacity_HighP1_lowN1_best +
+                            trialnumberRS * choice +
+                            trialnumberRS * riskywinP1_loseN1 + 
+                            capacity_HighP1_lowN1_best * choice + 
+                            capacity_HighP1_lowN1_best * riskywinP1_loseN1 + 
+                            all_diff_cont * trialnumberRS +
+                            all_diff_cont * capacity_HighP1_lowN1_best +
+                            all_diff_cont * choice + 
+                            all_diff_cont * riskywinP1_loseN1 + 
+                            prev_all_diff_cont * trialnumberRS +
+                            prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                            prev_all_diff_cont * choice + 
+                            prev_all_diff_cont * riskywinP1_loseN1 + 
+                            (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m11_2way_rfx)
 
 
 
+anova(wind4_m11_fullintxn_rfx, wind4_m11_4way_rfx, wind4_m11_3way_rfx, wind4_m11_2way_rfx)
+# the 2-way-only regression doesn't do significantly worse than the other, more 
+# complex regressions. 
+
+summary(wind4_m11_2way_rfx)
+
+# SIGNIFICANT TERMS
+#                                                 Estimate Std. Error         df t value Pr(>|t|)    
+# (Intercept)                                    4.106e+00  8.031e-02  8.210e+01  51.130  < 2e-16 ***
+# trialnumberRS                                 -3.349e-01  1.918e-02  1.347e+04 -17.468  < 2e-16 ***
+# choice                                         2.583e-02  1.230e-02  1.347e+04   2.100  0.03579 *  
+# prev_all_diff_cont                            -4.326e-02  1.566e-02  1.347e+04  -2.763  0.00573 ** 
+# trialnumberRS:all_diff_cont                    4.877e-02  2.286e-02  1.347e+04   2.133  0.03291 *  
+# choice:all_diff_cont                          -2.562e-02  1.256e-02  1.347e+04  -2.039  0.04148 *  
+# trialnumberRS:prev_all_diff_cont               7.502e-02  2.284e-02  1.347e+04   3.285  0.00102 ** 
+
+# TREND
+# trialnumberRS:capacity_HighP1_lowN1_best       1.641e-02  9.624e-03  1.347e+04   1.705  0.08820 .  
+
+# NON-SIGNIFICANCE
+# capacity_HighP1_lowN1_best                     1.010e-01  7.980e-02  8.005e+01   1.265  0.20938    
+# riskywinP1_loseN1                              1.365e-02  8.522e-03  1.347e+04   1.601  0.10933    
+# all_diff_cont                                 -2.843e-03  1.591e-02  1.347e+04  -0.179  0.85816    
+# trialnumberRS:choice                           2.288e-02  1.797e-02  1.347e+04   1.273  0.20300    
+# trialnumberRS:riskywinP1_loseN1                1.197e-04  1.258e-02  1.347e+04   0.010  0.99241    
+# capacity_HighP1_lowN1_best:choice              3.838e-03  5.484e-03  1.347e+04   0.700  0.48411    
+# capacity_HighP1_lowN1_best:riskywinP1_loseN1   2.445e-05  3.809e-03  1.347e+04   0.006  0.99488    
+# capacity_HighP1_lowN1_best:all_diff_cont       9.578e-03  6.587e-03  1.347e+04   1.454  0.14595    
+# riskywinP1_loseN1:all_diff_cont               -1.219e-02  8.569e-03  1.347e+04  -1.423  0.15481    
+# capacity_HighP1_lowN1_best:prev_all_diff_cont  2.398e-03  6.587e-03  1.347e+04   0.364  0.71586    
+# choice:prev_all_diff_cont                     -9.714e-04  1.233e-02  1.347e+04  -0.079  0.93719    
+# riskywinP1_loseN1:prev_all_diff_cont          -7.911e-03  8.739e-03  1.347e+04  -0.905  0.36531    
+
+
+# In WINDOW 4 (late ITI), we find that the pupil... 
+# - constricts with time
+#   - ... and might constrict LESS for high-capacity folks/MORE for low-capacity folks (like window 2! but trend)
+# - constricts more the more difficult the previous trial was, EARLY in the study, 
+#   but dilates more the more difficult the previous trial was, LATE in the study. 
+# - dilates after easy risky choices (and does so more with time)
+# - dilates after diff risky choices ONLY late in study
+#
+# NO EFFECT of risky outcome (!) as ME or interaction with anything, and nearly no
+# effect of capacity either. 
+
+# TAKEAWAY:
+# Window 4 pupil...
+# - exhibits similar global patterns as window 2
+# - is responsive to prev. difficulty in a way that flips (NEG -> POS) over the study
+# - dilates after risky choices, with an initial NEG. modulation by curr. difficulty
+#   that is attenuated with time. 
+
+
+adc = 1
+chc = 1
+trialn = 1
+
+chc * 2.583e-02 + chc * trialn * 4.877e-02 + chc * adc * -2.562e-02
+
+# safe -> 0 (NO EFFECT OF DIFFICULTY OR TIME)
+# risky, easy, early -> 0.03
+# risky, diff, early -> 0.0002
+# risky, easy, late -> 0.07
+# risky, diff, late -> 0.05
+#
+# Early on, EASY >>> difficult; later on, easy > diff, but both are greater than early
+
+
+wind4_m11_2way_rfx_noriskyotc = lmer(wind4_prep_lateiti_mean ~ 1 +
+                            trialnumberRS * capacity_HighP1_lowN1_best +
+                            trialnumberRS * choice +
+                            capacity_HighP1_lowN1_best * choice + 
+                            all_diff_cont * trialnumberRS +
+                            all_diff_cont * capacity_HighP1_lowN1_best +
+                            all_diff_cont * choice + 
+                            prev_all_diff_cont * trialnumberRS +
+                            prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                            prev_all_diff_cont * choice + 
+                            (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m11_2way_rfx_noriskyotc)
+
+anova(wind4_m11_2way_rfx_noriskyotc, wind4_m11_2way_rfx)
+# NO RISKY-OUTCOME TERM IS NOT SIG. WORSE
+# Reg. w/o risky outcome term finds *same* pattern of sig. regressors
 
 
 
-
-
-
-
-
-
+wind4_m11_2way_rfx_noriskyotc_diffintxn = lmer(wind4_prep_lateiti_mean ~ 1 +
+                                       trialnumberRS * capacity_HighP1_lowN1_best +
+                                       trialnumberRS * choice +
+                                       capacity_HighP1_lowN1_best * choice + 
+                                       all_diff_cont * trialnumberRS +
+                                       all_diff_cont * capacity_HighP1_lowN1_best +
+                                       all_diff_cont * choice + 
+                                       prev_all_diff_cont * trialnumberRS +
+                                       prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                       prev_all_diff_cont * choice + 
+                                       all_diff_cont * prev_all_diff_cont + 
+                                       (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m11_2way_rfx_noriskyotc_diffintxn) # nope
+# the interaction of curr. & prev. diff is not sig. 
 
 
 
