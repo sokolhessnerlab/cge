@@ -7134,7 +7134,7 @@ summary(wind4_m11_2way_rfx)
 #   - ... and might constrict LESS for high-capacity folks/MORE for low-capacity folks (like window 2! but trend)
 # - constricts more the more difficult the previous trial was, EARLY in the study, 
 #   but dilates more the more difficult the previous trial was, LATE in the study. 
-# - dilates after easy risky choices (and does so more with time)
+# - dilates after easy risky choices (and does so more with time) (vs. safe)
 # - dilates after diff risky choices ONLY late in study
 #
 # NO EFFECT of risky outcome (!) as ME or interaction with anything, and nearly no
