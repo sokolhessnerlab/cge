@@ -5952,9 +5952,9 @@ summary(wind2_m11_sepdifficulties_3ways_rfx)
 
 
 # Difficulty & Choice effect calculations
-adc = 1
-chc = 1
-trialn = 1
+adc = 1 # current difficulty (All Diff Cont)
+chc = 1 # choice
+trialn = 1 # trial number
 
 chc * 7.751e-02 + chc * trialn * -1.125e-01 + chc * adc * -5.991e-02 + chc * adc * trialn * 1.231e-01
 
@@ -7171,9 +7171,6 @@ summary(wind4_m11_2way_rfx)
 #   - ... and might constrict LESS for high-capacity folks/MORE for low-capacity folks (like window 2! but trend)
 # - constricts more the more difficult the previous trial was, EARLY in the study,
 #   but dilates more the more difficult the previous trial was, LATE in the study.
-# - dilates after easy risky choices (and does so more with time)
-# - constricts more the more difficult the previous trial was, EARLY in the study,
-#   but dilates more the more difficult the previous trial was, LATE in the study.
 # - dilates after easy risky choices (and does so more with time) (vs. safe)
 # - dilates after diff risky choices ONLY late in study
 #
@@ -7188,9 +7185,9 @@ summary(wind4_m11_2way_rfx)
 #   that is attenuated with time.
 
 
-adc = 1
-chc = 1
-trialn = 1
+adc = 1 # current difficulty (All Diff Cont)
+chc = 1 # choice
+trialn = 1 # trial number
 
 chc * 2.583e-02 + chc * trialn * 4.877e-02 + chc * adc * -2.562e-02
 
