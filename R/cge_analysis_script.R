@@ -5968,6 +5968,28 @@ chc * 7.751e-02 + chc * trialn * -1.125e-01 + chc * adc * -5.991e-02 + chc * adc
 # for those trials --> Early, big dilation; late, constriction.
 
 
+padc = 1 # prev. difficulty (prev_all_diff_cont) (0->1)
+chc = 0 # choice (0/1)
+cap = 1 # WMC group +1/-1
+trialn = 1 # trial number (0->1)
+
+
+# prev. easy --> 0 (NO EFFECTS)
+
+# prev. diff, risky, low cap, early -->  -0.02
+# prev. diff, safe, low cap, early -->    0
+# prev. diff, risky, low cap, late -->    0.01
+# prev. diff, safe, low cap, late -->     0.03
+
+# prev. diff, risky, high cap, early -->  0.02
+# prev. diff, safe, high cap, early -->    0
+# prev. diff, risky, high cap, late -->  -0.02
+# prev. diff, safe, high cap, late -->    -0.04
+
+-3.855e-02 * trialn * cap * padc + 2.350e-02 * cap * chc * padc
+
+# trialnumberRS:capacity_HighP1_lowN1_best:prev_all_diff_cont -3.855e-02  1.872e-02  1.347e+04  -2.059  0.03951 *
+# capacity_HighP1_lowN1_best:choice:prev_all_diff_cont         2.350e-02  1.005e-02  1.347e+04   2.338  0.01943 *
 
 
 # For thesis: INCLUDE NCS
