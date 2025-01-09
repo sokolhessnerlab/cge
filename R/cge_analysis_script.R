@@ -6012,6 +6012,35 @@ summary(wind2_m11_sepdifficulties_3ways_rfx_NCS)
 #
 # No interactions with current or prev. difficulty, and no main effect.
 
+# trialnumberRS                                               -2.452e-01  1.892e-02  1.331e+04 -12.962  < 2e-16 ***
+# choice                                                       8.183e-02  1.455e-02  1.331e+04   5.624 1.90e-08 ***
+# trialnumberRS:capacity_HighP1_lowN1_best                     3.376e-02  1.543e-02  1.331e+04   2.187 0.028742 *
+# trialnumberRS:choice                                        -1.186e-01  2.610e-02  1.331e+04  -4.545 5.55e-06 ***
+# trialnumberRS:NCS_HighP1_LowN1                              -2.666e-02  6.967e-03  1.331e+04  -3.827 0.000131 ***
+# trialnumberRS:NCS_HighP1_LowN1                              -2.666e-02  6.967e-03  1.331e+04  -3.827 0.000131 ***
+# choice:all_diff_cont                                        -6.596e-02  2.223e-02  1.331e+04  -2.967 0.003015 **
+# trialnumberRS:choice:all_diff_cont                           1.336e-01  3.557e-02  1.331e+04   3.757 0.000173 ***
+# trialnumberRS:capacity_HighP1_lowN1_best:prev_all_diff_cont -3.858e-02  1.883e-02  1.331e+04  -2.049 0.040509 *
+# trialnumberRS:choice:prev_all_diff_cont                      6.139e-02  3.542e-02  1.331e+04   1.733 0.083137 .
+# capacity_HighP1_lowN1_best:choice:prev_all_diff_cont         2.337e-02  1.011e-02  1.331e+04   2.312 0.020791 *
+
+# capacity_HighP1_lowN1_best                                   1.214e-01  8.085e-02  8.195e+01   1.502 0.136931
+# NCS_HighP1_LowN1                                            -3.253e-02  7.562e-02  8.052e+01  -0.430 0.668170
+# all_diff_cont                                               -1.297e-02  1.662e-02  1.331e+04  -0.780 0.435119
+# prev_all_diff_cont                                           2.779e-03  1.619e-02  1.331e+04   0.172 0.863683
+# capacity_HighP1_lowN1_best:choice                           -1.165e-02  1.001e-02  1.331e+04  -1.164 0.244406
+# trialnumberRS:all_diff_cont                                 -2.474e-02  2.645e-02  1.331e+04  -0.935 0.349784
+# capacity_HighP1_lowN1_best:all_diff_cont                     1.494e-02  1.294e-02  1.331e+04   1.154 0.248322
+# NCS_HighP1_LowN1:all_diff_cont                              -5.003e-03  4.869e-03  1.331e+04  -1.028 0.304168
+# trialnumberRS:prev_all_diff_cont                            -1.687e-02  2.589e-02  1.331e+04  -0.652 0.514712
+# capacity_HighP1_lowN1_best:prev_all_diff_cont                1.587e-02  1.276e-02  1.331e+04   1.243 0.213743
+# choice:prev_all_diff_cont                                   -2.704e-02  2.212e-02  1.331e+04  -1.222 0.221553
+# NCS_HighP1_LowN1:prev_all_diff_cont                          2.030e-03  4.872e-03  1.331e+04   0.417 0.676997
+# trialnumberRS:capacity_HighP1_lowN1_best:choice             -2.130e-03  1.509e-02  1.331e+04  -0.141 0.887747
+# trialnumberRS:capacity_HighP1_lowN1_best:all_diff_cont      -2.329e-02  1.883e-02  1.331e+04  -1.237 0.216157
+
+# capacity_HighP1_lowN1_best:choice:all_diff_cont              6.608e-03  1.033e-02  1.331e+04   0.640 0.522462
+
 
 wind2_m11_sepdifficulties_3ways_rfx_limNCS = lmer(wind2_effort_isi_mean ~ 1 +
                                              trialnumberRS * capacity_HighP1_lowN1_best * choice +
