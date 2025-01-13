@@ -7982,6 +7982,284 @@ corrplot(cor_matrix, type = 'lower')
 
 
 
+### Thesis Graphs ####
+
+dev.off()
+
+# T-tests: RTs
+par(mfrow = c(1,2))
+
+choiceDifficultyGraph = barplot(means, beside = T, col = c("blue", "red"),
+                                ylim = c(0, 2), names.arg = c("Easy", "Difficult"),
+                                ylab = "Average RTs in Seconds", main = "A")
+
+arrows(choiceDifficultyGraph, means + ses,
+       choiceDifficultyGraph, means - ses,
+       angle = 90, code = 3, length = 0.1)
+box(bty="l")
+
+WMCgraph = barplot(means_matrix, beside = TRUE, col = c("blue", "red"),
+                   ylim = c(0, 2), names.arg = colnames(means_matrix),
+                   ylab = "Average RTs in Seconds", main = "B",
+                   legend.text = rownames(means_matrix),
+                   args.legend = list(x = "topright"))
+
+arrows(WMCgraph, means_matrix + ses,
+       WMCgraph, means_matrix - ses,
+       angle = 90, code = 3, length = 0.1)
+box(bty="l")
+
+
+
+# Regressions
+par(mfrow = c(1,1))
+# RTs
+
+plot(1, type = 'n',
+     xlab = "Milliseconds", ylab = "Demeaned Pupil Diameter (mm)",
+     main = "Aligned to Choice",
+     xlim = c(-pre_dec_window_width, dec_isi_otc_iti_window_width), ylim = c(min(dec_isi_otc_iti_lower),max(dec_isi_otc_iti_upper)))
+polygon(x = c(1000, 2000, 2000, 1000),
+        y = c(3, 3, -3, -3),
+        lty = 0, col = rgb(0,0,0,.1))
+text(x = mean(c(0, 1000)), y = min(dec_isi_otc_iti_lower),
+     labels = "ISI")
+text(x = mean(c(1000, 2000)), y = min(dec_isi_otc_iti_lower),
+     labels = "Outcome")
+text(x = mean(c(2000, 5000)), y = min(dec_isi_otc_iti_lower),
+     labels = "ITI")
+polygon(x = sem_dec_isi_otc_iti_x_vals,
+        y = c(dec_isi_otc_iti_upper,rev(dec_isi_otc_iti_lower)),
+        lty = 0, col = rgb(0,0,0,.2))
+lines(x = dec_isi_otc_iti_bins[1:(length(dec_isi_otc_iti_bins)-1)] + bin_increment/2,
+      y = rowMeans(mean_dec_isi_otc_iti_array, na.rm = T), type = 'l',
+      lwd = 3, col = 'black')
+abline(v = 0, lty = 'dashed')
+
+# ~ low WMC
+# mean_HE = mean((clean_data_dm$all_diff_cont[clean_data_dm$choice == 0]), na.rm = T);
+# sd_HE = sd((meanRT_easy_capacity_High), na.rm = T);
+# mean_HD = mean((meanRT_diff_capacity_High), na.rm = T);
+# sd_HD = sd((meanRT_diff_capacity_High), na.rm = T);
+#
+# mean_LE = mean((meanRT_easy_capacity_Low), na.rm = T);
+# sd_LE = sd((meanRT_easy_capacity_Low), na.rm = T);
+# mean_LD = mean((meanRT_diff_capacity_Low), na.rm = T);
+# sd_LD =  sd((meanRT_diff_capacity_Low), na.rm = T);
+#
+# se_HE = sd_HE/sqrt(length(meanRT_easy_capacity_High))
+# se_HD = sd_HD/sqrt(length(meanRT_diff_capacity_High))
+# se_LE = sd_LE/sqrt(length(meanRT_easy_capacity_Low))
+# se_LD = sd_LD/sqrt(length(meanRT_diff_capacity_Low))
+# means = c(mean_LE, mean_HE, mean_LD, mean_HD)
+# ses = c(se_LE, se_HE, se_LD, se_HD)
+#
+# means_matrix = matrix(means, nrow=2, byrow=TRUE)
+# rownames(means_matrix) = c("Easy", "Difficult")
+# colnames(means_matrix) = c("Low WMC", "High WMC")
+#
+# WMCgraph = barplot(means_matrix, beside = TRUE, col = c("blue", "red"),
+#                    ylim = c(0, 2.5), names.arg = colnames(means_matrix),
+#                    ylab = "Average RTs in Seconds",
+#                    main = "B")
+#
+# arrows(WMCgraph, means_matrix,
+#        WMCgraph, means_matrix + ses,
+#        angle = 90, code = 3, length = 0.1)
+# box(bty="l")
+
+
+xval_plot = seq(from = 0, to = 1, length.out = 10)
+predict_data_m3_best_H = clean_data_dm[0,];
+predict_data_m3_best_H[1:20,] = NA;
+predict_data_m3_best_H$all_diff_cont[1:10] = xval_plot
+predict_data_m3_best_H$all_diff_cont[11:20] = xval_plot
+predict_data_m3_best_H$prev_all_diff_cont[1:10] = 0;
+predict_data_m3_best_H$prev_all_diff_cont[11:20] = 1;
+predict_data_m3_best_H$capacity_HighP1_lowN1_best = 1;
+
+predict_data_m3_best_L = predict_data_m3_best_H;
+predict_data_m3_best_L$capacity_HighP1_lowN1_best = -1;
+
+predict_output_m3_best_H = predict(m3_best, newdata = predict_data_m3_best_H, type = 'response', re.form = NA)^2
+predict_output_m3_best_L = predict(m3_best, newdata = predict_data_m3_best_L, type = 'response', re.form = NA)^2
+
+par(mfrow = c(1,2))
+#SEPERATE INTO TWO PLOTS (LOW CAPACITY BELOW)
+# Third plot PREV easy & CAPACITY low
+plot(x = xval_plot, y = predict_output_m3_best_L[1:10],
+     type = 'l',lwd = 5, col = 'blue',
+     main = 'A: Low WMC', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
+     ylim = c(1.25,1.85))
+# Fourth (last) plot PREV diff & CAPACITY low
+lines(x = xval_plot, y = predict_output_m3_best_L[11:20],
+      lwd = 5, col = 'red')
+legend("bottomright", legend = c("Previous Easy", "Previous Difficult"),
+       col = c('blue', 'red'), lty = c(1, 1))
+
+#HIGH CAPACITY PLOT
+# First plot PREV easy & CAPACITY high
+plot(x = xval_plot, y = predict_output_m3_best_H[1:10],
+     type = 'l', lwd = 5, col = 'blue',
+     main = 'B: High WMC', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
+     ylim = c(1.25, 1.85))
+# Second plot PREV diff & CAPACITY high
+lines(x = xval_plot, y = predict_output_m3_best_H[11:20],
+      lwd = 5, col = 'red')
+legend("bottomright", legend = c("Previous Easy", "Previous Difficult"),
+       col = c('blue', 'red'), lty = c(1, 1))
+
+
+
+
+wind2_m11_sepdifficulties_3ways_rfx_NCS
+
+# xval_plot = seq(from = 0, to = 1, by = .1);
+# coef_vals = fixef(m0_alldiffcont_rfx)
+#
+# plot(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_diff_cont"])^2,
+#      type = 'l', lwd = 5, col = 'purple',
+#      main = 'Effect of current difficulty', xlab = 'Difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)')
+#
+# # Plot it!
+# xval_plot = seq(from = 0, to = 1, by = .1); # current difficulty (easy = 0, difficult = 1)
+# prev_trial_diff = c(1,2); # easy = 0, difficult = 1
+# capacity = c(1, -1); # HIGH = 1, low = -1
+# coef_vals = fixef(m3_prev_diffCont_capacityCat_intxn_rfx)
+#
+# #HIGH CAPACITY PLOT
+# # First plot PREV easy & CAPACITY high
+# plot(x = xval_plot, y = (coef_vals["(Intercept)"] +
+#                            xval_plot*coef_vals["all_diff_cont"] +
+#                            prev_trial_diff[1]*coef_vals["prev_all_diff_cont"] +
+#                            xval_plot*capacity[1]* coef_vals["all_diff_cont:capacity_HighP1_lowN1"] +
+#                            prev_trial_diff[1]*capacity[1]*coef_vals["prev_all_diff_cont:capacity_HighP1_lowN1"])^2,
+#      type = 'l', lwd = 5, col = 'blue',
+#      main = 'Effect of current & previous difficulty', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
+#      ylim = c(1.25, 1.575))
+# # Second plot PREV diff & CAPACITY high
+# lines(x = xval_plot, y = (coef_vals["(Intercept)"] +
+#                             xval_plot*coef_vals["all_diff_cont"] +
+#                             prev_trial_diff[2]*coef_vals["prev_all_diff_cont"] +
+#                             xval_plot*capacity[1]* coef_vals["all_diff_cont:capacity_HighP1_lowN1"] +
+#                             prev_trial_diff[2]*capacity[1]*coef_vals["prev_all_diff_cont:capacity_HighP1_lowN1"])^2,
+#       lwd = 5, col = 'red')
+
+
+par(mfrow = c(1,2))
+
+xval_plot = seq(from = 0, to = 1, by = .1)
+cd = c(0,1)
+pd = c(0,1)
+choice = c(0,1)
+wmc = c(-1, 1)
+coef_vals = fixef(wind2_m11_sepdifficulties_3ways_rfx_NCS)
+# low WMC pupil
+# CD x Choice
+plot(x = xval_plot, y = coef_vals["(Intercept)"] +
+       xval_plot*coef_vals["all_diff_cont"] +
+       choice[1]*coef_vals["choice"] +
+       xval_plot*wmc[1]*coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+       choice[1]*wmc[1]*coef_vals["choice:all_diff_cont"],
+     type = 'l', lwd = 5, col = 'green',
+     main = 'A: Low WMC x Current Difficulty x Choice',
+     xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)')
+lines(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot*coef_vals["all_diff_cont"] +
+        choice[2]*coef_vals["choice"] +
+        xval_plot*wmc[1]*coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+        choice[2]*wmc[1]*coef_vals["choice:all_diff_cont"],
+      type = 'l', lwd = 5, col = 'orange')
+
+
+
+
+
+#                                                               Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                                                  4.120e+00  8.124e-02  8.270e+01  50.716  < 2e-16 ***
+# trialnumberRS                                               -2.452e-01  1.892e-02  1.331e+04 -12.962  < 2e-16 ***
+# capacity_HighP1_lowN1_best                                   1.214e-01  8.085e-02  8.195e+01   1.502 0.136931
+# choice                                                       8.183e-02  1.455e-02  1.331e+04   5.624 1.90e-08 ***
+# NCS_HighP1_LowN1                                            -3.253e-02  7.562e-02  8.052e+01  -0.430 0.668170
+# all_diff_cont                                               -1.297e-02  1.662e-02  1.331e+04  -0.780 0.435119
+# prev_all_diff_cont                                           2.779e-03  1.619e-02  1.331e+04   0.172 0.863683
+
+# trialnumberRS:capacity_HighP1_lowN1_best                     3.376e-02  1.543e-02  1.331e+04   2.187 0.028742 *
+# trialnumberRS:choice                                        -1.186e-01  2.610e-02  1.331e+04  -4.545 5.55e-06 ***
+# capacity_HighP1_lowN1_best:choice                           -1.165e-02  1.001e-02  1.331e+04  -1.164 0.244406
+# trialnumberRS:NCS_HighP1_LowN1                              -2.666e-02  6.967e-03  1.331e+04  -3.827 0.000131 ***
+# trialnumberRS:all_diff_cont                                 -2.474e-02  2.645e-02  1.331e+04  -0.935 0.349784
+
+# capacity_HighP1_lowN1_best:all_diff_cont                     1.494e-02  1.294e-02  1.331e+04   1.154 0.248323
+# choice:all_diff_cont                                        -6.596e-02  2.223e-02  1.331e+04  -2.967 0.003015 **
+# NCS_HighP1_LowN1:all_diff_cont                              -5.003e-03  4.869e-03  1.331e+04  -1.028 0.304168
+# trialnumberRS:prev_all_diff_cont                            -1.687e-02  2.589e-02  1.331e+04  -0.652 0.514713
+# capacity_HighP1_lowN1_best:prev_all_diff_cont                1.587e-02  1.276e-02  1.331e+04   1.243 0.213743
+# choice:prev_all_diff_cont                                   -2.704e-02  2.212e-02  1.331e+04  -1.222 0.221552
+# NCS_HighP1_LowN1:prev_all_diff_cont                          2.030e-03  4.872e-03  1.331e+04   0.417 0.676996
+
+# trialnumberRS:capacity_HighP1_lowN1_best:choice             -2.130e-03  1.509e-02  1.331e+04  -0.141 0.887747
+# trialnumberRS:capacity_HighP1_lowN1_best:all_diff_cont      -2.329e-02  1.883e-02  1.331e+04  -1.237 0.216158
+# trialnumberRS:choice:all_diff_cont                           1.336e-01  3.557e-02  1.331e+04   3.757 0.000173 ***
+# capacity_HighP1_lowN1_best:choice:all_diff_cont              6.608e-03  1.033e-02  1.331e+04   0.640 0.522462
+# trialnumberRS:capacity_HighP1_lowN1_best:prev_all_diff_cont -3.858e-02  1.883e-02  1.331e+04  -2.049 0.040509 *
+# trialnumberRS:choice:prev_all_diff_cont                      6.139e-02  3.542e-02  1.331e+04   1.733 0.083137 .
+# capacity_HighP1_lowN1_best:choice:prev_all_diff_cont         2.337e-02  1.011e-02  1.331e+04   2.312 0.020791 *
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##### thesis: single predictor models #####
+
+wind2_m01_trial = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS  +
+                                                 (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$NCS_HighP1_LowN1),], REML = F)
+summary(wind2_m01_trial)
+# trialnumberRS -2.986e-01  6.610e-03  1.378e+04  -45.17   <2e-16 ***
+
+wind2_m01_wmc = lmer(wind2_effort_isi_mean ~ 1 + capacity_HighP1_lowN1_best +
+                       (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$NCS_HighP1_LowN1),], REML = F)
+summary(wind2_m01_wmc)
+# capacity_HighP1_lowN1_best  0.13546    0.08051 80.00013   1.683   0.0963 .
+
+wind2_m01_choice = lmer(wind2_effort_isi_mean ~ 1 + choice +
+                          (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$NCS_HighP1_LowN1),], REML = F)
+summary(wind2_m01_choice)
+# choice      3.135e-02  4.175e-03 1.378e+04   7.509 6.34e-14 ***
+
+wind2_m01_nfc = lmer(wind2_effort_isi_mean ~ 1 + NCS_HighP1_LowN1 +
+                       (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$NCS_HighP1_LowN1),], REML = F)
+summary(wind2_m01_nfc)
+# NCS_HighP1_LowN1 -0.02867    0.07560 82.00004  -0.379    0.706
+
+wind2_m01_cd = lmer(wind2_effort_isi_mean ~ 1 + all_diff_cont +
+                      (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$NCS_HighP1_LowN1),], REML = F)
+summary(wind2_m01_cd)
+# all_diff_cont -6.233e-02  5.029e-03  1.378e+04  -12.39   <2e-16 ***
+
+wind2_m01_pd = lmer(wind2_effort_isi_mean ~ 1 + prev_all_diff_cont +
+                      (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$NCS_HighP1_LowN1),], REML = F)
+summary(wind2_m01_pd)
+# prev_all_diff_cont -4.156e-02  5.037e-03  1.364e+04  -8.251   <2e-16 ***
+
+
+
+
+
+
+
 
 
 

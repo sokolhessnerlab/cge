@@ -421,6 +421,8 @@ m2_all_trialRT_intfx_2wayOnly_subset <- lmer(sqrtRT ~ 1 +
                                         easyP1difficultN1_prev * NCS_HighP1_LowN1 +
                                         (1 | subjectnumber), data = clean_data_dm_vonkim[is.finite(clean_data_dm_vonkim$NCS_HighP1_LowN1),])
 
+summary(m2_all_trialRT_intfx_2wayOnly_subset)
+
 
 anova(m2_all_trialRT_intfx_2wayOnly_subset,m2_allNoNFC_trialRT_intfx_2wayonly_subset) # IT'S NOT BETTER W/ NCS IN IT!
 # TODO VONFIXVALUES
@@ -492,8 +494,16 @@ m4_curr_sdRT <- lmer(sdRT ~ 1 +
                        (1 | subjectnumber), data = data_curr_diff)
 summary(m4_curr_sdRT)
 
-plot(x = data_curr_diff$curr_diff, y = data_curr_diff$meanRT, type = 'l', ylim = c(0, 3),
-     main = 'Current Difficulty on RT Variability', xlab = 'Current Difficulty', ylab = 'RT Variability')
+test = rev(data_curr_diff$curr_diff)
+
+data_curr_diff$curr_diff <- factor(data_curr_diff$curr_diff, levels = rev(levels(data_curr_diff$curr_diff)))
+
+plot(x = data_curr_diff$curr_diff, y = data_curr_diff$sdRT, type = 'l', ylim = c(min(data_curr_diff$sdRT) - .2, max(data_curr_diff$sdRT) + .2),
+     main = 'RT Variability (standard deviations)', xlab = 'Current Difficulty', ylab = 'Reaction Time (seconds)')
+
+
+
+
 
 # ~ When regressing current difficulty on RT variability,
 # regression coefficients indicate an effect of current difficulty, β = -0.06(0.01), p < .001.
