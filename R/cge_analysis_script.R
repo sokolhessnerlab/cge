@@ -1617,6 +1617,14 @@ m3_best_nointxn = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best +
                          (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_nointxn) # THIS OUTPERFORMS THE FULLY-INTERACTIVE VERSION
 
+#                                                 Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                                    1.202e+00  1.233e-02  8.980e+01  97.522  < 2e-16 ***
+# all_diff_cont                                  1.164e-01  3.839e-03  1.368e+04  30.312  < 2e-16 ***
+# capacity_HighP1_lowN1_best                    -2.213e-02  1.233e-02  8.980e+01  -1.795    0.076 .
+# prev_all_diff_cont                            -2.713e-02  3.844e-03  1.368e+04  -7.058 1.77e-12 ***
+# all_diff_cont:capacity_HighP1_lowN1_best       2.485e-02  3.839e-03  1.368e+04   6.473 9.91e-11 ***
+# capacity_HighP1_lowN1_best:prev_all_diff_cont  1.579e-02  3.844e-03  1.368e+04   4.107 4.04e-05 ***
+
 
 m3_best_continuousWMC_nointxn = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned + prev_all_diff_cont * complexspan_demeaned +
                          (1 | subjectnumber), data = clean_data_dm, REML = F);
@@ -1699,6 +1707,27 @@ plot(x = xval_plot, y = predict_output_m3_best_L[1:10],
 # Fourth (last) plot PREV diff & CAPACITY low
 lines(x = xval_plot, y = predict_output_m3_best_L[11:20],
       lwd = 5, col = 'red')
+
+# Plot by WMC x Previous Difficult Choice only
+par(mfrow = c(1,1))
+par(mar = c(5, 6, 4, 4))
+# ~ low WMC
+plot(x = xval_plot, y = predict_output_m3_best_L[11:20], cex.axis = 1.2,
+     type = 'l', lwd = 5, col = 'red',ylim = c(1.3, 1.8),
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Reaction Time (seconds)")), cex.lab = 1.5,)
+lines(x = xval_plot, y = predict_output_m3_best_H[11:20],
+      lwd = 5, col = 'red',  lty = 2)
+legend("topleft", legend = c(expression(bold("WMC Group")), "low WMC", "high WMC"), cex = 1.2,
+       col = c(NA, 'red', 'red'), lty = c(NA, 1, 2), lwd = c(NA, 2, 2),
+       bty = "o", inset = c(0.025, 0.025))
+
+
+
+
+# legend("left", legend = c(expression(bold("Previous Easy")), "Safe Choice", "Risky Choice", NA,
+#                           expression(bold("Previous Difficult")), "Safe Choice", "Risky Choice"),  # Labels
+#        col = c(NA, "green", "green", NA, NA, "orange", "orange"),  # Blue for Easy, Red for Difficult
+#        lty = c(NA, 1, 2, NA, NA, 1, 2), lwd = 2)
 
 
 # Are we better off using O-Span or Sym-Span (vs. Composite Span)?
@@ -8146,30 +8175,125 @@ wind2_m11_sepdifficulties_3ways_rfx_NCS
 #       lwd = 5, col = 'red')
 
 
-par(mfrow = c(1,2))
+par(mfrow = c(1,3))
 
 xval_plot = seq(from = 0, to = 1, by = .1)
-cd = c(0,1)
+# cd = c(0,1) # this is redundant with above
 pd = c(0,1)
 choice = c(0,1)
 wmc = c(-1, 1)
 coef_vals = fixef(wind2_m11_sepdifficulties_3ways_rfx_NCS)
+
+layout(matrix(c(1, 2, 3), nrow = 1, ncol = 3), widths = c(2.5, 2.5, 2))
 # low WMC pupil
 # CD x Choice
+# ~ previous easy, safe choice
 plot(x = xval_plot, y = coef_vals["(Intercept)"] +
-       xval_plot*coef_vals["all_diff_cont"] +
-       choice[1]*coef_vals["choice"] +
-       xval_plot*wmc[1]*coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
-       choice[1]*wmc[1]*coef_vals["choice:all_diff_cont"],
-     type = 'l', lwd = 5, col = 'green',
-     main = 'A: Low WMC x Current Difficulty x Choice',
-     xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)')
+       xval_plot * coef_vals["all_diff_cont"] +
+       pd[1] * coef_vals["prev_all_diff_cont"] +
+       choice[1] * coef_vals["choice"] +
+       xval_plot * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+       pd[1] * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+       xval_plot * choice[1] * coef_vals["choice:all_diff_cont"] +
+       pd[1] * choice[1] * coef_vals["choice:prev_all_diff_cont"] +
+       xval_plot * wmc[1] * choice[1] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+       pd[1] * wmc[1] * choice[1] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+     type = 'l', lwd = 5, col = 'green', lty = 1,
+     main = 'A: Low WMC', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'TEPR (mm)', ylim = c(4,4.25))
+# ~ previous easy, risky choice
 lines(x = xval_plot, y = coef_vals["(Intercept)"] +
-        xval_plot*coef_vals["all_diff_cont"] +
-        choice[2]*coef_vals["choice"] +
-        xval_plot*wmc[1]*coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
-        choice[2]*wmc[1]*coef_vals["choice:all_diff_cont"],
-      type = 'l', lwd = 5, col = 'orange')
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[1] * coef_vals["prev_all_diff_cont"] +
+        choice[2] * coef_vals["choice"] +
+        xval_plot * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+        pd[1] * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+        pd[1] * choice[2] * coef_vals["choice:prev_all_diff_cont"] +
+        xval_plot * wmc[1] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+        pd[1] * wmc[1] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'green', lty = 2)
+# ~ previous difficult, safe choice
+lines(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[2] * coef_vals["prev_all_diff_cont"] +
+        choice[1] * coef_vals["choice"] +
+        xval_plot * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+        pd[2] * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+        xval_plot * choice[1] * coef_vals["choice:all_diff_cont"] +
+        pd[2] * choice[1] * coef_vals["choice:prev_all_diff_cont"] +
+        xval_plot * wmc[1] * choice[1] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+        pd[2] * wmc[1] * choice[1] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'orange', lty = 1)
+# ~ previous difficult, risky choice
+lines(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[2] * coef_vals["prev_all_diff_cont"] +
+        choice[2] * coef_vals["choice"] +
+        xval_plot * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+        pd[2] * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+        pd[2] * choice[2] * coef_vals["choice:prev_all_diff_cont"] +
+        xval_plot * wmc[1] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+        pd[2] * wmc[1] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'orange', lty = 2)
+
+# high WMC pupil
+# CD x Choice
+# ~ previous easy, safe choice
+plot(x = xval_plot, y = coef_vals["(Intercept)"] +
+       xval_plot * coef_vals["all_diff_cont"] +
+       pd[1] * coef_vals["prev_all_diff_cont"] +
+       choice[1] * coef_vals["choice"] +
+       xval_plot * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+       pd[1] * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+       xval_plot * choice[1] * coef_vals["choice:all_diff_cont"] +
+       pd[1] * choice[1] * coef_vals["choice:prev_all_diff_cont"] +
+       xval_plot * wmc[2] * choice[1] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+       pd[1] * wmc[2] * choice[1] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+     type = 'l', lwd = 5, col = 'green', lty = 1,
+     main = 'B: High WMC', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'TEPR (mm)', ylim = c(4,4.25))
+# ~ previous easy, risky choice
+lines(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[1] * coef_vals["prev_all_diff_cont"] +
+        choice[2] * coef_vals["choice"] +
+        xval_plot * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+        pd[1] * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+        pd[1] * choice[2] * coef_vals["choice:prev_all_diff_cont"] +
+        xval_plot * wmc[2] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+        pd[1] * wmc[2] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'green', lty = 2)
+# ~ previous difficult, safe choice
+lines(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[2] * coef_vals["prev_all_diff_cont"] +
+        choice[1] * coef_vals["choice"] +
+        xval_plot * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+        pd[2] * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+        xval_plot * choice[1] * coef_vals["choice:all_diff_cont"] +
+        pd[2] * choice[1] * coef_vals["choice:prev_all_diff_cont"] +
+        xval_plot * wmc[2] * choice[1] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+        pd[2] * wmc[2] * choice[1] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'orange', lty = 1)
+# ~ previous difficult, risky choice
+lines(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[2] * coef_vals["prev_all_diff_cont"] +
+        choice[2] * coef_vals["choice"] +
+        xval_plot * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+        pd[2] * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+        pd[2] * choice[2] * coef_vals["choice:prev_all_diff_cont"] +
+        xval_plot * wmc[2] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+        pd[2] * wmc[2] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'orange', lty = 2)
+
+plot(1, type = "n", xlab = "", ylab = "", xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
+legend("left", legend = c(expression(bold("Previous Easy")), "Safe Choice", "Risky Choice", NA,
+                           expression(bold("Previous Difficult")), "Safe Choice", "Risky Choice"),  # Labels
+       col = c(NA, "green", "green", NA, NA, "orange", "orange"),  # Blue for Easy, Red for Difficult
+       lty = c(NA, 1, 2, NA, NA, 1, 2), lwd = 2)
 
 
 
@@ -8212,8 +8336,7 @@ lines(x = xval_plot, y = coef_vals["(Intercept)"] +
 
 
 
-
-
+clean_data_dm$all_diff_cont
 
 
 
@@ -8256,15 +8379,61 @@ summary(wind2_m01_pd)
 
 
 
+m3_best_intxn = lmer(sqrtRT ~ 1 +
+                       all_diff_cont * capacity_HighP1_lowN1_best +
+                       all_diff_cont * NCS_HighP1_LowN1 +
+                       prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                       prev_all_diff_cont * NCS_HighP1_LowN1 +
+                       (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$NCS_HighP1_LowN1),], REML = F)
+summary(m3_best_intxn)
+# (Intercept)                                    1.201e+00  1.221e-02  8.887e+01  98.355  < 2e-16 ***
+# all_diff_cont                                  1.148e-01  3.840e-03  1.352e+04  29.904  < 2e-16 ***
+# capacity_HighP1_lowN1_best                    -2.202e-02  1.219e-02  8.887e+01  -1.807   0.0742 .
+# NCS_HighP1_LowN1                               1.254e-02  1.154e-02  8.963e+01   1.087   0.2800
+# prev_all_diff_cont                            -2.697e-02  3.844e-03  1.352e+04  -7.016 2.39e-12 ***
+# all_diff_cont:capacity_HighP1_lowN1_best       2.700e-02  3.834e-03  1.352e+04   7.041 2.00e-12 ***
+# all_diff_cont:NCS_HighP1_LowN1                -5.992e-03  3.675e-03  1.352e+04  -1.631   0.1030
+# capacity_HighP1_lowN1_best:prev_all_diff_cont  1.575e-02  3.839e-03  1.352e+04   4.103 4.09e-05 ***
+# NCS_HighP1_LowN1:prev_all_diff_cont            1.714e-04  3.681e-03  1.352e+04   0.047   0.9628
+
+m3_best_nointxn = lmer(sqrtRT ~ 1 +
+                         all_diff_cont * capacity_HighP1_lowN1_best +
+                         prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                         (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$NCS_HighP1_LowN1),], REML = F)
+
+summary(m3_best_nointxn)
+# (Intercept)                                    1.202e+00  1.223e-02  8.880e+01  98.234  < 2e-16 ***
+# all_diff_cont                                  1.144e-01  3.832e-03  1.352e+04  29.859  < 2e-16 ***
+# capacity_HighP1_lowN1_best                    -2.154e-02  1.223e-02  8.880e+01  -1.761   0.0817 .
+# prev_all_diff_cont                            -2.701e-02  3.837e-03  1.352e+04  -7.041 2.00e-12 ***
+# all_diff_cont:capacity_HighP1_lowN1_best       2.680e-02  3.832e-03  1.352e+04   6.993 2.82e-12 ***
+# capacity_HighP1_lowN1_best:prev_all_diff_cont  1.567e-02  3.837e-03  1.352e+04   4.084 4.44e-05 ***
 
 
+m3_sqrtRT_cd = lmer(sqrtRT ~ 1 +
+                      all_diff_cont +
+                      (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$NCS_HighP1_LowN1),], REML = F)
 
+summary(m3_sqrtRT_cd)
+# all_diff_cont 1.042e-01  3.641e-03 1.415e+04   28.61   <2e-16 ***
+m3_sqrtRT_pd = lmer(sqrtRT ~ 1 +
+                      prev_all_diff_cont +
+                      (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$NCS_HighP1_LowN1),], REML = F)
 
+summary(m3_sqrtRT_pd)
+# prev_all_diff_cont -2.572e-02  3.758e-03  1.401e+04  -6.844 8.04e-12 ***
+m3_sqrtRT_wmc = lmer(sqrtRT ~ 1 +
+                      capacity_HighP1_lowN1_best +
+                      (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$NCS_HighP1_LowN1),], REML = F)
 
+summary(m3_sqrtRT_wmc)
+# capacity_HighP1_lowN1_best -0.002706   0.011809 80.994572  -0.229    0.819
+m3_sqrtRT_nfc = lmer(sqrtRT ~ 1 +
+                      NCS_HighP1_LowN1 +
+                      (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$NCS_HighP1_LowN1),], REML = F)
 
-
-
-
+summary(m3_sqrtRT_nfc)
+# NCS_HighP1_LowN1  0.005762   0.010951 83.996779   0.526      0.6
 
 
 

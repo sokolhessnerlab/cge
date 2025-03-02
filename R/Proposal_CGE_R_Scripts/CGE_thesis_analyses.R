@@ -572,6 +572,88 @@ m4_all_sdRT_intfx_2wayonly <- lmer(sdRT ~ 1 +
                             (1 | subjectnumber), data = data_currprev_diff)
 summary(m4_all_sdRT_intfx_2wayonly)
 
+# (Intercept)          0.39294    0.01408 108.41122  27.903  < 2e-16 ***
+# curr_diffdifficult   0.06102    0.01013  84.00000   6.025 4.33e-08 ***
+
+# (Intercept)                      4.122e-01  1.383e-02  7.800e+01  29.798  < 2e-16 ***
+# easyP1difficultN1               -3.192e-02  4.858e-03  2.370e+02  -6.571 3.14e-10 ***
+# WMCgroup                        -6.272e-03  1.381e-02  7.800e+01  -0.454    0.651
+# easyP1difficultN1_prev          -3.977e-03  4.858e-03  2.370e+02  -0.819    0.414
+# NFCgroup                        -9.526e-03  1.304e-02  7.800e+01  -0.730    0.467
+# easyP1difficultN1:WMCgroup      -5.968e-03  4.849e-03  2.370e+02  -1.231    0.220
+# WMCgroup:easyP1difficultN1_prev -4.150e-03  4.849e-03  2.370e+02  -0.856    0.393
+# easyP1difficultN1:NFCgroup      -1.207e-03  4.580e-03  2.370e+02  -0.263    0.792
+# easyP1difficultN1_prev:NFCgroup -6.213e-04  4.580e-03  2.370e+02  -0.136    0.892
+
+
+m4_currDiff_sdRT <- lmer(sdRT ~ 1 +
+                           easyP1difficultN1 +
+                           (1 | subjectnumber), data = data_currprev_diff)
+summary(m4_currDiff_sdRT)
+# (Intercept)         0.419867   0.013080  83.999994  32.099  < 2e-16 ***
+# easyP1difficultN1  -0.031253   0.004506 254.000003  -6.935 3.35e-11 ***
+
+
+plot(x = data_currprev_diff$easyP1difficultN1 == -1, y = data_currprev_diff$sdRT,
+     type = 'l', ylim = c(min(data_currprev_diff$sdRT) - .2, max(data_currprev_diff$sdRT) + .2),
+     main = 'RT Variability (standard deviations)', xlab = 'Current Difficulty', ylab = 'Reaction Time (seconds)')
+
+
+
+m4_sdRT_pd <- lmer(sdRT ~ 1 +
+                           easyP1difficultN1_prev +
+                           (1 | subjectnumber), data = data_currprev_diff)
+summary(m4_sdRT_pd)
+# easyP1difficultN1_prev  -0.002825   0.004911 254.000001  -0.575    0.566
+m4_sdRT_wmc <- lmer(sdRT ~ 1 +
+                      WMCgroup +
+                     (1 | subjectnumber), data = data_currprev_diff)
+summary(m4_sdRT_wmc)
+# WMCgroup    -0.008108   0.013794 79.999994  -0.588    0.558
+m4_sdRT_nfc <- lmer(sdRT ~ 1 +
+                      NFCgroup +
+                      (1 | subjectnumber), data = data_currprev_diff)
+summary(m4_sdRT_nfc)
+# NFCgroup    -0.01554    0.01308 82.00000  -1.188    0.238
+
+# Create the initial line plot
+plot(1, type = 'n', xlim = 'n', ylim = c(min(data_currprev_diff$sdRT) - .1, max(data_currprev_diff$sdRT) + .2),
+     main = 'RT Variability (standard deviations)', xlab = 'Current Difficulty', ylab = 'Reaction Time (seconds)')
+
+# Overlay boxplots for the two categories of easyP1difficultN1
+boxplot(sdRT ~ easyP1difficultN1 == -1, data = data_currprev_diff,
+        add = TRUE, col = rgb(0.8, 0.8, 0.8, 0.3), outline = FALSE,
+        boxwex = 0.2)  # Adjust box width to fit on the plot
+
+
+# Recode the 'easyP1difficultN1' variable to factors with 'Easy' and 'Difficult' labels
+data_currprev_diff$easyP1difficultN1 <- factor(data_currprev_diff$easyP1difficultN1, levels = rev(c(-1, 1)), labels = c("Easy", "Difficult"))
+
+# Create the base plot (empty, just the axes)
+plot(1, type = 'n',
+     xlim = c(0.5, 2.5),  # Set limits to fit two boxplots
+     ylim = c(min(data_currprev_diff$sdRT) - .1, max(data_currprev_diff$sdRT) + .2),
+     main = 'RT Variability (standard deviations)',
+     xlab = 'Current Difficulty',
+     ylab = 'Reaction Time (seconds)',
+     xaxt = 'n',  # Suppress the x-axis
+     yaxt = 'n')  # Suppress the y-axis
+
+# Overlay boxplots for the two categories: Easy and Difficult
+boxplot(sdRT ~ easyP1difficultN1, data = data_currprev_diff,
+        at = c(1, 2),  # Place "Easy" at 1, "Difficult" at 2
+        col = rgb(0.8, 0.8, 0.8, 0.3),
+        outline = FALSE,
+        boxwex = 0.2,
+        add = TRUE)  # Add boxplots
+
+
+
+
+data_curr_diff$curr_diff <- factor(data_curr_diff$curr_diff, levels = rev(levels(data_curr_diff$curr_diff)))
+
+
+
 m4_all_sdRT_intfx <- lmer(sdRT ~ 1 +
                       easyP1difficultN1 *
                       easyP1difficultN1_prev *
@@ -596,10 +678,9 @@ summary(m4_all_sdRT_intfx)
 # easyP1difficultN1_prev:WMCgroup:NFCgroup                 0.002351   0.006916 231.000000   0.340    0.734
 # curr_diffeasy:easyP1difficultN1_prev:WMCgroup:NFCgroup  -0.003279   0.009780 231.000000  -0.335    0.738
 
-m4_currDiff_sdRT <- lmer(sdRT ~ 1 +
-                            easyP1difficultN1 +
-                            (1 | subjectnumber), data = data_currprev_diff)
-summary(m4_currDiff_sdRT)
+
+
+
 
 # curr_diffeasy  -0.062505   0.009013 254.000003  -6.935 3.35e-11 ***
 
