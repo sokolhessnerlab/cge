@@ -1181,6 +1181,14 @@ plot(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_dif
 # plot(x = clean_data_dm$all_diff_cont, y = clean_data_dm$sqrtRT)
 # abline(reg = m0_alldiffcont, col = 'red') # regression must be an LM or GLM, not LMER or GLMER
 
+# Revamped choice difficulty plot
+par(mfrow = c(1,1))
+par(mar = c(5, 6, 4, 4))
+# ~ low WMC
+plot(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_diff_cont"])^2, cex.axis = 1.3, las = 1,
+     type = 'l', lwd = 5, col = 'purple',ylim = c(1.3, 1.8),
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Reaction Time (seconds)")), cex.lab = 1.5,)
+
 
 
 # BIG TAKEAWAY:
@@ -1259,6 +1267,22 @@ lines(x = xval_plot, y = predict_output_m1[11:20],
 
 # BLUE = previous trial easy
 # RED = previous trial difficult
+
+# Plot Previous Difficult Choice only
+par(mfrow = c(1,1))
+par(mar = c(5, 6, 4, 4))
+# ~ low WMC
+plot(x = xval_plot, y = predict_output_m1[1:10], cex.axis = 1.3, las = 1,
+     type = 'l', lwd = 5, col = 'blue',ylim = c(1.3, 1.8),
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Reaction Time (seconds)")), cex.lab = 1.5,)
+lines(x = xval_plot, y = predict_output_m1[11:20],
+      lwd = 5, col = 'red')
+legend("topleft", legend = c(expression(bold("Previous Difficulty")), "Easy Choice", "Difficult Choice"), cex = 1.3, y.intersp = 1.3,
+       col = c(NA, 'blue', 'red'), lwd = c(NA, 2, 2),
+       bty = "o", inset = c(0.025, 0.025))
+
+
+
 
 # How far back does the previous difficulty effect go? Let's look **4 trials back**
 m1_prev_alldiffCont_back4_intxn_rfx = lmer(sqrtRT ~ 1 +
@@ -1712,12 +1736,12 @@ lines(x = xval_plot, y = predict_output_m3_best_L[11:20],
 par(mfrow = c(1,1))
 par(mar = c(5, 6, 4, 4))
 # ~ low WMC
-plot(x = xval_plot, y = predict_output_m3_best_L[11:20], cex.axis = 1.2,
+plot(x = xval_plot, y = predict_output_m3_best_L[11:20], cex.axis = 1.3, las = 1,
      type = 'l', lwd = 5, col = 'red',ylim = c(1.3, 1.8),
      xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Reaction Time (seconds)")), cex.lab = 1.5,)
 lines(x = xval_plot, y = predict_output_m3_best_H[11:20],
       lwd = 5, col = 'red',  lty = 2)
-legend("topleft", legend = c(expression(bold("WMC Group")), "low WMC", "high WMC"), cex = 1.2,
+legend("topleft", legend = c(expression(bold("WMC Group")), "low WMC", "high WMC"), cex = 1.3, y.intersp = 1.3,
        col = c(NA, 'red', 'red'), lty = c(NA, 1, 2), lwd = c(NA, 2, 2),
        bty = "o", inset = c(0.025, 0.025))
 
@@ -2156,7 +2180,7 @@ summary(m3_best_trialNum_2WayIntxOnly_lowCap)
 # all_diff_cont:trialnumberRS        -0.01230    0.01664 9155.07098  -0.740 0.459550
 # trialnumberRS:prev_all_diff_cont    0.06458    0.01665 9155.11543   3.878 0.000106 ***
 
-# including choice
+# including choice - questionable
 m3_best_trialNum_2WayIntxOnly_choice = lmer(sqrtRT ~ 1 +
                                        all_diff_cont * capacity_HighP1_lowN1_best +
                                        all_diff_cont * trialnumberRS +
@@ -8176,6 +8200,7 @@ wind2_m11_sepdifficulties_3ways_rfx_NCS
 
 
 par(mfrow = c(1,3))
+par(mar = c(6, 7, 4, 4))
 
 xval_plot = seq(from = 0, to = 1, by = .1)
 # cd = c(0,1) # this is redundant with above
@@ -8198,8 +8223,8 @@ plot(x = xval_plot, y = coef_vals["(Intercept)"] +
        pd[1] * choice[1] * coef_vals["choice:prev_all_diff_cont"] +
        xval_plot * wmc[1] * choice[1] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
        pd[1] * wmc[1] * choice[1] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
-     type = 'l', lwd = 5, col = 'green', lty = 1,
-     main = 'A: Low WMC', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'TEPR (mm)', ylim = c(4,4.25))
+     type = 'l', lwd = 5, col = 'darkblue', lty = 1, cex.axis = 1.3, las = 1,
+     main = 'A: Low WMC', xlab = expression(bold("Current Difficulty")), ylab = expression(bold("TEPR (mm)")), ylim = c(4,4.25))
 # ~ previous easy, risky choice
 lines(x = xval_plot, y = coef_vals["(Intercept)"] +
         xval_plot * coef_vals["all_diff_cont"] +
@@ -8211,7 +8236,7 @@ lines(x = xval_plot, y = coef_vals["(Intercept)"] +
         pd[1] * choice[2] * coef_vals["choice:prev_all_diff_cont"] +
         xval_plot * wmc[1] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
         pd[1] * wmc[1] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
-      type = 'l', lwd = 5, col = 'green', lty = 2)
+      type = 'l', lwd = 5, col = 'darkblue', lty = 2)
 # ~ previous difficult, safe choice
 lines(x = xval_plot, y = coef_vals["(Intercept)"] +
         xval_plot * coef_vals["all_diff_cont"] +
@@ -8250,8 +8275,8 @@ plot(x = xval_plot, y = coef_vals["(Intercept)"] +
        pd[1] * choice[1] * coef_vals["choice:prev_all_diff_cont"] +
        xval_plot * wmc[2] * choice[1] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
        pd[1] * wmc[2] * choice[1] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
-     type = 'l', lwd = 5, col = 'green', lty = 1,
-     main = 'B: High WMC', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'TEPR (mm)', ylim = c(4,4.25))
+     type = 'l', lwd = 5, col = 'darkblue', lty = 1, cex.axis = 1.3, las = 1,
+     main = 'B: High WMC', xlab = expression(bold("Current Difficulty")), ylab = expression(bold("TEPR (mm)")), ylim = c(4,4.25))
 # ~ previous easy, risky choice
 lines(x = xval_plot, y = coef_vals["(Intercept)"] +
         xval_plot * coef_vals["all_diff_cont"] +
@@ -8263,7 +8288,7 @@ lines(x = xval_plot, y = coef_vals["(Intercept)"] +
         pd[1] * choice[2] * coef_vals["choice:prev_all_diff_cont"] +
         xval_plot * wmc[2] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
         pd[1] * wmc[2] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
-      type = 'l', lwd = 5, col = 'green', lty = 2)
+      type = 'l', lwd = 5, col = 'darkblue', lty = 2)
 # ~ previous difficult, safe choice
 lines(x = xval_plot, y = coef_vals["(Intercept)"] +
         xval_plot * coef_vals["all_diff_cont"] +
@@ -8292,12 +8317,32 @@ lines(x = xval_plot, y = coef_vals["(Intercept)"] +
 plot(1, type = "n", xlab = "", ylab = "", xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
 legend("left", legend = c(expression(bold("Previous Easy")), "Safe Choice", "Risky Choice", NA,
                            expression(bold("Previous Difficult")), "Safe Choice", "Risky Choice"),  # Labels
-       col = c(NA, "green", "green", NA, NA, "orange", "orange"),  # Blue for Easy, Red for Difficult
+       col = c(NA, "darkblue", "darkblue", NA, NA, "orange", "orange"),  # Blue for Easy, Red for Difficult
        lty = c(NA, 1, 2, NA, NA, 1, 2), lwd = 2)
 
 
 
+par(mfrow = c(1,1))
+par(mar = c(5, 6, 4, 4))
+# ~ low WMC
+plot(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_diff_cont"])^2, cex.axis = 1.3, las = 1,
+     type = 'l', lwd = 5, col = 'purple',ylim = c(1.3, 1.8),
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Reaction Time (seconds)")), cex.lab = 1.5,)
 
+
+
+
+par(mfrow = c(1,1))
+par(mar = c(5, 6, 4, 4))
+# ~ low WMC
+plot(x = xval_plot, y = predict_output_m1[1:10], cex.axis = 1.3, las = 1,
+     type = 'l', lwd = 5, col = 'blue',ylim = c(1.3, 1.8),
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Reaction Time (seconds)")), cex.lab = 1.5,)
+lines(x = xval_plot, y = predict_output_m1[11:20],
+      lwd = 5, col = 'red')
+legend("topleft", legend = c(expression(bold("Previous Difficulty")), "Easy Choice", "Difficult Choice"), cex = 1.3, y.intersp = 1.3,
+       col = c(NA, 'blue', 'red'), lwd = c(NA, 2, 2),
+       bty = "o", inset = c(0.025, 0.025))
 
 #                                                               Estimate Std. Error         df t value Pr(>|t|)
 # (Intercept)                                                  4.120e+00  8.124e-02  8.270e+01  50.716  < 2e-16 ***
@@ -8333,15 +8378,26 @@ legend("left", legend = c(expression(bold("Previous Easy")), "Safe Choice", "Ris
 # Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
+# Pupillometry - just to graph
+plot(x = xval_plot, y = (coef_vals["(Intercept)"] + xval_plot*coef_vals["all_diff_cont"])^2, cex.axis = 1.3, las = 1,
+     type = 'l', lwd = 5, col = 'purple',ylim = c(1.3, 1.8),
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (millimeters)")), cex.lab = 1.5,)
 
 
-
-clean_data_dm$all_diff_cont
-
-
-
-
-
+par(mfrow = c(1,1))
+par(mar = c(5, 6, 4, 4), mgp = c(3.5, 1, 0))
+plot(x = xval_plot, y = coef_vals["(Intercept)"] +
+       xval_plot * coef_vals["all_diff_cont"] +
+       pd[1] * coef_vals["prev_all_diff_cont"] +
+       choice[1] * coef_vals["choice"] +
+       xval_plot * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+       pd[1] * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+       xval_plot * choice[1] * coef_vals["choice:all_diff_cont"] +
+       pd[1] * choice[1] * coef_vals["choice:prev_all_diff_cont"] +
+       xval_plot * wmc[2] * choice[1] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+       pd[1] * wmc[2] * choice[1] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+     type = 'l', lwd = 5, col = 'purple', lty = 1,  cex.axis = 1.3, las = 1, ylim = c(4,4.3),
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (millimeters)")), cex.lab = 1.5,)
 
 
 
