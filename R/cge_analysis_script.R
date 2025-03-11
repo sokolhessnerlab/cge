@@ -7355,6 +7355,78 @@ wind4_m5_diffContAll_prevdiffContAll_wmcCont_intxn_rfx = lmer(wind4_prep_lateiti
 summary(wind4_m5_diffContAll_prevdiffContAll_wmcCont_intxn_rfx)
 
 
+# ~ 2- and 3-way Interaction Models
+
+wind4_m11_sepdifficulties_3ways_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                                             trialnumberRS * capacity_HighP1_lowN1_best * choice +
+                                             all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
+                                             all_diff_cont * trialnumberRS * choice +
+                                             all_diff_cont * capacity_HighP1_lowN1_best * choice +
+                                             prev_all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
+                                             prev_all_diff_cont * trialnumberRS * choice +
+                                             prev_all_diff_cont * capacity_HighP1_lowN1_best * choice +
+                                             (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(wind4_m11_sepdifficulties_3ways_rfx)
+
+                                                              # Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                                                  4.096e+00  7.968e-02  8.580e+01  51.412   <2e-16 ***
+# trialnumberRS                                               -3.094e-01  2.436e-02  1.349e+04 -12.703   <2e-16 ***
+# choice                                                       4.098e-02  1.876e-02  1.349e+04   2.185   0.0289 *
+
+# capacity_HighP1_lowN1_best:choice:all_diff_cont              2.352e-02  1.333e-02  1.349e+04   1.765   0.0777 .
+# capacity_HighP1_lowN1_best:choice:prev_all_diff_cont         2.242e-02  1.304e-02  1.349e+04   1.719   0.0857 .
+
+# capacity_HighP1_lowN1_best                                   1.090e-01  7.936e-02  8.446e+01   1.373   0.1734
+# all_diff_cont                                               -8.729e-04  2.141e-02  1.349e+04  -0.041   0.9675
+# prev_all_diff_cont                                          -2.020e-02  2.086e-02  1.349e+04  -0.968   0.3329
+# trialnumberRS:capacity_HighP1_lowN1_best                     2.363e-02  1.991e-02  1.349e+04   1.187   0.2352
+# trialnumberRS:choice                                        -2.079e-02  3.362e-02  1.349e+04  -0.618   0.5364
+# capacity_HighP1_lowN1_best:choice                           -2.123e-02  1.292e-02  1.349e+04  -1.643   0.1004
+# trialnumberRS:all_diff_cont                                  3.690e-02  3.408e-02  1.349e+04   1.083   0.2789
+# capacity_HighP1_lowN1_best:all_diff_cont                    -6.085e-03  1.670e-02  1.349e+04  -0.364   0.7156
+# choice:all_diff_cont                                        -3.045e-02  2.863e-02  1.349e+04  -1.064   0.2875
+# trialnumberRS:prev_all_diff_cont                             2.716e-02  3.336e-02  1.349e+04   0.814   0.4156
+# capacity_HighP1_lowN1_best:prev_all_diff_cont                7.449e-03  1.647e-02  1.349e+04   0.452   0.6511
+# choice:prev_all_diff_cont                                   -3.408e-02  2.849e-02  1.349e+04  -1.196   0.2317
+# trialnumberRS:capacity_HighP1_lowN1_best:choice              5.533e-03  1.948e-02  1.349e+04   0.284   0.7764
+# trialnumberRS:capacity_HighP1_lowN1_best:all_diff_cont       5.580e-03  2.432e-02  1.349e+04   0.229   0.8185
+# trialnumberRS:choice:all_diff_cont                           2.576e-02  4.575e-02  1.349e+04   0.563   0.5734
+# trialnumberRS:capacity_HighP1_lowN1_best:prev_all_diff_cont -2.890e-02  2.432e-02  1.349e+04  -1.188   0.2347
+# trialnumberRS:choice:prev_all_diff_cont                      7.424e-02  4.558e-02  1.349e+04   1.629   0.1034
+
+
+
+wind4_m11_2ways_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                             trialnumberRS * capacity_HighP1_lowN1_best +
+                             trialnumberRS * choice +
+                             capacity_HighP1_lowN1_best * choice +
+                             all_diff_cont * trialnumberRS +
+                             all_diff_cont * capacity_HighP1_lowN1_best +
+                             all_diff_cont * choice +
+                             prev_all_diff_cont * trialnumberRS +
+                             prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                             prev_all_diff_cont * choice +
+                             (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(wind4_m11_2ways_rfx)
+
+#                                                 Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                                    4.106e+00  7.932e-02  8.426e+01  51.767  < 2e-16 ***
+# trialnumberRS                                 -3.346e-01  1.916e-02  1.349e+04 -17.462  < 2e-16 ***
+# choice                                         2.547e-02  1.229e-02  1.349e+04   2.072  0.03827 *
+# prev_all_diff_cont                            -4.294e-02  1.565e-02  1.349e+04  -2.745  0.00607 **
+# trialnumberRS:all_diff_cont                    4.867e-02  2.284e-02  1.349e+04   2.131  0.03313 *
+# choice:all_diff_cont                          -2.547e-02  1.256e-02  1.349e+04  -2.029  0.04251 *
+# trialnumberRS:prev_all_diff_cont               7.438e-02  2.282e-02  1.349e+04   3.259  0.00112 **
+
+# trialnumberRS:capacity_HighP1_lowN1_best       1.628e-02  9.615e-03  1.349e+04   1.693  0.09040 .
+
+# capacity_HighP1_lowN1_best                     1.011e-01  7.880e-02  8.210e+01   1.283  0.20299
+# all_diff_cont                                 -2.871e-03  1.589e-02  1.349e+04  -0.181  0.85665
+# trialnumberRS:choice                           2.325e-02  1.796e-02  1.349e+04   1.295  0.19547
+# capacity_HighP1_lowN1_best:choice              4.058e-03  5.480e-03  1.349e+04   0.740  0.45904
+# capacity_HighP1_lowN1_best:all_diff_cont       9.454e-03  6.581e-03  1.349e+04   1.436  0.15092
+# capacity_HighP1_lowN1_best:prev_all_diff_cont  2.288e-03  6.583e-03  1.349e+04   0.348  0.72815
+# choice:prev_all_diff_cont                     -8.493e-04  1.232e-02  1.349e+04  -0.069  0.94503
 
 
 ### LOOP: Regression Loop and Plotting a Predictor across all Pupillometry Windows #####
