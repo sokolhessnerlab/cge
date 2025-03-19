@@ -985,20 +985,33 @@ plot(ospanScores, symspanScores,
 lines(x = c(-1, 2), y = c(-1, 2)) # so line extends to edge
 
 capacity_HighP1_lowN1 = (compositeSpanScores > median_compositespan)*2-1;
+# NOTE: This is all participants who completed the WMC task
+# Includes people we drop from e.g. decision-making analysis
 
-sum(capacity_HighP1_lowN1 == 1, na.rm = T) # 41
-sum(capacity_HighP1_lowN1 == -1, na.rm = T) # 44
+sum(capacity_HighP1_lowN1 == 1, na.rm = T) # 41 (all participants)
+sum(capacity_HighP1_lowN1 == -1, na.rm = T) # 44 (all participants)
 
 # Plot the distribution w/ the median value
 hist(compositeSpanScores, breaks = 10, xlab = 'Composite Span Score', main = 'Distribution of Spans');
 abline(v = median_compositespan, col = 'red', lwd = 5)
 
 
+# Limiting analysis to those people we kept for DECISION-MAKING ANALYSIS...
+sum(clean_data_complexspan$compositeSpanScore > median(clean_data_complexspan$compositeSpanScore, na.rm = T), na.rm = T)
+sum(clean_data_complexspan$compositeSpanScore <= median(clean_data_complexspan$compositeSpanScore, na.rm = T), na.rm = T)
+# 41 with > median capacity
+# 41 with <= median capacity
+
+# Create *CLEAN DATA* capacity median split
+clean_data_complexspan$capacity_HighP1_lowN1 = (clean_data_complexspan$compositeSpanScore > 
+                                                  median(clean_data_complexspan$compositeSpanScore, na.rm = T))*2-1;
+
 clean_data_dm$capacity_HighP1_lowN1 = NA;
 
 for(s in 1:number_of_clean_subjects){
   subj_id = keep_participants[s];
-  clean_data_dm$capacity_HighP1_lowN1[clean_data_dm$subjectnumber == subj_id] = capacity_HighP1_lowN1[s];
+  clean_data_dm$capacity_HighP1_lowN1[clean_data_dm$subjectnumber == subj_id] = 
+    clean_data_complexspan$capacity_HighP1_lowN1[clean_data_complexspan$subjectnumber == subj_id];
 }
 
 clean_data_dm$complexspan_demeaned = clean_data_dm$complexspan - mean_compositespan;
