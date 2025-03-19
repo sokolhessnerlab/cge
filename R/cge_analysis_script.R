@@ -1016,8 +1016,14 @@ for(s in 1:number_of_clean_subjects){
 
 clean_data_dm$complexspan_demeaned = clean_data_dm$complexspan - mean_compositespan;
 
-plot(sort(compositeSpanScores))
+# all subjects
+plot(sort(compositeSpanScores), main = 'All participants')
 abline(h = median_compositespan, col = 'red', lwd = 2)
+
+# just clean subjects
+plot(sort(clean_data_complexspan$compositeSpanScore), main = 'Clean participants')
+abline(h = median(clean_data_complexspan$compositeSpanScore, na.rm = T), col = 'red', lwd = 2)
+
 
 # Easy vs. Difficult in WMC - From thesis
 
