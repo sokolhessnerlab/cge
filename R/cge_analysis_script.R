@@ -1439,12 +1439,12 @@ m2_capacityContDiff_intxn_rfx = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP
 summary(m2_capacityContDiff_intxn_rfx)
 # SAME PATTERN If you use continuous difficulty instead of categorical difficulty
 
-# effect of difficulty is 0.118 for HIGH CAPACITY
-# effect of difficulty is 0.100 for LOW CAPACITY
+# effect of difficulty is 0.127 for HIGH CAPACITY
+# effect of difficulty is 0.084 for LOW CAPACITY
 
 
-AIC(m2_capacityCatDiff_intxn_rfx) # AIC: -5874.978
-AIC(m2_capacityContDiff_intxn_rfx) # AIC: -6026.223 (CONTINUOUS IS BETTER)
+AIC(m2_capacityCatDiff_intxn_rfx) # AIC: -8514.704
+AIC(m2_capacityContDiff_intxn_rfx) # AIC: -8699.212 (CONTINUOUS IS BETTER)
 
 
 # Model 3: What role does high/low cognitive capacity have on CURRENT AND PREVIOUS TRIAL EFFECTS
@@ -1473,8 +1473,8 @@ m3_prev_diffCont_capacityCat_intxn_rfx = lmer(sqrtRT ~ 1 +
                                                 all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1 +
                                                 (1 | subjectnumber), data = clean_data_dm);
 summary(m3_prev_diffCont_capacityCat_intxn_rfx)
-# Besides main effects of current and previous difficulty, NO INTERACTIONS between capacity and
-# difficulty (current or previous).
+# Besides main effects of current and previous difficulty, ONLY interaction is between
+# current difficulty and capacity (steeper for higher difficulty folks)
 
 
 
@@ -1489,20 +1489,21 @@ AIC(m3_prev_diffCont_capacityCat_intxn_rfx) # Be careful when reporting; has few
 #
 # MODEL OUTPUT
 #                                                        Estimate Std. Error         df t value Pr(>|t|)
-#   (Intercept)                                             1.222e+00  1.333e-02  6.778e+01  91.669  < 2e-16 ***
-#   all_diff_cont                                           1.085e-01  6.697e-03  9.839e+03  16.204  < 2e-16 ***
-#   prev_all_diff_cont                                     -3.647e-02  6.721e-03  9.840e+03  -5.426 5.91e-08 ***
-#   capacity_HighP1_lowN1                                  -1.606e-02  1.333e-02  6.778e+01  -1.205    0.233
-#   all_diff_cont:prev_all_diff_cont                        6.487e-03  1.014e-02  9.834e+03   0.640    0.522
-#   all_diff_cont:capacity_HighP1_lowN1                     8.721e-03  6.697e-03  9.839e+03   1.302    0.193
-#   prev_all_diff_cont:capacity_HighP1_lowN1                6.921e-03  6.721e-03  9.840e+03   1.030    0.303
-#   all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1  4.349e-05  1.014e-02  9.834e+03   0.004    0.997
+#                                                            Estimate Std. Error         df t value Pr(>|t|)    
+#   (Intercept)                                             1.211e+00  1.194e-02  9.447e+01 101.409  < 2e-16 ***
+#   all_diff_cont                                           1.051e-01  5.767e-03  1.367e+04  18.220  < 2e-16 ***
+#   prev_all_diff_cont                                     -3.496e-02  5.777e-03  1.367e+04  -6.052 1.47e-09 ***
+#   capacity_HighP1_lowN1                                  -9.077e-03  1.194e-02  9.447e+01  -0.760  0.44896    
+#   all_diff_cont:prev_all_diff_cont                        6.018e-03  8.654e-03  1.367e+04   0.695  0.48683    
+#   all_diff_cont:capacity_HighP1_lowN1                     1.534e-02  5.767e-03  1.367e+04   2.659  0.00784 ** 
+#   prev_all_diff_cont:capacity_HighP1_lowN1               -2.297e-04  5.777e-03  1.367e+04  -0.040  0.96828    
+#   all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1  1.200e-02  8.654e-03  1.367e+04   1.387  0.16543  
 #
 # Current difficulty = slower RTs (found previously)
 # Prev. difficulty = faster RTs (found previously)
 # Curr. & prev. difficulty do NOT interact to influence reaction time.
 #
-# Capacity = no net effect! [contrary to hypotheses]
+# Capacity interacts with current difficulty. No interaction w/ prev. difficulty.
 #
 # in CGT, Capacity interacted with CURRENT difficulty to potentiate slowing due to difficulty
 # for high capacity people, and attenuate that effect for low capacity people. NOT SO IN CGE!
@@ -1555,12 +1556,11 @@ m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx = lmer(sqrtRT ~ 1 +
                                                       data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == 1,]);
 summary(m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx)
 # Fixed effects:
-#   Estimate Std. Error         df t value Pr(>|t|)
-#   (Intercept)                       1.206e+00  1.750e-02  3.289e+01  68.920  < 2e-16 ***
-#   all_diff_cont                     1.172e-01  8.756e-03  4.845e+03  13.387  < 2e-16 ***
-#   prev_all_diff_cont               -2.957e-02  8.816e-03  4.845e+03  -3.355 0.000801 ***
-#   all_diff_cont:prev_all_diff_cont  6.550e-03  1.346e-02  4.843e+03   0.486 0.626637
-
+#                                     Estimate Std. Error         df t value Pr(>|t|)    
+#   (Intercept)                       1.202e+00  1.601e-02  4.677e+01  75.062  < 2e-16 ***
+#   all_diff_cont                     1.204e-01  7.735e-03  6.842e+03  15.566  < 2e-16 ***
+#   prev_all_diff_cont               -3.520e-02  7.774e-03  6.842e+03  -4.528 6.06e-06 ***
+#   all_diff_cont:prev_all_diff_cont  1.804e-02  1.179e-02  6.840e+03   1.530    0.126    
 # Contrary to CGT, there *IS* a significant effect of previous difficulty for high capacity folks.
 
 m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx = lmer(sqrtRT ~ 1 +
@@ -1568,38 +1568,34 @@ m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx = lmer(sqrtRT ~ 1 +
                                                        (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == -1,]);
 summary(m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx)
 # Fixed effects:
-#   Estimate Std. Error         df t value Pr(>|t|)
-#   (Intercept)                       1.238e+00  2.005e-02  3.495e+01  61.757  < 2e-16 ***
-#   all_diff_cont                     9.980e-02  1.018e-02  4.995e+03   9.806  < 2e-16 ***
-#   prev_all_diff_cont               -4.340e-02  1.018e-02  4.995e+03  -4.261 2.07e-05 ***
-#   all_diff_cont:prev_all_diff_cont  6.464e-03  1.519e-02  4.992e+03   0.425     0.67
+#                                     Estimate Std. Error         df t value Pr(>|t|)    
+#   (Intercept)                       1.220e+00  1.772e-02  4.762e+01  68.852  < 2e-16 ***
+#   all_diff_cont                     8.977e-02  8.554e-03  6.831e+03  10.494  < 2e-16 ***
+#   prev_all_diff_cont               -3.471e-02  8.545e-03  6.832e+03  -4.062 4.92e-05 ***
+#   all_diff_cont:prev_all_diff_cont -5.979e-03  1.267e-02  6.828e+03  -0.472    0.637    
 
-# The effect of previous difficulty is STRONGER in low capacity people (just not sig. so)
+# The effect of previous difficulty is similar in low capacity people (just not sig. so)
 
 # THESE FINDINGS TOTALLY PARALLEL THE COMPLEX INTERACTIVE MODEL ABOVE AND BACK UP THE OBSERVATIONS MADE THERE.
 
-for (s in 1:number_of_clean_subjects){
-  subj_id = keep_participants[s];
-  clean_data_dm$diff_cont[subj_id] = abs(abs(clean_data_dm$choiceP[subj_id] - 0.5)*2-1); # JUST for the easy/difficult dynamic trials
-  clean_data_dm$all_diff_cont[subj_id] = abs(abs(clean_data_dm$all_choiceP[subj_id] - 0.5)*2-1); # for ALL trials
-  clean_data_dm$capacity_HighP1_lowN1[clean_data_dm$subjectnumber == subj_id] = capacity_HighP1_lowN1[s];
+# for (s in 1:number_of_clean_subjects){
+#   subj_id = keep_participants[s];
+#   # clean_data_dm$diff_cont[subj_id] = abs(abs(clean_data_dm$choiceP[subj_id] - 0.5)*2-1); # JUST for the easy/difficult dynamic trials
+#   # clean_data_dm$all_diff_cont[subj_id] = abs(abs(clean_data_dm$all_choiceP[subj_id] - 0.5)*2-1); # for ALL trials
+#   # clean_data_dm$capacity_HighP1_lowN1[clean_data_dm$subjectnumber == subj_id] = capacity_HighP1_lowN1[s];
+# 
+#   m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx = lmer(sqrtRT ~ 1 +
+#                                                           all_diff_cont * prev_all_diff_cont +
+#                                                           (1 | subjectnumber),
+#                                                         data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == 1,]);
+#   summary(m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx)
+# 
+#   m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx = lmer(sqrtRT ~ 1 +
+#                                                          all_diff_cont * prev_all_diff_cont +
+#                                                          (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == -1,]);
+#   summary(m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx)
+# }
 
-  m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx = lmer(sqrtRT ~ 1 +
-                                                          all_diff_cont * prev_all_diff_cont +
-                                                          (1 | subjectnumber),
-                                                        data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == 1,]);
-  summary(m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx)
-
-  m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx = lmer(sqrtRT ~ 1 +
-                                                         all_diff_cont * prev_all_diff_cont +
-                                                         (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == -1,]);
-  summary(m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx)
-}
-
-for(s in 1:number_of_clean_subjects){
-  subj_id = keep_participants[s];
-  clean_data_dm$capacity_HighP1_lowN1[clean_data_dm$subjectnumber == subj_id] = capacity_HighP1_lowN1[s];
-}
 
 # Examine best-fitting threshold values
 possible_threshold_values = sort(unique(compositeSpanScores))+.000001;
@@ -1614,13 +1610,14 @@ for(ind in 1:length(possible_threshold_values)){
   clean_data_dm$capacity_HighP1_lowN1_temp[clean_data_dm$complexspan > break_val] = 1;
   clean_data_dm$capacity_HighP1_lowN1_temp[clean_data_dm$complexspan < break_val] = -1;
 
-  cat(sprintf('This many people are < break_val: %g\n',sum(compositeSpanScores<break_val, na.rm = T)))
+  cat(sprintf('This many people are < break_val: %g\n',sum(clean_data_complexspan$compositeSpanScore<break_val, na.rm = T)))
 
-  if((sum(compositeSpanScores<break_val, na.rm = T) == 1) | (sum(compositeSpanScores>break_val, na.rm = T) == 1)){
+  if((sum(clean_data_complexspan$compositeSpanScore<break_val, na.rm = T) == 1) | (sum(clean_data_complexspan$compositeSpanScore>break_val, na.rm = T) == 1)){
     next # don't use any categorizations that create a 'group' with just 1 person
   }
 
-  m3_tmp = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_temp +
+  m3_tmp = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_temp +
+                  prev_all_diff_cont * capacity_HighP1_lowN1_temp +
                   (1 | subjectnumber), data = clean_data_dm, REML = F);
   all_aic_values[ind] = AIC(m3_tmp)
 }
@@ -1631,9 +1628,9 @@ best_threshold = possible_threshold_values[which(all_aic_values == best_aic)];
 cat(sprintf('The best fitting model uses a CompositeSpan threshold value of %g.\n', best_threshold))
 cat(sprintf('The best AIC obtained with the CompositeSpan was %0.2f\n', best_aic))
 
-plot(sort(compositeSpanScores), xlab = 'Participants', ylab = 'Span')
+plot(sort(clean_data_complexspan$compositeSpanScore), xlab = 'Participants', ylab = 'Span')
 abline(h = best_threshold, col = 'blue', lwd = 4)
-abline(h = median_compositespan, col = 'red', lwd = 4, lty = 'dotted') # median value
+abline(h = median(clean_data_complexspan$compositeSpanScore, na.rm = T), col = 'red', lwd = 4, lty = 'dotted') # median value
 legend('topleft', legend = c('Span','Best threshold','Median span'), col = c('black','blue', 'red'), lty = 1)
 
 plot(x = possible_threshold_values, y = all_aic_values, type = 'l', col = 'green', xlab = 'Thresholds', ylab = 'AIC values (lower better)')
@@ -1642,9 +1639,9 @@ abline(v = best_threshold, col = 'blue', lwd = 4)
 
 # The best-fitting threshold (just slightly above the median value) is 0.6571439
 
-break_val = best_threshold; # as of 2/25/24, this was 0.6571439
+break_val = best_threshold; # as of 3/19/25, this was 0.6785724
 
-capacity_HighP1_lowN1_Best = (compositeSpanScores[keep_participants] > break_val)*2 - 1;
+capacity_HighP1_lowN1_Best = (clean_data_complexspan$compositeSpanScore > break_val)*2 - 1;
 
 clean_data_dm$capacity_HighP1_lowN1_best[clean_data_dm$complexspan > break_val] = 1;
 clean_data_dm$capacity_HighP1_lowN1_best[clean_data_dm$complexspan < break_val] = -1;
@@ -1660,19 +1657,21 @@ m3_best_nointxn = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best +
                          (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_nointxn) # THIS OUTPERFORMS THE FULLY-INTERACTIVE VERSION
 
-#                                                 Estimate Std. Error         df t value Pr(>|t|)
-# (Intercept)                                    1.202e+00  1.233e-02  8.980e+01  97.522  < 2e-16 ***
-# all_diff_cont                                  1.164e-01  3.839e-03  1.368e+04  30.312  < 2e-16 ***
-# capacity_HighP1_lowN1_best                    -2.213e-02  1.233e-02  8.980e+01  -1.795    0.076 .
-# prev_all_diff_cont                            -2.713e-02  3.844e-03  1.368e+04  -7.058 1.77e-12 ***
-# all_diff_cont:capacity_HighP1_lowN1_best       2.485e-02  3.839e-03  1.368e+04   6.473 9.91e-11 ***
-# capacity_HighP1_lowN1_best:prev_all_diff_cont  1.579e-02  3.844e-03  1.368e+04   4.107 4.04e-05 ***
+#                                                 Estimate Std. Error         df t value Pr(>|t|)    
+#   (Intercept)                                    1.202e+00  1.259e-02  8.971e+01  95.441  < 2e-16 ***
+#   all_diff_cont                                  1.181e-01  3.914e-03  1.368e+04  30.185  < 2e-16 ***
+#   capacity_HighP1_lowN1_best                    -2.096e-02  1.259e-02  8.971e+01  -1.665 0.099401 .  
+#   prev_all_diff_cont                            -2.643e-02  3.918e-03  1.368e+04  -6.746 1.58e-11 ***
+#   all_diff_cont:capacity_HighP1_lowN1_best       2.598e-02  3.914e-03  1.368e+04   6.638 3.29e-11 ***
+#   capacity_HighP1_lowN1_best:prev_all_diff_cont  1.515e-02  3.918e-03  1.368e+04   3.867 0.000111 ***
 
+# AIC: -8762.2 (BEST)
 
-m3_best_continuousWMC_nointxn = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned + prev_all_diff_cont * complexspan_demeaned +
+m3_best_continuousWMC_nointxn = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned + 
+                                       prev_all_diff_cont * complexspan_demeaned +
                          (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_continuousWMC_nointxn) # THIS OUTPERFORMS THE FULLY-INTERACTIVE VERSION
-
+# AIC: -8740.8
 
 m3_best_HighCap_only = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont +
                               (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1_best == 1,], REML = F);
