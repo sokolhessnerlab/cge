@@ -1745,6 +1745,24 @@ legend("topleft", legend = c(expression(bold("WMC Group")), "low WMC", "high WMC
        col = c(NA, 'red', 'red'), lty = c(NA, 1, 2), lwd = c(NA, 2, 2),
        bty = "o", inset = c(0.025, 0.025))
 
+# for SANS
+par(mfrow = c(1,2))
+par(mar = c(5, 6, 4, 4))
+# ~ low WMC
+plot(x = xval_plot, y = predict_output_m3_best_L[1:10], cex.axis = 1.3, las = 1,
+     type = 'l', lwd = 5, col = 'blue',ylim = c(1.3, 1.8),
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Reaction Time (seconds)")), cex.lab = 1.5,)
+lines(x = xval_plot, y = predict_output_m3_best_L[11:20],
+      lwd = 5, col = 'red',  lty = 1)
+# ~ high WMC
+plot(x = xval_plot, y = predict_output_m3_best_H[1:10], cex.axis = 1.3, las = 1,
+     type = 'l', lwd = 5, col = 'blue',ylim = c(1.3, 1.8),
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Reaction Time (seconds)")), cex.lab = 1.5,)
+lines(x = xval_plot, y = predict_output_m3_best_H[11:20],
+      lwd = 5, col = 'red',  lty = 1)
+
+
+
 
 
 
@@ -5937,6 +5955,96 @@ wind2_m11_sepdifficulties_3ways_rfx = lmer(wind2_effort_isi_mean ~ 1 +
                                              (1 | subjectnumber), data = clean_data_dm, REML = F)
 summary(wind2_m11_sepdifficulties_3ways_rfx)
 
+# xval_plot = seq(from = 0, to = 1, length.out = 10)
+# predict_data_m3_best_H = clean_data_dm[0,];
+# predict_data_m3_best_H[1:20,] = NA;
+# predict_data_m3_best_H$all_diff_cont[1:10] = xval_plot
+# predict_data_m3_best_H$all_diff_cont[11:20] = xval_plot
+# predict_data_m3_best_H$prev_all_diff_cont[1:10] = 0;
+# predict_data_m3_best_H$prev_all_diff_cont[11:20] = 1;
+# predict_data_m3_best_H$capacity_HighP1_lowN1_best = 1;
+#
+# predict_data_m3_best_L = predict_data_m3_best_H;
+# predict_data_m3_best_L$capacity_HighP1_lowN1_best = -1;
+#
+# predict_output_m3_best_H = predict(m3_best, newdata = predict_data_m3_best_H, type = 'response', re.form = NA)^2
+# predict_output_m3_best_L = predict(m3_best, newdata = predict_data_m3_best_L, type = 'response', re.form = NA)^2
+
+par(mfrow = c(1,2))
+par(mar = c(5, 6, 4, 4))
+xval_plot = seq(from = 0, to = 1, by = .1)
+# cd = c(0,1) # this is redundant with above
+pd = c(0,1)
+choice = c(0,1)
+wmc = c(-1, 1)
+coef_vals = fixef(wind2_m11_sepdifficulties_3ways_rfx)
+
+# layout(matrix(c(1, 2, 3), nrow = 1, ncol = 3), widths = c(2.5, 2.5, 2))
+
+# low WMC pupil
+# CD x Choice
+# ~ previous easy, risky choice
+plot(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[1] * coef_vals["prev_all_diff_cont"] +
+        choice[2] * coef_vals["choice"] +
+        xval_plot * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+        pd[1] * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+        pd[1] * choice[2] * coef_vals["choice:prev_all_diff_cont"] +
+        xval_plot * wmc[1] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+        pd[1] * wmc[1] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(4,4.25), cex.lab = 1.5)
+# ~ previous difficult, risky choice
+lines(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[2] * coef_vals["prev_all_diff_cont"] +
+        choice[2] * coef_vals["choice"] +
+        xval_plot * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+        pd[2] * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+        pd[2] * choice[2] * coef_vals["choice:prev_all_diff_cont"] +
+        xval_plot * wmc[1] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+        pd[2] * wmc[1] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'red', lty = 1)
+
+# high WMC pupil
+# CD x Choice
+# ~ previous easy, risky choice
+plot(x = xval_plot, y = coef_vals["(Intercept)"] +
+       xval_plot * coef_vals["all_diff_cont"] +
+       pd[1] * coef_vals["prev_all_diff_cont"] +
+       choice[2] * coef_vals["choice"] +
+       xval_plot * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+       pd[1] * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+       xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+       pd[1] * choice[2] * coef_vals["choice:prev_all_diff_cont"] +
+       xval_plot * wmc[2] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+       pd[1] * wmc[2] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(4,4.25), cex.lab = 1.5)
+# ~ previous difficult, risky choice
+lines(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[2] * coef_vals["prev_all_diff_cont"] +
+        choice[2] * coef_vals["choice"] +
+        xval_plot * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+        pd[2] * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+        pd[2] * choice[2] * coef_vals["choice:prev_all_diff_cont"] +
+        xval_plot * wmc[2] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+        pd[2] * wmc[2] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'red', lty = 1)
+
+# plot(1, type = "n", xlab = "", ylab = "", xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
+# legend("left", legend = c(expression(bold("Previous Easy")), "Safe Choice", "Risky Choice", NA,
+#                           expression(bold("Previous Difficult")), "Safe Choice", "Risky Choice"),  # Labels
+#        col = c(NA, "darkblue", "darkblue", NA, NA, "orange", "orange"),  # Blue for Easy, Red for Difficult
+#        lty = c(NA, 1, 2, NA, NA, 1, 2), lwd = 2)
+
+
+
 wind2_m11_2ways_rfx = lmer(wind2_effort_isi_mean ~ 1 +
                              trialnumberRS * capacity_HighP1_lowN1_best +
                              trialnumberRS * choice +
@@ -7427,6 +7535,79 @@ summary(wind4_m11_2ways_rfx)
 # capacity_HighP1_lowN1_best:all_diff_cont       9.454e-03  6.581e-03  1.349e+04   1.436  0.15092
 # capacity_HighP1_lowN1_best:prev_all_diff_cont  2.288e-03  6.583e-03  1.349e+04   0.348  0.72815
 # choice:prev_all_diff_cont                     -8.493e-04  1.232e-02  1.349e+04  -0.069  0.94503
+
+par(mfrow = c(1,2))
+par(mar = c(5, 6, 4, 4))
+xval_plot = seq(from = 0, to = 1, by = .1)
+# cd = c(0,1) # this is redundant with above
+pd = c(0,1)
+choice = c(0,1)
+wmc = c(-1, 1)
+coef_vals = fixef(wind4_m11_sepdifficulties_3ways_rfx)
+
+# layout(matrix(c(1, 2, 3), nrow = 1, ncol = 3), widths = c(2.5, 2.5, 2))
+
+# low WMC pupil
+# CD x Choice
+# ~ previous easy, risky choice
+plot(x = xval_plot, y = coef_vals["(Intercept)"] +
+       xval_plot * coef_vals["all_diff_cont"] +
+       pd[1] * coef_vals["prev_all_diff_cont"] +
+       choice[2] * coef_vals["choice"] +
+       xval_plot * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+       pd[1] * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+       xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+       pd[1] * choice[2] * coef_vals["choice:prev_all_diff_cont"] +
+       xval_plot * wmc[1] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+       pd[1] * wmc[1] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(4,4.25), cex.lab = 1.5)
+# ~ previous difficult, risky choice
+lines(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[2] * coef_vals["prev_all_diff_cont"] +
+        choice[2] * coef_vals["choice"] +
+        xval_plot * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+        pd[2] * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+        pd[2] * choice[2] * coef_vals["choice:prev_all_diff_cont"] +
+        xval_plot * wmc[1] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+        pd[2] * wmc[1] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'red', lty = 1)
+
+# high WMC pupil
+# CD x Choice
+# ~ previous easy, risky choice
+plot(x = xval_plot, y = coef_vals["(Intercept)"] +
+       xval_plot * coef_vals["all_diff_cont"] +
+       pd[1] * coef_vals["prev_all_diff_cont"] +
+       choice[2] * coef_vals["choice"] +
+       xval_plot * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+       pd[1] * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+       xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+       pd[1] * choice[2] * coef_vals["choice:prev_all_diff_cont"] +
+       xval_plot * wmc[2] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+       pd[1] * wmc[2] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(4,4.25), cex.lab = 1.5)
+# ~ previous difficult, risky choice
+lines(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[2] * coef_vals["prev_all_diff_cont"] +
+        choice[2] * coef_vals["choice"] +
+        xval_plot * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+        pd[2] * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+        pd[2] * choice[2] * coef_vals["choice:prev_all_diff_cont"] +
+        xval_plot * wmc[2] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:all_diff_cont"] +
+        pd[2] * wmc[2] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'red', lty = 1)
+
+
+anova(wind4_m11_sepdifficulties_3ways_rfx,wind4_m11_2ways_rfx)
+
+
+
 
 
 ### LOOP: Regression Loop and Plotting a Predictor across all Pupillometry Windows #####
