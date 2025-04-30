@@ -1003,14 +1003,14 @@ sum(clean_data_complexspan$compositeSpanScore <= median(clean_data_complexspan$c
 # 41 with <= median capacity
 
 # Create *CLEAN DATA* capacity median split
-clean_data_complexspan$capacity_HighP1_lowN1 = (clean_data_complexspan$compositeSpanScore > 
+clean_data_complexspan$capacity_HighP1_lowN1 = (clean_data_complexspan$compositeSpanScore >
                                                   median(clean_data_complexspan$compositeSpanScore, na.rm = T))*2-1;
 
 clean_data_dm$capacity_HighP1_lowN1 = NA;
 
 for(s in 1:number_of_clean_subjects){
   subj_id = keep_participants[s];
-  clean_data_dm$capacity_HighP1_lowN1[clean_data_dm$subjectnumber == subj_id] = 
+  clean_data_dm$capacity_HighP1_lowN1[clean_data_dm$subjectnumber == subj_id] =
     clean_data_complexspan$capacity_HighP1_lowN1[clean_data_complexspan$subjectnumber == subj_id];
 }
 
@@ -1489,15 +1489,15 @@ AIC(m3_prev_diffCont_capacityCat_intxn_rfx) # Be careful when reporting; has few
 #
 # MODEL OUTPUT
 #                                                        Estimate Std. Error         df t value Pr(>|t|)
-#                                                            Estimate Std. Error         df t value Pr(>|t|)    
+#                                                            Estimate Std. Error         df t value Pr(>|t|)
 #   (Intercept)                                             1.211e+00  1.194e-02  9.447e+01 101.409  < 2e-16 ***
 #   all_diff_cont                                           1.051e-01  5.767e-03  1.367e+04  18.220  < 2e-16 ***
 #   prev_all_diff_cont                                     -3.496e-02  5.777e-03  1.367e+04  -6.052 1.47e-09 ***
-#   capacity_HighP1_lowN1                                  -9.077e-03  1.194e-02  9.447e+01  -0.760  0.44896    
-#   all_diff_cont:prev_all_diff_cont                        6.018e-03  8.654e-03  1.367e+04   0.695  0.48683    
-#   all_diff_cont:capacity_HighP1_lowN1                     1.534e-02  5.767e-03  1.367e+04   2.659  0.00784 ** 
-#   prev_all_diff_cont:capacity_HighP1_lowN1               -2.297e-04  5.777e-03  1.367e+04  -0.040  0.96828    
-#   all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1  1.200e-02  8.654e-03  1.367e+04   1.387  0.16543  
+#   capacity_HighP1_lowN1                                  -9.077e-03  1.194e-02  9.447e+01  -0.760  0.44896
+#   all_diff_cont:prev_all_diff_cont                        6.018e-03  8.654e-03  1.367e+04   0.695  0.48683
+#   all_diff_cont:capacity_HighP1_lowN1                     1.534e-02  5.767e-03  1.367e+04   2.659  0.00784 **
+#   prev_all_diff_cont:capacity_HighP1_lowN1               -2.297e-04  5.777e-03  1.367e+04  -0.040  0.96828
+#   all_diff_cont:prev_all_diff_cont:capacity_HighP1_lowN1  1.200e-02  8.654e-03  1.367e+04   1.387  0.16543
 #
 # Current difficulty = slower RTs (found previously)
 # Prev. difficulty = faster RTs (found previously)
@@ -1556,11 +1556,11 @@ m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx = lmer(sqrtRT ~ 1 +
                                                       data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == 1,]);
 summary(m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx)
 # Fixed effects:
-#                                     Estimate Std. Error         df t value Pr(>|t|)    
+#                                     Estimate Std. Error         df t value Pr(>|t|)
 #   (Intercept)                       1.202e+00  1.601e-02  4.677e+01  75.062  < 2e-16 ***
 #   all_diff_cont                     1.204e-01  7.735e-03  6.842e+03  15.566  < 2e-16 ***
 #   prev_all_diff_cont               -3.520e-02  7.774e-03  6.842e+03  -4.528 6.06e-06 ***
-#   all_diff_cont:prev_all_diff_cont  1.804e-02  1.179e-02  6.840e+03   1.530    0.126    
+#   all_diff_cont:prev_all_diff_cont  1.804e-02  1.179e-02  6.840e+03   1.530    0.126
 # Contrary to CGT, there *IS* a significant effect of previous difficulty for high capacity folks.
 
 m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx = lmer(sqrtRT ~ 1 +
@@ -1568,11 +1568,11 @@ m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx = lmer(sqrtRT ~ 1 +
                                                        (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == -1,]);
 summary(m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx)
 # Fixed effects:
-#                                     Estimate Std. Error         df t value Pr(>|t|)    
+#                                     Estimate Std. Error         df t value Pr(>|t|)
 #   (Intercept)                       1.220e+00  1.772e-02  4.762e+01  68.852  < 2e-16 ***
 #   all_diff_cont                     8.977e-02  8.554e-03  6.831e+03  10.494  < 2e-16 ***
 #   prev_all_diff_cont               -3.471e-02  8.545e-03  6.832e+03  -4.062 4.92e-05 ***
-#   all_diff_cont:prev_all_diff_cont -5.979e-03  1.267e-02  6.828e+03  -0.472    0.637    
+#   all_diff_cont:prev_all_diff_cont -5.979e-03  1.267e-02  6.828e+03  -0.472    0.637
 
 # The effect of previous difficulty is similar in low capacity people (just not sig. so)
 
@@ -1583,13 +1583,13 @@ summary(m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx)
 #   # clean_data_dm$diff_cont[subj_id] = abs(abs(clean_data_dm$choiceP[subj_id] - 0.5)*2-1); # JUST for the easy/difficult dynamic trials
 #   # clean_data_dm$all_diff_cont[subj_id] = abs(abs(clean_data_dm$all_choiceP[subj_id] - 0.5)*2-1); # for ALL trials
 #   # clean_data_dm$capacity_HighP1_lowN1[clean_data_dm$subjectnumber == subj_id] = capacity_HighP1_lowN1[s];
-# 
+#
 #   m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx = lmer(sqrtRT ~ 1 +
 #                                                           all_diff_cont * prev_all_diff_cont +
 #                                                           (1 | subjectnumber),
 #                                                         data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == 1,]);
 #   summary(m3_prev_diffCont_capacityCat_intxn_HIGHONLYrfx)
-# 
+#
 #   m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx = lmer(sqrtRT ~ 1 +
 #                                                          all_diff_cont * prev_all_diff_cont +
 #                                                          (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1 == -1,]);
@@ -1657,17 +1657,17 @@ m3_best_nointxn = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best +
                          (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_nointxn) # THIS OUTPERFORMS THE FULLY-INTERACTIVE VERSION
 
-#                                                 Estimate Std. Error         df t value Pr(>|t|)    
+#                                                 Estimate Std. Error         df t value Pr(>|t|)
 #   (Intercept)                                    1.202e+00  1.259e-02  8.971e+01  95.441  < 2e-16 ***
 #   all_diff_cont                                  1.181e-01  3.914e-03  1.368e+04  30.185  < 2e-16 ***
-#   capacity_HighP1_lowN1_best                    -2.096e-02  1.259e-02  8.971e+01  -1.665 0.099401 .  
+#   capacity_HighP1_lowN1_best                    -2.096e-02  1.259e-02  8.971e+01  -1.665 0.099401 .
 #   prev_all_diff_cont                            -2.643e-02  3.918e-03  1.368e+04  -6.746 1.58e-11 ***
 #   all_diff_cont:capacity_HighP1_lowN1_best       2.598e-02  3.914e-03  1.368e+04   6.638 3.29e-11 ***
 #   capacity_HighP1_lowN1_best:prev_all_diff_cont  1.515e-02  3.918e-03  1.368e+04   3.867 0.000111 ***
 
 # AIC: -8762.2 (BEST)
 
-m3_best_continuousWMC_nointxn = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned + 
+m3_best_continuousWMC_nointxn = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned +
                                        prev_all_diff_cont * complexspan_demeaned +
                          (1 | subjectnumber), data = clean_data_dm, REML = F);
 summary(m3_best_continuousWMC_nointxn) # THIS OUTPERFORMS THE FULLY-INTERACTIVE VERSION
@@ -2159,11 +2159,13 @@ AIC(m3_best_trialNum_3WayIntxOnly) # does better
 AIC(m3_best_trialNum_contWMC_3WayIntxOnly)
 
 m3_best_trialNum_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best +
-                                       all_diff_cont * trialnumberRS +
-                                       prev_all_diff_cont * capacity_HighP1_lowN1_best +
-                                       prev_all_diff_cont * trialnumberRS +
-                                       capacity_HighP1_lowN1_best * trialnumberRS +
-                                       (1 | subjectnumber), data = clean_data_dm, REML = F);
+                                              all_diff_cont * trialnumberRS +
+                                              prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                              prev_all_diff_cont * trialnumberRS +
+                                              capacity_HighP1_lowN1_best * trialnumberRS +
+                                              (1 | subjectnumber), data = clean_data_dm, REML = F);
+
+
 summary(m3_best_trialNum_2WayIntxOnly)
 
 m3_best_trialNum_contWMC_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned +
@@ -5963,14 +5965,15 @@ wind2_m11_sepdifficulties_4ways_rfx = lmer(wind2_effort_isi_mean ~ 1 +
 summary(wind2_m11_sepdifficulties_4ways_rfx)
 
 wind2_m11_sepdifficulties_3ways_rfx = lmer(wind2_effort_isi_mean ~ 1 +
-                                             trialnumberRS * capacity_HighP1_lowN1_best * choice +
-                                             all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
-                                             all_diff_cont * trialnumberRS * choice +
-                                             all_diff_cont * capacity_HighP1_lowN1_best * choice +
-                                             prev_all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
-                                             prev_all_diff_cont * trialnumberRS * choice +
-                                             prev_all_diff_cont * capacity_HighP1_lowN1_best * choice +
-                                             (1 | subjectnumber), data = clean_data_dm, REML = F)
+                                                                   trialnumberRS * capacity_HighP1_lowN1_best * choice +
+                                                                   all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
+                                                                   all_diff_cont * trialnumberRS * choice +
+                                                                   all_diff_cont * capacity_HighP1_lowN1_best * choice +
+                                                                   prev_all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
+                                                                   prev_all_diff_cont * trialnumberRS * choice +
+                                                                   prev_all_diff_cont * capacity_HighP1_lowN1_best * choice +
+                                                                   (1 | subjectnumber), data = clean_data_dm, REML = F)
+
 summary(wind2_m11_sepdifficulties_3ways_rfx)
 
 # xval_plot = seq(from = 0, to = 1, length.out = 10)
@@ -7523,16 +7526,17 @@ summary(wind4_m11_sepdifficulties_3ways_rfx)
 
 
 wind4_m11_2ways_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
-                             trialnumberRS * capacity_HighP1_lowN1_best +
-                             trialnumberRS * choice +
-                             capacity_HighP1_lowN1_best * choice +
-                             all_diff_cont * trialnumberRS +
-                             all_diff_cont * capacity_HighP1_lowN1_best +
-                             all_diff_cont * choice +
-                             prev_all_diff_cont * trialnumberRS +
-                             prev_all_diff_cont * capacity_HighP1_lowN1_best +
-                             prev_all_diff_cont * choice +
-                             (1 | subjectnumber), data = clean_data_dm, REML = F)
+                                                     trialnumberRS * capacity_HighP1_lowN1_best +
+                                                     trialnumberRS * choice +
+                                                     capacity_HighP1_lowN1_best * choice +
+                                                     all_diff_cont * trialnumberRS +
+                                                     all_diff_cont * capacity_HighP1_lowN1_best +
+                                                     all_diff_cont * choice +
+                                                     prev_all_diff_cont * trialnumberRS +
+                                                     prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                                     prev_all_diff_cont * choice +
+                                                     (1 | subjectnumber), data = clean_data_dm, REML = F)
+
 summary(wind4_m11_2ways_rfx)
 
 #                                                 Estimate Std. Error         df t value Pr(>|t|)
@@ -7623,6 +7627,100 @@ lines(x = xval_plot, y = coef_vals["(Intercept)"] +
 
 
 anova(wind4_m11_sepdifficulties_3ways_rfx,wind4_m11_2ways_rfx)
+
+
+# for SANS25
+coef_vals = fixef(wind4_m11_2ways_rfx)
+
+# layout(matrix(c(1, 2, 3), nrow = 1, ncol = 3), widths = c(2.5, 2.5, 2))
+
+# low WMC pupil
+# CD x Choice
+# ~ previous easy, risky choice
+plot(x = xval_plot, y = coef_vals["(Intercept)"] +
+       xval_plot * coef_vals["all_diff_cont"] +
+       pd[1] * coef_vals["prev_all_diff_cont"] +
+       choice[2] * coef_vals["choice"] +
+       xval_plot * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+       pd[1] * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+       xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+       pd[1] * choice[2] * coef_vals["choice:prev_all_diff_cont"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(4,4.25), cex.lab = 1.5)
+# ~ previous difficult, risky choice
+lines(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[2] * coef_vals["prev_all_diff_cont"] +
+        choice[2] * coef_vals["choice"] +
+        xval_plot * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+        pd[2] * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+        pd[2] * choice[2] * coef_vals["choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'red', lty = 1)
+
+# high WMC pupil
+# CD x Choice
+# ~ previous easy, risky choice
+plot(x = xval_plot, y = coef_vals["(Intercept)"] +
+       xval_plot * coef_vals["all_diff_cont"] +
+       pd[1] * coef_vals["prev_all_diff_cont"] +
+       choice[2] * coef_vals["choice"] +
+       xval_plot * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+       pd[1] * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+       xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+       pd[1] * choice[2] * coef_vals["choice:prev_all_diff_cont"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(4,4.25), cex.lab = 1.5)
+# ~ previous difficult, risky choice
+lines(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[2] * coef_vals["prev_all_diff_cont"] +
+        choice[2] * coef_vals["choice"] +
+        xval_plot * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:all_diff_cont"] +
+        pd[2] * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:prev_all_diff_cont"] +
+        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+        pd[2] * choice[2] * coef_vals["choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'red', lty = 1)
+
+# predict graphs
+par(mfrow = c(1,2))
+par(mar = c(5, 6, 4, 4))
+
+xval_plot = seq(from = 0, to = 1, length.out = 10)
+wind4_m11_2ways_rfx_H = clean_data_dm[0,];
+wind4_m11_2ways_rfx_H[1:20,] = NA;
+wind4_m11_2ways_rfx_H$all_diff_cont[1:10] = xval_plot
+wind4_m11_2ways_rfx_H$all_diff_cont[11:20] = xval_plot
+wind4_m11_2ways_rfx_H$prev_all_diff_cont[1:10] = 0;
+wind4_m11_2ways_rfx_H$prev_all_diff_cont[11:20] = 1;
+wind4_m11_2ways_rfx_H$capacity_HighP1_lowN1_best = 1;
+
+
+wind4_m11_2ways_rfx_L = wind4_m11_2ways_rfx_H;
+wind4_m11_2ways_rfx_L$capacity_HighP1_lowN1_best = -1;
+
+
+wind4_m11_2ways_rfx_H = predict(wind4_m11_2ways_rfx, newdata = wind4_m11_2ways_rfx_H, type = 'response', re.form = NA)
+wind4_m11_2ways_rfx_L = predict(wind4_m11_2ways_rfx, newdata = wind4_m11_2ways_rfx_L, type = 'response', re.form = NA)
+
+# low WMC
+plot(x = xval_plot, y = wind4_m11_2ways_rfx_L[1:10],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(0,8), cex.lab = 1.5)
+lines(x = xval_plot, y = wind4_m11_2ways_rfx_L[11:20],
+      type = 'l', lwd = 5, col = 'red', lty = 1)
+
+# high WMC
+plot(x = xval_plot, y = wind4_m11_2ways_rfx_H[1:10],
+     type = 'l', lwd = 5, col = 'blue',
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(4,4.25), cex.lab = 1.5)
+lines(x = xval_plot, y = wind4_m11_2ways_rfx_H[11:20],
+      type = 'l', lwd = 5, col = 'red', lty = 1)
+
+
+
+
+
 
 
 
