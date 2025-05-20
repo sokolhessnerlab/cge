@@ -1128,7 +1128,13 @@ box(bty="l")
 library(lme4)
 library(lmerTest)
 
+# Calculating Current Decision Times
 clean_data_dm$sqrtRT = sqrt(clean_data_dm$reactiontime);
+
+# Calculating Previous Decision Times
+clean_data_dm$prev_sqrtRT = c(NA,clean_data_dm$sqrtRT[1:(length(clean_data_dm$sqrtRT)-1)]) # for ALL trials
+clean_data_dm$prev_sqrtRT[clean_data_dm$trialnumber == 1] = NA;
+
 
 ## Model 0: Current RT based on current easy difficult
 m0_diffcat = lm(sqrtRT ~ 1 + easyP1difficultN1, data = clean_data_dm); # LM
