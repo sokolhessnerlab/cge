@@ -1131,9 +1131,9 @@ library(lmerTest)
 # Calculating Current Decision Times
 clean_data_dm$sqrtRT = sqrt(clean_data_dm$reactiontime);
 
-# Calculating Previous Decision Times
-clean_data_dm$prev_sqrtRT = c(NA,clean_data_dm$sqrtRT[1:(length(clean_data_dm$sqrtRT)-1)]) # for ALL trials
-clean_data_dm$prev_sqrtRT[clean_data_dm$trialnumber == 1] = NA;
+# Calculating Previous Decision Times --> Actually calculated below as sqrtRT_prev
+# clean_data_dm$prev_sqrtRT = c(NA,clean_data_dm$sqrtRT[1:(length(clean_data_dm$sqrtRT)-1)]) # for ALL trials
+# clean_data_dm$prev_sqrtRT[clean_data_dm$trialnumber == 1] = NA;
 
 
 ## Model 0: Current RT based on current easy difficult
@@ -1231,7 +1231,7 @@ clean_data_dm$easyP1difficultN1_prev = c(0,clean_data_dm$easyP1difficultN1[1:(le
 # fix the few problematic trials (#1)
 clean_data_dm$easyP1difficultN1_prev[clean_data_dm$trialnumber == 1] = 0;
 # input shifted version of desired content
-clean_data_dm$sqrtRT_prev = c(NA,clean_data_dm$sqrtRT[1:(length(clean_data_dm$sqrtRT)-1)])
+clean_data_dm$sqrtRT_prev = c(NA,clean_data_dm$sqrtRT[1:(length(clean_data_dm$sqrtRT)-1)]) ### Previous Decision Time was here...
 # fix the few problematic trials (#1)
 clean_data_dm$sqrtRT_prev[clean_data_dm$trialnumber == 1] = NA;
 
@@ -6241,7 +6241,16 @@ wind2_m11_sepdifficulties_3ways_rfx_limNCS = lmer(wind2_effort_isi_mean ~ 1 +
                                              (1 | subjectnumber), data = clean_data_dm[is.finite(clean_data_dm$NCS_HighP1_LowN1),], REML = F)
 summary(wind2_m11_sepdifficulties_3ways_rfx_limNCS)
 anova(wind2_m11_sepdifficulties_3ways_rfx_NCS, wind2_m11_sepdifficulties_3ways_rfx_limNCS)
-#
+
+
+
+
+
+
+
+
+
+
 
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
