@@ -6311,11 +6311,42 @@ w2_bothDT_to_ISI_controlTimeChoice_rfx = lmer(wind2_effort_isi_mean ~ 1 +
 summary(w2_bothDT_to_ISI_controlTimeChoice_rfx)
 # Note: Only effect of time and choice...
 
+# 4way Model
+w2_bothDT_to_ISI_4way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                             trialnumberRS * sqrtRT * capacity_HighP1_lowN1_best * choice +
+                                             trialnumberRS * sqrtRT_prev * capacity_HighP1_lowN1_best * choice +
+                                             (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w2_bothDT_to_ISI_4way_rfx)
 
+#                                                               Estimate Std. Error         df t value Pr(>|t|)        # why didn't it format properly like before when I pasted?
+# (Intercept)                                                  3.901e+00  9.526e-02  1.470e+02  40.949  < 2e-16 ***
+# trialnumberRS                                               -1.636e-01  7.929e-02  1.347e+04  -2.064   0.0391 *
+# sqrtRT                                                       1.332e-01  3.210e-02  1.347e+04   4.150 3.34e-05 ***
+# capacity_HighP1_lowN1_best                                   5.614e-02  9.526e-02  1.470e+02   0.589   0.5565
+# choice                                                      -1.552e-01  6.715e-02  1.347e+04  -2.311   0.0208 *
+# sqrtRT_prev                                                  3.639e-02  3.203e-02  1.347e+04   1.136   0.2559
+# trialnumberRS:sqrtRT                                        -7.151e-02  5.374e-02  1.347e+04  -1.331   0.1834
+# trialnumberRS:capacity_HighP1_lowN1_best                     6.505e-02  7.929e-02  1.347e+04   0.820   0.4120
+# sqrtRT:capacity_HighP1_lowN1_best                            4.022e-02  3.210e-02  1.347e+04   1.253   0.2102
+# trialnumberRS:choice                                         2.695e-01  1.137e-01  1.347e+04   2.371   0.0178 *
+# sqrtRT:choice                                                6.633e-02  4.639e-02  1.347e+04   1.430   0.1528
+# capacity_HighP1_lowN1_best:choice                            1.814e-02  6.715e-02  1.347e+04   0.270   0.7870
+# trialnumberRS:sqrtRT_prev                                   -1.067e-02  5.387e-02  1.347e+04  -0.198   0.8430
+# capacity_HighP1_lowN1_best:sqrtRT_prev                       2.266e-02  3.203e-02  1.347e+04   0.708   0.4793
+# choice:sqrtRT_prev                                           9.202e-02  4.654e-02  1.347e+04   1.977   0.0480 *
+# trialnumberRS:sqrtRT:capacity_HighP1_lowN1_best             -3.574e-02  5.374e-02  1.347e+04  -0.665   0.5061
+# trialnumberRS:sqrtRT:choice                                 -1.072e-01  7.859e-02  1.347e+04  -1.364   0.1726
+# trialnumberRS:capacity_HighP1_lowN1_best:choice             -3.545e-02  1.137e-01  1.347e+04  -0.312   0.7551
+# sqrtRT:capacity_HighP1_lowN1_best:choice                    -3.997e-02  4.639e-02  1.347e+04  -0.861   0.3890
+# trialnumberRS:capacity_HighP1_lowN1_best:sqrtRT_prev        -2.171e-02  5.387e-02  1.347e+04  -0.403   0.6869
+# trialnumberRS:choice:sqrtRT_prev                            -1.314e-01  7.892e-02  1.347e+04  -1.666   0.0958 .
+# capacity_HighP1_lowN1_best:choice:sqrtRT_prev                3.137e-02  4.654e-02  1.347e+04   0.674   0.5002
+# trialnumberRS:sqrtRT:capacity_HighP1_lowN1_best:choice       7.615e-02  7.859e-02  1.347e+04   0.969   0.3326
+# trialnumberRS:capacity_HighP1_lowN1_best:choice:sqrtRT_prev -5.255e-02  7.892e-02  1.347e+04  -0.666   0.5055
 
-
-
-
+# Note: mfx of trial, choice, and currDT
+# 2away - intfx of trialxchoice, choicexprevDT
+# approaching sig 3way - trialxchoicexprevDT
 
 
 
