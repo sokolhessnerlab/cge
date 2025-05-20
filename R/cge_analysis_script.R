@@ -6246,22 +6246,22 @@ anova(wind2_m11_sepdifficulties_3ways_rfx_NCS, wind2_m11_sepdifficulties_3ways_r
 # ~ Decision Time as a Predictor of Window 2 Pupil Dilation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-w2_rfx_currDT_to_ISI_rfx = lmer(wind2_effort_isi_mean ~ 1 + sqrtRT + (1 | subjectnumber), data = clean_data_dm, REML = F) # redid - I don't know where the original is... might have been deleted? or under a different name? or model format? or did I just run on the console?
-summary(w2_rfx_currDT_to_ISI_rfx)
+w2_currDT_to_ISI_rfx = lmer(wind2_effort_isi_mean ~ 1 + sqrtRT + (1 | subjectnumber), data = clean_data_dm, REML = F) # redid - I don't know where the original is... might have been deleted? or under a different name? or model format? or did I just run on the console?
+summary(w2_currDT_to_ISI_rfx)
 
 #              Estimate Std. Error        df t value Pr(>|t|)
 # (Intercept) 3.704e+00  7.620e-02 8.881e+01   48.61   <2e-16 ***
 # sqrtRT      1.825e-01  1.113e-02 1.395e+04   16.40   <2e-16 ***
 
-w2_rfx_prevDT_to_ISI_rfx = lmer(wind2_effort_isi_mean ~ 1 + sqrtRT_prev + (1 | subjectnumber), data = clean_data_dm, REML = F)
-summary(w2_rfx_prevDT_to_ISI_rfx)
+w2_prevDT_to_ISI_rfx = lmer(wind2_effort_isi_mean ~ 1 + sqrtRT_prev + (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w2_prevDT_to_ISI_rfx)
 
 #              Estimate Std. Error        df t value Pr(>|t|)
 # (Intercept) 3.774e+00  7.611e-02 8.890e+01   49.59   <2e-16 ***
 # sqrtRT_prev 1.244e-01  1.119e-02 1.381e+04   11.11   <2e-16 ***
 
-w2_rfx_bothDT_to_ISI_rfx = lmer(wind2_effort_isi_mean ~ 1 + sqrtRT + sqrtRT_prev + (1 | subjectnumber), data = clean_data_dm, REML = F)
-summary(w2_rfx_bothDT_to_ISI_rfx)
+w2_bothDT_to_ISI_rfx = lmer(wind2_effort_isi_mean ~ 1 + sqrtRT + sqrtRT_prev + (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w2_bothDT_to_ISI_rfx)
 
 #              Estimate Std. Error        df t value Pr(>|t|)
 # (Intercept) 3.594e+00  7.733e-02 9.327e+01  46.479   <2e-16 ***
@@ -6269,14 +6269,51 @@ summary(w2_rfx_bothDT_to_ISI_rfx)
 # sqrtRT_prev 1.023e-01  1.120e-02 1.381e+04   9.137   <2e-16 ***
 
 
-w2_rfx_bothDT_to_ISI_rfx_intfx = lmer(wind2_effort_isi_mean ~ 1 + sqrtRT * sqrtRT_prev + (1 | subjectnumber), data = clean_data_dm, REML = F)
-summary(w2_rfx_bothDT_to_ISI_rfx_intfx)
+w2_bothDT_to_ISI_rfx_intfx = lmer(wind2_effort_isi_mean ~ 1 + sqrtRT * sqrtRT_prev + (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w2_bothDT_to_ISI_rfx_intfx)
 
 #                     Estimate Std. Error        df t value Pr(>|t|)
 # (Intercept)        3.697e+00  1.074e-01 3.453e+02  34.409   <2e-16 ***
 # sqrtRT             8.502e-02  6.003e-02 1.381e+04   1.416    0.157
 # sqrtRT_prev        2.163e-02  5.970e-02 1.381e+04   0.362    0.717
 # sqrtRT:sqrtRT_prev 6.321e-02  4.593e-02 1.380e+04   1.376    0.169
+
+# Note: similar to previous models where there is no interaction between current and previous
+# Note: is this foreshadowing no mfx of current and previous DT?
+
+# 5way Model (no choice difficulty)
+w2_bothDT_to_ISI_5way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                   trialnumberRS * sqrtRT * sqrtRT_prev * capacity_HighP1_lowN1_best * choice +
+                                   (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w2_bothDT_to_ISI_5way_rfx)
+# Note: no effects of anything...
+# Is it because DT aren't 1:1 when it comes to choice difficulty?
+
+# What happens if we control for Time and/or Choice?
+w2_bothDT_to_ISI_controlTime_noChoice_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                   trialnumberRS + sqrtRT * sqrtRT_prev * capacity_HighP1_lowN1_best +
+                                   (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w2_bothDT_to_ISI_controlTime_noChoice_rfx)
+#                                                 Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                                    4.044e+00  1.162e-01  3.233e+02  34.793   <2e-16 ***
+# trialnumberRS                                 -2.770e-01  6.871e-03  1.347e+04 -40.307   <2e-16 ***
+# Note: Only effect of Time...
+w2_bothDT_to_ISI_controlChoice_noTime_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                                   choice + sqrtRT * sqrtRT_prev * capacity_HighP1_lowN1_best +
+                                                   (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w2_bothDT_to_ISI_controlChoice_noTime_rfx)
+#                                                 Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                                    3.743e+00  1.193e-01  3.600e+02  31.364  < 2e-16 ***
+# choice                                         3.118e-02  4.139e-03  1.347e+04   7.533 5.29e-14 ***
+w2_bothDT_to_ISI_controlTimeChoice_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                                   trialnumberRS + choice + sqrtRT * sqrtRT_prev * capacity_HighP1_lowN1_best +
+                                                   (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w2_bothDT_to_ISI_controlTimeChoice_rfx)
+# Note: Only effect of time and choice...
+
+
+
+
 
 
 
