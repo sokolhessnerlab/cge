@@ -6612,8 +6612,13 @@ anova(w2_DTCD_to_ISI_2way_rfx,w2_DTCD_to_ISI_3way_rfx)
 # I don't know what to make of this...
 # Let's ignore this for now...
 
+# REFLECTION: is it like how sometimes participants will put more effort on easy and less effort on difficult???
 
+# what if I compare the orignal PD model with the new one that also has DT??????????????
+anova(wind2_m11_sepdifficulties_3ways_rfx,w2_DTCD_to_ISI_3way_rfx)
 
+# NOTE: pandora's box... the new more complex 3way model is better
+# isn't that just because it has more predictors to work with?
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ### WINDOW 3 REGRESSIONS: Evaluation (2 seconds, outcome start to +1000 after iti start) #####
