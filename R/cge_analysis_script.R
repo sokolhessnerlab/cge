@@ -7933,9 +7933,91 @@ plot(x = xval_plot, y = wind4_m11_2ways_rfx_H[1:10],
 lines(x = xval_plot, y = wind4_m11_2ways_rfx_H[11:20],
       type = 'l', lwd = 5, col = 'red', lty = 1)
 
+# ~ Decision Time as a Predictor of Window 4 Pupil Dilation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# 2way Model
+w4_bothDT_to_ISI_2way_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                                   trialnumberRS * capacity_HighP1_lowN1_best +
+                                   trialnumberRS * choice +
+                                   capacity_HighP1_lowN1_best * choice +
+                                   sqrtRT * trialnumberRS +
+                                   sqrtRT * capacity_HighP1_lowN1_best +
+                                   sqrtRT * choice +
+                                   sqrtRT_prev * trialnumberRS +
+                                   sqrtRT_prev * capacity_HighP1_lowN1_best +
+                                   sqrtRT_prev * choice +
+                                   (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w4_bothDT_to_ISI_2way_rfx)
+#                                            Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                               3.912e+00  9.366e-02  1.470e+02  41.775  < 2e-16 ***
+# trialnumberRS                            -9.073e-02  6.768e-02  1.349e+04  -1.341    0.180
+# capacity_HighP1_lowN1_best                8.191e-02  8.529e-02  1.011e+02   0.960    0.339
+# choice                                    1.582e-02  4.115e-02  1.349e+04   0.385    0.701
+# sqrtRT                                    1.460e-01  3.051e-02  1.349e+04   4.784 1.74e-06 ***
+# sqrtRT_prev                              -5.335e-03  3.063e-02  1.349e+04  -0.174    0.862
+# trialnumberRS:capacity_HighP1_lowN1_best -6.083e-03  9.610e-03  1.349e+04  -0.633    0.527
+# trialnumberRS:choice                      1.514e-02  1.787e-02  1.349e+04   0.848    0.397
+# capacity_HighP1_lowN1_best:choice         2.081e-03  5.585e-03  1.349e+04   0.373    0.709
+# trialnumberRS:sqrtRT                     -1.893e-01  4.555e-02  1.349e+04  -4.155 3.27e-05 ***
+# capacity_HighP1_lowN1_best:sqrtRT         1.174e-02  1.566e-02  1.350e+04   0.750    0.453
+# choice:sqrtRT                            -1.160e-03  2.620e-02  1.349e+04  -0.044    0.965
+# trialnumberRS:sqrtRT_prev                 4.135e-02  4.576e-02  1.349e+04   0.904    0.366
+# capacity_HighP1_lowN1_best:sqrtRT_prev    1.149e-02  1.569e-02  1.350e+04   0.733    0.464
+# choice:sqrtRT_prev                        1.018e-03  2.592e-02  1.349e+04   0.039    0.969
 
+# Note:
+# mfx currDT
+# 2way intfx trialxcurrDT
 
+# 3way Model
+w4_bothDT_to_ISI_3way_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                                   trialnumberRS * capacity_HighP1_lowN1_best * choice +
+                                   sqrtRT * trialnumberRS * capacity_HighP1_lowN1_best +
+                                   sqrtRT * trialnumberRS * choice +
+                                   sqrtRT * capacity_HighP1_lowN1_best * choice +
+                                   sqrtRT_prev * trialnumberRS * capacity_HighP1_lowN1_best +
+                                   sqrtRT_prev * trialnumberRS * choice +
+                                   sqrtRT_prev * capacity_HighP1_lowN1_best * choice +
+                                   (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w4_bothDT_to_ISI_3way_rfx)
+#                                                        Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                                           3.973e+00  1.011e-01  1.994e+02  39.289  < 2e-16 ***
+# trialnumberRS                                        -2.140e-01  9.886e-02  1.349e+04  -2.165  0.03043 *
+# capacity_HighP1_lowN1_best                            9.280e-02  9.608e-02  1.627e+02   0.966  0.33554
+# choice                                               -9.421e-02  7.930e-02  1.349e+04  -1.188  0.23487
+# sqrtRT                                                8.907e-02  4.023e-02  1.349e+04   2.214  0.02684 *
+# sqrtRT_prev                                           4.571e-03  4.023e-02  1.349e+04   0.114  0.90955
+# trialnumberRS:capacity_HighP1_lowN1_best             -2.981e-02  7.676e-02  1.349e+04  -0.388  0.69774
+# trialnumberRS:choice                                  2.447e-01  1.314e-01  1.349e+04   1.863  0.06254 .
+# capacity_HighP1_lowN1_best:choice                     2.486e-03  4.524e-02  1.349e+04   0.055  0.95618
+# trialnumberRS:sqrtRT                                 -7.199e-02  6.706e-02  1.349e+04  -1.073  0.28308
+# capacity_HighP1_lowN1_best:sqrtRT                     1.628e-02  3.369e-02  1.349e+04   0.483  0.62894
+# choice:sqrtRT                                         1.138e-01  5.443e-02  1.349e+04   2.091  0.03651 *
+# trialnumberRS:sqrtRT_prev                             2.100e-02  6.716e-02  1.349e+04   0.313  0.75453
+# capacity_HighP1_lowN1_best:sqrtRT_prev               -2.603e-04  3.368e-02  1.349e+04  -0.008  0.99383
+# choice:sqrtRT_prev                                   -2.821e-02  5.453e-02  1.349e+04  -0.517  0.60491
+# trialnumberRS:capacity_HighP1_lowN1_best:choice       6.472e-03  1.955e-02  1.349e+04   0.331  0.74065
+# trialnumberRS:capacity_HighP1_lowN1_best:sqrtRT      -2.032e-03  5.130e-02  1.349e+04  -0.040  0.96841
+# trialnumberRS:choice:sqrtRT                          -2.406e-01  9.099e-02  1.349e+04  -2.644  0.00819 **
+# capacity_HighP1_lowN1_best:choice:sqrtRT             -7.664e-03  2.920e-02  1.349e+04  -0.262  0.79299
+# trialnumberRS:capacity_HighP1_lowN1_best:sqrtRT_prev  1.755e-02  5.140e-02  1.349e+04   0.342  0.73271
+# trialnumberRS:choice:sqrtRT_prev                      5.932e-02  9.128e-02  1.349e+04   0.650  0.51581
+# capacity_HighP1_lowN1_best:choice:sqrtRT_prev         5.334e-03  2.880e-02  1.349e+04   0.185  0.85310
+
+# Note:
+# mfx trial, currDT
+# 2way intfx trialxchoice (marginal), choicexcurrDT
+# 3way intfx trialxchoicexcurrDT
+# no effect of wmc just like the choice difficulty models
+
+# COMPARE THE MODELS: 2way vs. 3way
+anova(w4_bothDT_to_ISI_2way_rfx,w4_bothDT_to_ISI_3way_rfx)
+#                           npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)
+# w4_bothDT_to_ISI_2way_rfx   17 5406.6 5534.4 -2686.3   5372.6
+# w4_bothDT_to_ISI_3way_rfx   24 5413.0 5593.4 -2682.5   5365.0 7.6114  7     0.3681
+
+# NOTE: 2way wins again!!!
 
 
 
