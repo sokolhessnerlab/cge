@@ -6064,12 +6064,85 @@ lines(x = xval_plot, y = coef_vals["(Intercept)"] +
         pd[2] * wmc[2] * choice[2] * coef_vals["capacity_HighP1_lowN1_best:choice:prev_all_diff_cont"],
       type = 'l', lwd = 5, col = 'red', lty = 1)
 
-# plot(1, type = "n", xlab = "", ylab = "", xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-# legend("left", legend = c(expression(bold("Previous Easy")), "Safe Choice", "Risky Choice", NA,
-#                           expression(bold("Previous Difficult")), "Safe Choice", "Risky Choice"),  # Labels
-#        col = c(NA, "darkblue", "darkblue", NA, NA, "orange", "orange"),  # Blue for Easy, Red for Difficult
-#        lty = c(NA, 1, 2, NA, NA, 1, 2), lwd = 2)
 
+# I need effect of Current Choice Difficulty (currCD) only graph and Previous Choice Difficulty interaction graph for SPR25BB
+# Currently, only WMC interaction graph
+
+wind2_m12_sepdiff_currCD_2way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                           trialnumberRS * choice +
+                                           all_diff_cont * trialnumberRS +
+                                           all_diff_cont * choice +
+                                           (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(wind2_m12_sepdiff_currCD_2way_rfx)
+#                               Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                  4.085e+00  7.485e-02  8.457e+01  54.578  < 2e-16 ***
+# trialnumberRS               -3.040e-01  1.249e-02  1.394e+04 -24.342  < 2e-16 ***
+# choice                       3.856e-02  8.533e-03  1.394e+04   4.518 6.28e-06 ***
+# all_diff_cont               -5.613e-02  1.176e-02  1.394e+04  -4.772 1.85e-06 ***
+# trialnumberRS:choice        -2.696e-02  1.338e-02  1.394e+04  -2.015  0.04393 *
+# trialnumberRS:all_diff_cont  5.436e-02  1.706e-02  1.394e+04   3.187  0.00144 **
+# choice:all_diff_cont         4.170e-03  9.494e-03  1.394e+04   0.439  0.66051
+
+# NOTE: no effect of prevCD???
+
+wind2_m12_sepdiff_bothCD_2way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                           trialnumberRS * choice +
+                                           all_diff_cont * trialnumberRS +
+                                           all_diff_cont * choice +
+                                           prev_all_diff_cont * trialnumberRS +
+                                           prev_all_diff_cont * choice +
+                                           (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(wind2_m12_sepdiff_bothCD_2way_rfx)
+#                                    Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                       4.087e+00  7.498e-02  8.513e+01  54.516  < 2e-16 ***
+# trialnumberRS                    -3.071e-01  1.453e-02  1.380e+04 -21.130  < 2e-16 ***
+# choice                            3.755e-02  9.261e-03  1.380e+04   4.055 5.04e-05 ***
+# all_diff_cont                    -5.457e-02  1.193e-02  1.380e+04  -4.575 4.80e-06 ***
+# prev_all_diff_cont               -1.664e-02  1.176e-02  1.380e+04  -1.415  0.15700
+# trialnumberRS:choice             -2.338e-02  1.365e-02  1.380e+04  -1.713  0.08677 .
+# trialnumberRS:all_diff_cont       5.069e-02  1.728e-02  1.380e+04   2.934  0.00335 **
+# choice:all_diff_cont              4.581e-03  9.515e-03  1.380e+04   0.481  0.63022
+# trialnumberRS:prev_all_diff_cont  2.420e-02  1.727e-02  1.380e+04   1.401  0.16112
+# choice:prev_all_diff_cont        -2.870e-03  9.345e-03  1.380e+04  -0.307  0.75874
+
+# NOTE: no effect of prevCD also???
+
+# approach to make similar structure to as DT graphs no appropriate...
+# also, just realized that the DT graphs I have don't use models with trials - even though I have them --> but not in simple to complex models (all have prevCD and WMC)
+# the models I use for PD do use trials AND they are the ones that I plot
+
+# can't I just use the final complex model to plot currCD and xprevCD???
+
+# PLOTTING currCD only
+par(mfrow = c(1,1))
+plot(x = xval_plot, y = coef_vals["(Intercept)"] +
+       xval_plot * coef_vals["all_diff_cont"] +
+       choice[2] * coef_vals["choice"] +
+       xval_plot * choice[2] * coef_vals["choice:all_diff_cont"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(4,4.25), cex.lab = 1.5)
+
+
+# PLOTTING with prevCD
+# ~ prevEasy
+plot(x = xval_plot, y = coef_vals["(Intercept)"] +
+       xval_plot * coef_vals["all_diff_cont"] +
+       pd[1] * coef_vals["prev_all_diff_cont"] +
+       choice[2] * coef_vals["choice"] +
+       xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+       pd[1] * choice[2] * coef_vals["choice:prev_all_diff_cont"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(4,4.25), cex.lab = 1.5)
+# ~ prevDiff
+lines(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[2] * coef_vals["prev_all_diff_cont"] +
+        choice[2] * coef_vals["choice"] +
+        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+        pd[2] * choice[2] * coef_vals["choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'red', lty = 1)
+
+# MUCH better approach!!!
 
 
 wind2_m11_2ways_rfx = lmer(wind2_effort_isi_mean ~ 1 +
@@ -6508,10 +6581,6 @@ plot(x = prevDT, y = coef_vals["(Intercept)"] +
      type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
      xlab = expression(bold("Current Decision Time")), ylab = expression(bold("Pupil Dilation (mm)")),
      ylim = c(3.8,4.1), cex.lab = 1.5)
-
-
-
-
 
 
 
@@ -8127,6 +8196,40 @@ lines(x = xval_plot, y = coef_vals["(Intercept)"] +
         xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
         pd[2] * choice[2] * coef_vals["choice:prev_all_diff_cont"],
       type = 'l', lwd = 5, col = 'red', lty = 1)
+
+# DOING SAME THING AS WINDOW 2
+# can't I just use the final complex model to plot currCD and xprevCD???
+
+par(mfrow = c(1,1))
+coef_vals = fixef(wind4_m11_2ways_rfx)
+
+# PLOTTING currCD only
+plot(x = xval_plot, y = coef_vals["(Intercept)"] +
+       xval_plot * coef_vals["all_diff_cont"] +
+       choice[2] * coef_vals["choice"] +
+       xval_plot * choice[2] * coef_vals["choice:all_diff_cont"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(4,4.25), cex.lab = 1.5)
+
+# PLOTTING with prevCD
+# ~ prevEasy
+plot(x = xval_plot, y = coef_vals["(Intercept)"] +
+       xval_plot * coef_vals["all_diff_cont"] +
+       pd[1] * coef_vals["prev_all_diff_cont"] +
+       choice[2] * coef_vals["choice"] +
+       xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+       pd[1] * choice[2] * coef_vals["choice:prev_all_diff_cont"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(4,4.25), cex.lab = 1.5)
+# ~ prevDiff
+lines(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[2] * coef_vals["prev_all_diff_cont"] +
+        choice[2] * coef_vals["choice"] +
+        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
+        pd[2] * choice[2] * coef_vals["choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'red', lty = 1)
+
 
 # predict graphs
 par(mfrow = c(1,2))
