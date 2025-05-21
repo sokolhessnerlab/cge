@@ -6436,7 +6436,7 @@ summary(w2_bothDT_to_ISI_2way_rfx)
 
 # Note:
 # mfx of currDT, prevDT # trial and choice are gone
-# 2way intfx trialxcurrDT, wmcxcurrDT
+# 2way intfx trialxcurrDT, wmcxcurrDT (marginal)
 
 # PATTERN: Noticing the DT doesn't really interact with WMC
 
@@ -6460,6 +6460,60 @@ w2_bothDT_to_ISI_controlTimeChoice_2way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
                                    (1 | subjectnumber), data = clean_data_dm, REML = F)
 summary(w2_bothDT_to_ISI_controlTimeChoice_2way_rfx)
 # NOTE: nothing informative - similar to other models
+
+# PLOT 2way
+par(mfrow = c(1,2))
+par(mar = c(5, 6, 4, 4))
+currDT = seq(from = 0, to = 1, by = .1)
+prevDT = seq(from = 0, to = 1, by = .1)
+wmc = c(-1, 1)
+coef_vals = fixef(w2_bothDT_to_ISI_2way_rfx)
+
+# DT low wmc previous DT
+plot(x = currDT, y = coef_vals["(Intercept)"] +
+       currDT * coef_vals["sqrtRT"] +
+       prevDT * coef_vals["sqrtRT_prev"] +
+       currDT * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:sqrtRT"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Decision Time")), ylab = expression(bold("Pupil Dilation (mm)")),
+     ylim = c(3.8,4.1), cex.lab = 1.5)
+# DT high wmc previous DT
+plot(x = currDT, y = coef_vals["(Intercept)"] +
+       currDT * coef_vals["sqrtRT"] +
+       prevDT * coef_vals["sqrtRT_prev"] +
+       currDT * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:sqrtRT"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Decision Time")), ylab = expression(bold("Pupil Dilation (mm)")),
+     ylim = c(3.8,4.1), cex.lab = 1.5)
+
+# currDT
+# DT low wmc previous DT
+plot(x = currDT, y = coef_vals["(Intercept)"] +
+       currDT * coef_vals["sqrtRT"] +
+       currDT * wmc[1] * coef_vals["capacity_HighP1_lowN1_best:sqrtRT"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Decision Time")), ylab = expression(bold("Pupil Dilation (mm)")),
+     ylim = c(3.8,4.1), cex.lab = 1.5)
+# DT high wmc previous DT
+plot(x = currDT, y = coef_vals["(Intercept)"] +
+       currDT * coef_vals["sqrtRT"] +
+       currDT * wmc[2] * coef_vals["capacity_HighP1_lowN1_best:sqrtRT"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Decision Time")), ylab = expression(bold("Pupil Dilation (mm)")),
+     ylim = c(3.8,4.1), cex.lab = 1.5)
+
+# prevDT
+plot(x = prevDT, y = coef_vals["(Intercept)"] +
+       prevDT * coef_vals["sqrtRT"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Decision Time")), ylab = expression(bold("Pupil Dilation (mm)")),
+     ylim = c(3.8,4.1), cex.lab = 1.5)
+
+
+
+
+
+
 
 # ~ Decision Time as a Predictor of Window 2 Pupil Dilation - WITH Choice Difficulty ~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -6619,6 +6673,16 @@ anova(wind2_m11_sepdifficulties_3ways_rfx,w2_DTCD_to_ISI_3way_rfx)
 
 # NOTE: pandora's box... the new more complex 3way model is better
 # isn't that just because it has more predictors to work with?
+
+# Not sure what I'm doing - just want to see how things relate
+cor.test(clean_data_dm$all_diff_cont,clean_data_dm$prev_all_diff_cont)
+cor.test(clean_data_dm$all_diff_cont,clean_data_dm$sqrtRT)
+cor.test(clean_data_dm$all_diff_cont,clean_data_dm$sqrtRT_prev)
+cor.test(clean_data_dm$prev_all_diff_cont,clean_data_dm$sqrtRT)
+cor.test(clean_data_dm$prev_all_diff_cont,clean_data_dm$sqrtRT_prev)
+# all related... duh
+
+
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ### WINDOW 3 REGRESSIONS: Evaluation (2 seconds, outcome start to +1000 after iti start) #####
