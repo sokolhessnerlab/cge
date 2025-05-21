@@ -6388,6 +6388,22 @@ summary(w2_bothDT_to_ISI_3way_rfx)
 # 2way intfx trialxchoice, choicexcurrDT, choicexprevDT (approaching)
 # 3way trialxchoicexcurrDT
 
+# ~ What if I interact current and previous DT? Do they interact? Simpler model (just both DTs) and the most complex model says otherwise
+w2_bothDT_to_ISI_full3way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                       trialnumberRS * capacity_HighP1_lowN1_best * choice +
+                                       sqrtRT * trialnumberRS * capacity_HighP1_lowN1_best +
+                                       sqrtRT * trialnumberRS * choice +
+                                       sqrtRT * capacity_HighP1_lowN1_best * choice +
+                                       sqrtRT_prev * trialnumberRS * capacity_HighP1_lowN1_best +
+                                       sqrtRT_prev * trialnumberRS * choice +
+                                       sqrtRT_prev * capacity_HighP1_lowN1_best * choice +
+                                       sqrtRT * sqrtRT_prev * trialnumberRS +
+                                       sqrtRT * sqrtRT_prev * capacity_HighP1_lowN1_best +
+                                       sqrtRT * sqrtRT_prev * choice +
+                                       (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w2_bothDT_to_ISI_full3way_rfx)
+# Note: yeah... looks like it really isn't the case - similar to currCD and prevCD
+
 # 2way Model
 w2_bothDT_to_ISI_2way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
                                    trialnumberRS * capacity_HighP1_lowN1_best +
