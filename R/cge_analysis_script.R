@@ -6243,7 +6243,7 @@ summary(wind2_m11_sepdifficulties_3ways_rfx_limNCS)
 anova(wind2_m11_sepdifficulties_3ways_rfx_NCS, wind2_m11_sepdifficulties_3ways_rfx_limNCS)
 
 
-# ~ Decision Time as a Predictor of Window 2 Pupil Dilation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~ Decision Time as a Predictor of Window 2 Pupil Dilation - WITHOUT Choice Difficulty ~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 w2_currDT_to_ISI_rfx = lmer(wind2_effort_isi_mean ~ 1 + sqrtRT + (1 | subjectnumber), data = clean_data_dm, REML = F) # redid - I don't know where the original is... might have been deleted? or under a different name? or model format? or did I just run on the console?
@@ -6451,6 +6451,167 @@ anova(w2_bothDT_to_ISI_5way_rfx,w2_bothDT_to_ISI_4way_rfx,w2_bothDT_to_ISI_3way_
 # The simplest model (the 2way) won!!! Surprising!!! - I didn't include choice difficulty though!!!
 # Would this trend appear in ITI??? - Better to start with the simple model, do a step of complexity, and then compare before moving on to the next complex model
 # Is DT a better predictor of PD than CD???
+
+# What if I controlled for time and choice?
+w2_bothDT_to_ISI_controlTimeChoice_2way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                   trialnumberRS + choice +
+                                   sqrtRT * capacity_HighP1_lowN1_best +
+                                   sqrtRT_prev * capacity_HighP1_lowN1_best +
+                                   (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w2_bothDT_to_ISI_controlTimeChoice_2way_rfx)
+# NOTE: nothing informative - similar to other models
+
+# ~ Decision Time as a Predictor of Window 2 Pupil Dilation - WITH Choice Difficulty ~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# - Concern... Does this even make sense to do since CD should hypothetically shapes DT? Are they separable when it comes to PD?
+
+w2_DTCD_to_ISI_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                  all_diff_cont + prev_all_diff_cont +
+                                  sqrtRT + sqrtRT_prev +
+                                  (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w2_DTCD_to_ISI_rfx)
+#                      Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)         3.597e+00  7.730e-02  9.302e+01  46.538   <2e-16 ***
+# all_diff_cont      -7.805e-02  5.059e-03  1.380e+04 -15.426   <2e-16 ***
+# prev_all_diff_cont -4.402e-02  5.078e-03  1.380e+04  -8.670   <2e-16 ***
+# sqrtRT              2.010e-01  1.147e-02  1.381e+04  17.523   <2e-16 ***
+# sqrtRT_prev         1.146e-01  1.149e-02  1.381e+04   9.973   <2e-16 ***
+
+w2_DTCD_to_ISI_rfx_intfx = lmer(wind2_effort_isi_mean ~ 1 +
+                            all_diff_cont * prev_all_diff_cont *
+                            sqrtRT * sqrtRT_prev +
+                            (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w2_DTCD_to_ISI_rfx_intfx)
+# NOTE: no effects!!!
+
+# 7way Model...
+w2_DTCD_to_ISI_rfx_7way_intfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                  trialnumberRS * capacity_HighP1_lowN1_best * choice *
+                                  all_diff_cont * prev_all_diff_cont *
+                                  sqrtRT * sqrtRT_prev +
+                                  (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w2_DTCD_to_ISI_rfx_7way_intfx)
+# NOTE: TERRIBLE IDEA!!! I did see that trial, wmc, currCD. currDT, and prevDT mattered pretty consistently when they interacted
+
+# 2way Model
+w2_DTCD_to_ISI_2way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                 trialnumberRS * capacity_HighP1_lowN1_best +
+                                 trialnumberRS * choice +
+                                 capacity_HighP1_lowN1_best * choice +
+                                 all_diff_cont * trialnumberRS +
+                                 all_diff_cont * capacity_HighP1_lowN1_best +
+                                 all_diff_cont * choice +
+                                 prev_all_diff_cont * trialnumberRS +
+                                 prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                                 prev_all_diff_cont * choice +
+                                 sqrtRT * trialnumberRS +
+                                 sqrtRT * capacity_HighP1_lowN1_best +
+                                 sqrtRT * choice +
+                                 sqrtRT_prev * trialnumberRS +
+                                 sqrtRT_prev * capacity_HighP1_lowN1_best +
+                                 sqrtRT_prev * choice +
+                                 (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w2_DTCD_to_ISI_2way_rfx)
+#                                                 Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                                    3.848e+00  9.003e-02  1.169e+02  42.737  < 2e-16 ***
+# trialnumberRS                                 -8.252e-02  5.242e-02  1.347e+04  -1.574 0.115482
+# capacity_HighP1_lowN1_best                     7.892e-02  8.493e-02  9.263e+01   0.929 0.355158
+# choice                                        -3.960e-03  3.157e-02  1.347e+04  -0.125 0.900190
+# all_diff_cont                                 -7.759e-02  1.265e-02  1.347e+04  -6.135 8.75e-10 ***
+# prev_all_diff_cont                            -1.285e-02  1.244e-02  1.347e+04  -1.033 0.301774
+# sqrtRT                                         1.917e-01  2.435e-02  1.347e+04   7.872 3.76e-15 ***
+# sqrtRT_prev                                    4.867e-02  2.442e-02  1.347e+04   1.993 0.046272 *
+# trialnumberRS:capacity_HighP1_lowN1_best      -4.984e-03  7.729e-03  1.347e+04  -0.645 0.519042
+# trialnumberRS:choice                          -2.454e-02  1.412e-02  1.347e+04  -1.739 0.082078 .
+# capacity_HighP1_lowN1_best:choice              3.080e-03  4.304e-03  1.347e+04   0.716 0.474153
+# trialnumberRS:all_diff_cont                    6.144e-02  1.802e-02  1.347e+04   3.411 0.000650 ***
+# capacity_HighP1_lowN1_best:all_diff_cont      -2.967e-03  5.481e-03  1.347e+04  -0.541 0.588246
+# choice:all_diff_cont                           8.516e-03  9.983e-03  1.347e+04   0.853 0.393642
+# trialnumberRS:prev_all_diff_cont               1.451e-02  1.804e-02  1.347e+04   0.804 0.421326
+# capacity_HighP1_lowN1_best:prev_all_diff_cont  7.463e-04  5.480e-03  1.347e+04   0.136 0.891688
+# choice:prev_all_diff_cont                     -2.916e-03  9.801e-03  1.347e+04  -0.298 0.766061
+# trialnumberRS:sqrtRT                          -1.289e-01  3.619e-02  1.347e+04  -3.561 0.000371 ***
+# capacity_HighP1_lowN1_best:sqrtRT              3.063e-02  1.277e-02  1.348e+04   2.398 0.016490 *
+# choice:sqrtRT                                  9.450e-03  2.095e-02  1.347e+04   0.451 0.651948
+# trialnumberRS:sqrtRT_prev                     -3.546e-02  3.642e-02  1.347e+04  -0.974 0.330193
+# capacity_HighP1_lowN1_best:sqrtRT_prev         1.378e-02  1.281e-02  1.348e+04   1.075 0.282218
+# choice:sqrtRT_prev                             2.417e-02  2.073e-02  1.347e+04   1.166 0.243603
+
+# NOTE
+# mfx currCD, currDT, prevDT
+# 2way intfx trialxchoice (marginal), trialxcurrCD, trialxcurrDT, wmcxcurrDT
+# seems like CD and DT have separable effects??? what does that mean about the relationship between CD and DT then?
+# no effects of prevCD though... Does this indicate that PD is an accumulation of effects???
+
+# 3way Model
+w2_DTCD_to_ISI_3way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                 trialnumberRS * capacity_HighP1_lowN1_best * choice +
+                                 all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
+                                 all_diff_cont * trialnumberRS * choice +
+                                 all_diff_cont * capacity_HighP1_lowN1_best * choice +
+                                 prev_all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
+                                 prev_all_diff_cont * trialnumberRS * choice +
+                                 prev_all_diff_cont * capacity_HighP1_lowN1_best * choice +
+                                 sqrtRT * trialnumberRS * capacity_HighP1_lowN1_best +
+                                 sqrtRT * trialnumberRS * choice +
+                                 sqrtRT * capacity_HighP1_lowN1_best * choice +
+                                 sqrtRT_prev * trialnumberRS * capacity_HighP1_lowN1_best +
+                                 sqrtRT_prev * trialnumberRS * choice +
+                                 sqrtRT_prev * capacity_HighP1_lowN1_best * choice +
+                                 (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(w2_DTCD_to_ISI_3way_rfx)
+#                                                               Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                                                  3.890e+00  9.463e-02  1.425e+02  41.114  < 2e-16 ***
+# trialnumberRS                                               -1.844e-01  7.617e-02  1.347e+04  -2.421  0.01548 *
+# capacity_HighP1_lowN1_best                                   3.418e-02  9.148e-02  1.245e+02   0.374  0.70930
+# choice                                                      -1.175e-01  6.137e-02  1.347e+04  -1.915  0.05553 .
+# all_diff_cont                                               -3.502e-02  1.716e-02  1.347e+04  -2.040  0.04133 *
+# prev_all_diff_cont                                           3.896e-03  1.676e-02  1.347e+04   0.233  0.81615
+# sqrtRT                                                       1.468e-01  3.209e-02  1.347e+04   4.575 4.81e-06 ***
+# sqrtRT_prev                                                  4.037e-02  3.208e-02  1.347e+04   1.259  0.20822
+# trialnumberRS:capacity_HighP1_lowN1_best                     7.597e-02  5.916e-02  1.347e+04   1.284  0.19911
+# trialnumberRS:choice                                         2.236e-01  1.016e-01  1.347e+04   2.202  0.02771 *
+# capacity_HighP1_lowN1_best:choice                            7.142e-03  3.490e-02  1.347e+04   0.205  0.83787
+# trialnumberRS:all_diff_cont                                 -1.867e-02  2.734e-02  1.347e+04  -0.683  0.49460
+# capacity_HighP1_lowN1_best:all_diff_cont                     9.570e-03  1.362e-02  1.347e+04   0.702  0.48240
+# choice:all_diff_cont                                        -6.060e-02  2.277e-02  1.347e+04  -2.662  0.00778 **
+# trialnumberRS:prev_all_diff_cont                            -2.687e-02  2.681e-02  1.347e+04  -1.002  0.31616
+# capacity_HighP1_lowN1_best:prev_all_diff_cont                8.605e-03  1.342e-02  1.347e+04   0.641  0.52146
+# choice:prev_all_diff_cont                                   -2.135e-02  2.263e-02  1.347e+04  -0.944  0.34541
+# trialnumberRS:sqrtRT                                        -3.812e-02  5.388e-02  1.347e+04  -0.707  0.47928
+# capacity_HighP1_lowN1_best:sqrtRT                            3.248e-02  2.696e-02  1.347e+04   1.205  0.22836
+# choice:sqrtRT                                                9.882e-02  4.339e-02  1.347e+04   2.277  0.02278 *
+# trialnumberRS:sqrtRT_prev                                   -5.792e-04  5.389e-02  1.347e+04  -0.011  0.99142
+# capacity_HighP1_lowN1_best:sqrtRT_prev                       4.055e-02  2.706e-02  1.347e+04   1.499  0.13397
+# choice:sqrtRT_prev                                           5.555e-02  4.336e-02  1.347e+04   1.281  0.20016
+# trialnumberRS:capacity_HighP1_lowN1_best:choice             -6.695e-03  1.555e-02  1.347e+04  -0.431  0.66676
+# trialnumberRS:capacity_HighP1_lowN1_best:all_diff_cont      -2.327e-02  1.992e-02  1.347e+04  -1.168  0.24277
+# trialnumberRS:choice:all_diff_cont                           1.293e-01  3.615e-02  1.347e+04   3.576  0.00035 ***
+# capacity_HighP1_lowN1_best:choice:all_diff_cont             -1.527e-03  1.098e-02  1.347e+04  -0.139  0.88939
+# trialnumberRS:capacity_HighP1_lowN1_best:prev_all_diff_cont -3.407e-02  1.987e-02  1.347e+04  -1.715  0.08645 .
+# trialnumberRS:choice:prev_all_diff_cont                      5.736e-02  3.602e-02  1.347e+04   1.592  0.11133
+# capacity_HighP1_lowN1_best:choice:prev_all_diff_cont         2.309e-02  1.073e-02  1.347e+04   2.151  0.03149 *
+# trialnumberRS:capacity_HighP1_lowN1_best:sqrtRT             -8.990e-03  4.132e-02  1.347e+04  -0.218  0.82776
+# trialnumberRS:choice:sqrtRT                                 -1.792e-01  7.232e-02  1.347e+04  -2.478  0.01324 *
+# capacity_HighP1_lowN1_best:choice:sqrtRT                     8.260e-03  2.367e-02  1.347e+04   0.349  0.72715
+# trialnumberRS:capacity_HighP1_lowN1_best:sqrtRT_prev        -3.411e-02  4.160e-02  1.347e+04  -0.820  0.41218
+# trialnumberRS:choice:sqrtRT_prev                            -9.175e-02  7.263e-02  1.347e+04  -1.263  0.20648
+# capacity_HighP1_lowN1_best:choice:sqrtRT_prev               -1.662e-02  2.338e-02  1.347e+04  -0.711  0.47721
+
+# NOTE: too much going on... DT still matters and so does CD
+# I don't even want to think about trying to interact CD and DT...
+
+anova(w2_DTCD_to_ISI_2way_rfx,w2_DTCD_to_ISI_3way_rfx)
+#                         npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+# w2_DTCD_to_ISI_2way_rfx   25 -1758.7 -1570.8 904.35  -1808.7
+# w2_DTCD_to_ISI_3way_rfx   38 -1771.6 -1486.0 923.78  -1847.6 38.874 13  0.0002094 ***
+
+# NOTE
+# 3way fits better than 2way...
+# I don't know what to make of this...
+# Let's ignore this for now...
+
 
 
 
