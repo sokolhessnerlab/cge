@@ -6424,6 +6424,17 @@ summary(w2_bothDT_to_ISI_2way_rfx)
 
 # PATTERN: Noticing the DT doesn't really interact with WMC
 
+# COMPARE THE MODELS!
+anova(w2_bothDT_to_ISI_5way_rfx,w2_bothDT_to_ISI_4way_rfx,w2_bothDT_to_ISI_3way_rfx,w2_bothDT_to_ISI_2way_rfx)
+#                           npar     AIC     BIC logLik deviance   Chisq Df Pr(>Chisq)
+# w2_bothDT_to_ISI_2way_rfx   17 -1699.6 -1571.9 866.80  -1733.6
+# w2_bothDT_to_ISI_3way_rfx   24 -1696.8 -1516.4 872.37  -1744.8 11.1386  7     0.1327
+# w2_bothDT_to_ISI_4way_rfx   26 -1693.8 -1498.4 872.91  -1745.8  1.0679  2     0.5863
+# w2_bothDT_to_ISI_5way_rfx   34 -1682.5 -1427.1 875.28  -1750.5  4.7387  8     0.7851
+
+# The simplest model (the 2way) won!!! Surprising!!! - I didn't include choice difficulty though!!!
+# Would this trend appear in ITI??? - Better to start with the simple model, do a step of complexity, and then compare before moving on to the next complex model
+# Is DT a better predictor of PD than CD???
 
 
 
