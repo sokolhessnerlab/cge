@@ -2263,6 +2263,49 @@ anova(m3_best_trialNum_2WayIntxOnly,m3_best_trialNum_2WayIntxOnly_choice)
 # m3_best_trialNum_2WayIntxOnly_choice   18 -9486.9 -9351.4 4761.5  -9522.9 40.382  6  3.832e-07 ***
 
 
+# PLOTTING for SPR25BB - might be a better plot???
+
+par(mar = c(5, 6, 4, 4))
+xval_plot = seq(from = 0, to = 1, by = .1)
+pd = c(0,1)
+choice = c(0,1)
+wmc = c(-1, 1)
+coef_vals = fixef(m3_best_trialNum_2WayIntxOnly_choice)
+
+par(mfrow = c(1,1))
+
+# currCD only
+plot(x = xval_plot, y = coef_vals["(Intercept)"] +
+       xval_plot * coef_vals["all_diff_cont"] +
+       choice[2] * coef_vals["choice"] +
+       xval_plot * choice[2] * coef_vals["all_diff_cont:choice"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Decision Time (sec)")),
+     ylim = c(1.2,1.5), cex.lab = 1.5)
+
+# with prevCD
+# ~ prevEasy
+plot(x = xval_plot, y = coef_vals["(Intercept)"] +
+       xval_plot * coef_vals["all_diff_cont"] +
+       pd[1] * coef_vals["prev_all_diff_cont"] +
+       choice[2] * coef_vals["choice"] +
+       xval_plot * choice[2] * coef_vals["all_diff_cont:choice"] +
+       pd[1] * choice[2] * coef_vals["choice:prev_all_diff_cont"],
+     type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Decision Time (sec)")),
+     ylim = c(1.2,1.5), cex.lab = 1.5)
+# ~ prevDiff
+lines(x = xval_plot, y = coef_vals["(Intercept)"] +
+        xval_plot * coef_vals["all_diff_cont"] +
+        pd[2] * coef_vals["prev_all_diff_cont"] +
+        choice[2] * coef_vals["choice"] +
+        xval_plot * choice[2] * coef_vals["all_diff_cont:choice"] +
+        pd[2] * choice[2] * coef_vals["choice:prev_all_diff_cont"],
+      type = 'l', lwd = 5, col = 'red', lty = 1)
+
+# wait... does it makes sense to plot the model with choice???
+# choice and DT might be to interrelated, no - why we didn't do it in the original no time predictor models
+
 
 ### Individual Regressions ############################################
 
