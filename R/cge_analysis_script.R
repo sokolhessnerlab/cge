@@ -1294,7 +1294,7 @@ predict_output_m1 = predict(m1_prev_alldiffCont_intxn_rfx, newdata = predict_dat
 plot(x = xval_plot, y = predict_output_m1[1:10],
      type = 'l', lwd = 5, col = 'blue',
      main = 'Effect of current & previous difficulty', xlab = 'Current difficulty (0 = easy, 1 = difficult)', ylab = 'Reaction Time (seconds)',
-     ylim = c(1.25, 2))
+     ylim = c(1.3, 1.8))
 lines(x = xval_plot, y = predict_output_m1[11:20],
       lwd = 5, col = 'red')
 
@@ -6172,7 +6172,9 @@ plot(x = xval_plot, y = coef_vals["(Intercept)"] +
        choice[2] * coef_vals["choice"] +
        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"],
      type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
-     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(4,4.25), cex.lab = 1.5)
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")),
+     ylim = c(4.10,4.15), cex.lab = 1.5)
+
 
 
 # PLOTTING with prevCD
@@ -6184,7 +6186,8 @@ plot(x = xval_plot, y = coef_vals["(Intercept)"] +
        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
        pd[1] * choice[2] * coef_vals["choice:prev_all_diff_cont"],
      type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
-     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(4,4.25), cex.lab = 1.5)
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")),
+     ylim = c(4.05,4.15), cex.lab = 1.5)
 # ~ prevDiff
 lines(x = xval_plot, y = coef_vals["(Intercept)"] +
         xval_plot * coef_vals["all_diff_cont"] +
@@ -6370,6 +6373,19 @@ anova(wind2_m11_sepdifficulties_3ways_rfx_NCS, wind2_m11_sepdifficulties_3ways_r
 
 # ~ Decision Time as a Predictor of Window 2 Pupil Dilation - WITHOUT Choice Difficulty ~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# mean_RT = mean(clean_data_dm$reactiontime, na.rm = T)
+# clean_data_dm$RT_demeaned = clean_data_dm$sqrtRT - mean_sqrtRT # currDT
+#
+# clean_data_dm$RT_demeaned_prev = c(NA,clean_data_dm$RT_demeaned[1:(length(clean_data_dm$RT_demeaned)-1)]) # prevDT
+# clean_data_dm$RT_demeaned_prev[clean_data_dm$trialnumber == 1] = NA;
+#
+# w2_currDT_to_ISI_rfx_test = lmer(wind2_effort_isi_mean ~ 1 + RT_demeaned + (1 | subjectnumber), data = clean_data_dm, REML = F) # redid - I don't know where the original is... might have been deleted? or under a different name? or model format? or did I just run on the console?
+# summary(w2_currDT_to_ISI_rfx_test)
+
+# can you index DTs by CDs? - don't have a clue how to do...
+# clean_data_dm$DTxCD = NA
+# clean_data_dm$DTxCD[clean_data_dm$all_diff_cont] = clean_data_dm$sqrtRT_demeaned[clean_data_dm$all_diff_cont]
 
 w2_currDT_to_ISI_rfx = lmer(wind2_effort_isi_mean ~ 1 + sqrtRT_demeaned + (1 | subjectnumber), data = clean_data_dm, REML = F) # redid - I don't know where the original is... might have been deleted? or under a different name? or model format? or did I just run on the console?
 summary(w2_currDT_to_ISI_rfx)
@@ -8256,7 +8272,8 @@ plot(x = xval_plot, y = coef_vals["(Intercept)"] +
        choice[2] * coef_vals["choice"] +
        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"],
      type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
-     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(4,4.25), cex.lab = 1.5)
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")),
+     ylim = c(4.1,4.15), cex.lab = 1.5)
 
 # PLOTTING with prevCD
 # ~ prevEasy
@@ -8267,7 +8284,8 @@ plot(x = xval_plot, y = coef_vals["(Intercept)"] +
        xval_plot * choice[2] * coef_vals["choice:all_diff_cont"] +
        pd[1] * choice[2] * coef_vals["choice:prev_all_diff_cont"],
      type = 'l', lwd = 5, col = 'blue', lty = 1, cex.axis = 1.3, las = 1,
-     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")), ylim = c(4,4.25), cex.lab = 1.5)
+     xlab = expression(bold("Current Difficulty")), ylab = expression(bold("Pupil Dilation (mm)")),
+     ylim = c(4.05,4.15), cex.lab = 1.5)
 # ~ prevDiff
 lines(x = xval_plot, y = coef_vals["(Intercept)"] +
         xval_plot * coef_vals["all_diff_cont"] +
@@ -9029,7 +9047,273 @@ for (i in predictors) {
 }
 
 
-### RFX for Trial Number? ###################################################
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# AUC Values #####
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+AUC = function(x, y) {
+  sum(diff(x) * (head(y, -1) + tail(y, -1)) / 2)
+}
+
+testData_df = data.frame(clean_data_dm)
+testData_df$decWin_auc = NA_real_
+
+for (s in keep_participants){
+
+  s_index = which(keep_participants == s);
+
+  cat(sprintf('Subject CGE%03i (%i of %i): trial 000', s, s_index, length(keep_participants)))
+
+  tmpdata = clean_data_dm[clean_data_dm$subjectnumber == s,]; # defines this person's BEHAVIORAL data
+
+  # find their file...
+  tmp_downsampled_fn = dir(pattern = glob2rx(sprintf('cge%03i_et_processed_downsampled*.RData',s)),full.names = T, recursive = T);
+  # and load only the most recent downsampled data file
+  load(tmp_downsampled_fn[length(tmp_downsampled_fn)]) # loads downsampled_et_data and event_timestamps
+  downsampled_et_data = as.data.frame(downsampled_et_data)
+
+  # Baseline correct all ET data to the MEAN PUPIL DIAMETER
+  downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled =
+    downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled -
+    mean(downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled, na.rm = T)
+
+  trialNum = which(testData_df$subjectnumber == s)
+
+  for (t in 1:number_of_trials){
+
+    cat(sprintf('\b\b\b%03i',t))
+
+    indices = (downsampled_et_data$time_data_downsampled >= event_timestamps$decision_start[t]) &
+      (downsampled_et_data$time_data_downsampled <= event_timestamps$decision_end[t])
+    pupil_tmp = downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled[indices]
+    time_tmp = downsampled_et_data$time_data_downsampled[indices] - event_timestamps$decision_start[t]
+
+    if (length(pupil_tmp) > 1 && length(time_tmp) == length(pupil_tmp)) {
+      aucVal = AUC(time_tmp, pupil_tmp)
+    } else {
+      aucVal = NA
+    }
+
+    testData_df$decWin_auc[trialNum[t]] = aucVal # I should also calculate a decWin_auc_prev
+
+  }
+
+  cat(sprintf('. Done.\n'))
+
+}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### AUC Regressions ####
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##### Decision Time as a Predictor of AUC ++++++++++++++++++++++++++++++++++++++
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# don't think this makes sense because auc is calculated using the length of pupil time points
+# length of time points are synonymous with length of decision time
+
+auc_currDT_rfx = lmer(decWin_auc ~ 1 + sqrtRT_demeaned + (1|subjectnumber), data = testData_df)
+summary(auc_currDT_rfx)
+#                 Estimate Std. Error       df t value Pr(>|t|)
+# (Intercept)       -88.30       9.19    84.02  -9.608 3.54e-15 ***
+# sqrtRT_demeaned    69.85      19.77 11068.55   3.533 0.000412 ***
+
+
+auc_prevDT_rfx = lmer(decWin_auc ~ 1 + sqrtRT_demeaned_prev + (1|subjectnumber), data = testData_df)
+summary(auc_prevDT_rfx)
+#                       Estimate Std. Error        df t value Pr(>|t|)
+# (Intercept)            -92.505      9.513    83.579  -9.724 2.18e-15 ***
+# sqrtRT_demeaned_prev   187.353     19.739 11313.871   9.492  < 2e-16 ***
+
+auc_DT_rfx = lmer(decWin_auc ~ 1 + sqrtRT_demeaned + sqrtRT_demeaned_prev + (1|subjectnumber), data = testData_df)
+summary(auc_DT_rfx)
+#                       Estimate Std. Error        df t value Pr(>|t|)
+# (Intercept)            -92.475      9.598    82.996  -9.634 3.52e-15 ***
+# sqrtRT_demeaned         31.899     20.046 12783.409   1.591    0.112
+# sqrtRT_demeaned_prev   182.123     20.036 12775.309   9.090  < 2e-16 ***
+
+
+auc_DT_rfx_intfx = lmer(decWin_auc ~ 1 + sqrtRT_demeaned * sqrtRT_demeaned_prev + (1|subjectnumber), data = testData_df)
+summary(auc_DT_rfx_intfx)
+#                                      Estimate Std. Error       df t value Pr(>|t|)
+# (Intercept)                           -101.04       9.50    85.88 -10.636  < 2e-16 ***
+# sqrtRT_demeaned                         12.77      20.18 12473.50   0.633    0.527
+# sqrtRT_demeaned_prev                   167.45      20.09 12511.38   8.333  < 2e-16 ***
+# sqrtRT_demeaned:sqrtRT_demeaned_prev   588.20      82.91 14003.60   7.094 1.36e-12 ***
+
+
+
+##### Predicting AUC (not w/ Decision Time) ++++++++++++++++++++++++++++++++++++
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+auc_currCD_rfx = lmer(decWin_auc ~ 1 + all_diff_cont + (1|subjectnumber), data = testData_df)
+summary(auc_currCD_rfx)
+#                Estimate Std. Error        df t value Pr(>|t|)
+# (Intercept)     -39.273     10.071   132.097  -3.899 0.000153 ***
+# all_diff_cont   -96.877      8.963 14279.969 -10.808  < 2e-16 ***
+
+# NOTE: more difficult => lower auc (less effort?)
+
+auc_dynaOnly_currCD_rfx = lmer(decWin_auc ~ 1 + diff_cont + (1|subjectnumber), data = testData_df[testData_df$static0dynamic1 == 1,])
+summary(auc_dynaOnly_currCD_rfx)
+# NOTE: consistent negative relationship between current difficulty and auc in just the dynamic
+
+auc_prevCD_rfx = lmer(decWin_auc ~ 1 + prev_all_diff_cont + (1|subjectnumber), data = testData_df)
+summary(auc_prevCD_rfx)
+#                     Estimate Std. Error        df t value Pr(>|t|)
+# (Intercept)          -68.657     10.163   131.373  -6.755 4.19e-10 ***
+# prev_all_diff_cont   -47.158      8.996 14135.989  -5.242 1.61e-07 ***
+
+# NOTE: same negative relationship for previous difficulty
+
+auc_CD_rfx = lmer(decWin_auc ~ 1 + all_diff_cont * prev_all_diff_cont + (1|subjectnumber), data = testData_df)
+summary(auc_CD_rfx)
+#                                  Estimate Std. Error       df t value Pr(>|t|)
+# (Intercept)                        -13.04      12.14   274.58  -1.074   0.2837
+# all_diff_cont                     -115.44      14.01 14122.68  -8.239  < 2e-16 ***
+# prev_all_diff_cont                 -64.55      14.04 14123.91  -4.598 4.31e-06 ***
+# all_diff_cont:prev_all_diff_cont    43.42      21.07 14088.98   2.060   0.0394 *
+
+# NOTE: currCD and prevCD interact here. Let's see if they continue to do so...?
+
+# 5way Model
+auc_full5way_rfx = lmer(decWin_auc ~ 1 +
+                    trialnumberRS * choice * capacity_HighP1_lowN1_best * all_diff_cont * prev_all_diff_cont +
+                    (1|subjectnumber), data = testData_df)
+summary(auc_full5way_rfx)
+# NOTE: only trial mattered and marginally trialxchoicexwmc
+
+
+# 2way Model
+auc_2way_rfx = lmer(decWin_auc ~ 1 +
+                      trialnumberRS * capacity_HighP1_lowN1_best +
+                      trialnumberRS * choice +
+                      capacity_HighP1_lowN1_best * choice +
+                      all_diff_cont * trialnumberRS +
+                      all_diff_cont * capacity_HighP1_lowN1_best +
+                      all_diff_cont * choice +
+                      prev_all_diff_cont * trialnumberRS +
+                      prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                      prev_all_diff_cont * choice +
+                      (1 | subjectnumber), data = testData_df, REML = F)
+summary(auc_2way_rfx)
+
+# NOTE: only currCD mattered AND it's still a negative relationship
+
+# 3way Model
+auc_3way_rfx = lmer(decWin_auc ~ 1 +
+                      trialnumberRS * capacity_HighP1_lowN1_best * choice +
+                      all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
+                      all_diff_cont * trialnumberRS * choice +
+                      all_diff_cont * capacity_HighP1_lowN1_best * choice +
+                      prev_all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
+                      prev_all_diff_cont * trialnumberRS * choice +
+                      prev_all_diff_cont * capacity_HighP1_lowN1_best * choice +
+                      (1 | subjectnumber), data = testData_df, REML = F)
+summary(auc_3way_rfx)
+#                                                               Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                                                   133.1029    21.6138  1552.0309   6.158 9.35e-10 ***
+# trialnumberRS                                                -394.9233    34.8340 13648.7921 -11.337  < 2e-16 ***
+# capacity_HighP1_lowN1_best                                     14.0004    19.2109  1009.7816   0.729   0.4663
+# choice                                                         32.1615    26.7256 13669.8574   1.203   0.2288
+# all_diff_cont                                                  -8.5417    30.5914 13667.1929  -0.279   0.7801
+# prev_all_diff_cont                                              7.8592    29.8383 13653.2364   0.263   0.7923
+# trialnumberRS:capacity_HighP1_lowN1_best                       -0.5173    28.6906 13650.2387  -0.018   0.9856
+# trialnumberRS:choice                                          -80.3814    47.9786 13644.3150  -1.675   0.0939 .
+# capacity_HighP1_lowN1_best:choice                             -33.3382    18.5783 13678.2530  -1.794   0.0728 .
+# trialnumberRS:all_diff_cont                                   -81.6094    48.7509 13643.4334  -1.674   0.0942 .
+# capacity_HighP1_lowN1_best:all_diff_cont                       25.4064    23.9964 13675.6636   1.059   0.2897
+# choice:all_diff_cont                                          -80.2579    40.7446 13647.3074  -1.970   0.0489 *
+# trialnumberRS:prev_all_diff_cont                              -13.3591    47.6958 13635.7908  -0.280   0.7794
+# capacity_HighP1_lowN1_best:prev_all_diff_cont                  -7.3219    23.7079 13660.9656  -0.309   0.7575
+# choice:prev_all_diff_cont                                     -41.3408    40.5599 13624.1649  -1.019   0.3081
+# trialnumberRS:capacity_HighP1_lowN1_best:choice                43.1544    28.0806 13665.7933   1.537   0.1244
+# trialnumberRS:capacity_HighP1_lowN1_best:all_diff_cont        -36.3379    35.0960 13640.3702  -1.035   0.3005
+# trialnumberRS:choice:all_diff_cont                            185.3323    65.0672 13636.6969   2.848   0.0044 **
+# capacity_HighP1_lowN1_best:choice:all_diff_cont                -8.1103    19.1525 13677.1840  -0.423   0.6720
+# trialnumberRS:capacity_HighP1_lowN1_best:prev_all_diff_cont   -17.2379    35.0525 13640.8145  -0.492   0.6229
+# trialnumberRS:choice:prev_all_diff_cont                       106.4818    64.8030 13623.3866   1.643   0.1004
+# capacity_HighP1_lowN1_best:choice:prev_all_diff_cont           38.8415    18.8146 13619.1497   2.064   0.0390 *
+
+# NOTE:
+# mfx trial
+# 2way intfx trialxchoice (marginal), wmcxchoice (marginal), trialxcurrCD (marginal), choicexcurrCD
+# 3way intfx trialxchoicexcurrCD, wmcxchoicexprevCD
+
+# Pattern:
+# auc decreases with time
+# no mfx of CD
+# auc decreases even more over time the more difficult the choice
+
+anova(auc_2way_rfx,auc_3way_rfx)
+#              npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)
+# auc_2way_rfx   17 203833 203961 -101899   203799
+# auc_3way_rfx   24 203826 204007 -101889   203778 20.315  7   0.004927 **
+
+# NOTE: yay... the 3way won... AND it has significant 3-ways....
+
+
+
+##### AUC as a Predictor of Pupil Window 2 (ISI) +++++++++++++++++++++++++++++++
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+w2_auc_rfx = lmer(wind2_effort_isi_mean ~ 1 + decWin_auc + (1|subjectnumber), data = testData_df)
+summary(w2_auc_rfx)
+#              Estimate Std. Error        df t value Pr(>|t|)
+# (Intercept) 3.967e+00  7.445e-02 8.200e+01   53.28   <2e-16 ***
+# decWin_auc  3.925e-04  3.289e-06 1.389e+04  119.32   <2e-16 ***
+
+# 6way Model - yikes...
+w2_auc_6way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                    trialnumberRS * choice * capacity_HighP1_lowN1_best * all_diff_cont * prev_all_diff_cont * decWin_auc + (1|subjectnumber), data = testData_df)
+summary(w2_auc_6way_rfx)
+# NOTE: too complex but there was a consistent relationship between auc and wmc, auc, wmc, and prevCD
+
+w2_auc_2way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                         trialnumberRS * capacity_HighP1_lowN1_best +
+                         trialnumberRS * choice +
+                         capacity_HighP1_lowN1_best * choice +
+                         all_diff_cont * trialnumberRS +
+                         all_diff_cont * capacity_HighP1_lowN1_best +
+                         all_diff_cont * choice +
+                         all_diff_cont * decWin_auc +
+                         prev_all_diff_cont * trialnumberRS +
+                         prev_all_diff_cont * capacity_HighP1_lowN1_best +
+                         prev_all_diff_cont * choice +
+                         prev_all_diff_cont * decWin_auc +
+                         decWin_auc * trialnumberRS +
+                         decWin_auc * capacity_HighP1_lowN1_best +
+                         decWin_auc * choice +
+                         (1 | subjectnumber), data = testData_df, REML = F)
+summary(w2_auc_2way_rfx)
+
+
+# why do decision time and auc have different scales?
+# w2_test = lmer(wind2_effort_isi_mean ~ 1 + sqrtRT_demeaned +
+#                  decWin_auc + (1|subjectnumber), data = testData_df)
+# summary(w2_test)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# RFX for Trial Number? ###################################################
 
 wind2_m10_T_CD_PD_intfx_noTrialRFX = lmer(wind2_effort_isi_mean ~ 1 + trialnumberRS +
                                             all_diff_cont * prev_all_diff_cont +
@@ -9082,7 +9366,7 @@ corrplot(cor_matrix, type = 'lower')
 
 
 
-### Thesis Graphs ####
+# Thesis Graphs ####
 
 dev.off()
 
