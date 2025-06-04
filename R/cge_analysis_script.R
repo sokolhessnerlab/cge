@@ -9295,10 +9295,22 @@ summary(w2_auc_2way_rfx)
 # summary(w2_test)
 
 
+w2_auc_3way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                         trialnumberRS * capacity_HighP1_lowN1_best * choice +
+                         all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
+                         all_diff_cont * trialnumberRS * choice +
+                         all_diff_cont * capacity_HighP1_lowN1_best * choice +
+                         prev_all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
+                         prev_all_diff_cont * trialnumberRS * choice +
+                         prev_all_diff_cont * capacity_HighP1_lowN1_best * choice +
+                         decWin_auc * trialnumberRS * capacity_HighP1_lowN1_best +
+                         decWin_auc * trialnumberRS * choice +
+                         decWin_auc * capacity_HighP1_lowN1_best * choice +
+                         (1 | subjectnumber), data = testData_df, REML = F)
+summary(w2_auc_3way_rfx)
 
 
-
-
+anova(w2_auc_2way_rfx,w2_auc_3way_rfx)
 
 
 
