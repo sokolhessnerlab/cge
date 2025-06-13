@@ -9192,6 +9192,15 @@ summary(auc_CD_PD_time_Cap_rfx)
 # Similar overall pattern to RTs.
 # Might be different overall effects (e.g. of time on task, capacity, and/or their interaction)
 
+auc_rt_time_Cap_rfx = lmer(decWin_auc ~ 1 + reactiontime*capacity_HighP1_lowN1_best + 
+                                trialnumberRS * capacity_HighP1_lowN1_best + (1|subjectnumber), data = clean_data_dm)
+summary(auc_rt_time_Cap_rfx)
+
+
+# to visualize AUC/RT relationship
+plot(clean_data_dm$decWin_auc, clean_data_dm$reactiontime, col = clean_data_dm$subjectnumber, pch = 16, cex = 1)
+
+
 
 # 5way Model
 auc_full5way_rfx = lmer(decWin_auc ~ 1 +
