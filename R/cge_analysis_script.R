@@ -9056,8 +9056,8 @@ AUC = function(x, y) {
   sum(diff(x) * (head(y, -1) + tail(y, -1)) / 2)
 }
 
-testData_df = data.frame(clean_data_dm)
-testData_df$decWin_auc = NA_real_
+clean_data_dm$decWin_auc = NA; # prev. had trouble w/ this; had to use NA_real_
+# clean_data_dm$decWin_auc_simple = NA;
 
 for (s in keep_participants){
 
@@ -9073,14 +9073,15 @@ for (s in keep_participants){
   load(tmp_downsampled_fn[length(tmp_downsampled_fn)]) # loads downsampled_et_data and event_timestamps
   downsampled_et_data = as.data.frame(downsampled_et_data)
 
-  # Baseline correct all ET data to the MEAN PUPIL DIAMETER
-  downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled =
-    downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled -
-    mean(downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled, na.rm = T)
+  # # Baseline correct all ET data to the MEAN PUPIL DIAMETER
+  # downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled =
+  #   downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled -
+  #   mean(downsampled_et_data$pupil_data_extend_interp_smooth_mm_downsampled, na.rm = T)
 
-  trialNum = which(testData_df$subjectnumber == s)
+  subj_row_ind = which(clean_data_dm$subjectnumber == s)
+  trial_numbers = clean_data_dm$trialnumber[clean_data_dm$subjectnumber == s]
 
-  for (t in 1:number_of_trials){
+  for (t in trial_numbers){
 
     cat(sprintf('\b\b\b%03i',t))
 
@@ -9095,7 +9096,8 @@ for (s in keep_participants){
       aucVal = NA
     }
 
-    testData_df$decWin_auc[trialNum[t]] = aucVal # I should also calculate a decWin_auc_prev
+    clean_data_dm$decWin_auc[subj_row_ind[t]] = aucVal # I should also calculate a decWin_auc_prev
+    # clean_data_dm$decWin_auc_simple[subj_row_ind[t]] = sum(pupil_tmp);
 
   }
 
@@ -9113,28 +9115,30 @@ for (s in keep_participants){
 # don't think this makes sense because auc is calculated using the length of pupil time points
 # length of time points are synonymous with length of decision time
 
-auc_currDT_rfx = lmer(decWin_auc ~ 1 + sqrtRT_demeaned + (1|subjectnumber), data = testData_df)
+auc_currDT_rfx = lmer(decWin_auc ~ 1 + sqrtRT_demeaned + (1|subjectnumber), data = clean_data_dm)
 summary(auc_currDT_rfx)
 #                 Estimate Std. Error       df t value Pr(>|t|)
 # (Intercept)       -88.30       9.19    84.02  -9.608 3.54e-15 ***
 # sqrtRT_demeaned    69.85      19.77 11068.55   3.533 0.000412 ***
 
+# Note this relationship is potentially even stronger with regular RTs
 
-auc_prevDT_rfx = lmer(decWin_auc ~ 1 + sqrtRT_demeaned_prev + (1|subjectnumber), data = testData_df)
+auc_prevDT_rfx = lmer(decWin_auc ~ 1 + sqrtRT_demeaned_prev + (1|subjectnumber), data = clean_data_dm)
 summary(auc_prevDT_rfx)
 #                       Estimate Std. Error        df t value Pr(>|t|)
 # (Intercept)            -92.505      9.513    83.579  -9.724 2.18e-15 ***
 # sqrtRT_demeaned_prev   187.353     19.739 11313.871   9.492  < 2e-16 ***
 
-auc_DT_rfx = lmer(decWin_auc ~ 1 + sqrtRT_demeaned + sqrtRT_demeaned_prev + (1|subjectnumber), data = testData_df)
+auc_DT_rfx = lmer(decWin_auc ~ 1 + sqrtRT_demeaned + sqrtRT_demeaned_prev + (1|subjectnumber), data = clean_data_dm)
 summary(auc_DT_rfx)
 #                       Estimate Std. Error        df t value Pr(>|t|)
 # (Intercept)            -92.475      9.598    82.996  -9.634 3.52e-15 ***
 # sqrtRT_demeaned         31.899     20.046 12783.409   1.591    0.112
 # sqrtRT_demeaned_prev   182.123     20.036 12775.309   9.090  < 2e-16 ***
 
+# but sqrtRT_demeaned AND sqrtRT_demeaned_prev are correlated b/c of time-on-task effects
 
-auc_DT_rfx_intfx = lmer(decWin_auc ~ 1 + sqrtRT_demeaned * sqrtRT_demeaned_prev + (1|subjectnumber), data = testData_df)
+auc_DT_rfx_intfx = lmer(decWin_auc ~ 1 + sqrtRT_demeaned * sqrtRT_demeaned_prev + (1|subjectnumber), data = clean_data_dm)
 summary(auc_DT_rfx_intfx)
 #                                      Estimate Std. Error       df t value Pr(>|t|)
 # (Intercept)                           -101.04       9.50    85.88 -10.636  < 2e-16 ***
@@ -9147,7 +9151,7 @@ summary(auc_DT_rfx_intfx)
 ##### Predicting AUC (not w/ Decision Time) ++++++++++++++++++++++++++++++++++++
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-auc_currCD_rfx = lmer(decWin_auc ~ 1 + all_diff_cont + (1|subjectnumber), data = testData_df)
+auc_currCD_rfx = lmer(decWin_auc ~ 1 + all_diff_cont + (1|subjectnumber), data = clean_data_dm)
 summary(auc_currCD_rfx)
 #                Estimate Std. Error        df t value Pr(>|t|)
 # (Intercept)     -39.273     10.071   132.097  -3.899 0.000153 ***
@@ -9155,11 +9159,11 @@ summary(auc_currCD_rfx)
 
 # NOTE: more difficult => lower auc (less effort?)
 
-auc_dynaOnly_currCD_rfx = lmer(decWin_auc ~ 1 + diff_cont + (1|subjectnumber), data = testData_df[testData_df$static0dynamic1 == 1,])
+auc_dynaOnly_currCD_rfx = lmer(decWin_auc ~ 1 + diff_cont + (1|subjectnumber), data = clean_data_dm[clean_data_dm$static0dynamic1 == 1,])
 summary(auc_dynaOnly_currCD_rfx)
 # NOTE: consistent negative relationship between current difficulty and auc in just the dynamic
 
-auc_prevCD_rfx = lmer(decWin_auc ~ 1 + prev_all_diff_cont + (1|subjectnumber), data = testData_df)
+auc_prevCD_rfx = lmer(decWin_auc ~ 1 + prev_all_diff_cont + (1|subjectnumber), data = clean_data_dm)
 summary(auc_prevCD_rfx)
 #                     Estimate Std. Error        df t value Pr(>|t|)
 # (Intercept)          -68.657     10.163   131.373  -6.755 4.19e-10 ***
@@ -9167,7 +9171,7 @@ summary(auc_prevCD_rfx)
 
 # NOTE: same negative relationship for previous difficulty
 
-auc_CD_rfx = lmer(decWin_auc ~ 1 + all_diff_cont * prev_all_diff_cont + (1|subjectnumber), data = testData_df)
+auc_CD_rfx = lmer(decWin_auc ~ 1 + all_diff_cont * prev_all_diff_cont + (1|subjectnumber), data = clean_data_dm)
 summary(auc_CD_rfx)
 #                                  Estimate Std. Error       df t value Pr(>|t|)
 # (Intercept)                        -13.04      12.14   274.58  -1.074   0.2837
@@ -9177,10 +9181,22 @@ summary(auc_CD_rfx)
 
 # NOTE: currCD and prevCD interact here. Let's see if they continue to do so...?
 
+
+auc_CD_PD_time_rfx = lmer(decWin_auc ~ 1 + all_diff_cont + prev_all_diff_cont + trialnumberRS + (1|subjectnumber), data = clean_data_dm)
+summary(auc_CD_PD_time_rfx)
+
+auc_CD_PD_time_Cap_rfx = lmer(decWin_auc ~ 1 + all_diff_cont*capacity_HighP1_lowN1_best + 
+                            prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+                            trialnumberRS * capacity_HighP1_lowN1_best + (1|subjectnumber), data = clean_data_dm)
+summary(auc_CD_PD_time_Cap_rfx)
+# Similar overall pattern to RTs.
+# Might be different overall effects (e.g. of time on task, capacity, and/or their interaction)
+
+
 # 5way Model
 auc_full5way_rfx = lmer(decWin_auc ~ 1 +
                     trialnumberRS * choice * capacity_HighP1_lowN1_best * all_diff_cont * prev_all_diff_cont +
-                    (1|subjectnumber), data = testData_df)
+                    (1|subjectnumber), data = clean_data_dm)
 summary(auc_full5way_rfx)
 # NOTE: only trial mattered and marginally trialxchoicexwmc
 
@@ -9196,7 +9212,7 @@ auc_2way_rfx = lmer(decWin_auc ~ 1 +
                       prev_all_diff_cont * trialnumberRS +
                       prev_all_diff_cont * capacity_HighP1_lowN1_best +
                       prev_all_diff_cont * choice +
-                      (1 | subjectnumber), data = testData_df, REML = F)
+                      (1 | subjectnumber), data = clean_data_dm, REML = F)
 summary(auc_2way_rfx)
 
 # NOTE: only currCD mattered AND it's still a negative relationship
@@ -9210,7 +9226,7 @@ auc_3way_rfx = lmer(decWin_auc ~ 1 +
                       prev_all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
                       prev_all_diff_cont * trialnumberRS * choice +
                       prev_all_diff_cont * capacity_HighP1_lowN1_best * choice +
-                      (1 | subjectnumber), data = testData_df, REML = F)
+                      (1 | subjectnumber), data = clean_data_dm, REML = F)
 summary(auc_3way_rfx)
 #                                                               Estimate Std. Error         df t value Pr(>|t|)
 # (Intercept)                                                   133.1029    21.6138  1552.0309   6.158 9.35e-10 ***
@@ -9258,7 +9274,7 @@ anova(auc_2way_rfx,auc_3way_rfx)
 ##### AUC as a Predictor of Pupil Window 2 (ISI) +++++++++++++++++++++++++++++++
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-w2_auc_rfx = lmer(wind2_effort_isi_mean ~ 1 + decWin_auc + (1|subjectnumber), data = testData_df)
+w2_auc_rfx = lmer(wind2_effort_isi_mean ~ 1 + decWin_auc + (1|subjectnumber), data = clean_data_dm)
 summary(w2_auc_rfx)
 #              Estimate Std. Error        df t value Pr(>|t|)
 # (Intercept) 3.967e+00  7.445e-02 8.200e+01   53.28   <2e-16 ***
@@ -9266,7 +9282,7 @@ summary(w2_auc_rfx)
 
 # 6way Model - yikes...
 w2_auc_6way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
-                    trialnumberRS * choice * capacity_HighP1_lowN1_best * all_diff_cont * prev_all_diff_cont * decWin_auc + (1|subjectnumber), data = testData_df)
+                    trialnumberRS * choice * capacity_HighP1_lowN1_best * all_diff_cont * prev_all_diff_cont * decWin_auc + (1|subjectnumber), data = clean_data_dm)
 summary(w2_auc_6way_rfx)
 # NOTE: too complex but there was a consistent relationship between auc and wmc, auc, wmc, and prevCD
 
@@ -9285,13 +9301,13 @@ w2_auc_2way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
                          decWin_auc * trialnumberRS +
                          decWin_auc * capacity_HighP1_lowN1_best +
                          decWin_auc * choice +
-                         (1 | subjectnumber), data = testData_df, REML = F)
+                         (1 | subjectnumber), data = clean_data_dm, REML = F)
 summary(w2_auc_2way_rfx)
 
 
 # why do decision time and auc have different scales?
 # w2_test = lmer(wind2_effort_isi_mean ~ 1 + sqrtRT_demeaned +
-#                  decWin_auc + (1|subjectnumber), data = testData_df)
+#                  decWin_auc + (1|subjectnumber), data = clean_data_dm)
 # summary(w2_test)
 
 
@@ -9306,7 +9322,7 @@ w2_auc_3way_rfx = lmer(wind2_effort_isi_mean ~ 1 +
                          decWin_auc * trialnumberRS * capacity_HighP1_lowN1_best +
                          decWin_auc * trialnumberRS * choice +
                          decWin_auc * capacity_HighP1_lowN1_best * choice +
-                         (1 | subjectnumber), data = testData_df, REML = F)
+                         (1 | subjectnumber), data = clean_data_dm, REML = F)
 summary(w2_auc_3way_rfx)
 
 
