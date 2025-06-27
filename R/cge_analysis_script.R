@@ -2172,6 +2172,29 @@ summary(m3_best_trialNum_contWMC_3WayIntxOnly)
 AIC(m3_best_trialNum_3WayIntxOnly) # does better
 AIC(m3_best_trialNum_contWMC_3WayIntxOnly)
 
+m3_best_trialNum_contWMC_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned +
+                                       all_diff_cont * trialnumberRS +
+                                       prev_all_diff_cont * complexspan_demeaned +
+                                       prev_all_diff_cont * trialnumberRS +
+                                         complexspan_demeaned * trialnumberRS +
+                                       (1 | subjectnumber), data = clean_data_dm, REML = F);
+
+
+summary(m3_best_trialNum_contWMC_2WayIntxOnly)
+
+# Fixed effects:
+#                                           Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                              1.272e+00  1.253e-02  1.221e+02 101.570  < 2e-16 ***
+# all_diff_cont                            1.248e-01  8.269e-03  1.368e+04  15.092  < 2e-16 ***
+# complexspan_demeaned                    -1.119e-01  5.948e-02  9.712e+01  -1.882   0.0628 .
+# trialnumberRS                           -1.507e-01  9.813e-03  1.367e+04 -15.358  < 2e-16 ***
+# prev_all_diff_cont                      -4.869e-02  8.292e-03  1.368e+04  -5.872 4.40e-09 ***
+# all_diff_cont:complexspan_demeaned       9.745e-02  1.899e-02  1.369e+04   5.132 2.90e-07 ***
+# all_diff_cont:trialnumberRS             -5.213e-03  1.331e-02  1.367e+04  -0.392   0.6953
+# complexspan_demeaned:prev_all_diff_cont  4.800e-02  1.903e-02  1.369e+04   2.523   0.0117 *
+# trialnumberRS:prev_all_diff_cont         5.412e-02  1.333e-02  1.367e+04   4.061 4.91e-05 ***
+# complexspan_demeaned:trialnumberRS       1.214e-01  2.642e-02  1.367e+04   4.596 4.34e-06 ***
+
 m3_best_trialNum_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best +
                                               all_diff_cont * trialnumberRS +
                                               prev_all_diff_cont * capacity_HighP1_lowN1_best +
@@ -2181,6 +2204,20 @@ m3_best_trialNum_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP
 
 
 summary(m3_best_trialNum_2WayIntxOnly)
+
+# Fixed effects:
+#                                                 Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                                    1.257e+00  1.343e-02  1.144e+02  93.624  < 2e-16 ***
+# all_diff_cont                                  1.322e-01  8.351e-03  1.368e+04  15.835  < 2e-16 ***
+# capacity_HighP1_lowN1_best                    -4.007e-02  1.282e-02  9.505e+01  -3.126  0.00235 **
+# trialnumberRS                                 -1.343e-01  9.779e-03  1.367e+04 -13.734  < 2e-16 ***
+# prev_all_diff_cont                            -4.623e-02  8.374e-03  1.368e+04  -5.521 3.44e-08 ***
+# all_diff_cont:capacity_HighP1_lowN1_best       2.119e-02  3.872e-03  1.368e+04   5.473 4.50e-08 ***
+# all_diff_cont:trialnumberRS                   -1.839e-03  1.326e-02  1.367e+04  -0.139  0.88966
+# capacity_HighP1_lowN1_best:prev_all_diff_cont  1.023e-02  3.880e-03  1.368e+04   2.636  0.00840 **
+# trialnumberRS:prev_all_diff_cont               5.779e-02  1.328e-02  1.367e+04   4.353 1.35e-05 ***
+# capacity_HighP1_lowN1_best:trialnumberRS       4.808e-02  5.671e-03  1.367e+04   8.478  < 2e-16 ***
+---
 
 m3_best_trialNum_contWMC_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned +
                                                all_diff_cont * trialnumberRS +
@@ -6022,6 +6059,44 @@ wind2_m11_sepdifficulties_4ways_rfx = lmer(wind2_effort_isi_mean ~ 1 +
                             (1 | subjectnumber), data = clean_data_dm, REML = F)
 summary(wind2_m11_sepdifficulties_4ways_rfx)
 
+
+wind2_m12_sepdifficulties_contWMC_3ways_rfx = lmer(wind2_effort_isi_mean ~ 1 +
+                                             trialnumberRS * complexspan_demeaned * choice +
+                                             all_diff_cont * trialnumberRS * complexspan_demeaned +
+                                             all_diff_cont * trialnumberRS * choice +
+                                             all_diff_cont * complexspan_demeaned * choice +
+                                             prev_all_diff_cont * trialnumberRS * complexspan_demeaned +
+                                             prev_all_diff_cont * trialnumberRS * choice +
+                                             prev_all_diff_cont * complexspan_demeaned * choice +
+                                             (1 | subjectnumber), data = clean_data_dm, REML = F)
+
+summary(wind2_m12_sepdifficulties_contWMC_3ways_rfx)
+
+# Fixed effects:
+#                                                         Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                                            4.074e+00  7.494e-02  8.421e+01  54.365  < 2e-16 ***
+# trialnumberRS                                         -2.635e-01  1.872e-02  1.347e+04 -14.073  < 2e-16 ***
+# complexspan_demeaned                                   6.467e-01  3.849e-01  8.346e+01   1.680 0.096656 .
+# choice                                                 8.627e-02  1.445e-02  1.347e+04   5.968 2.46e-09 ***
+# all_diff_cont                                         -2.154e-02  1.606e-02  1.347e+04  -1.341 0.179864
+# prev_all_diff_cont                                    -1.858e-03  1.557e-02  1.347e+04  -0.119 0.905012
+# trialnumberRS:complexspan_demeaned                     1.589e-01  7.955e-02  1.347e+04   1.997 0.045810 *
+# trialnumberRS:choice                                  -1.177e-01  2.591e-02  1.347e+04  -4.541 5.65e-06 ***
+# complexspan_demeaned:choice                           -1.252e-01  5.015e-02  1.347e+04  -2.497 0.012545 *
+# trialnumberRS:all_diff_cont                           -9.523e-03  2.566e-02  1.347e+04  -0.371 0.710571
+# complexspan_demeaned:all_diff_cont                     9.003e-02  6.479e-02  1.347e+04   1.390 0.164657
+# choice:all_diff_cont                                  -6.588e-02  2.183e-02  1.347e+04  -3.018 0.002545 **
+# trialnumberRS:prev_all_diff_cont                      -3.334e-03  2.503e-02  1.347e+04  -0.133 0.894009
+# complexspan_demeaned:prev_all_diff_cont                3.316e-02  6.368e-02  1.347e+04   0.521 0.602540
+# choice:prev_all_diff_cont                             -3.897e-02  2.171e-02  1.347e+04  -1.796 0.072590 .
+# trialnumberRS:complexspan_demeaned:choice              8.165e-02  7.188e-02  1.347e+04   1.136 0.255974
+# trialnumberRS:complexspan_demeaned:all_diff_cont      -1.515e-01  9.288e-02  1.347e+04  -1.631 0.102969
+# trialnumberRS:choice:all_diff_cont                     1.284e-01  3.530e-02  1.347e+04   3.638 0.000276 ***
+# complexspan_demeaned:choice:all_diff_cont              2.546e-02  5.121e-02  1.347e+04   0.497 0.619097
+# trialnumberRS:complexspan_demeaned:prev_all_diff_cont -1.094e-01  9.291e-02  1.347e+04  -1.178 0.239014
+# trialnumberRS:choice:prev_all_diff_cont                6.693e-02  3.515e-02  1.347e+04   1.904 0.056953 .
+# complexspan_demeaned:choice:prev_all_diff_cont         1.012e-01  5.056e-02  1.347e+04   2.002 0.045325 *
+
 wind2_m11_sepdifficulties_3ways_rfx = lmer(wind2_effort_isi_mean ~ 1 +
                                                                    trialnumberRS * capacity_HighP1_lowN1_best * choice +
                                                                    all_diff_cont * trialnumberRS * capacity_HighP1_lowN1_best +
@@ -6033,6 +6108,31 @@ wind2_m11_sepdifficulties_3ways_rfx = lmer(wind2_effort_isi_mean ~ 1 +
                                                                    (1 | subjectnumber), data = clean_data_dm, REML = F)
 
 summary(wind2_m11_sepdifficulties_3ways_rfx)
+
+# Fixed effects:
+#                                                               Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                                                  4.122e+00  8.231e-02  8.367e+01  50.079  < 2e-16 ***
+# trialnumberRS                                               -2.505e-01  1.895e-02  1.347e+04 -13.213  < 2e-16 ***
+# capacity_HighP1_lowN1_best                                   1.186e-01  8.213e-02  8.296e+01   1.444 0.152380
+# choice                                                       7.794e-02  1.455e-02  1.347e+04   5.358 8.57e-08 ***
+# all_diff_cont                                               -1.307e-02  1.666e-02  1.347e+04  -0.784 0.432919
+# prev_all_diff_cont                                           5.957e-03  1.627e-02  1.347e+04   0.366 0.714298
+# trialnumberRS:capacity_HighP1_lowN1_best                     2.732e-02  1.564e-02  1.347e+04   1.746 0.080802 .
+# trialnumberRS:choice                                        -1.116e-01  2.602e-02  1.347e+04  -4.291 1.79e-05 ***
+# capacity_HighP1_lowN1_best:choice                           -1.011e-02  1.017e-02  1.347e+04  -0.993 0.320544
+# trialnumberRS:all_diff_cont                                 -2.304e-02  2.647e-02  1.347e+04  -0.870 0.384161
+# capacity_HighP1_lowN1_best:all_diff_cont                     1.744e-02  1.314e-02  1.347e+04   1.327 0.184571
+# choice:all_diff_cont                                        -6.179e-02  2.215e-02  1.347e+04  -2.789 0.005290 **
+# trialnumberRS:prev_all_diff_cont                            -2.175e-02  2.595e-02  1.347e+04  -0.838 0.402021
+# capacity_HighP1_lowN1_best:prev_all_diff_cont                1.774e-02  1.297e-02  1.347e+04   1.367 0.171540
+# choice:prev_all_diff_cont                                   -2.525e-02  2.204e-02  1.347e+04  -1.146 0.251958
+# trialnumberRS:capacity_HighP1_lowN1_best:choice              1.779e-03  1.535e-02  1.347e+04   0.116 0.907761
+# trialnumberRS:capacity_HighP1_lowN1_best:all_diff_cont      -2.583e-02  1.918e-02  1.347e+04  -1.347 0.177978
+# trialnumberRS:choice:all_diff_cont                           1.229e-01  3.526e-02  1.347e+04   3.484 0.000496 ***
+# capacity_HighP1_lowN1_best:choice:all_diff_cont             -1.570e-05  1.049e-02  1.347e+04  -0.001 0.998807
+# trialnumberRS:capacity_HighP1_lowN1_best:prev_all_diff_cont -4.220e-02  1.915e-02  1.347e+04  -2.204 0.027559 *
+# trialnumberRS:choice:prev_all_diff_cont                      5.996e-02  3.512e-02  1.347e+04   1.707 0.087766 .
+# capacity_HighP1_lowN1_best:choice:prev_all_diff_cont         2.071e-02  1.027e-02  1.347e+04   2.017 0.043721 *
 
 # xval_plot = seq(from = 0, to = 1, length.out = 10)
 # predict_data_m3_best_H = clean_data_dm[0,];
@@ -7925,6 +8025,46 @@ wind4_m11_3way_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
                             (1 | subjectnumber), data = clean_data_dm)
 summary(wind4_m11_3way_rfx)
 
+wind4_m12_contWMC_2way_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
+                                    trialnumberRS * complexspan_demeaned +
+                                    trialnumberRS * choice +
+                                    trialnumberRS * riskywinP1_loseN1 +
+                                    complexspan_demeaned * choice +
+                                    complexspan_demeaned * riskywinP1_loseN1 +
+                                    all_diff_cont * trialnumberRS +
+                                    all_diff_cont * complexspan_demeaned +
+                                    all_diff_cont * choice +
+                                    all_diff_cont * riskywinP1_loseN1 +
+                                    prev_all_diff_cont * trialnumberRS +
+                                    prev_all_diff_cont * complexspan_demeaned +
+                                    prev_all_diff_cont * choice +
+                                    prev_all_diff_cont * riskywinP1_loseN1 +
+                                    (1 | subjectnumber), data = clean_data_dm)
+summary(wind4_m12_contWMC_2way_rfx)
+
+# Fixed effects:
+#                                           Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                              4.071e+00  7.475e-02  8.267e+01  54.462  < 2e-16 ***
+# trialnumberRS                           -3.431e-01  1.924e-02  1.347e+04 -17.834  < 2e-16 ***
+# complexspan_demeaned                     5.500e-01  3.819e-01  8.022e+01   1.440 0.153733
+# choice                                   2.434e-02  1.225e-02  1.347e+04   1.987 0.046924 *
+# riskywinP1_loseN1                        1.413e-02  8.467e-03  1.347e+04   1.669 0.095145 .
+# all_diff_cont                           -7.958e-03  1.581e-02  1.347e+04  -0.503 0.614653
+# prev_all_diff_cont                      -4.607e-02  1.556e-02  1.347e+04  -2.962 0.003066 **
+# trialnumberRS:complexspan_demeaned       1.151e-01  4.640e-02  1.347e+04   2.481 0.013112 *
+# trialnumberRS:choice                     2.245e-02  1.797e-02  1.347e+04   1.249 0.211583
+# trialnumberRS:riskywinP1_loseN1          9.147e-04  1.257e-02  1.347e+04   0.073 0.942008
+# complexspan_demeaned:choice              2.837e-02  2.657e-02  1.347e+04   1.068 0.285632
+# complexspan_demeaned:riskywinP1_loseN1  -2.565e-02  1.802e-02  1.347e+04  -1.424 0.154530
+# trialnumberRS:all_diff_cont              5.137e-02  2.288e-02  1.347e+04   2.245 0.024788 *
+# complexspan_demeaned:all_diff_cont       3.197e-02  3.346e-02  1.347e+04   0.955 0.339422
+# choice:all_diff_cont                    -2.560e-02  1.257e-02  1.347e+04  -2.037 0.041699 *
+# riskywinP1_loseN1:all_diff_cont         -1.283e-02  8.569e-03  1.347e+04  -1.497 0.134383
+# trialnumberRS:prev_all_diff_cont         7.757e-02  2.287e-02  1.347e+04   3.392 0.000696 ***
+# complexspan_demeaned:prev_all_diff_cont  1.739e-02  3.350e-02  1.347e+04   0.519 0.603812
+# choice:prev_all_diff_cont               -3.051e-04  1.233e-02  1.347e+04  -0.025 0.980259
+# riskywinP1_loseN1:prev_all_diff_cont    -8.946e-03  8.748e-03  1.347e+04  -1.023 0.306541
+
 wind4_m11_2way_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
                             trialnumberRS * capacity_HighP1_lowN1_best +
                             trialnumberRS * choice +
@@ -7942,7 +8082,28 @@ wind4_m11_2way_rfx = lmer(wind4_prep_lateiti_mean ~ 1 +
                             (1 | subjectnumber), data = clean_data_dm)
 summary(wind4_m11_2way_rfx)
 
-
+# Fixed effects:
+#                                                 Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)                                    4.109e+00  8.229e-02  8.198e+01  49.941  < 2e-16 ***
+# trialnumberRS                                 -3.375e-01  1.922e-02  1.347e+04 -17.555  < 2e-16 ***
+# capacity_HighP1_lowN1_best                     1.033e-01  8.180e-02  8.005e+01   1.263  0.21025
+# choice                                         2.569e-02  1.236e-02  1.347e+04   2.079  0.03764 *
+# riskywinP1_loseN1                              1.302e-02  8.547e-03  1.347e+04   1.523  0.12773
+# all_diff_cont                                 -9.770e-04  1.595e-02  1.347e+04  -0.061  0.95116
+# prev_all_diff_cont                            -4.044e-02  1.571e-02  1.347e+04  -2.574  0.01005 *
+# trialnumberRS:capacity_HighP1_lowN1_best      -1.269e-03  9.838e-03  1.347e+04  -0.129  0.89736
+# trialnumberRS:choice                           2.212e-02  1.798e-02  1.347e+04   1.230  0.21869
+# trialnumberRS:riskywinP1_loseN1                4.823e-04  1.258e-02  1.347e+04   0.038  0.96942
+# capacity_HighP1_lowN1_best:choice              7.770e-04  5.614e-03  1.347e+04   0.138  0.88993
+# capacity_HighP1_lowN1_best:riskywinP1_loseN1  -1.363e-03  3.919e-03  1.347e+04  -0.348  0.72799
+# trialnumberRS:all_diff_cont                    4.516e-02  2.287e-02  1.347e+04   1.975  0.04831 *
+# capacity_HighP1_lowN1_best:all_diff_cont       6.374e-03  6.735e-03  1.347e+04   0.946  0.34393
+# choice:all_diff_cont                          -2.649e-02  1.257e-02  1.347e+04  -2.108  0.03507 *
+# riskywinP1_loseN1:all_diff_cont               -1.218e-02  8.577e-03  1.347e+04  -1.420  0.15565
+# trialnumberRS:prev_all_diff_cont               7.124e-02  2.285e-02  1.347e+04   3.118  0.00182 **
+# capacity_HighP1_lowN1_best:prev_all_diff_cont  3.552e-03  6.727e-03  1.347e+04   0.528  0.59747
+# choice:prev_all_diff_cont                     -9.556e-04  1.233e-02  1.347e+04  -0.078  0.93822
+# riskywinP1_loseN1:prev_all_diff_cont          -8.176e-03  8.740e-03  1.347e+04  -0.935  0.34959
 
 anova(wind4_m11_fullintxn_rfx, wind4_m11_4way_rfx, wind4_m11_3way_rfx, wind4_m11_2way_rfx)
 # the 2-way-only regression doesn't do significantly worse than the other, more
