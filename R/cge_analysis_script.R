@@ -9411,13 +9411,11 @@ for(o in 1:iter) {
 
   tmp_output = optim(initial_values, sigmoid_NLL,
                      data = clean_data_dm,
+                     model = sigmoid_NLL_model_formula, # is this how I get it to run regressions here???
                      lower = lower_bounds,
                      upper = upper_bounds,
                      method = "L-BFGS-B", # do I still need this?
                      hessian = T) # do I still need this?
-
-  sigmoid_NLL_model = lmer(sqrtRT ~ 1 + tWMC +
-                             (1 | subjectnumber), data = clean_data_dm, REML = F)
 
   # store nll output we need later
   temp_NLLs[o,] = tmp_output$value; # the NLLs
