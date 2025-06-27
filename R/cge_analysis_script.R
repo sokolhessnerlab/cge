@@ -9418,7 +9418,7 @@ for(o in 1:iter) {
                      hessian = T) # do I still need this?
 
   # store nll output we need later
-  temp_NLLs[o,] = tmp_output$value; # the NLLs
+  tmp_NLLs[o,] = tmp_output$value; # the NLLs
 
 }
 
