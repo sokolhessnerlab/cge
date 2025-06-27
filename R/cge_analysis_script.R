@@ -9389,7 +9389,34 @@ sigmoid_NLL = function(parameters, data) {
 
 }
 
+# Setting up optim()
+iter = 200
+tmp_NLLs = array(dim = c(iter, 1))
 
+for(o in 1:iter) {
+
+  # setting the bounds
+  eps = .Machine$double.eps
+  lower_bounds = c(eps, eps, eps); # we don't want 0s for alpa and gamma
+  upper_bounds = c(5,2) # I'm literally using values that I had from my other code...
+
+  # setting initial values
+  initial_values = runif(3, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
+
+  tmp_output = optim(initial_values, sigmoid_NLL,
+                     data = clean_data_dm,
+                     lower = lower_bounds,
+                     upper = upper_bounds,
+                     method = "L-BFGS-B", # do I still need this?
+                     hessian = T) # do I still need this?
+
+  sigmoid_NLL_model = lmer(sqrtRT ~ 1 + tWMC +
+                             (1 | subjectnumber), data = clean_data_dm, REML = F)
+
+  # store nll output we need later
+  temp_NLLs[o,] = tmp_output$value; # the NLLs
+
+}
 
 
 
