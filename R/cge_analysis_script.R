@@ -9185,14 +9185,14 @@ summary(auc_CD_rfx)
 auc_CD_PD_time_rfx = lmer(decWin_auc ~ 1 + all_diff_cont + prev_all_diff_cont + trialnumberRS + (1|subjectnumber), data = clean_data_dm)
 summary(auc_CD_PD_time_rfx)
 
-auc_CD_PD_time_Cap_rfx = lmer(decWin_auc ~ 1 + all_diff_cont*capacity_HighP1_lowN1_best + 
-                            prev_all_diff_cont * capacity_HighP1_lowN1_best + 
+auc_CD_PD_time_Cap_rfx = lmer(decWin_auc ~ 1 + all_diff_cont*capacity_HighP1_lowN1_best +
+                            prev_all_diff_cont * capacity_HighP1_lowN1_best +
                             trialnumberRS * capacity_HighP1_lowN1_best + (1|subjectnumber), data = clean_data_dm)
 summary(auc_CD_PD_time_Cap_rfx)
 # Similar overall pattern to RTs.
 # Might be different overall effects (e.g. of time on task, capacity, and/or their interaction)
 
-auc_rt_time_Cap_rfx = lmer(decWin_auc ~ 1 + reactiontime*capacity_HighP1_lowN1_best + 
+auc_rt_time_Cap_rfx = lmer(decWin_auc ~ 1 + reactiontime*capacity_HighP1_lowN1_best +
                                 trialnumberRS * capacity_HighP1_lowN1_best + (1|subjectnumber), data = clean_data_dm)
 summary(auc_rt_time_Cap_rfx)
 
@@ -9339,7 +9339,24 @@ anova(w2_auc_2way_rfx,w2_auc_3way_rfx)
 
 
 
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# WMC Sigmoid Transformation #####
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+# STEPS TO DO
+# 1. NLL function creation (model_nll(parameters, data)) --> wait... is model supposed to be after data???
+# 2. take start values for alpha and gamma
+# 3. constrain those values as necessary (> 0 gamma < 200)
+# 4. transform wmc -> twmc (using logistic defined by alpha and gamma
+# 5. put twmc into same dataframe as the rest of the data
+# 6. lmer() stadard regression call using twmc instead of wmc
+# 7. nll produced by lmer() model
+# 8. nonlinear fitting procedure (optim(), randomized initial values for alpha & gamma, iteration
+# 9. make twmc variable here using the best-fit values of alpha & gamma and save that into the real data frame
+# 10. fit lmer() model as inside the NLL outside the NLL with the twmc --> based on this, I think yes
+# 11. Final output
+  # - best fitting alpha & best fitting gamma
+  # - the other regression coefficients that go with that twmc variable
 
 
 
