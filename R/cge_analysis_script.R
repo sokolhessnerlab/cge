@@ -9359,10 +9359,10 @@ anova(w2_auc_2way_rfx,w2_auc_3way_rfx)
   # - the other regression coefficients that go with that twmc variable
 
 # Regression model formula for use in optim() later
-sigmoid_NLL_model_formula = sqrtRT ~ 1 + tWMC + (1 | subjectnumber)
+#sigmoid_NLL_model_formula = sqrtRT ~ 1 + tWMC + (1 | subjectnumber)
 
 # Creating the Sigmoid transformation function
-sigmoid_NLL = function(parameters, data, formula) {
+sigmoid_NLL = function(parameters, data) {
 
   # create the parameters
   alpha = parameters[1] # what does this represent again?
@@ -9378,7 +9378,7 @@ sigmoid_NLL = function(parameters, data, formula) {
                                                                               # just noticed that complexspan_demeaned with mean_composite span... why?
 
   # model fitting procedure to create nll
-  sigmoid_NLL_model = lmer(formula,
+  sigmoid_NLL_model = lmer(sqrtRT ~ 1 + tWMC + (1 | subjectnumber),
                            data = clean_data_dm, REML = F) # do I just do a simple tWMC regression or do I add other predictors???
                                                            # do I create one for pupil dilation too in the same function??? OR do I have to do a separate function???
                                                            # will this formula work fine in the function OR do I have to create it outside of the function like I did with pupil window analyses???
@@ -9388,16 +9388,17 @@ sigmoid_NLL = function(parameters, data, formula) {
                                                            # is there a possibility this gives a bad NLL??? What is a "bad" NLL in the first place???
 
   # return nll from model
-  return =(-log(sigmoid_NLL_model)) # in other NLL functions I had to likelihoods - do I need to do that here or is this fine???
-                                    # this step and the step prior are the ones that are throwing me off about what code I need to do...
-                                    # because it looks different from how I've done other NLL function
-                                    # it just occurred to me, but am I running this for only one participant or is this doing this for all participants???
+  return =(-logLik(sigmoid_NLL_model)) # in other NLL functions I had to likelihoods - do I need to do that here or is this fine???
+                                       # this step and the step prior are the ones that are throwing me off about what code I need to do...
+                                       # because it looks different from how I've done other NLL function
+                                       # it just occurred to me, but am I running this for only one participant or is this doing this for all participants???
+                                       # OHHHH!!! I literally need to tell it to get the logLik, which is numeric and not an object
 
 }
 
 # Setting up optim()
 iter = 200
-tmp_NLLs = array(dim = c(o, 1))
+tmp_NLLs = array(dim = c(iter, 1))
 
 for(o in 1:iter) {
 
@@ -9407,11 +9408,11 @@ for(o in 1:iter) {
   upper_bounds = c(5,2) # I'm literally using values that I had from my other code...
 
   # setting initial values
-  initial_values = runif(3, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
+  initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
 
   tmp_output = optim(initial_values, sigmoid_NLL,
                      data = clean_data_dm,
-                     model = sigmoid_NLL_model_formula, # is this how I get it to run regressions here???
+                     #formula = sigmoid_NLL_model_formula, # is this how I get it to run regressions here???
                      lower = lower_bounds,
                      upper = upper_bounds,
                      method = "L-BFGS-B", # do I still need this?
