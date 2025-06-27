@@ -9397,7 +9397,7 @@ sigmoid_NLL = function(parameters, data, model) {
 
 # Setting up optim()
 iter = 200
-tmp_NLLs = array(dim = c(iter, 1))
+tmp_NLLs = array(dim = c(o, 1))
 
 for(o in 1:iter) {
 
