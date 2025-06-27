@@ -9358,10 +9358,39 @@ anova(w2_auc_2way_rfx,w2_auc_3way_rfx)
   # - best fitting alpha & best fitting gamma
   # - the other regression coefficients that go with that twmc variable
 
+# Creating the Sigmoid transformation function
+sigmoid_NLL = function(parameters, data) {
+
+  # create the parameters
+  alpha = parameters[1] # what does this represent again?
+  gamma = parameters[2] # what does this represent again?
+
+  # ensure parameters don't fall below eps
+  eps = .Machine$double.eps
+  if (alpha < eps) {alpha = eps} # I don't think I need this... I think only for gamma
+  if (gamma < eps) {gamma = eps}
+
+  # sigmoid transform WMC into tWMC and add to clean_data_dm
+  clean_data_dm$tWMC = 1/(1 + exp(alpha - gamma * clean_data_dm$complexspan)) # use complexspan, complexspan_demeaned
+                                                                              # just noticed that complexspan_demeaned with mean_composite span... why?
+
+  # model fitting procedure to create nll
+  sigmoid_NLL_model = lmer(sqrtRT ~ 1 + tWMC +
+                             (1 | subjectnumber), data = clean_data_dm, REML = F) # do I just do a simple tWMC regression or do I add other predictors???
+                                                                                  # do I create one for pupil dilation too in the same function??? OR do I have to do a separate function???
+                                                                                  # will this formula work fine in the function OR do I have to create it outside of the function like I did with pupil window analyses???
+                                                                                  # is there a possibility this gives a bad NLL??? What is a "bad" NLL in the first place???
+                                                                                  # return nll from model
+
+  return =(-log(sigmoid_NLL_model)) # in other NLL functions I had to likelihoods - do I need to do that here or is this fine???
+                                    # this step and the step prior are the ones that are throwing me off about what code I need to do...
+                                    # because it looks different from how I've done other NLL function
+                                    # it just occurred to me, but am I running this for only one participant or is this doing this for all participants???
+
+}
 
 
 
-tWMC = 1/(1 + exp(5 - 2 * clean_data_dm$complexspan))
 
 
 
