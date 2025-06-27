@@ -9362,7 +9362,7 @@ anova(w2_auc_2way_rfx,w2_auc_3way_rfx)
 sigmoid_NLL_model_formula = sqrtRT ~ 1 + tWMC + (1 | subjectnumber)
 
 # Creating the Sigmoid transformation function
-sigmoid_NLL = function(parameters, data, model) {
+sigmoid_NLL = function(parameters, data, formula) {
 
   # create the parameters
   alpha = parameters[1] # what does this represent again?
@@ -9378,7 +9378,7 @@ sigmoid_NLL = function(parameters, data, model) {
                                                                               # just noticed that complexspan_demeaned with mean_composite span... why?
 
   # model fitting procedure to create nll
-  sigmoid_NLL_model = lmer(model,
+  sigmoid_NLL_model = lmer(formula,
                            data = clean_data_dm, REML = F) # do I just do a simple tWMC regression or do I add other predictors???
                                                            # do I create one for pupil dilation too in the same function??? OR do I have to do a separate function???
                                                            # will this formula work fine in the function OR do I have to create it outside of the function like I did with pupil window analyses???
