@@ -9361,7 +9361,7 @@ anova(w2_auc_2way_rfx,w2_auc_3way_rfx)
 
 
 
-
+tWMC = 1/(1 + exp(5 - 2 * clean_data_dm$complexspan))
 
 
 
