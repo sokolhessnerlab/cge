@@ -2217,7 +2217,7 @@ summary(m3_best_trialNum_2WayIntxOnly)
 # capacity_HighP1_lowN1_best:prev_all_diff_cont  1.023e-02  3.880e-03  1.368e+04   2.636  0.00840 **
 # trialnumberRS:prev_all_diff_cont               5.779e-02  1.328e-02  1.367e+04   4.353 1.35e-05 ***
 # capacity_HighP1_lowN1_best:trialnumberRS       4.808e-02  5.671e-03  1.367e+04   8.478  < 2e-16 ***
----
+
 
 m3_best_trialNum_contWMC_2WayIntxOnly = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned +
                                                all_diff_cont * trialnumberRS +
