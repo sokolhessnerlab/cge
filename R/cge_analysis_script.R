@@ -9577,7 +9577,7 @@ for(o in 1:iter) {
   # setting the bounds
   eps = .Machine$double.eps
   lower_bounds = c(eps, eps, eps); # we don't want 0s for alpa and gamma
-  upper_bounds = c(5,2) # I'm literally using values that I had from my other code...
+  upper_bounds = c(10,2) # I'm literally using values that I had from my other code...
 
   # setting initial values
   initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
@@ -9597,6 +9597,7 @@ for(o in 1:iter) {
 
 }
 
+unique(tmp_NLLs)
 
 
 
