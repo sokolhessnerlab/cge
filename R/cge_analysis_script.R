@@ -9521,12 +9521,23 @@ anova(w2_auc_2way_rfx,w2_auc_3way_rfx)
 
 # Regression model formula for use in optim() later
 #sigmoid_NLL_model_formula = sqrtRT ~ 1 + tWMC + (1 | subjectnumber)
+make_tWMC = function(parameters, var_to_transform){
+  alpha = parameters[1]
+  gamma = parameters[2]
 
+  tWMC = 1/(1 + exp(alpha - gamma * var_to_transform)) # use complexspan, complexspan_demeaned
+
+  tWMC = tWMC - min(tWMC, na.rm = T) # zeros it out
+  tWMC = tWMC/max(tWMC, na.rm = T) # scales it to 0-1
+  tWMC = tWMC*2-1; # rescales to -1 to +1
+
+  return(tWMC)
+}
 
 
 
 # Creating the Sigmoid transformation function
-sigmoid_NLL = function(parameters, data) {
+sigmoid_NLL = function(parameters, func_data) {
 
   # create the parameters
   alpha = parameters[1] # what does this represent again?
@@ -9535,21 +9546,21 @@ sigmoid_NLL = function(parameters, data) {
   # ensure parameters don't fall below eps
   eps = .Machine$double.eps
   # if (alpha < eps) {alpha = eps} # I don't think I need this... I think only for gamma
-  if (gamma < eps) {gamma = eps}
+  if (gamma < 1e-8) {gamma = 1e-8}
 
   # sigmoid transform WMC into tWMC and add to clean_data_dm - to use in the NLL
-  clean_data_dm$tWMC = 1/(1 + exp(alpha - gamma * clean_data_dm$complexspan)) # use complexspan, complexspan_demeaned
-                                                                              # just noticed that complexspan_demeaned with mean_composite span... why?
-                                                                              # how to make it work outside of the function...??? does it need to be a function???
-                                                                              # - I need alpha and gamma to be created first and outside of this function
-                                                                              # but how do I make it dynamically accept any variable???
+  func_data$tWMC = make_tWMC(c(alpha, gamma), func_data$complexspan)
+  # clean_data_dm$tWMC = 1/(1 + exp(alpha - gamma * clean_data_dm$complexspan)) # use complexspan, complexspan_demeaned
+  #                                                                             # just noticed that complexspan_demeaned with mean_composite span... why?
+  #                                                                             # how to make it work outside of the function...??? does it need to be a function???
+  #                                                                             # - I need alpha and gamma to be created first and outside of this function
+  #                                                                             # but how do I make it dynamically accept any variable???
 
-
-
+  print(parameters)
   # model fitting procedure to create nll
-sigmoid_NLL_model = lmer(sqrtRT ~ 1 +
+  sigmoid_NLL_model = lmer(sqrtRT ~ 1 +
                            all_diff_cont * tWMC + prev_all_diff_cont * tWMC
-                         + (1 | subjectnumber), data = clean_data_dm, REML = F) # do I just do a simple tWMC regression or do I add other predictors???
+                         + (1 | subjectnumber), data = func_data, REML = F) # do I just do a simple tWMC regression or do I add other predictors???
                                                                                 # - yes, we do need the model that reflects what we have previously found for linear effects (to compare)
                                                                                 # do I create one for pupil dilation too in the same function??? OR do I have to do a separate function???
                                                                                 # will this formula work fine in the function OR do I have to create it outside of the function like I did with pupil window analyses???
@@ -9568,37 +9579,39 @@ sigmoid_NLL_model = lmer(sqrtRT ~ 1 +
 }
 
 # Setting up optim()
-iter = 200
+iter = 10
 tmp_parameters = array(dim = c(number_of_iterations, 2)) # 2 for the alpha and gamma?
-tmp_hessian = array(dim = c(2, 2, number_of_iterations))
+tmp_hessians = array(dim = c(2, 2, number_of_iterations))
 tmp_NLLs = array(dim = c(iter, 1))
 
 for(o in 1:iter) {
+  cat(o)
 
   # setting the bounds
   eps = .Machine$double.eps
-  lower_bounds = c(eps, eps); # we don't want 0s for alpa and gamma
-  upper_bounds = c(10,2) # I'm literally using values that I had from my other code...
+  lower_bounds = c(eps, 1e-8); # we don't want 0s for alpa and gamma
+  upper_bounds = c(1000,500) # I'm literally using values that I had from my other code...
 
   # setting initial values
   initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
 
   tmp_output = optim(initial_values, sigmoid_NLL,
-                     data = clean_data_dm,
-                     #formula = sigmoid_NLL_model_formula, # is this how I get it to run regressions here???
+                     func_data = clean_data_dm,
                      lower = lower_bounds,
                      upper = upper_bounds,
                      method = "L-BFGS-B", # do I still need this?
                      hessian = T) # do I still need this?
 
   # store nll output we need later
-  tmp_parameterss[o,] = tmp_output$par
-  tmp_hessians[o,] = tmp_output$hessian
-  tmp_NLLs[o,] = tmp_output$value # the NLLs
+  tmp_parameters[o,] = tmp_output$par
+  tmp_hessians[,,o] = tmp_output$hessian
+  tmp_NLLs[o,1] = tmp_output$value # the NLLs
 
 }
 
 unique(tmp_NLLs)
+
+
 
 
 
