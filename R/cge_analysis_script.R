@@ -9614,8 +9614,8 @@ for(o in 1:iter) {
 
 }
 
-unique(tmp_NLLs)
-
+bestSigNLL = which(tmp_NLLs == min(tmp_NLLs)) # getting the best NLL
+2^tmp_parameters[bestSigNLL,] # getting the squared associated parameters of the best NLL 
 
 
 
