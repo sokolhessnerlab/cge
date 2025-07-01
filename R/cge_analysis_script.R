@@ -9546,14 +9546,16 @@ transform = clean_data_dm$tWMC = 1/(1 + exp(alpha - gamma * clean_data_dm$comple
 
 
   # model fitting procedure to create nll
-  sigmoid_NLL_model = lmer(sqrtRT ~ 1 + tWMC + (1 | subjectnumber),
-                           data = clean_data_dm, REML = F) # do I just do a simple tWMC regression or do I add other predictors???
-                                                           # do I create one for pupil dilation too in the same function??? OR do I have to do a separate function???
-                                                           # will this formula work fine in the function OR do I have to create it outside of the function like I did with pupil window analyses???
-                                                           # - I think I do in order to run optim()
-                                                           # - which also means I probably need to put it after (parameters, data)
-                                                           # - this is weird and confusing
-                                                           # is there a possibility this gives a bad NLL??? What is a "bad" NLL in the first place???
+sigmoid_NLL_model = lmer(sqrtRT ~ 1 +
+                           all_diff_cont * tWMC + prev_all_diff_cont * tWMC
+                         + (1 | subjectnumber), data = clean_data_dm, REML = F) # do I just do a simple tWMC regression or do I add other predictors???
+                                                                                # - yes, we do need the model that reflects what we have previously found for linear effects (to compare)
+                                                                                # do I create one for pupil dilation too in the same function??? OR do I have to do a separate function???
+                                                                                # will this formula work fine in the function OR do I have to create it outside of the function like I did with pupil window analyses???
+                                                                                # - I think I do in order to run optim()
+                                                                                # - which also means I probably need to put it after (parameters, data)
+                                                                                # - this is weird and confusing
+                                                                                # is there a possibility this gives a bad NLL??? What is a "bad" NLL in the first place???
 
   # return nll from model
   return =(-logLik(sigmoid_NLL_model)) # in other NLL functions I had to likelihoods - do I need to do that here or is this fine???
