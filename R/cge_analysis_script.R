@@ -9522,6 +9522,9 @@ anova(w2_auc_2way_rfx,w2_auc_3way_rfx)
 # Regression model formula for use in optim() later
 #sigmoid_NLL_model_formula = sqrtRT ~ 1 + tWMC + (1 | subjectnumber)
 
+
+
+
 # Creating the Sigmoid transformation function
 sigmoid_NLL = function(parameters, data) {
 
@@ -9534,9 +9537,13 @@ sigmoid_NLL = function(parameters, data) {
   if (alpha < eps) {alpha = eps} # I don't think I need this... I think only for gamma
   if (gamma < eps) {gamma = eps}
 
-  # sigmoid transform WMC into tWMC and add to clean_data_dm
-  clean_data_dm$tWMC = 1/(1 + exp(alpha - gamma * clean_data_dm$complexspan)) # use complexspan, complexspan_demeaned
-                                                                              # just noticed that complexspan_demeaned with mean_composite span... why?
+  # sigmoid transform WMC into tWMC and add to clean_data_dm - to use in the NLL
+transform = clean_data_dm$tWMC = 1/(1 + exp(alpha - gamma * clean_data_dm$complexspan)) # use complexspan, complexspan_demeaned
+                                                                                        # just noticed that complexspan_demeaned with mean_composite span... why?
+                                                                                        # how to make it work outside of the function...??? does it need to be a function???
+                                                                                        # - I need alpha and gamma to be created first and outside of this function
+                                                                                        # but how do I make it dynamically accept any variable???
+
 
   # model fitting procedure to create nll
   sigmoid_NLL_model = lmer(sqrtRT ~ 1 + tWMC + (1 | subjectnumber),
