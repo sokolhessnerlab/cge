@@ -9538,11 +9538,12 @@ sigmoid_NLL = function(parameters, data) {
   if (gamma < eps) {gamma = eps}
 
   # sigmoid transform WMC into tWMC and add to clean_data_dm - to use in the NLL
-transform = clean_data_dm$tWMC = 1/(1 + exp(alpha - gamma * clean_data_dm$complexspan)) # use complexspan, complexspan_demeaned
-                                                                                        # just noticed that complexspan_demeaned with mean_composite span... why?
-                                                                                        # how to make it work outside of the function...??? does it need to be a function???
-                                                                                        # - I need alpha and gamma to be created first and outside of this function
-                                                                                        # but how do I make it dynamically accept any variable???
+  clean_data_dm$tWMC = 1/(1 + exp(alpha - gamma * clean_data_dm$complexspan)) # use complexspan, complexspan_demeaned
+                                                                              # just noticed that complexspan_demeaned with mean_composite span... why?
+                                                                              # how to make it work outside of the function...??? does it need to be a function???
+                                                                              # - I need alpha and gamma to be created first and outside of this function
+                                                                              # but how do I make it dynamically accept any variable???
+
 
 
   # model fitting procedure to create nll
@@ -9576,7 +9577,7 @@ for(o in 1:iter) {
 
   # setting the bounds
   eps = .Machine$double.eps
-  lower_bounds = c(eps, eps, eps); # we don't want 0s for alpa and gamma
+  lower_bounds = c(eps, eps); # we don't want 0s for alpa and gamma
   upper_bounds = c(10,2) # I'm literally using values that I had from my other code...
 
   # setting initial values
