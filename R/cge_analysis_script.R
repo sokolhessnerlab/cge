@@ -9534,7 +9534,7 @@ sigmoid_NLL = function(parameters, data) {
 
   # ensure parameters don't fall below eps
   eps = .Machine$double.eps
-  if (alpha < eps) {alpha = eps} # I don't think I need this... I think only for gamma
+  # if (alpha < eps) {alpha = eps} # I don't think I need this... I think only for gamma
   if (gamma < eps) {gamma = eps}
 
   # sigmoid transform WMC into tWMC and add to clean_data_dm - to use in the NLL
@@ -9568,6 +9568,8 @@ sigmoid_NLL_model = lmer(sqrtRT ~ 1 +
 
 # Setting up optim()
 iter = 200
+tmp_parameters = array(dim = c(number_of_iterations, 2)) # 2 for the alpha and gamma?
+tmp_hessian = array(dim = c(2, 2, number_of_iterations))
 tmp_NLLs = array(dim = c(iter, 1))
 
 for(o in 1:iter) {
@@ -9589,7 +9591,9 @@ for(o in 1:iter) {
                      hessian = T) # do I still need this?
 
   # store nll output we need later
-  tmp_NLLs[o,] = tmp_output$value; # the NLLs
+  tmp_parameterss[o,] = tmp_output$par
+  tmp_hessians[o,] = tmp_output$hessian
+  tmp_NLLs[o,] = tmp_output$value # the NLLs
 
 }
 
