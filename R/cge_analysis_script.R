@@ -9522,10 +9522,14 @@ anova(w2_auc_2way_rfx,w2_auc_3way_rfx)
 # Regression model formula for use in optim() later
 #sigmoid_NLL_model_formula = sqrtRT ~ 1 + tWMC + (1 | subjectnumber)
 make_tWMC = function(parameters, var_to_transform){
+  
   alpha = parameters[1]
   gamma = parameters[2]
 
-  tWMC = 1/(1 + exp(alpha - gamma * var_to_transform)) # use complexspan, complexspan_demeaned
+  tWMC = 1/(1 + exp(gamma * (alpha - var_to_transform))) # use complexspan, complexspan_demeaned
+                                                         # this new formula might behave much better compared to the original 
+                                                         # original formula - tWMC = 1/(1 + exp(alpha - gamma * var_to_transform))
+                                                         # - value of alpha is co-identified with gamma 
 
   tWMC = tWMC - min(tWMC, na.rm = T) # zeros it out
   tWMC = tWMC/max(tWMC, na.rm = T) # scales it to 0-1
@@ -9546,10 +9550,11 @@ sigmoid_NLL = function(parameters, func_data) {
   # ensure parameters don't fall below eps
   eps = .Machine$double.eps
   # if (alpha < eps) {alpha = eps} # I don't think I need this... I think only for gamma
-  if (gamma < 1e-8) {gamma = 1e-8}
+  # if (gamma < 1e-8) {gamma = 1e-8}
+  gamma_applied = 2^gamma
 
   # sigmoid transform WMC into tWMC and add to clean_data_dm - to use in the NLL
-  func_data$tWMC = make_tWMC(c(alpha, gamma), func_data$complexspan)
+  func_data$tWMC = make_tWMC(c(alpha, gamma_applied), func_data$complexspan)
   # clean_data_dm$tWMC = 1/(1 + exp(alpha - gamma * clean_data_dm$complexspan)) # use complexspan, complexspan_demeaned
   #                                                                             # just noticed that complexspan_demeaned with mean_composite span... why?
   #                                                                             # how to make it work outside of the function...??? does it need to be a function???
@@ -9580,8 +9585,8 @@ sigmoid_NLL = function(parameters, func_data) {
 
 # Setting up optim()
 iter = 10
-tmp_parameters = array(dim = c(number_of_iterations, 2)) # 2 for the alpha and gamma?
-tmp_hessians = array(dim = c(2, 2, number_of_iterations))
+tmp_parameters = array(dim = c(iter, 2)) # 2 for the alpha and gamma?
+tmp_hessians = array(dim = c(2, 2, iter))
 tmp_NLLs = array(dim = c(iter, 1))
 
 for(o in 1:iter) {
@@ -9589,8 +9594,8 @@ for(o in 1:iter) {
 
   # setting the bounds
   eps = .Machine$double.eps
-  lower_bounds = c(eps, 1e-8); # we don't want 0s for alpa and gamma
-  upper_bounds = c(1000,500) # I'm literally using values that I had from my other code...
+  lower_bounds = c(0, 0); # we don't want 0s for alpa and gamma
+  upper_bounds = c(1,10) # I'm literally using values that I had from my other code...
 
   # setting initial values
   initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
