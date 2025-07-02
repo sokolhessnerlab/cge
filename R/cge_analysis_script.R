@@ -9564,8 +9564,8 @@ sigmoid_NLL = function(parameters, func_data) {
   #print(parameters)
   # model fitting procedure to create nll
   sigmoid_NLL_model = lmer(sqrtRT ~ 1 +
-                           all_diff_cont * tWMC + prev_all_diff_cont * tWMC
-                         + (1 | subjectnumber), data = func_data, REML = F) # do I just do a simple tWMC regression or do I add other predictors???
+                             all_diff_cont * tWMC + prev_all_diff_cont * tWMC +
+                             (1 | subjectnumber), data = func_data, REML = F)   # do I just do a simple tWMC regression or do I add other predictors???
                                                                                 # - yes, we do need the model that reflects what we have previously found for linear effects (to compare)
                                                                                 # do I create one for pupil dilation too in the same function??? OR do I have to do a separate function???
                                                                                 # will this formula work fine in the function OR do I have to create it outside of the function like I did with pupil window analyses???
@@ -9618,7 +9618,37 @@ bestSigmNLL = which(tmp_NLLs == min(tmp_NLLs)) # getting the best NLL
 bestSigmParam = tmp_parameters[bestSigmNLL,] # getting the squared parameters associated with the best NLL
 
 
-plot(clean_data_dm$complexspan, make_tWMC(c(bestSigmParam), clean_data_dm$complexspan))
+plot(clean_data_dm$complexspan, make_tWMC(c(bestSigmParam), clean_data_dm$complexspan), type = "l")
+
+clean_data_dm$tWMC = make_tWMC(bestSigmParam, clean_data_dm$complexspan)
+
+sigmNLL_model = lmer(sqrtRT ~ 1 +
+                       all_diff_cont * tWMC + prev_all_diff_cont * tWMC +
+                       (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(sigmNLL_model)
+# Fixed effects:
+#                           Estimate Std. Error         df t value Pr(>|t|)
+# (Intercept)              1.202e+00  1.277e-02  8.964e+01  94.080  < 2e-16 ***
+# all_diff_cont            1.181e-01  3.971e-03  1.368e+04  29.749  < 2e-16 ***
+# tWMC                    -2.812e-02  1.899e-02  9.024e+01  -1.481  0.14219
+# prev_all_diff_cont      -2.688e-02  3.975e-03  1.368e+04  -6.761 1.42e-11 ***
+# all_diff_cont:tWMC       3.575e-02  5.986e-03  1.368e+04   5.973 2.38e-09 ***
+# tWMC:prev_all_diff_cont  1.904e-02  5.994e-03  1.368e+04   3.177  0.00149 **
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
