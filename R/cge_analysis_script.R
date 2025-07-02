@@ -9615,7 +9615,7 @@ for(o in 1:iter) {
 }
 
 bestSigmNLL = which(tmp_NLLs == min(tmp_NLLs)) # getting the best NLL
-bestSigmParam = 2^tmp_parameters[bestSigmNLL,] # getting the squared parameters associated with the best NLL
+bestSigmParam = tmp_parameters[bestSigmNLL,] # getting the squared parameters associated with the best NLL
 
 
 plot(clean_data_dm$complexspan, make_tWMC(c(bestSigmParam), clean_data_dm$complexspan))
