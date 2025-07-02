@@ -9522,14 +9522,14 @@ anova(w2_auc_2way_rfx,w2_auc_3way_rfx)
 # Regression model formula for use in optim() later
 #sigmoid_NLL_model_formula = sqrtRT ~ 1 + tWMC + (1 | subjectnumber)
 make_tWMC = function(parameters, var_to_transform){
-  
+
   alpha = parameters[1]
   gamma = parameters[2]
 
   tWMC = 1/(1 + exp(gamma * (alpha - var_to_transform))) # use complexspan, complexspan_demeaned
-                                                         # this new formula might behave much better compared to the original 
+                                                         # this new formula might behave much better compared to the original
                                                          # original formula - tWMC = 1/(1 + exp(alpha - gamma * var_to_transform))
-                                                         # - value of alpha is co-identified with gamma 
+                                                         # - value of alpha is co-identified with gamma
 
   tWMC = tWMC - min(tWMC, na.rm = T) # zeros it out
   tWMC = tWMC/max(tWMC, na.rm = T) # scales it to 0-1
@@ -9561,7 +9561,7 @@ sigmoid_NLL = function(parameters, func_data) {
   #                                                                             # - I need alpha and gamma to be created first and outside of this function
   #                                                                             # but how do I make it dynamically accept any variable???
 
-  print(parameters)
+  #print(parameters)
   # model fitting procedure to create nll
   sigmoid_NLL_model = lmer(sqrtRT ~ 1 +
                            all_diff_cont * tWMC + prev_all_diff_cont * tWMC
@@ -9584,7 +9584,7 @@ sigmoid_NLL = function(parameters, func_data) {
 }
 
 # Setting up optim()
-iter = 10
+iter = 200
 tmp_parameters = array(dim = c(iter, 2)) # 2 for the alpha and gamma?
 tmp_hessians = array(dim = c(2, 2, iter))
 tmp_NLLs = array(dim = c(iter, 1))
@@ -9614,11 +9614,11 @@ for(o in 1:iter) {
 
 }
 
-bestSigNLL = which(tmp_NLLs == min(tmp_NLLs)) # getting the best NLL
-2^tmp_parameters[bestSigNLL,] # getting the squared associated parameters of the best NLL 
+bestSigmNLL = which(tmp_NLLs == min(tmp_NLLs)) # getting the best NLL
+bestSigmParam = 2^tmp_parameters[bestSigmNLL,] # getting the squared parameters associated with the best NLL
 
 
-
+plot(clean_data_dm$complexspan, make_tWMC(c(bestSigmParam), clean_data_dm$complexspan))
 
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
