@@ -9254,7 +9254,7 @@ for (s in keep_participants){
     if (length(pupil_tmp) > 1 && length(time_tmp) == length(pupil_tmp)) {
       aucVal = AUC(time_tmp, pupil_tmp)
     } else {
-      aucVal = NA
+      aucVal = NA # i could've done the !is.na like in my other loops - 1 less line
     }
 
     clean_data_dm$decWin_auc[subj_row_ind[t]] = aucVal # I should also calculate a decWin_auc_prev
@@ -9619,9 +9619,10 @@ bestSigmNLL = which(tmp_NLLs == min(tmp_NLLs)) # getting the best NLL
 bestSigmParam = tmp_parameters[bestSigmNLL,] # getting the squared parameters associated with the best NLL
 
 
-plot(clean_data_dm$complexspan, make_tWMC(c(bestSigmParam), clean_data_dm$complexspan), type = "l")
+plot(clean_data_complexspan$compositeSpanScore, make_tWMC(c(bestSigmParam), clean_data_complexspan$compositeSpanScore))
 
-clean_data_dm$tWMC = make_tWMC(bestSigmParam, clean_data_dm$complexspan)
+clean_data_dm$tWMC = make_tWMC(bestSigmParam, clean_data_complexspan$compositeSpanScore)
+
 
 sigmNLL_model = lmer(sqrtRT ~ 1 +
                        all_diff_cont * tWMC + prev_all_diff_cont * tWMC +
@@ -9635,17 +9636,11 @@ summary(sigmNLL_model)
 # prev_all_diff_cont      -2.688e-02  3.975e-03  1.368e+04  -6.761 1.42e-11 ***
 # all_diff_cont:tWMC       3.575e-02  5.986e-03  1.368e+04   5.973 2.38e-09 ***
 # tWMC:prev_all_diff_cont  1.904e-02  5.994e-03  1.368e+04   3.177  0.00149 **
-# ---
-# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-
-
-
-
-
-
-
-
+anova(m3_best_nointxn, sigmNLL_model, test = "LRT", REML = F)
+#                 npar     AIC     BIC logLik deviance Chisq Df Pr(>Chisq)
+# m3_best_nointxn    8 -8762.2 -8701.9 4389.1  -8778.2
+# sigmNLL_model      8 -8748.0 -8687.7 4382.0  -8764.0     0  0
 
 
 
