@@ -9584,7 +9584,7 @@ sigmoid_NLL = function(parameters, func_data) {
 }
 
 # Setting up optim()
-iter = 200
+iter = 800
 tmp_parameters = array(dim = c(iter, 2)) # 2 for the alpha and gamma?
 tmp_hessians = array(dim = c(2, 2, iter))
 tmp_NLLs = array(dim = c(iter, 1))
@@ -9612,6 +9612,7 @@ for(o in 1:iter) {
   tmp_hessians[,,o] = tmp_output$hessian
   tmp_NLLs[o,1] = tmp_output$value # the NLLs
 
+  cat(sprintf('. Done.\n'))
 }
 
 bestSigmNLL = which(tmp_NLLs == min(tmp_NLLs)) # getting the best NLL
