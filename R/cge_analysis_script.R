@@ -9586,42 +9586,79 @@ sigmoid_NLL = function(parameters, func_data) {
 # Setting up optim()
 iter = 800
 tmp_parameters = array(dim = c(iter, 2)) # 2 for the alpha and gamma?
-tmp_hessians = array(dim = c(2, 2, iter))
+# tmp_hessians = array(dim = c(2, 2, iter))
 tmp_NLLs = array(dim = c(iter, 1))
 
-for(o in 1:iter) {
-  cat(o)
+# Set up the parallelization
+n.cores <- parallel::detectCores() - 1; # Use 1 less than the full number of cores.
+my.cluster <- parallel::makeCluster(
+  n.cores,
+  type = "FORK"
+)
+doParallel::registerDoParallel(cl = my.cluster)
 
-  # setting the bounds
-  eps = .Machine$double.eps
-  lower_bounds = c(0, 0); # we don't want 0s for alpa and gamma
-  upper_bounds = c(1,10) # I'm literally using values that I had from my other code...
+# setting the bounds
+eps = .Machine$double.eps
+lower_bounds = c(0, 0); # we don't want 0s for alpa and gamma
+upper_bounds = c(1,10) # I'm literally using values that I had from my other code...
 
-  # setting initial values
+
+# The parallelized loop
+alloutput <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
   initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
-
-  tmp_output = optim(initial_values, sigmoid_NLL,
-                     func_data = clean_data_dm,
-                     lower = lower_bounds,
-                     upper = upper_bounds,
-                     method = "L-BFGS-B", # do I still need this?
-                     hessian = T) # do I still need this?
-
-  # store nll output we need later
-  tmp_parameters[o,] = tmp_output$par
-  tmp_hessians[,,o] = tmp_output$hessian
-  tmp_NLLs[o,1] = tmp_output$value # the NLLs
-
-  cat(sprintf('. Done.\n'))
+  
+  # The estimation itself
+  output <- optim(initial_values, sigmoid_NLL,
+                  func_data = clean_data_dm,
+                  lower = lower_bounds,
+                  upper = upper_bounds,
+                  method = "L-BFGS-B", # do I still need this?
+                  hessian = T)
+  
+  c(output$par,output$value); # the things (parameter values & NLL) to save/combine across parallel estimations
 }
 
-bestSigmNLL = which(tmp_NLLs == min(tmp_NLLs)) # getting the best NLL
-bestSigmParam = tmp_parameters[bestSigmNLL,] # getting the squared parameters associated with the best NLL
+all_estimates = alloutput[,1:2];
+all_nlls = alloutput[,3];
+
+best_nll_index = which.min(all_nlls); # identify the single best estimation
+
+# Save out the parameters & NLLs from the single best estimation
+bestSigmParam = all_estimates[best_nll_index,];
+bestSigmNLL = all_nlls[best_nll_index];
+
+best_hessian = hessian(func=sigmoid_NLL, x = bestSigmParam, func_data = clean_data_dm)
+best_estimated_parameter_errors = sqrt(diag(solve(best_hessian)));
+
+# 
+# for(o in 1:iter) {
+#   cat(o)
+# 
+#   # setting initial values
+#   initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
+# 
+#   tmp_output = optim(initial_values, sigmoid_NLL,
+#                      func_data = clean_data_dm,
+#                      lower = lower_bounds,
+#                      upper = upper_bounds,
+#                      method = "L-BFGS-B", # do I still need this?
+#                      hessian = T) # do I still need this?
+# 
+#   # store nll output we need later
+#   tmp_parameters[o,] = tmp_output$par
+#   tmp_hessians[,,o] = tmp_output$hessian
+#   tmp_NLLs[o,1] = tmp_output$value # the NLLs
+# 
+#   cat(sprintf('. Done.\n'))
+# }
+# 
+# bestSigmNLL = which(tmp_NLLs == min(tmp_NLLs)) # getting the best NLL
+# bestSigmParam = tmp_parameters[bestSigmNLL,] # getting the squared parameters associated with the best NLL
 
 
 plot(clean_data_complexspan$compositeSpanScore, make_tWMC(c(bestSigmParam), clean_data_complexspan$compositeSpanScore))
 
-clean_data_dm$tWMC = make_tWMC(bestSigmParam, clean_data_complexspan$compositeSpanScore)
+clean_data_dm$tWMC = make_tWMC(bestSigmParam, clean_data_dm$complexspan)
 
 
 sigmNLL_model = lmer(sqrtRT ~ 1 +
