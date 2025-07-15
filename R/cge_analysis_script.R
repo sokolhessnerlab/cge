@@ -9589,6 +9589,10 @@ tmp_parameters = array(dim = c(iter, 2)) # 2 for the alpha and gamma?
 # tmp_hessians = array(dim = c(2, 2, iter))
 tmp_NLLs = array(dim = c(iter, 1))
 
+library(doParallel)
+library(numDeriv)
+library(tictoc)
+
 # Set up the parallelization
 n.cores <- parallel::detectCores() - 1; # Use 1 less than the full number of cores.
 my.cluster <- parallel::makeCluster(
@@ -9604,6 +9608,9 @@ upper_bounds = c(1,10) # I'm literally using values that I had from my other cod
 
 
 # The parallelized loop
+
+tic("Sigmoid Optimization Begins")
+
 alloutput <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
   initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
   
@@ -9617,6 +9624,9 @@ alloutput <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
   
   c(output$par,output$value); # the things (parameter values & NLL) to save/combine across parallel estimations
 }
+
+toc(log = T) # stores the time it ended?
+tic.log(format = T) # let's me see the time?
 
 all_estimates = alloutput[,1:2];
 all_nlls = alloutput[,3];
@@ -9654,6 +9664,25 @@ best_estimated_parameter_errors = sqrt(diag(solve(best_hessian)));
 # 
 # bestSigmNLL = which(tmp_NLLs == min(tmp_NLLs)) # getting the best NLL
 # bestSigmParam = tmp_parameters[bestSigmNLL,] # getting the squared parameters associated with the best NLL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 plot(clean_data_complexspan$compositeSpanScore, make_tWMC(c(bestSigmParam), clean_data_complexspan$compositeSpanScore))
