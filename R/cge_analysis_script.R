@@ -9666,7 +9666,22 @@ anova(m3_best_nointxn, sigmNLL_model, test = "LRT", REML = F)
 # m3_best_nointxn    8 -8762.2 -8701.9 4389.1  -8778.2
 # sigmNLL_model      8 -8748.0 -8687.7 4382.0  -8764.0     0  0
 
-# manual LRT: -2 * (restricted model/full model) -> which is the restricted and full model in this case?
+# Do a manual LRT instead!!!
+# manual LRT looks like -2 * (restricted model - full model)? -> which is the restricted and full model in this case?
+# so this would be more like -2 * (logLik(m0) - logLik(m1)) since I need the numbers no the just the log
+# does this solve the issue with the "missing" parameters? 
+
+LRT_WMC_only = -2 * (logLik(m3_best_nointxn) - logLik(sigmNLL_model))
+LRT_WMC_only 
+# 'log Lik.' -14.19124 (df=8) - idk what to do with this??? where's the p-value? run chi-square test? also are the DFs the same?
+
+# chisq.test() -> i don't think so...
+# pchisq() -> yes...??? what are quantiles referring to for q? what is lower,tail referring to?
+
+pchisq(LRT_WMC_only, df = 8)
+# 'log Lik.' 0 (df=8) -> so the new model is significantly different?
+
+
 
 
 # ______________________________________________________________________________
