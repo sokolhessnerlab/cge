@@ -9539,6 +9539,10 @@ make_tWMC = function(parameters, var_to_transform){
 }
 
 
+# ______________________________________________________________________________
+### Sigmoid: WMC Model Comparison ##### 
+# ******************************************************************************
+
 
 # Creating the Sigmoid transformation function
 sigmoid_NLL = function(parameters, func_data) {
@@ -9640,55 +9644,9 @@ bestSigmNLL = all_nlls[best_nll_index];
 best_hessian = hessian(func=sigmoid_NLL, x = bestSigmParam, func_data = clean_data_dm)
 best_estimated_parameter_errors = sqrt(diag(solve(best_hessian)));
 
-# 
-# for(o in 1:iter) {
-#   cat(o)
-# 
-#   # setting initial values
-#   initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
-# 
-#   tmp_output = optim(initial_values, sigmoid_NLL,
-#                      func_data = clean_data_dm,
-#                      lower = lower_bounds,
-#                      upper = upper_bounds,
-#                      method = "L-BFGS-B", # do I still need this?
-#                      hessian = T) # do I still need this?
-# 
-#   # store nll output we need later
-#   tmp_parameters[o,] = tmp_output$par
-#   tmp_hessians[,,o] = tmp_output$hessian
-#   tmp_NLLs[o,1] = tmp_output$value # the NLLs
-# 
-#   cat(sprintf('. Done.\n'))
-# }
-# 
-# bestSigmNLL = which(tmp_NLLs == min(tmp_NLLs)) # getting the best NLL
-# bestSigmParam = tmp_parameters[bestSigmNLL,] # getting the squared parameters associated with the best NLL
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 plot(clean_data_complexspan$compositeSpanScore, make_tWMC(c(bestSigmParam), clean_data_complexspan$compositeSpanScore))
 
 clean_data_dm$tWMC = make_tWMC(bestSigmParam, clean_data_dm$complexspan)
-
 
 sigmNLL_model = lmer(sqrtRT ~ 1 +
                        all_diff_cont * tWMC + prev_all_diff_cont * tWMC +
@@ -9707,6 +9665,129 @@ anova(m3_best_nointxn, sigmNLL_model, test = "LRT", REML = F)
 #                 npar     AIC     BIC logLik deviance Chisq Df Pr(>Chisq)
 # m3_best_nointxn    8 -8762.2 -8701.9 4389.1  -8778.2
 # sigmNLL_model      8 -8748.0 -8687.7 4382.0  -8764.0     0  0
+
+# manual LRT: -2 * (restricted model/full model) -> which is the restricted and full model in this case?
+
+
+# ______________________________________________________________________________
+### Sigmoid: Time-on-Task Model Comparison ##### 
+# ******************************************************************************
+
+# Creating the Sigmoid transformation function
+sigmoid_NLL = function(parameters, func_data) {
+  
+  # create the parameters
+  alpha = parameters[1] # what does this represent again?
+  gamma = parameters[2] # what does this represent again?
+  
+  # ensure parameters don't fall below eps
+  eps = .Machine$double.eps
+  # if (alpha < eps) {alpha = eps} # I don't think I need this... I think only for gamma
+  # if (gamma < 1e-8) {gamma = 1e-8}
+  gamma_applied = 2^gamma
+  
+  # sigmoid transform WMC into tWMC and add to clean_data_dm - to use in the NLL
+  func_data$tWMC = make_tWMC(c(alpha, gamma_applied), func_data$complexspan)
+  # clean_data_dm$tWMC = 1/(1 + exp(alpha - gamma * clean_data_dm$complexspan)) 
+  
+  #print(parameters)
+  
+  # model fitting procedure to create nll
+  sigmoid_NLL_time_model = lmer(sqrtRT ~ 1 + 
+                                  all_diff_cont * tWMC +
+                                  all_diff_cont * trialnumberRS +
+                                  prev_all_diff_cont * tWMC +
+                                  prev_all_diff_cont * trialnumberRS +
+                                  tWMC * trialnumberRS +
+                                  (1 | subjectnumber), data = func_data, REML = F)   
+  
+  # return nll from model
+  return =(-logLik(sigmoid_NLL_time_model)) 
+  
+}
+
+# Setting up optim()
+iter = 800
+tmp_parameters = array(dim = c(iter, 2)) # 2 for the alpha and gamma?
+# tmp_hessians = array(dim = c(2, 2, iter))
+tmp_NLLs = array(dim = c(iter, 1))
+
+# Set up the parallelization
+n.cores <- parallel::detectCores() - 1; # Use 1 less than the full number of cores.
+my.cluster <- parallel::makeCluster(
+  n.cores,
+  type = "FORK"
+)
+doParallel::registerDoParallel(cl = my.cluster)
+
+# setting the bounds
+eps = .Machine$double.eps
+lower_bounds = c(0, 0); # we don't want 0s for alpa and gamma
+upper_bounds = c(1,10) # I'm literally using values that I had from my other code...
+
+
+# The parallelized loop
+
+tic("Sigmoid Optimization Begins")
+
+alloutput <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
+  initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
+  
+  # The estimation itself
+  output <- optim(initial_values, sigmoid_NLL,
+                  func_data = clean_data_dm,
+                  lower = lower_bounds,
+                  upper = upper_bounds,
+                  method = "L-BFGS-B", # do I still need this?
+                  hessian = T)
+  
+  c(output$par,output$value); # the things (parameter values & NLL) to save/combine across parallel estimations
+}
+
+toc(log = T) # stores the time it ended?
+tic.log(format = T) # let's me see the time?
+
+all_estimates = alloutput[,1:2];
+all_nlls = alloutput[,3];
+
+best_nll_index = which.min(all_nlls); # identify the single best estimation
+
+# Save out the parameters & NLLs from the single best estimation
+bestSigmParam = all_estimates[best_nll_index,];
+bestSigmNLL = all_nlls[best_nll_index];
+
+best_hessian = hessian(func=sigmoid_NLL, x = bestSigmParam, func_data = clean_data_dm)
+best_estimated_parameter_errors = sqrt(diag(solve(best_hessian)));
+
+plot(clean_data_complexspan$compositeSpanScore, make_tWMC(c(bestSigmParam), clean_data_complexspan$compositeSpanScore))
+
+clean_data_dm$tWMC = make_tWMC(bestSigmParam, clean_data_dm$complexspan)
+
+sigmNLL_time_model = lmer(sqrtRT ~ 1 + 
+                       all_diff_cont * tWMC +
+                       all_diff_cont * trialnumberRS +
+                       prev_all_diff_cont * tWMC +
+                       prev_all_diff_cont * trialnumberRS +
+                       tWMC * trialnumberRS +
+                       (1 | subjectnumber), data = clean_data_dm, REML = F)
+summary(sigmNLL_time_model)
+
+
+anova(m3_best_trialNum_2WayIntxOnly, sigmNLL_time_model, test = "LRT", REML = F)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
