@@ -9673,13 +9673,15 @@ anova(m3_best_nointxn, sigmNLL_model, test = "LRT", REML = F)
 
 LRT_WMC_only = -2 * (logLik(m3_best_nointxn) - logLik(sigmNLL_model))
 LRT_WMC_only 
-# 'log Lik.' -14.19124 (df=8) - idk what to do with this??? where's the p-value? run chi-square test? also are the DFs the same?
+# 'log Lik.' -14.19124 (df=8) - idk what to do with this??? where's the p-value? run chi-square test? also are the DFs the same? both are still 8?
 
 # chisq.test() -> i don't think so...
 # pchisq() -> yes...??? what are quantiles referring to for q? what is lower,tail referring to?
 
 pchisq(LRT_WMC_only, df = 8)
-# 'log Lik.' 0 (df=8) -> so the new model is significantly different?
+# 'log Lik.' 0 (df=8) -> so the new model is significantly different? wait... do I subtract the DFs from each model like for delta chi-square model compisons in SEM????? how do I get the DFs for each model...?
+
+
 
 
 
@@ -9745,7 +9747,7 @@ upper_bounds = c(1,10) # I'm literally using values that I had from my other cod
 
 tic("Sigmoid Optimization Begins")
 
-alloutput <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
+alloutput_time <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
   initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
   
   # The estimation itself
@@ -9762,21 +9764,21 @@ alloutput <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
 toc(log = T) # stores the time it ended?
 tic.log(format = T) # let's me see the time?
 
-all_estimates = alloutput[,1:2];
-all_nlls = alloutput[,3];
+all_time_estimates = alloutput_time[,1:2];
+all_time_nlls = alloutput_time[,3];
 
-best_nll_index = which.min(all_nlls); # identify the single best estimation
+best_nll_time_index = which.min(all_time_nlls); # identify the single best estimation
 
 # Save out the parameters & NLLs from the single best estimation
-bestSigmParam = all_estimates[best_nll_index,];
-bestSigmNLL = all_nlls[best_nll_index];
+bestSigmParam_time = all_time_estimates[best_nll_time_index,];
+bestSigmNLL_time = all_time_nlls[best_nll_time_index]; # where does this go afterward once it had been made though?
 
-best_hessian = hessian(func=sigmoid_NLL, x = bestSigmParam, func_data = clean_data_dm)
-best_estimated_parameter_errors = sqrt(diag(solve(best_hessian)));
+best_hessian_time = hessian(func=sigmoid_NLL, x = bestSigmParam_time, func_data = clean_data_dm)
+best_estimated_parameter_errors_time = sqrt(diag(solve(best_hessian_time)));
 
-plot(clean_data_complexspan$compositeSpanScore, make_tWMC(c(bestSigmParam), clean_data_complexspan$compositeSpanScore))
+plot(clean_data_complexspan$compositeSpanScore, make_tWMC(c(bestSigmParam_time), clean_data_complexspan$compositeSpanScore))
 
-clean_data_dm$tWMC = make_tWMC(bestSigmParam, clean_data_dm$complexspan)
+clean_data_dm$tWMC = make_tWMC(bestSigmParam_time, clean_data_dm$complexspan)
 
 sigmNLL_time_model = lmer(sqrtRT ~ 1 + 
                        all_diff_cont * tWMC +
@@ -9790,6 +9792,16 @@ summary(sigmNLL_time_model)
 
 anova(m3_best_trialNum_2WayIntxOnly, sigmNLL_time_model, test = "LRT", REML = F)
 
+# Do a manual LRT instead!!!
+# manual LRT looks like -2 * (restricted model - full model)? -> which is the restricted and full model in this case?
+# so this would be more like -2 * (logLik(m0) - logLik(m1)) since I need the numbers no the just the log
+
+
+LRT_time = -2 * (logLik(m3_best_nointxn) - logLik(sigmNLL_time_model))
+LRT_time
+
+pchisq(LRT_WMC_only, df = 8)
+# 'log Lik.' 0 (df=8) -> so the new model is significantly different?
 
 
 
