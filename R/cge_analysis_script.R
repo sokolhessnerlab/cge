@@ -9679,7 +9679,7 @@ LRT_WMC_only
 # pchisq() -> yes...??? what are quantiles referring to for q? what is lower,tail referring to?
 
 pchisq(LRT_WMC_only, df = 8)
-# 'log Lik.' 0 (df=8) -> so the new model is significantly different? wait... do I subtract the DFs from each model like for delta chi-square model compisons in SEM????? how do I get the DFs for each model...?
+# 'log Lik.' 0 (df=8) -> so the new model is significantly different? wait... do I subtract the DFs from each model like for delta chi-square model compisons in SEM????? how do I get the DFs for each model...? but that leaves 0 -> similar issue as with LRT in anova
 
 
 
@@ -9725,9 +9725,9 @@ sigmoid_NLL = function(parameters, func_data) {
 
 # Setting up optim()
 iter = 800
-tmp_parameters = array(dim = c(iter, 2)) # 2 for the alpha and gamma?
+tmp_time_parameters = array(dim = c(iter, 2)) # 2 for the alpha and gamma?
 # tmp_hessians = array(dim = c(2, 2, iter))
-tmp_NLLs = array(dim = c(iter, 1))
+tmp_time_NLLs = array(dim = c(iter, 1))
 
 # Set up the parallelization
 n.cores <- parallel::detectCores() - 1; # Use 1 less than the full number of cores.
