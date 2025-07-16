@@ -9525,8 +9525,9 @@ make_tWMC = function(parameters, var_to_transform){
 
   alpha = parameters[1]
   gamma = parameters[2]
-
-  tWMC = 1/(1 + exp(gamma * (alpha - var_to_transform))) # use complexspan, complexspan_demeaned
+  # gamma_applied = 2^gamma # carrying this out online inside the transformation
+  
+  tWMC = 1/(1 + exp(2^gamma * (alpha - var_to_transform))) # use complexspan, complexspan_demeaned
                                                          # this new formula might behave much better compared to the original
                                                          # original formula - tWMC = 1/(1 + exp(alpha - gamma * var_to_transform))
                                                          # - value of alpha is co-identified with gamma
@@ -9555,10 +9556,9 @@ sigmoid_NLL = function(parameters, func_data) {
   eps = .Machine$double.eps
   # if (alpha < eps) {alpha = eps} # I don't think I need this... I think only for gamma
   # if (gamma < 1e-8) {gamma = 1e-8}
-  gamma_applied = 2^gamma
 
   # sigmoid transform WMC into tWMC and add to clean_data_dm - to use in the NLL
-  func_data$tWMC = make_tWMC(c(alpha, gamma_applied), func_data$complexspan)
+  func_data$tWMC = make_tWMC(c(alpha, gamma), func_data$complexspan)
   # clean_data_dm$tWMC = 1/(1 + exp(alpha - gamma * clean_data_dm$complexspan)) # use complexspan, complexspan_demeaned
   #                                                                             # just noticed that complexspan_demeaned with mean_composite span... why?
   #                                                                             # how to make it work outside of the function...??? does it need to be a function???
@@ -9608,13 +9608,15 @@ doParallel::registerDoParallel(cl = my.cluster)
 # setting the bounds
 eps = .Machine$double.eps
 lower_bounds = c(0, 0); # we don't want 0s for alpa and gamma
-upper_bounds = c(1,10) # I'm literally using values that I had from my other code...
+upper_bounds = c(1,15) # I'm literally using values that I had from my other code...
 
 
 # The parallelized loop
 
-tic("Sigmoid Optimization Begins")
+tic()
 
+# Expected time is 122s/iteration/core. E.g., for 7 cores, 800 iterations, 
+# expect total time of 3.9 hours. 
 alloutput <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
   initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
   
@@ -9629,8 +9631,7 @@ alloutput <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
   c(output$par,output$value); # the things (parameter values & NLL) to save/combine across parallel estimations
 }
 
-toc(log = T) # stores the time it ended?
-tic.log(format = T) # let's me see the time?
+sigNLLtime = toc()
 
 all_estimates = alloutput[,1:2];
 all_nlls = alloutput[,3];
@@ -9639,6 +9640,7 @@ best_nll_index = which.min(all_nlls); # identify the single best estimation
 
 # Save out the parameters & NLLs from the single best estimation
 bestSigmParam = all_estimates[best_nll_index,];
+# bestSigmParam[2] = 2^bestSigmParam[2]
 bestSigmNLL = all_nlls[best_nll_index];
 
 best_hessian = hessian(func=sigmoid_NLL, x = bestSigmParam, func_data = clean_data_dm)
@@ -9671,16 +9673,25 @@ anova(m3_best_nointxn, sigmNLL_model, test = "LRT", REML = F)
 # so this would be more like -2 * (logLik(m0) - logLik(m1)) since I need the numbers no the just the log
 # does this solve the issue with the "missing" parameters? 
 
-LRT_WMC_only = -2 * (logLik(m3_best_nointxn) - logLik(sigmNLL_model))
-LRT_WMC_only 
+LRT_WMC_only = -2 * (logLik(sigmNLL_model) - logLik(m3_best_nointxn)) # Note: logLik() returns the NLL, not the LL!
+LRT_WMC_only = as.numeric(LRT_WMC_only)
+df = 1 # the full sigmoid has slope and intercept # the binary has fixed slope (+infinity), flexible intercept
 # 'log Lik.' -14.19124 (df=8) - idk what to do with this??? where's the p-value? run chi-square test? also are the DFs the same? both are still 8?
 
-# chisq.test() -> i don't think so...
-# pchisq() -> yes...??? what are quantiles referring to for q? what is lower,tail referring to?
-
-pchisq(LRT_WMC_only, df = 8)
+pLRT = 1 - pchisq(LRT_WMC_only, df = df) # the full sigmoid has slope and intercept # the binary has fixed slope (+infinity), flexible intercept
 # 'log Lik.' 0 (df=8) -> so the new model is significantly different? wait... do I subtract the DFs from each model like for delta chi-square model compisons in SEM????? how do I get the DFs for each model...? but that leaves 0 -> similar issue as with LRT in anova
+cat(sprintf('Likelihood Ratio Test: Test statistic = %.1f, p = %.5f.\n', LRT_WMC_only, pLRT))
 
+#### tWMC Analysis Take-Away ####
+# 
+# It works! The best fitting relationship between WMC and effort deployment
+# as a funciton of current & previous difficulty is a *Nonlinear* one characterized
+# by a sigmoid (described by alpha & gamma). 
+#
+# This sigmoid provides a better overall model fit than a binary categorization
+# indicating that there is a nonlinear, monotonic role of WMC. 
+#
+##################################
 
 
 
