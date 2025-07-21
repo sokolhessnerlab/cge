@@ -9725,7 +9725,7 @@ sigmoid_time_NLL = function(parameters, func_data) {
 }
 
 # Setting up optim()
-iter = 4
+iter = 10
 
 # setting the bounds
 eps = .Machine$double.eps
