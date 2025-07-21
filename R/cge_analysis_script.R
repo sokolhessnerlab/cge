@@ -9673,7 +9673,7 @@ anova(m3_best_nointxn, sigmNLL_model, test = "LRT", REML = F)
 # so this would be more like -2 * (logLik(m0) - logLik(m1)) since I need the numbers no the just the log
 # does this solve the issue with the "missing" parameters? 
 
-LRT_WMC_only = -2 * (logLik(sigmNLL_model) - logLik(m3_best_nointxn)) # Note: logLik() returns the NLL, not the LL!
+LRT_WMC_only = 2 * (logLik(sigmNLL_model) - logLik(m3_best_nointxn)) # Note: logLik() returns the NLL, not the LL!
 LRT_WMC_only = as.numeric(LRT_WMC_only)
 df = 1 # the full sigmoid has slope and intercept # the binary has fixed slope (+infinity), flexible intercept
 # 'log Lik.' -14.19124 (df=8) - idk what to do with this??? where's the p-value? run chi-square test? also are the DFs the same? both are still 8?
@@ -9682,14 +9682,10 @@ pLRT = 1 - pchisq(LRT_WMC_only, df = df) # the full sigmoid has slope and interc
 # 'log Lik.' 0 (df=8) -> so the new model is significantly different? wait... do I subtract the DFs from each model like for delta chi-square model compisons in SEM????? how do I get the DFs for each model...? but that leaves 0 -> similar issue as with LRT in anova
 cat(sprintf('Likelihood Ratio Test: Test statistic = %.1f, p = %.5f.\n', LRT_WMC_only, pLRT))
 
-#### tWMC Analysis Take-Away ####
+# TODO edit the take away - the below is no longer true - the sigmoid is no longer significantlybetter
+#### tWMC Analysis Take-Away #### 
 # 
-# It works! The best fitting relationship between WMC and effort deployment
-# as a funciton of current & previous difficulty is a *Nonlinear* one characterized
-# by a sigmoid (described by alpha & gamma). 
-#
-# This sigmoid provides a better overall model fit than a binary categorization
-# indicating that there is a nonlinear, monotonic role of WMC. 
+
 #
 ##################################
 
@@ -9702,24 +9698,18 @@ cat(sprintf('Likelihood Ratio Test: Test statistic = %.1f, p = %.5f.\n', LRT_WMC
 # ******************************************************************************
 
 # Creating the Sigmoid transformation function
-sigmoid_NLL = function(parameters, func_data) {
+sigmoid_time_NLL = function(parameters, func_data) {
   
   # create the parameters
-  alpha = parameters[1] # what does this represent again?
-  gamma = parameters[2] # what does this represent again?
+  alpha = parameters[1] # what does this represent again? -> intercept
+  gamma = parameters[2] # what does this represent again? -> slope
   
   # ensure parameters don't fall below eps
   eps = .Machine$double.eps
-  # if (alpha < eps) {alpha = eps} # I don't think I need this... I think only for gamma
-  # if (gamma < 1e-8) {gamma = 1e-8}
-  gamma_applied = 2^gamma
   
   # sigmoid transform WMC into tWMC and add to clean_data_dm - to use in the NLL
-  func_data$tWMC = make_tWMC(c(alpha, gamma_applied), func_data$complexspan)
-  # clean_data_dm$tWMC = 1/(1 + exp(alpha - gamma * clean_data_dm$complexspan)) 
-  
-  #print(parameters)
-  
+  func_data$tWMC = make_tWMC(c(alpha, gamma), func_data$complexspan)
+
   # model fitting procedure to create nll
   sigmoid_NLL_time_model = lmer(sqrtRT ~ 1 + 
                                   all_diff_cont * tWMC +
@@ -9727,7 +9717,7 @@ sigmoid_NLL = function(parameters, func_data) {
                                   prev_all_diff_cont * tWMC +
                                   prev_all_diff_cont * trialnumberRS +
                                   tWMC * trialnumberRS +
-                                  (1 | subjectnumber), data = func_data, REML = F)   
+                                  (1 | subjectnumber), data = func_data, REML = F)    
   
   # return nll from model
   return =(-logLik(sigmoid_NLL_time_model)) 
@@ -9735,10 +9725,12 @@ sigmoid_NLL = function(parameters, func_data) {
 }
 
 # Setting up optim()
-iter = 800
-tmp_time_parameters = array(dim = c(iter, 2)) # 2 for the alpha and gamma?
-# tmp_hessians = array(dim = c(2, 2, iter))
-tmp_time_NLLs = array(dim = c(iter, 1))
+iter = 4
+
+# setting the bounds
+eps = .Machine$double.eps
+lower_bounds = c(0, 0); # we don't want 0s for alpa and gamma
+upper_bounds = c(1,15) # I'm literally using values that I had from my other code...
 
 # Set up the parallelization
 n.cores <- parallel::detectCores() - 1; # Use 1 less than the full number of cores.
@@ -9748,21 +9740,17 @@ my.cluster <- parallel::makeCluster(
 )
 doParallel::registerDoParallel(cl = my.cluster)
 
-# setting the bounds
-eps = .Machine$double.eps
-lower_bounds = c(0, 0); # we don't want 0s for alpa and gamma
-upper_bounds = c(1,10) # I'm literally using values that I had from my other code...
-
-
 # The parallelized loop
 
-tic("Sigmoid Optimization Begins")
+tic()
 
+# Expected time is 122s/iteration/core. E.g., for 7 cores, 800 iterations, 
+# expect total time of 3.9 hours. 
 alloutput_time <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
   initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
   
   # The estimation itself
-  output <- optim(initial_values, sigmoid_NLL,
+  output <- optim(initial_values, sigmoid_time_NLL,
                   func_data = clean_data_dm,
                   lower = lower_bounds,
                   upper = upper_bounds,
@@ -9772,54 +9760,81 @@ alloutput_time <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
   c(output$par,output$value); # the things (parameter values & NLL) to save/combine across parallel estimations
 }
 
-toc(log = T) # stores the time it ended?
-tic.log(format = T) # let's me see the time?
+sigNLLtime_time = toc()
 
-all_time_estimates = alloutput_time[,1:2];
-all_time_nlls = alloutput_time[,3];
+all_estimates_time = alloutput_time[,1:2];
+all_nlls_time = alloutput_time[,3];
 
-best_nll_time_index = which.min(all_time_nlls); # identify the single best estimation
+best_nll_index_time = which.min(all_nlls_time); # identify the single best estimation
 
 # Save out the parameters & NLLs from the single best estimation
-bestSigmParam_time = all_time_estimates[best_nll_time_index,];
-bestSigmNLL_time = all_time_nlls[best_nll_time_index]; # where does this go afterward once it had been made though?
+bestSigmParam_time = all_estimates_time[best_nll_index_time,];
+bestSigmNLL_time = all_nlls_time[best_nll_index_time];
 
-best_hessian_time = hessian(func=sigmoid_NLL, x = bestSigmParam_time, func_data = clean_data_dm)
+best_hessian_time = hessian(func=sigmoid_time_NLL, x = bestSigmParam_time, func_data = clean_data_dm)
 best_estimated_parameter_errors_time = sqrt(diag(solve(best_hessian_time)));
 
+# plotting
 plot(clean_data_complexspan$compositeSpanScore, make_tWMC(c(bestSigmParam_time), clean_data_complexspan$compositeSpanScore))
 
-clean_data_dm$tWMC = make_tWMC(bestSigmParam_time, clean_data_dm$complexspan)
+# run model
+clean_data_dm$tWMC_time = make_tWMC(bestSigmParam_time, clean_data_dm$complexspan)
 
 sigmNLL_time_model = lmer(sqrtRT ~ 1 + 
-                       all_diff_cont * tWMC +
-                       all_diff_cont * trialnumberRS +
-                       prev_all_diff_cont * tWMC +
-                       prev_all_diff_cont * trialnumberRS +
-                       tWMC * trialnumberRS +
-                       (1 | subjectnumber), data = clean_data_dm, REML = F)
+                            all_diff_cont * tWMC_time +
+                            all_diff_cont * trialnumberRS +
+                            prev_all_diff_cont * tWMC_time +
+                            prev_all_diff_cont * trialnumberRS +
+                            tWMC_time * trialnumberRS +
+                            (1 | subjectnumber), data = clean_data_dm, REML = F)
 summary(sigmNLL_time_model)
+  #                                   Estimate Std. Error         df t value Pr(>|t|)    
+  # (Intercept)                       1.258e+00  1.318e-02  1.155e+02  95.491  < 2e-16 ***
+  # all_diff_cont                     1.295e-01  8.308e-03  1.368e+04  15.588  < 2e-16 ***
+  # tWMC_time                        -4.454e-02  1.255e-02  9.508e+01  -3.549 0.000604 ***
+  # trialnumberRS                    -1.353e-01  9.735e-03  1.367e+04 -13.899  < 2e-16 ***
+  # prev_all_diff_cont               -4.784e-02  8.331e-03  1.368e+04  -5.742 9.53e-09 ***
+  # all_diff_cont:tWMC_time           1.925e-02  3.795e-03  1.368e+04   5.072 3.99e-07 ***
+  # all_diff_cont:trialnumberRS      -3.016e-04  1.324e-02  1.367e+04  -0.023 0.981830    
+  # tWMC_time:prev_all_diff_cont      1.016e-02  3.802e-03  1.368e+04   2.672 0.007539 ** 
+  # trialnumberRS:prev_all_diff_cont  5.917e-02  1.326e-02  1.367e+04   4.463 8.14e-06 ***
+  # tWMC_time:trialnumberRS           5.604e-02  5.553e-03  1.367e+04  10.092  < 2e-16 ***
 
 
+# do model comparisons
 anova(m3_best_trialNum_2WayIntxOnly, sigmNLL_time_model, test = "LRT", REML = F)
 
 # Do a manual LRT instead!!!
-# manual LRT looks like -2 * (restricted model - full model)? -> which is the restricted and full model in this case?
-# so this would be more like -2 * (logLik(m0) - logLik(m1)) since I need the numbers no the just the log
+# manual LRT looks like -2 * (restricted model - full model)? 
+
+LRT_WMC_time = 2 * (logLik(sigmNLL_time_model) - logLik(m3_best_trialNum_2WayIntxOnly)) # Note: logLik() returns the NLL, not the LL!
+LRT_WMC_time = as.numeric(LRT_WMC_time)
+df_time = 1 
+
+pLRT_time = 1 - pchisq(LRT_WMC_time, df = df_time)
+cat(sprintf('Likelihood Ratio Test: Test statistic = %.1f, p = %.5f.\n', LRT_WMC_time, pLRT_time))
 
 
-LRT_time = -2 * (logLik(m3_best_nointxn) - logLik(sigmNLL_time_model))
-LRT_time
+#### tWMC Time Analysis Take-Away #### 
+# 
 
-pchisq(LRT_WMC_only, df = 8)
-# 'log Lik.' 0 (df=8) -> so the new model is significantly different?
-
-
+#
+##################################
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+  
 
 
 
