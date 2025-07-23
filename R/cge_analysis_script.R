@@ -13,12 +13,12 @@ rm(list=ls()); # Clear the workspace
 # On PSH's computers...
 #setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # On Von's PC Laptop "tabletas"...
-setwd('C:/Users/jvonm/Documents/GitHub/cge');
+#setwd('C:/Users/jvonm/Documents/GitHub/cge');
 # Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
-Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
+#Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
 
-#setwd('/Users/shlab/Documents/GitHub/cge')
-#Sys.setenv(R_CONFIG_ACTIVE = 'default')
+setwd('/Users/shlab/Documents/GitHub/cge')
+Sys.setenv(R_CONFIG_ACTIVE = 'default')
 
 
 # STEP 2: then run from here on the same
@@ -9725,15 +9725,14 @@ sigmoid_time_NLL = function(parameters, func_data) {
 }
 
 # Setting up optim()
-iter = 10
+iter = 50
 
 # setting the bounds
-eps = .Machine$double.eps
 lower_bounds = c(0, 0); # we don't want 0s for alpa and gamma
-upper_bounds = c(1,15) # I'm literally using values that I had from my other code...
+upper_bounds = c(1, 15) # I'm literally using values that I had from my other code...
 
 # Set up the parallelization
-n.cores <- parallel::detectCores() - 1; # Use 1 less than the full number of cores.
+n.cores <- parallel::detectCores() - 2; # Use 1 less than the full number of cores.
 my.cluster <- parallel::makeCluster(
   n.cores,
   type = "FORK"
@@ -9745,7 +9744,7 @@ doParallel::registerDoParallel(cl = my.cluster)
 tic()
 
 # Expected time is 122s/iteration/core. E.g., for 7 cores, 800 iterations, 
-# expect total time of 3.9 hours. 
+# 8905.103 for 100 iterations
 alloutput_time <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
   initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
   
@@ -9769,6 +9768,7 @@ best_nll_index_time = which.min(all_nlls_time); # identify the single best estim
 
 # Save out the parameters & NLLs from the single best estimation
 bestSigmParam_time = all_estimates_time[best_nll_index_time,];
+bestSigmParam_time
 bestSigmNLL_time = all_nlls_time[best_nll_index_time];
 
 best_hessian_time = hessian(func=sigmoid_time_NLL, x = bestSigmParam_time, func_data = clean_data_dm)
@@ -9788,17 +9788,17 @@ sigmNLL_time_model = lmer(sqrtRT ~ 1 +
                             tWMC_time * trialnumberRS +
                             (1 | subjectnumber), data = clean_data_dm, REML = F)
 summary(sigmNLL_time_model)
-  #                                   Estimate Std. Error         df t value Pr(>|t|)    
-  # (Intercept)                       1.258e+00  1.318e-02  1.155e+02  95.491  < 2e-16 ***
-  # all_diff_cont                     1.295e-01  8.308e-03  1.368e+04  15.588  < 2e-16 ***
-  # tWMC_time                        -4.454e-02  1.255e-02  9.508e+01  -3.549 0.000604 ***
-  # trialnumberRS                    -1.353e-01  9.735e-03  1.367e+04 -13.899  < 2e-16 ***
-  # prev_all_diff_cont               -4.784e-02  8.331e-03  1.368e+04  -5.742 9.53e-09 ***
-  # all_diff_cont:tWMC_time           1.925e-02  3.795e-03  1.368e+04   5.072 3.99e-07 ***
-  # all_diff_cont:trialnumberRS      -3.016e-04  1.324e-02  1.367e+04  -0.023 0.981830    
-  # tWMC_time:prev_all_diff_cont      1.016e-02  3.802e-03  1.368e+04   2.672 0.007539 ** 
-  # trialnumberRS:prev_all_diff_cont  5.917e-02  1.326e-02  1.367e+04   4.463 8.14e-06 ***
-  # tWMC_time:trialnumberRS           5.604e-02  5.553e-03  1.367e+04  10.092  < 2e-16 ***
+  #                                     Estimate Std. Error         df t value Pr(>|t|)    
+  # (Intercept)                       1.261e+00  1.291e-02  1.174e+02  97.635  < 2e-16 ***
+  # all_diff_cont                     1.304e-01  8.261e-03  1.368e+04  15.779  < 2e-16 ***
+  # tWMC_time                        -4.065e-02  1.225e-02  9.529e+01  -3.317  0.00129 ** 
+  # trialnumberRS                    -1.360e-01  9.718e-03  1.367e+04 -14.000  < 2e-16 ***
+  # prev_all_diff_cont               -4.672e-02  8.283e-03  1.368e+04  -5.641 1.72e-08 ***
+  # all_diff_cont:tWMC_time           1.923e-02  3.728e-03  1.368e+04   5.159 2.52e-07 ***
+  # all_diff_cont:trialnumberRS      -3.856e-03  1.322e-02  1.367e+04  -0.292  0.77049    
+  # tWMC_time:prev_all_diff_cont      8.326e-03  3.735e-03  1.368e+04   2.229  0.02581 *  
+  # trialnumberRS:prev_all_diff_cont  5.538e-02  1.323e-02  1.367e+04   4.185 2.86e-05 ***
+  # tWMC_time:trialnumberRS           5.605e-02  5.394e-03  1.367e+04  10.391  < 2e-16 ***
 
 
 # do model comparisons
