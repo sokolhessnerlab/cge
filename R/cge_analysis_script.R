@@ -9625,7 +9625,7 @@ alloutput <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
                   func_data = clean_data_dm,
                   lower = lower_bounds,
                   upper = upper_bounds,
-                  method = "L-BFGS-B", # do I still need this?
+                  method = "L-BFGS-B", 
                   hessian = T)
   
   c(output$par,output$value); # the things (parameter values & NLL) to save/combine across parallel estimations
@@ -9729,7 +9729,7 @@ iter = 50
 
 # setting the bounds
 lower_bounds = c(0, 0); # we don't want 0s for alpa and gamma
-upper_bounds = c(1, 15) # I'm literally using values that I had from my other code...
+upper_bounds = c(1, 75) # I'm literally using values that I had from my other code...
 
 # Set up the parallelization
 n.cores <- parallel::detectCores() - 2; # Use 1 less than the full number of cores.
@@ -9753,7 +9753,7 @@ alloutput_time <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
                   func_data = clean_data_dm,
                   lower = lower_bounds,
                   upper = upper_bounds,
-                  method = "L-BFGS-B", # do I still need this?
+                  method = "L-BFGS-B", 
                   hessian = T)
   
   c(output$par,output$value); # the things (parameter values & NLL) to save/combine across parallel estimations
@@ -9768,11 +9768,16 @@ best_nll_index_time = which.min(all_nlls_time); # identify the single best estim
 
 # Save out the parameters & NLLs from the single best estimation
 bestSigmParam_time = all_estimates_time[best_nll_index_time,];
-bestSigmParam_time
 bestSigmNLL_time = all_nlls_time[best_nll_index_time];
 
 best_hessian_time = hessian(func=sigmoid_time_NLL, x = bestSigmParam_time, func_data = clean_data_dm)
 best_estimated_parameter_errors_time = sqrt(diag(solve(best_hessian_time)));
+
+bestSigmParam_time
+hist(all_nlls_time)
+hist(all_estimates_time[,1])
+hist(all_estimates_time[,2])
+
 
 # plotting
 plot(clean_data_complexspan$compositeSpanScore, make_tWMC(c(bestSigmParam_time), clean_data_complexspan$compositeSpanScore))
