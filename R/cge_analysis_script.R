@@ -9643,11 +9643,16 @@ best_nll_index = which.min(all_nlls); # identify the single best estimation
 
 # Save out the parameters & NLLs from the single best estimation
 bestSigmParam = all_estimates[best_nll_index,];
+# These are: 0.6785773 (alpha) 12.3147348 (gamma)
+
 # bestSigmParam[2] = 2^bestSigmParam[2]
 bestSigmNLL = all_nlls[best_nll_index];
+# This is: -4390.019
 
 best_hessian = hessian(func=sigmoid_NLL, x = bestSigmParam, func_data = clean_data_dm)
 best_estimated_parameter_errors = sqrt(diag(solve(best_hessian)));
+# These are: 0.002095915 41.789305491
+#           super tight   very wide! Gamma is really the same as it increases
 
 plot(clean_data_complexspan$compositeSpanScore, make_tWMC(c(bestSigmParam), clean_data_complexspan$compositeSpanScore))
 
@@ -9666,10 +9671,10 @@ summary(sigmNLL_model)
 # all_diff_cont:tWMC       3.575e-02  5.986e-03  1.368e+04   5.973 2.38e-09 ***
 # tWMC:prev_all_diff_cont  1.904e-02  5.994e-03  1.368e+04   3.177  0.00149 **
 
-anova(m3_best_nointxn, sigmNLL_model, test = "LRT", REML = F)
-#                 npar     AIC     BIC logLik deviance Chisq Df Pr(>Chisq)
-# m3_best_nointxn    8 -8762.2 -8701.9 4389.1  -8778.2
-# sigmNLL_model      8 -8748.0 -8687.7 4382.0  -8764.0     0  0
+# NOTE: This is the IDENTICAL pattern as found in the binary model
+
+# CANNOT USE: 
+# anova(m3_best_nointxn, sigmNLL_model, test = "LRT", REML = F)
 
 # Do a manual LRT instead!!!
 # manual LRT looks like -2 * (restricted model - full model)? -> which is the restricted and full model in this case?
@@ -9684,11 +9689,15 @@ df = 1 # the full sigmoid has slope and intercept # the binary has fixed slope (
 pLRT = 1 - pchisq(LRT_WMC_only, df = df) # the full sigmoid has slope and intercept # the binary has fixed slope (+infinity), flexible intercept
 # 'log Lik.' 0 (df=8) -> so the new model is significantly different? wait... do I subtract the DFs from each model like for delta chi-square model compisons in SEM????? how do I get the DFs for each model...? but that leaves 0 -> similar issue as with LRT in anova
 cat(sprintf('Likelihood Ratio Test: Test statistic = %.1f, p = %.5f.\n', LRT_WMC_only, pLRT))
+# Likelihood Ratio Test: Test statistic = 1.9, p = 0.17091.
 
-# TODO edit the take away - the below is no longer true - the sigmoid is no longer significantlybetter
 #### tWMC Analysis Take-Away #### 
 # 
-
+# The best fitting tWMC in this model is effectively a BINARY low/high split
+# with a single person in the middle (i.e. at 0, not +1 or -1). 
+#
+# The fit quality of this model is not significantly better than the straight
+# binary model used earlier (p = 0.17). 
 #
 ##################################
 
@@ -9772,10 +9781,24 @@ best_nll_index_time = which.min(all_nlls_time); # identify the single best estim
 
 # Save out the parameters & NLLs from the single best estimation
 bestSigmParam_time = all_estimates_time[best_nll_index_time,];
+# These are: 0.6284359 12.6299756
+
 bestSigmNLL_time = all_nlls_time[best_nll_index_time];
+# This is: -4743.211
 
 best_hessian_time = hessian(func=sigmoid_time_NLL, x = bestSigmParam_time, func_data = clean_data_dm)
 best_estimated_parameter_errors_time = sqrt(diag(solve(best_hessian_time)));
+# These are: 0.0001636176          NaN
+#             tight!            Oops... 
+# 
+# Explanation: This regression turns out a straight binary, i.e. a threshold
+# between two participants where it goes from -1 to +1 with a high gamma. 
+# When Gamma is so high, a wide range of gamma values work equally well, AND
+# a narrow range of alpha values work equally well (like, identically). This
+# produces issues with the parameter error calculation b/c of oddities in the
+# likelihood surface right around the best fitting values. 
+#
+# TL;DR: The best fitting values are trustworthy; the errors aren't super useful.
 
 bestSigmParam_time
 hist(all_nlls_time)
@@ -9797,24 +9820,19 @@ sigmNLL_time_model = lmer(sqrtRT ~ 1 +
                             tWMC_time * trialnumberRS +
                             (1 | subjectnumber), data = clean_data_dm, REML = F)
 summary(sigmNLL_time_model)
-  #                                     Estimate Std. Error         df t value Pr(>|t|)    
-  # (Intercept)                       1.261e+00  1.291e-02  1.174e+02  97.635  < 2e-16 ***
-  # all_diff_cont                     1.304e-01  8.261e-03  1.368e+04  15.779  < 2e-16 ***
-  # tWMC_time                        -4.065e-02  1.225e-02  9.529e+01  -3.317  0.00129 ** 
-  # trialnumberRS                    -1.360e-01  9.718e-03  1.367e+04 -14.000  < 2e-16 ***
-  # prev_all_diff_cont               -4.672e-02  8.283e-03  1.368e+04  -5.641 1.72e-08 ***
-  # all_diff_cont:tWMC_time           1.923e-02  3.728e-03  1.368e+04   5.159 2.52e-07 ***
-  # all_diff_cont:trialnumberRS      -3.856e-03  1.322e-02  1.367e+04  -0.292  0.77049    
-  # tWMC_time:prev_all_diff_cont      8.326e-03  3.735e-03  1.368e+04   2.229  0.02581 *  
-  # trialnumberRS:prev_all_diff_cont  5.538e-02  1.323e-02  1.367e+04   4.185 2.86e-05 ***
-  # tWMC_time:trialnumberRS           5.605e-02  5.394e-03  1.367e+04  10.391  < 2e-16 ***
+#                                     Estimate Std. Error         df t value Pr(>|t|)    
+#   (Intercept)                       1.261e+00  1.291e-02  1.174e+02  97.635  < 2e-16 ***
+#   all_diff_cont                     1.304e-01  8.261e-03  1.368e+04  15.779  < 2e-16 ***
+#   tWMC_time                        -4.065e-02  1.225e-02  9.529e+01  -3.317  0.00129 ** 
+#   trialnumberRS                    -1.360e-01  9.718e-03  1.367e+04 -14.000  < 2e-16 ***
+#   prev_all_diff_cont               -4.672e-02  8.283e-03  1.368e+04  -5.641 1.72e-08 ***
+#   all_diff_cont:tWMC_time           1.923e-02  3.728e-03  1.368e+04   5.159 2.52e-07 ***
+#   all_diff_cont:trialnumberRS      -3.856e-03  1.322e-02  1.367e+04  -0.292  0.77049    
+#   tWMC_time:prev_all_diff_cont      8.326e-03  3.735e-03  1.368e+04   2.229  0.02581 *  
+#   trialnumberRS:prev_all_diff_cont  5.538e-02  1.323e-02  1.367e+04   4.185 2.86e-05 ***
+#   tWMC_time:trialnumberRS           5.605e-02  5.394e-03  1.367e+04  10.391  < 2e-16 ***
 
-
-# do model comparisons
-anova(m3_best_trialNum_2WayIntxOnly, sigmNLL_time_model, test = "LRT", REML = F)
-
-# Do a manual LRT instead!!!
-# manual LRT looks like -2 * (restricted model - full model)? 
+# NOTE: THIS PATTERN IS IDENTICAL TO THE NON-SIGMOID REGRESSION.
 
 LRT_WMC_time = 2 * (logLik(sigmNLL_time_model) - logLik(m3_best_trialNum_2WayIntxOnly)) # Note: logLik() returns the NLL, not the LL!
 LRT_WMC_time = as.numeric(LRT_WMC_time)
@@ -9822,11 +9840,21 @@ df_time = 1
 
 pLRT_time = 1 - pchisq(LRT_WMC_time, df = df_time)
 cat(sprintf('Likelihood Ratio Test: Test statistic = %.1f, p = %.5f.\n', LRT_WMC_time, pLRT_time))
-
+# Likelihood Ratio Test: Test statistic = 35.0, p = 0.00000.
+# actual p value = 3.3e-9
 
 #### tWMC Time Analysis Take-Away #### 
 # 
-
+# The best-fitting tWMC from this regression is ALSO effectively a binary. 
+# For comparison, the parameter values from these two regressions were:
+#               alpha   gamma
+# simple reg:    0.68   12.3
+# reg w/ time:   0.63   12.6
+#
+# While this version of the regression with tWMC & time-on-task is technically
+# (much) better than the version with the straight binary (p = 3.3e-9), it 
+# yields no new insights. The pattern of betas is identical, with only small
+# changes in the values. 
 #
 ##################################
 
