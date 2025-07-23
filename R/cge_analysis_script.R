@@ -9588,12 +9588,13 @@ sigmoid_NLL = function(parameters, func_data) {
 }
 
 # Setting up optim()
-iter = 800
+iter = 1000
 tmp_parameters = array(dim = c(iter, 2)) # 2 for the alpha and gamma?
 # tmp_hessians = array(dim = c(2, 2, iter))
 tmp_NLLs = array(dim = c(iter, 1))
 
 library(doParallel)
+library(doRNG)
 library(numDeriv)
 library(tictoc)
 
@@ -9617,7 +9618,7 @@ tic()
 
 # Expected time is 122s/iteration/core. E.g., for 7 cores, 800 iterations, 
 # expect total time of 3.9 hours. 
-alloutput <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
+alloutput <- foreach(iteration=1:iter, .combine=rbind) %dorng% {
   initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
   
   # The estimation itself
@@ -9630,6 +9631,8 @@ alloutput <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
   
   c(output$par,output$value); # the things (parameter values & NLL) to save/combine across parallel estimations
 }
+stopCluster(my.cluster)
+
 
 sigNLLtime = toc()
 
@@ -9725,14 +9728,14 @@ sigmoid_time_NLL = function(parameters, func_data) {
 }
 
 # Setting up optim()
-iter = 50
+iter = 1000
 
 # setting the bounds
 lower_bounds = c(0, 0); # we don't want 0s for alpa and gamma
-upper_bounds = c(1, 75) # I'm literally using values that I had from my other code...
+upper_bounds = c(1, 15) # I'm literally using values that I had from my other code...
 
 # Set up the parallelization
-n.cores <- parallel::detectCores() - 2; # Use 1 less than the full number of cores.
+n.cores <- parallel::detectCores() - 1; # Use 1 less than the full number of cores.
 my.cluster <- parallel::makeCluster(
   n.cores,
   type = "FORK"
@@ -9745,7 +9748,7 @@ tic()
 
 # Expected time is 122s/iteration/core. E.g., for 7 cores, 800 iterations, 
 # 8905.103 for 100 iterations
-alloutput_time <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
+alloutput_time <- foreach(iteration=1:iter, .combine=rbind) %dorng% {
   initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
   
   # The estimation itself
@@ -9758,6 +9761,7 @@ alloutput_time <- foreach(iteration=1:iter, .combine=rbind) %dopar% {
   
   c(output$par,output$value); # the things (parameter values & NLL) to save/combine across parallel estimations
 }
+stopCluster(my.cluster)
 
 sigNLLtime_time = toc()
 
