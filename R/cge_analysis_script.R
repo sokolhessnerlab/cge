@@ -11,7 +11,7 @@ rm(list=ls()); # Clear the workspace
 
 # STEP 1: Set the working directory
 # On PSH's computers...
-#setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
+# setwd('/Users/sokolhessner/Documents/gitrepos/cge/');
 # On Von's PC Laptop "tabletas"...
 #setwd('C:/Users/jvonm/Documents/GitHub/cge');
 # Von - May need just in case tabletas disappears again Sys.setenv(R_CONFIG_ACTIVE = 'tabletas')
@@ -996,6 +996,64 @@ hist(compositeSpanScores, breaks = 10, xlab = 'Composite Span Score', main = 'Di
 abline(v = median_compositespan, col = 'red', lwd = 5)
 
 
+
+# RE-DOING BASIC WMC ANALYSIS WITH ONLY THE 85 KEPT PARTICIPANTS
+
+cat(sprintf('Out of a total of %i participants, we have O-Span scores for %i, Sym-Span scores for %i, and composite span scores for %i.\n',
+            number_of_clean_subjects,
+            sum(is.finite(clean_data_complexspan$ospanScore)),
+            sum(is.finite(clean_data_complexspan$symspanScore)),
+            sum(is.finite(clean_data_complexspan$compositeSpanScore))))
+# Out of a total of 85 participants, we have O-Span scores for 70, Sym-Span scores for 71, and composite span scores for 82.
+cat(sprintf('%i participants have both scores, %i participants are missing only one score (%i have only ospan; %i have only symspan), and %i participants are missing both scores.\n',
+            sum(is.finite(clean_data_complexspan$ospanScore) & is.finite(clean_data_complexspan$symspanScore)),
+            sum(xor(is.finite(clean_data_complexspan$ospanScore),is.finite(clean_data_complexspan$symspanScore))),
+            sum(is.finite(clean_data_complexspan$ospanScore) & !is.finite(clean_data_complexspan$symspanScore)),
+            sum(!is.finite(clean_data_complexspan$ospanScore) & is.finite(clean_data_complexspan$symspanScore)),
+            number_of_clean_subjects-sum(is.finite(clean_data_complexspan$compositeSpanScore))))
+# 59 participants have both scores, 23 participants are missing only one score, and 6 participants are missing both scores.
+
+# Mean, Median, and Variance of ospan, symspan, and compositespan
+sum(is.finite(clean_data_complexspan$ospanScore))
+mean_ospan = mean(clean_data_complexspan$ospanScore, na.rm = T)
+sd_ospan = sd(clean_data_complexspan$ospanScore, na.rm = T)
+
+sum(is.finite(clean_data_complexspan$symspanScore))
+mean_symspan = mean(clean_data_complexspan$symspanScore, na.rm = T)
+sd_symspan = sd(clean_data_complexspan$symspanScore, na.rm = T)
+
+sum(is.finite(clean_data_complexspan$compositeSpanScore))
+mean_compositespan = mean(clean_data_complexspan$compositeSpanScore, na.rm = T)
+sd_compositespan = sd(clean_data_complexspan$compositeSpanScore, na.rm = T)
+
+cor.test(clean_data_complexspan$ospanScore, clean_data_complexspan$symspanScore) # r(60) = 0.3703213, p = 0.00305 (as of 2/25/24)
+var.test(clean_data_complexspan$ospanScore, clean_data_complexspan$symspanScore) # similar variance (F(72) = 0.95278, p = 0.8378 as of 2/25/24)
+t.test(clean_data_complexspan$ospanScore, clean_data_complexspan$symspanScore, paired = T) # t(61) = 0.14979, p = 0.8814 (as of 2/12/24)
+
+# SUMMARY: O-Span & Sym-Span scores are correlated with each other, and not significantly
+# different from one another. They are NOT redundant (i.e., correlation is ~0.4).
+
+plot(clean_data_complexspan$ospanScore, clean_data_complexspan$symspanScore,
+     pch = 19, col = rgb(.5, .5, .5, .5),
+     xlim = c(0, 1), ylim = c(0, 1), cex = 2.5,
+     xlab = 'OSpan Scores', ylab = 'SymSpan Scores',
+     main = 'Complex Span Scores')
+lines(x = c(-1, 2), y = c(-1, 2)) # so line extends to edge
+
+capacity_HighP1_lowN1 = (compositeSpanScores > median_compositespan)*2-1;
+# NOTE: This is all participants who completed the WMC task
+# Includes people we drop from e.g. decision-making analysis
+
+sum(capacity_HighP1_lowN1 == 1, na.rm = T) # 41 (all participants)
+sum(capacity_HighP1_lowN1 == -1, na.rm = T) # 44 (all participants)
+
+# Plot the distribution w/ the median value
+hist(compositeSpanScores, breaks = 10, xlab = 'Composite Span Score', main = 'Distribution of Spans');
+abline(v = median_compositespan, col = 'red', lwd = 5)
+
+
+
+
 # Limiting analysis to those people we kept for DECISION-MAKING ANALYSIS...
 sum(clean_data_complexspan$compositeSpanScore > median(clean_data_complexspan$compositeSpanScore, na.rm = T), na.rm = T)
 sum(clean_data_complexspan$compositeSpanScore <= median(clean_data_complexspan$compositeSpanScore, na.rm = T), na.rm = T)
@@ -1612,6 +1670,13 @@ summary(m3_prev_diffCont_capacityCat_intxn_LOWONLYrfx)
 
 
 # Examine best-fitting threshold values
+best_testing_model = as.formula('sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_temp * trialnumberRS +
+                  prev_all_diff_cont * capacity_HighP1_lowN1_temp * trialnumberRS +
+                  (1 | subjectnumber)')
+best_model = as.formula('sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best * trialnumberRS +
+                  prev_all_diff_cont * capacity_HighP1_lowN1_best * trialnumberRS +
+                  (1 | subjectnumber)')
+
 possible_threshold_values = sort(unique(compositeSpanScores))+.000001;
 possible_threshold_values = possible_threshold_values[1:(length(possible_threshold_values)-1)];
 
@@ -1630,9 +1695,7 @@ for(ind in 1:length(possible_threshold_values)){
     next # don't use any categorizations that create a 'group' with just 1 person
   }
 
-  m3_tmp = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_temp +
-                  prev_all_diff_cont * capacity_HighP1_lowN1_temp +
-                  (1 | subjectnumber), data = clean_data_dm, REML = F);
+  m3_tmp = lmer(best_testing_model, data = clean_data_dm, REML = F);
   all_aic_values[ind] = AIC(m3_tmp)
 }
 
@@ -1647,51 +1710,41 @@ abline(h = best_threshold, col = 'blue', lwd = 4)
 abline(h = median(clean_data_complexspan$compositeSpanScore, na.rm = T), col = 'red', lwd = 4, lty = 'dotted') # median value
 legend('topleft', legend = c('Span','Best threshold','Median span'), col = c('black','blue', 'red'), lty = 1)
 
-plot(x = possible_threshold_values, y = all_aic_values, type = 'l', col = 'green', xlab = 'Thresholds', ylab = 'AIC values (lower better)')
+plot(x = possible_threshold_values, y = all_aic_values, type = 'l', col = 'green', xlab = 'Thresholds', ylab = 'AIC values (lower better)', lwd = 3, xlim = c(0.1, 0.9) )
 abline(v = median_compositespan, col = 'red', lwd = 4, lty = 'dotted')
 abline(v = best_threshold, col = 'blue', lwd = 4)
-
+legend('bottomleft', legend = c('AIC values', 'Median span', 'Best threshold'), col = c('green','red','blue'), lty = 1)
 # The best-fitting threshold (just slightly above the median value) is 0.6571439
 
 break_val = best_threshold; # as of 3/19/25, this was 0.6785724
 
-capacity_HighP1_lowN1_Best = (clean_data_complexspan$compositeSpanScore > break_val)*2 - 1;
+# capacity_HighP1_lowN1_Best = (clean_data_complexspan$compositeSpanScore > break_val)*2 - 1;
 
 clean_data_dm$capacity_HighP1_lowN1_best[clean_data_dm$complexspan > break_val] = 1;
 clean_data_dm$capacity_HighP1_lowN1_best[clean_data_dm$complexspan < break_val] = -1;
 
-m3_best = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont * capacity_HighP1_lowN1_best +
-                 (1 | subjectnumber), data = clean_data_dm, REML = F);
+m3_best = lmer(best_model, data = clean_data_dm, REML = F);
 summary(m3_best)
 m3_best_summary = summary(m3_best);
 m3_best_meanlik = exp(-m3_best_summary$logLik/nobs(m3_best));
 cat(sprintf('The best mean likelihood obtained with the CompositeSpan was %0.4f\n', m3_best_meanlik))
 
-m3_best_nointxn = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best + prev_all_diff_cont * capacity_HighP1_lowN1_best +
+m3_best_with_intxn = lmer(sqrtRT ~ 1 + all_diff_cont * capacity_HighP1_lowN1_best * trialnumberRS * prev_all_diff_cont +
                          (1 | subjectnumber), data = clean_data_dm, REML = F);
-summary(m3_best_nointxn) # THIS OUTPERFORMS THE FULLY-INTERACTIVE VERSION
+summary(m3_best_with_intxn) # THIS DOES NOT OUTPERFORM THE FULLY-INTERACTIVE VERSION
 
-#                                                 Estimate Std. Error         df t value Pr(>|t|)
-#   (Intercept)                                    1.202e+00  1.259e-02  8.971e+01  95.441  < 2e-16 ***
-#   all_diff_cont                                  1.181e-01  3.914e-03  1.368e+04  30.185  < 2e-16 ***
-#   capacity_HighP1_lowN1_best                    -2.096e-02  1.259e-02  8.971e+01  -1.665 0.099401 .
-#   prev_all_diff_cont                            -2.643e-02  3.918e-03  1.368e+04  -6.746 1.58e-11 ***
-#   all_diff_cont:capacity_HighP1_lowN1_best       2.598e-02  3.914e-03  1.368e+04   6.638 3.29e-11 ***
-#   capacity_HighP1_lowN1_best:prev_all_diff_cont  1.515e-02  3.918e-03  1.368e+04   3.867 0.000111 ***
 
-# AIC: -8762.2 (BEST)
-
-m3_best_continuousWMC_nointxn = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned +
-                                       prev_all_diff_cont * complexspan_demeaned +
+m3_best_continuousWMC_nointxn = lmer(sqrtRT ~ 1 + all_diff_cont * complexspan_demeaned * trialnumberRS +
+                                       prev_all_diff_cont * complexspan_demeaned * trialnumberRS +
                          (1 | subjectnumber), data = clean_data_dm, REML = F);
-summary(m3_best_continuousWMC_nointxn) # THIS OUTPERFORMS THE FULLY-INTERACTIVE VERSION
+summary(m3_best_continuousWMC_nointxn) # THIS DOES NOT OUTPERFORM THE BEST BINARY VERSION
 # AIC: -8740.8
 
-m3_best_HighCap_only = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont +
+m3_best_HighCap_only = lmer(sqrtRT ~ 1 + all_diff_cont * trialnumberRS + prev_all_diff_cont * trialnumberRS +
                               (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1_best == 1,], REML = F);
 summary(m3_best_HighCap_only)
 
-m3_best_LowCap_only = lmer(sqrtRT ~ 1 + all_diff_cont * prev_all_diff_cont +
+m3_best_LowCap_only = lmer(sqrtRT ~ 1 + all_diff_cont * trialnumberRS + prev_all_diff_cont * trialnumberRS + 
                              (1 | subjectnumber), data = clean_data_dm[clean_data_dm$capacity_HighP1_lowN1_best == -1,], REML = F);
 summary(m3_best_LowCap_only)
 
@@ -9568,7 +9621,8 @@ sigmoid_NLL = function(parameters, func_data) {
   #print(parameters)
   # model fitting procedure to create nll
   sigmoid_NLL_model = lmer(sqrtRT ~ 1 +
-                             all_diff_cont * tWMC + prev_all_diff_cont * tWMC +
+                             all_diff_cont * tWMC * trialnumberRS + 
+                             prev_all_diff_cont * tWMC * trialnumberRS +
                              (1 | subjectnumber), data = func_data, REML = F)   # do I just do a simple tWMC regression or do I add other predictors???
                                                                                 # - yes, we do need the model that reflects what we have previously found for linear effects (to compare)
                                                                                 # do I create one for pupil dilation too in the same function??? OR do I have to do a separate function???
@@ -9659,7 +9713,8 @@ plot(clean_data_complexspan$compositeSpanScore, make_tWMC(c(bestSigmParam), clea
 clean_data_dm$tWMC = make_tWMC(bestSigmParam, clean_data_dm$complexspan)
 
 sigmNLL_model = lmer(sqrtRT ~ 1 +
-                       all_diff_cont * tWMC + prev_all_diff_cont * tWMC +
+                       all_diff_cont * tWMC * trialnumberRS + 
+                       prev_all_diff_cont * tWMC * trialnumberRS +
                        (1 | subjectnumber), data = clean_data_dm, REML = F)
 summary(sigmNLL_model)
 # Fixed effects:
