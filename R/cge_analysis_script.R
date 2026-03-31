@@ -1720,8 +1720,14 @@ break_val = best_threshold; # as of 3/19/25, this was 0.6785724
 
 # capacity_HighP1_lowN1_Best = (clean_data_complexspan$compositeSpanScore > break_val)*2 - 1;
 
+# Make the variable in the DM dataframe
 clean_data_dm$capacity_HighP1_lowN1_best[clean_data_dm$complexspan > break_val] = 1;
 clean_data_dm$capacity_HighP1_lowN1_best[clean_data_dm$complexspan < break_val] = -1;
+
+# Make the variable in the Span dataframe
+clean_data_complexspan$capacity_HighP1_lowN1_best[clean_data_complexspan$compositeSpanScore > break_val] = 1;
+clean_data_complexspan$capacity_HighP1_lowN1_best[clean_data_complexspan$compositeSpanScore < break_val] = -1;
+
 
 m3_best = lmer(best_model, data = clean_data_dm, REML = F);
 summary(m3_best)
@@ -9651,6 +9657,7 @@ library(doParallel)
 library(doRNG)
 library(numDeriv)
 library(tictoc)
+par(mfrow = c(1,1))
 
 # Set up the parallelization
 n.cores <- parallel::detectCores() - 1; # Use 1 less than the full number of cores.
@@ -9708,9 +9715,22 @@ best_estimated_parameter_errors = sqrt(diag(solve(best_hessian)));
 # These are: 0.002095915 41.789305491
 #           super tight   very wide! Gamma is really the same as it increases
 
-plot(clean_data_complexspan$compositeSpanScore, make_tWMC(c(bestSigmParam), clean_data_complexspan$compositeSpanScore))
-
 clean_data_dm$tWMC = make_tWMC(bestSigmParam, clean_data_dm$complexspan)
+clean_data_complexspan$tWMC = make_tWMC(bestSigmParam, clean_data_complexspan$compositeSpanScore)
+
+sorted_clean_data_complexspan = clean_data_complexspan[order(clean_data_complexspan$compositeSpanScore), ]
+
+plot(sorted_clean_data_complexspan$compositeSpanScore, sorted_clean_data_complexspan$tWMC, type = 'l',
+     xlab = 'WMC (composite span score)', ylab = 'Transformed WMC', col = 'darkorange1', lwd = 4)
+points(clean_data_complexspan$compositeSpanScore, clean_data_complexspan$tWMC, pch = 16)
+abline(v = median_compositespan, col = 'red', lwd = 4, lty = 'dotted')
+abline(v = best_threshold, col = 'blue', lwd = 4)
+legend('topleft', legend = c('tWMC', 'Median span', 'Best binary threshold'), 
+       col = c('darkorange1','red','blue'), lty = 1, lwd = 3, cex = .6)
+
+# Checking how span, binary split, and tWMC compare
+sorted_clean_data_complexspan[,c('compositeSpanScore','capacity_HighP1_lowN1_best','tWMC')];
+
 
 sigmNLL_model = lmer(sqrtRT ~ 1 +
                        all_diff_cont * tWMC * trialnumberRS + 
@@ -9718,13 +9738,19 @@ sigmNLL_model = lmer(sqrtRT ~ 1 +
                        (1 | subjectnumber), data = clean_data_dm, REML = F)
 summary(sigmNLL_model)
 # Fixed effects:
-#                           Estimate Std. Error         df t value Pr(>|t|)
-# (Intercept)              1.202e+00  1.277e-02  8.964e+01  94.080  < 2e-16 ***
-# all_diff_cont            1.181e-01  3.971e-03  1.368e+04  29.749  < 2e-16 ***
-# tWMC                    -2.812e-02  1.899e-02  9.024e+01  -1.481  0.14219
-# prev_all_diff_cont      -2.688e-02  3.975e-03  1.368e+04  -6.761 1.42e-11 ***
-# all_diff_cont:tWMC       3.575e-02  5.986e-03  1.368e+04   5.973 2.38e-09 ***
-# tWMC:prev_all_diff_cont  1.904e-02  5.994e-03  1.368e+04   3.177  0.00149 **
+#                                           Estimate Std. Error         df t value Pr(>|t|)    
+# (Intercept)                              1.260e+00  1.294e-02  1.184e+02  97.385  < 2e-16 ***
+#   all_diff_cont                          1.298e-01  8.488e-03  1.368e+04  15.298  < 2e-16 ***
+#   tWMC                                  -4.407e-02  1.294e-02  1.184e+02  -3.406 0.000900 ***
+#   trialnumberRS                         -1.346e-01  9.874e-03  1.367e+04 -13.633  < 2e-16 ***
+#   prev_all_diff_cont                    -4.401e-02  8.509e-03  1.368e+04  -5.172 2.35e-07 ***
+#   all_diff_cont:tWMC                     1.683e-02  8.488e-03  1.368e+04   1.983 0.047357 *  
+#   all_diff_cont:trialnumberRS           -3.085e-03  1.367e-02  1.367e+04  -0.226 0.821402    
+#   tWMC:trialnumberRS                     6.286e-02  9.874e-03  1.367e+04   6.366 2.00e-10 ***
+#   tWMC:prev_all_diff_cont                1.902e-02  8.509e-03  1.368e+04   2.235 0.025401 *  
+#   trialnumberRS:prev_all_diff_cont       5.057e-02  1.368e-02  1.367e+04   3.697 0.000219 ***
+#   all_diff_cont:tWMC:trialnumberRS       3.833e-03  1.367e-02  1.367e+04   0.281 0.779098    
+#   tWMC:trialnumberRS:prev_all_diff_cont -1.909e-02  1.368e-02  1.367e+04  -1.395 0.162956    
 
 # NOTE: This is the IDENTICAL pattern as found in the binary model
 
@@ -9736,7 +9762,7 @@ summary(sigmNLL_model)
 # so this would be more like -2 * (logLik(m0) - logLik(m1)) since I need the numbers no the just the log
 # does this solve the issue with the "missing" parameters? 
 
-LRT_WMC_only = 2 * (logLik(sigmNLL_model) - logLik(m3_best_nointxn)) # Note: logLik() returns the NLL, not the LL!
+LRT_WMC_only = 2 * (logLik(sigmNLL_model) - logLik(m3_best)) # Note: logLik() returns the NLL, not the LL!
 LRT_WMC_only = as.numeric(LRT_WMC_only)
 df = 1 # the full sigmoid has slope and intercept # the binary has fixed slope (+infinity), flexible intercept
 # 'log Lik.' -14.19124 (df=8) - idk what to do with this??? where's the p-value? run chi-square test? also are the DFs the same? both are still 8?
@@ -9744,7 +9770,15 @@ df = 1 # the full sigmoid has slope and intercept # the binary has fixed slope (
 pLRT = 1 - pchisq(LRT_WMC_only, df = df) # the full sigmoid has slope and intercept # the binary has fixed slope (+infinity), flexible intercept
 # 'log Lik.' 0 (df=8) -> so the new model is significantly different? wait... do I subtract the DFs from each model like for delta chi-square model compisons in SEM????? how do I get the DFs for each model...? but that leaves 0 -> similar issue as with LRT in anova
 cat(sprintf('Likelihood Ratio Test: Test statistic = %.1f, p = %.5f.\n', LRT_WMC_only, pLRT))
-# Likelihood Ratio Test: Test statistic = 1.9, p = 0.17091.
+# Likelihood Ratio Test: Test statistic = 0.0, p = 0.99999
+
+
+
+
+# STOPPED HERE 3/31/26
+
+
+
 
 #### tWMC Analysis Take-Away #### 
 # 
