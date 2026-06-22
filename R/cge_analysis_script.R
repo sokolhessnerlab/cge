@@ -2599,7 +2599,7 @@ summary(likmodel_contDiff_catCap)
 
 # Pupillometry Analyses #################
 
-tmp_pupil_QA_metrics_fn = dir(pattern = glob2rx(sprintf('cge_pupil_QA_metrics*.csv',s)),full.names = T, recursive = T);
+tmp_pupil_QA_metrics_fn = dir(pattern = glob2rx(sprintf('cge_pupil_QA_metrics*.csv')),full.names = T, recursive = T);
 pupil_QA_metrics = read.csv(tmp_pupil_QA_metrics_fn[length(tmp_pupil_QA_metrics_fn)])
 keep_subj_pupil = as.logical(pupil_QA_metrics$keep_subj_pupil[keep_participants]); # focusing on those individuals
 # we are retaining for behavioral analysis, which do we ALSO retain for pupil analysis
