@@ -2551,6 +2551,101 @@ summary(likmodel_contDiff_catCap)
 # no signs of anything going on in previous difficulty
 
 
+# Another Approach - look for lower choice consistency after difficult trials
+negLLprospect_cge_muPrevDiff <- function(parameters,choiceset,choices) {
+  # A negative log likelihood function for a prospect-theory estimation.
+  # Assumes parameters are [rho, mu, muchange]
+  # Assumes choiceset has columns riskyoption1, riskyoption2, safeoption, and all_diff_cont
+  # Assumes choices are binary/logical, with 1 = risky, 0 = safe.
+  #
+  # Peter Sokol-Hessner
+  # July 2021
+  
+  rho = parameters[1]
+  mu = parameters[2]
+  muchange = parameters[3]
+  
+  if(mu - muchange < 0){ # if the change term results in a mu value below zero
+    muchange = mu # set the change term to be equal to -mu so the resulting mu is 0.
+  }
+  
+  choiceset$all_diff_cont = choiceset$all_diff_cont*2-1 # take the 0-1 difficulty measure and make it -1 to 1
+  
+  muvals = mu + choiceset$all_diff_cont * muchange
+  
+  for(t in 1:length(choiceset$all_diff_cont)){
+    choiceP[t] = choice_probability(c(rho,muvals[t]), choiceset);
+  }
+  
+  likelihood = choices * choiceP + (1 - choices) * (1-choiceP);
+  likelihood[likelihood == 0] = 0.000000000000001; # 1e-15, i.e. 14 zeros followed by a 1
+  
+  nll <- -sum(log(likelihood));
+  return(nll)
+}
+
+## Optimization ############################################
+eps = .Machine$double.eps;
+lower_bounds = c(eps, 0, 0); # R, M, muchange
+upper_bounds = c(2,80,40);
+number_of_parameters = length(lower_bounds);
+
+# Create placeholders for parameters, errors, NLL (and anything else you want)
+number_of_iterations = 200; # 100 or more
+estimated_parameters = array(dim = c(number_of_clean_subjects,2));
+estimated_parameter_errors = array(dim = c(number_of_clean_subjects,2));
+NLLs = array(dim = c(number_of_clean_subjects,1));
+
+# clean_data_dm$all_choiceP = NA;
+
+cat('Beginning Optimization\n')
+
+for (subj in 1:number_of_clean_subjects){
+  subj_id = keep_participants[subj];
+  print(subj_id)
+  
+  tmpdata = clean_data_dm[(clean_data_dm$subjectnumber == subj_id) &
+                            is.finite(clean_data_dm$choice),]; # defines this person's data
+  
+  temp_parameters = array(dim = c(number_of_iterations,number_of_parameters));
+  temp_hessians = array(dim = c(number_of_iterations,number_of_parameters,number_of_parameters));
+  temp_NLLs = array(dim = c(number_of_iterations,1));
+  
+  choiceset = as.data.frame(cbind(tmpdata$riskyopt1, tmpdata$riskyopt2, tmpdata$safe, tmpdata$all_diff_cont));
+  colnames(choiceset) <- c('riskyoption1', 'riskyoption2', 'safeoption', 'all_diff_cont');
+  
+  # tic() # start the timer
+  
+  for(iter in 1:number_of_iterations){
+    # Randomly set initial values within supported values
+    # using uniformly-distributed values. Many ways to do this!
+    
+    initial_values = runif(number_of_parameters, min = lower_bounds, max = upper_bounds)
+    
+    temp_output = optim(initial_values, negLLprospect_cge_muPrevDiff,
+                        choiceset = choiceset,
+                        choices = tmpdata$choice,
+                        lower = lower_bounds,
+                        upper = upper_bounds,
+                        method = "L-BFGS-B",
+                        hessian = T)
+    
+    # Store the output we need access to later
+    temp_parameters[iter,] = temp_output$par; # parameter values
+    temp_hessians[iter,,] = temp_output$hessian; # SEs
+    temp_NLLs[iter,] = temp_output$value; # the NLLs
+  }
+  
+  # Compare output; select the best one
+  NLLs[subj] = min(temp_NLLs); # the best NLL for this person
+  best_ind = which(temp_NLLs == NLLs[subj])[1]; # the index of that NLL
+  
+  estimated_parameters[subj,] = temp_parameters[best_ind,] # the parameters
+  estimated_parameter_errors[subj,] = sqrt(diag(solve(temp_hessians[best_ind,,]))); # the SEs
+}
+
+
+
 # TAKEAWAY:
 # There are no strong signs in peoples' choices that after difficult trials, choice likelihood
 # is relatively lower for low capacity folks than for high capacity folks. That *would* have
