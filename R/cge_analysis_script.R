@@ -439,7 +439,7 @@ cat('Beginning Optimization\n')
 
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
-  print(subj_id)
+  cat(sprintf('%i of %i\n',subj_id, number_of_clean_subjects)
 
   tmpdata = clean_data_dm[(clean_data_dm$subjectnumber == subj_id) &
                             (clean_data_dm$static0dynamic1 == 0) &
@@ -492,97 +492,97 @@ for (subj in 1:number_of_clean_subjects){
 }
 
 
-## Grid Search ############################################
-
-### Q: Does optimized analysis match grid search analysis?###
-
-n_rho_values = 200; # SET THIS TO THE DESIRED DEGREE OF FINENESS
-n_mu_values = 201; # IBID
-
-rho_values = seq(from = 0.3, to = 2.2, length.out = n_rho_values); # the range of fit-able values
-mu_values = seq(from = 7, to = 80, length.out = n_mu_values);
-
-best_rhos = array(dim = c(number_of_clean_subjects,1));
-best_mus = array(dim = c(number_of_clean_subjects,1));
-
-cat('Beginning Grid Search\n')
-
-for (subj in 1:number_of_clean_subjects){
-  subj_id = keep_participants[subj];
-  print(subj_id)
-  #
-  tmpdata = clean_data_dm[(clean_data_dm$subjectnumber == subj_id) &
-                            (clean_data_dm$static0dynamic1 == 0) &
-                            is.finite(clean_data_dm$choice),]; # defines this person's data
-
-  choiceset = as.data.frame(cbind(tmpdata$riskyopt1, tmpdata$riskyopt2, tmpdata$safe));
-  colnames(choiceset) <- c('riskyoption1', 'riskyoption2', 'safeoption');
-
-  grid_nll_values = array(dim = c(n_rho_values, n_mu_values));
-
-  for(r in 1:n_rho_values){
-    for(m in 1:n_mu_values){
-      grid_nll_values[r,m] = negLLprospect_cge(c(rho_values[r],mu_values[m]), choiceset, tmpdata$choice)
-    }
-  }
-
-  min_nll = min(grid_nll_values); # identify the single best value
-  indexes = which(grid_nll_values == min_nll, arr.ind = T); # Get indices for that single best value
-
-  best_rhos[subj] = rho_values[indexes[1]]; # what are the corresponding rho & mu values?
-  best_mus[subj] = mu_values[indexes[2]];
-}
-
-# look at all best rho & mu per participant
-grid_bestRho = array(dim = c(number_of_clean_subjects,1));
-grid_bestMu = array(dim = c(number_of_clean_subjects,1));
-for (subj in 1:number_of_clean_subjects){
-  subj_id = keep_participants[subj];
-
-  tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
-
-  grid_bestRho[subj] = rho_values[unique(tmpdata$bestRho)];
-  grid_bestMu[subj] = mu_values[unique(tmpdata$bestMu)];
-}
-
-# First, check fresh grid search best Rho & Mu against experiment-executed grid search Rho & Mu
-# (should be trivial and match!)
-
-if (any((grid_bestRho - best_rhos) != 0)){
-  print('MISMATCH!')
-}else{
-  print('Grid search values match (as expected)')
-}
-
-# Grid search replicates (which it should!) (4/11/24)
-
-# Then check estimated parameters vs. grid search parameters
-plot(grid_bestRho,estimated_parameters[,1], main = 'RHO',
-     xlab = 'Grid Search Estimate', ylab = 'Optimization estimate',
-     xlim = c(0, 2), ylim = c(0, 2))
-lines(c(0, 2), c(0, 2))
-
-plot(grid_bestMu,estimated_parameters[,2], main = 'MU',
-     xlab = 'Grid Search Estimate', ylab = 'Optimization estimate',
-     xlim = c(0, 100), ylim = c(0, 100))
-lines(c(0, 100), c(0, 100))
-
-hist(grid_bestRho - estimated_parameters[,1], xlim = c(-2,2),
-     breaks = seq(from = -2, to = 2, by = 0.02), main = 'Difference in Rho Estimates',
-     ylab = 'Participants', xlab = 'Grid estimate - MLE estimate')
-hist(grid_bestMu - estimated_parameters[,2], xlim = c(-100,100),
-     breaks = seq(from = -100, to = 100, by = 0.5), main = 'Difference in Mu Estimates',
-     ylab = 'Participants', xlab = 'Grid estimate - MLE estimate')
-# This is supposed to look silly! Should cluster around 0
-# ... and it does, as of 4/5/24!
-
-t.test(grid_bestRho, estimated_parameters[,1], paired = T) # no sig. diff (rho)... 4/11/24 (t(84) = 1.7804, p = 0.07862)
-t.test(grid_bestMu, estimated_parameters[,2], paired = T) # no sig. diff (mu)... 4/11/24 (t(84) = 1.8545, p = 0.06718)
-
-cor.test(grid_bestRho, estimated_parameters[,1]) # both extremely highly correlated. r(83) = 0.9974685, p = 2.2e-16
-cor.test(grid_bestMu, estimated_parameters[,2]) # r(83) = 0.9997898, p = 2.2e-16
-
-# A: YES, grid-search values match optimized values very closely.
+# ## Grid Search ############################################
+# 
+# ### Q: Does optimized analysis match grid search analysis?###
+# 
+# n_rho_values = 200; # SET THIS TO THE DESIRED DEGREE OF FINENESS
+# n_mu_values = 201; # IBID
+# 
+# rho_values = seq(from = 0.3, to = 2.2, length.out = n_rho_values); # the range of fit-able values
+# mu_values = seq(from = 7, to = 80, length.out = n_mu_values);
+# 
+# best_rhos = array(dim = c(number_of_clean_subjects,1));
+# best_mus = array(dim = c(number_of_clean_subjects,1));
+# 
+# cat('Beginning Grid Search\n')
+# 
+# for (subj in 1:number_of_clean_subjects){
+#   subj_id = keep_participants[subj];
+#   print(subj_id)
+#   #
+#   tmpdata = clean_data_dm[(clean_data_dm$subjectnumber == subj_id) &
+#                             (clean_data_dm$static0dynamic1 == 0) &
+#                             is.finite(clean_data_dm$choice),]; # defines this person's data
+# 
+#   choiceset = as.data.frame(cbind(tmpdata$riskyopt1, tmpdata$riskyopt2, tmpdata$safe));
+#   colnames(choiceset) <- c('riskyoption1', 'riskyoption2', 'safeoption');
+# 
+#   grid_nll_values = array(dim = c(n_rho_values, n_mu_values));
+# 
+#   for(r in 1:n_rho_values){
+#     for(m in 1:n_mu_values){
+#       grid_nll_values[r,m] = negLLprospect_cge(c(rho_values[r],mu_values[m]), choiceset, tmpdata$choice)
+#     }
+#   }
+# 
+#   min_nll = min(grid_nll_values); # identify the single best value
+#   indexes = which(grid_nll_values == min_nll, arr.ind = T); # Get indices for that single best value
+# 
+#   best_rhos[subj] = rho_values[indexes[1]]; # what are the corresponding rho & mu values?
+#   best_mus[subj] = mu_values[indexes[2]];
+# }
+# 
+# # look at all best rho & mu per participant
+# grid_bestRho = array(dim = c(number_of_clean_subjects,1));
+# grid_bestMu = array(dim = c(number_of_clean_subjects,1));
+# for (subj in 1:number_of_clean_subjects){
+#   subj_id = keep_participants[subj];
+# 
+#   tmpdata = clean_data_dm[clean_data_dm$subjectnumber == subj_id,];
+# 
+#   grid_bestRho[subj] = rho_values[unique(tmpdata$bestRho)];
+#   grid_bestMu[subj] = mu_values[unique(tmpdata$bestMu)];
+# }
+# 
+# # First, check fresh grid search best Rho & Mu against experiment-executed grid search Rho & Mu
+# # (should be trivial and match!)
+# 
+# if (any((grid_bestRho - best_rhos) != 0)){
+#   print('MISMATCH!')
+# }else{
+#   print('Grid search values match (as expected)')
+# }
+# 
+# # Grid search replicates (which it should!) (4/11/24)
+# 
+# # Then check estimated parameters vs. grid search parameters
+# plot(grid_bestRho,estimated_parameters[,1], main = 'RHO',
+#      xlab = 'Grid Search Estimate', ylab = 'Optimization estimate',
+#      xlim = c(0, 2), ylim = c(0, 2))
+# lines(c(0, 2), c(0, 2))
+# 
+# plot(grid_bestMu,estimated_parameters[,2], main = 'MU',
+#      xlab = 'Grid Search Estimate', ylab = 'Optimization estimate',
+#      xlim = c(0, 100), ylim = c(0, 100))
+# lines(c(0, 100), c(0, 100))
+# 
+# hist(grid_bestRho - estimated_parameters[,1], xlim = c(-2,2),
+#      breaks = seq(from = -2, to = 2, by = 0.02), main = 'Difference in Rho Estimates',
+#      ylab = 'Participants', xlab = 'Grid estimate - MLE estimate')
+# hist(grid_bestMu - estimated_parameters[,2], xlim = c(-100,100),
+#      breaks = seq(from = -100, to = 100, by = 0.5), main = 'Difference in Mu Estimates',
+#      ylab = 'Participants', xlab = 'Grid estimate - MLE estimate')
+# # This is supposed to look silly! Should cluster around 0
+# # ... and it does, as of 4/5/24!
+# 
+# t.test(grid_bestRho, estimated_parameters[,1], paired = T) # no sig. diff (rho)... 4/11/24 (t(84) = 1.7804, p = 0.07862)
+# t.test(grid_bestMu, estimated_parameters[,2], paired = T) # no sig. diff (mu)... 4/11/24 (t(84) = 1.8545, p = 0.06718)
+# 
+# cor.test(grid_bestRho, estimated_parameters[,1]) # both extremely highly correlated. r(83) = 0.9974685, p = 2.2e-16
+# cor.test(grid_bestMu, estimated_parameters[,2]) # r(83) = 0.9997898, p = 2.2e-16
+# 
+# # A: YES, grid-search values match optimized values very closely.
 
 # Who are our subjects?
 mean_params = colMeans(estimated_parameters);
@@ -2631,19 +2631,21 @@ my.cluster <- parallel::makeCluster(
 doParallel::registerDoParallel(cl = my.cluster)
 
 
+##### Do the Estimations ###############################
 tic()
 for (subj in 1:number_of_clean_subjects){
 # for (subj in 1){
   subj_id = keep_participants[subj];
-  print(subj_id)
+  cat(sprintf('%i of %i\n',subj_id, number_of_clean_subjects))
   
   tmpdata = clean_data_dm[(clean_data_dm$subjectnumber == subj_id) &
-                            is.finite(clean_data_dm$choice),]; # defines this person's data
+                            is.finite(clean_data_dm$choice) & 
+                            is.finite(clean_data_dm$prev_all_diff_cont),]; # defines this person's data
   
   choiceset = as.data.frame(cbind(tmpdata$riskyopt1, tmpdata$riskyopt2, tmpdata$safe, tmpdata$prev_all_diff_cont));
   colnames(choiceset) <- c('riskyoption1', 'riskyoption2', 'safeoption', 'prev_all_diff_cont');
   
-  ##### Do the Mu-Change Estimation ###############################
+  # Mu Change Model
   temp_parameters = array(dim = c(number_of_iterations,number_of_parameters));
   temp_hessians = array(dim = c(number_of_iterations,number_of_parameters,number_of_parameters));
   temp_NLLs = array(dim = c(number_of_iterations,1));
@@ -2681,7 +2683,7 @@ for (subj in 1:number_of_clean_subjects){
   estimated_parameter_errors[subj,] = sqrt(diag(solve(tmp_hess))); # the SEs
   
   
-  ##### Do the No-Change Estimation ###############################
+  # Standard (Constrained, no mu change) Model
   
   temp_parameters = array(dim = c(number_of_iterations,number_of_parameters_constr));
   temp_hessians = array(dim = c(number_of_iterations,number_of_parameters,number_of_parameters_constr));
@@ -2722,21 +2724,40 @@ for (subj in 1:number_of_clean_subjects){
 stopCluster(my.cluster)
 toc()
 
+##### Process the Results ###############################
 ttest_result = t.test(estimated_parameters[,3])
 cat(sprintf('Results of one-sample t-test: t = %.2f (df = %i), p = %.4f\n',
             ttest_result$statistic, ttest_result$parameter, ttest_result$p.value))
+# Value is *slightly* positive, M = 0.17, SD = 0.54; t(84) = 2.9, p = 0.005
+hist(estimated_parameters[,3])
 
 lrt = 2*(NLLs_constr - NLLs)
 df = 1
 lrtp = 1 - pchisq(lrt, df)
 
-cat(sprintf('Out of %i mu-change parameter values, %i are not different from 0, %i are different & negative, and %i are different & positive.\n', 
+cat(sprintf('Out of %i mu-change parameter values:\n - %i are not different from 0\n - %i are different & negative\n - %i are different & positive.\n', 
             length(lrtp), sum(lrtp >= .05), 
             sum(((lrtp < .05) & (estimated_parameters[,3] < 0))), 
             sum(((lrtp < .05) & (estimated_parameters[,3] > 0)))))
 
-cat(sprintf('Full results:\nLikelihood Ratio Test: Test statistic = %.1f, p = %.5f.\n', lrt, lrtp))
+cat(sprintf('Likelihood Ratio Test: Test statistic = %.1f, p = %.5f.\n', lrt, lrtp))
 
+cor.test(estimated_parameters[,3], clean_data_complexspan$compositeSpanScore)
+cor.test(estimated_parameters[,3], clean_data_complexspan$compositeSpanScore, method = 'spearman')
+plot(estimated_parameters[,3], clean_data_complexspan$compositeSpanScore, 
+     xlab = 'Mu Change parameter', ylab = 'WMC')
+# No significant correlation (either spearman's rho or pearson's r)
+
+# Had predicted...
+# - negative muchange parameter value
+# - muchange parameter value correlated with WMC (or diff. by group),
+#   such that low WMC people had a negative muchange parameter value
+#   indicating reduced choice consistency after difficult trials. 
+#
+# Find instead:
+# - weak average positive value (significant at a one-sample t-test, but
+#   not significant on a per-person basis at any meaningful level)
+# - No relationship between WMC and muchange.
 
 
 # TAKEAWAY:
