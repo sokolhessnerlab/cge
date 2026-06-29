@@ -2576,7 +2576,7 @@ negLLprospect_cge_muPrevDiff <- function(parameters,choiceset,choices) {
     rho = .Machine$double.eps;
   }
   
-  applied_mu = exp(mu + choiceset$all_diff_cont*muchange)
+  applied_mu = exp(mu + choiceset$prev_all_diff_cont*muchange)
   
   # calculate utility of the two options
   utility_risky_option = 0.5 * choiceset$riskyoption1^rho +
@@ -2640,8 +2640,8 @@ for (subj in 1:number_of_clean_subjects){
   tmpdata = clean_data_dm[(clean_data_dm$subjectnumber == subj_id) &
                             is.finite(clean_data_dm$choice),]; # defines this person's data
   
-  choiceset = as.data.frame(cbind(tmpdata$riskyopt1, tmpdata$riskyopt2, tmpdata$safe, tmpdata$all_diff_cont));
-  colnames(choiceset) <- c('riskyoption1', 'riskyoption2', 'safeoption', 'all_diff_cont');
+  choiceset = as.data.frame(cbind(tmpdata$riskyopt1, tmpdata$riskyopt2, tmpdata$safe, tmpdata$prev_all_diff_cont));
+  colnames(choiceset) <- c('riskyoption1', 'riskyoption2', 'safeoption', 'prev_all_diff_cont');
   
   ##### Do the Mu-Change Estimation ###############################
   temp_parameters = array(dim = c(number_of_iterations,number_of_parameters));
@@ -2722,11 +2722,20 @@ for (subj in 1:number_of_clean_subjects){
 stopCluster(my.cluster)
 toc()
 
+ttest_result = t.test(estimated_parameters[,3])
+cat(sprintf('Results of one-sample t-test: t = %.2f (df = %i), p = %.4f\n',
+            ttest_result$statistic, ttest_result$parameter, ttest_result$p.value))
+
 lrt = 2*(NLLs_constr - NLLs)
 df = 1
 lrtp = 1 - pchisq(lrt, df)
 
-cat(sprintf('Likelihood Ratio Test: Test statistic = %.1f, p = %.5f.\n', lrt, lrtp))
+cat(sprintf('Out of %i mu-change parameter values, %i are not different from 0, %i are different & negative, and %i are different & positive.\n', 
+            length(lrtp), sum(lrtp >= .05), 
+            sum(((lrtp < .05) & (estimated_parameters[,3] < 0))), 
+            sum(((lrtp < .05) & (estimated_parameters[,3] > 0)))))
+
+cat(sprintf('Full results:\nLikelihood Ratio Test: Test statistic = %.1f, p = %.5f.\n', lrt, lrtp))
 
 
 
