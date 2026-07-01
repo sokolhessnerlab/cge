@@ -47,7 +47,7 @@ text(x = 0, y = 140, labels = 'Prev. Extremely Diff.', srt = 2, col = 'red4', po
 subj_val_diff = seq(from = -6, to = 6, by = .1)
 
 softmax_inv_temp_preveasy = .8
-softmax_inv_temp_prevdiff = .4
+softmax_inv_temp_prevdiff = .5
 
 softmax <- function(xvals,mu){
   yvals = 1/(1 + exp(-mu * xvals))

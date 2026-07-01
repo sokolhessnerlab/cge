@@ -2768,11 +2768,11 @@ plot(estimated_parameters[,3], clean_data_complexspan$compositeSpanScore,
 #
 # Note that no stats are instead consistent with *facilitation* after difficult trials (which
 # might predict more internally-consistent choices after difficult trials).
-
+#
 # This analysis likely suffers from too much breaking-into-parts (and any others going down this
 # path would suffer more, e.g. is the likelihood lower, on difficult trials only, after difficult
 # trials than after easy trials?)
-
+#
 # This analysis is ALSO fundamentally limited by our design - easy and difficult trials are
 # DESIGNED with a particular choice likelihood. That's the literal definition of what makes an
 # easy trial easy etc. In particular, difficult trials, where we might expect to see the most
@@ -2784,6 +2784,31 @@ plot(estimated_parameters[,3], clean_data_complexspan$compositeSpanScore,
 # work at all to decide about. In short, the way to have observed this might have been with
 # trials that were in-between easy and difficult.
 
+
+# What does actual observed probability of risky option selection look like against the
+# boundaries that we used to create easy accept, easy reject, and difficult? 
+hist(clean_data_dm$choiceP, xlim = c(0,1), breaks = 100,
+     xlab = 'p(risky)', ylab = 'Frequency', main = 'Dynamic Choice Set: Boundaries & Observed Values') # All p(risky) values
+abline(v = 0.15) # easy rej. upper bound
+abline(v = 0.85) # easy acc. lower bound
+abline(v = 0.45) # diff lower bound
+abline(v = 0.55) # diff upper bound
+
+hist(abs(abs(clean_data_dm$choiceP - 0.5)*2-1), xlim = c(0,1), breaks = 100,
+     xlab = 'Difficulty (0 = easy, 1 = diff)', ylab = 'Frequency', main = 'Difficulty bounds & Observed Values')
+abline(v = 0.3)
+abline(v = 0.9)
+
+# For the purposes of CGE, the above is fine! Trials are as it says on the bin - easy
+# and difficult. BUT the easy trials in particular are very biased to *extremely* easy.
+# This is broadly consistent then with the limitation in the argument above, stating 
+# that the easy trials may be SO easy that we can't see changes there. 
+#
+# This means that the throwing-in-the-towel analyses we were thinking about are largely 
+# not possible in this dataset as we don't even have easy trials approaching the 
+# near-intermediate values. 
+#
+# Future research needs to more smoothly sample difficulty. Smaller bins? 
 
 
 # Pupillometry Analyses #################
