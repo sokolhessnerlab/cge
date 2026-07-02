@@ -37,10 +37,10 @@ plot(currdiff, yval_prev_easy, col = 'blue', type = 'l', ylim = c(0,800), lwd = 
 lines(currdiff, yval_prev_diff, col = 'red', lwd = 8)
 lines(currdiff, yval_prev_very_diff, col = 'red3', lwd = 8, lty = 'dotted')
 lines(currdiff, yval_prev_extreme_diff, col = 'red4', lwd = 8, lty = 'dotted')
-text(x = 0, y = 455, labels = 'Prev. Easy', srt = 20, col = 'blue', pos = 4)
-text(x = 0, y = 350, labels = 'Prev. Diff.', srt = 20, col = 'red', pos = 4)
-text(x = 0, y = 255, labels = 'Prev. Very Diff.', srt = 10, col = 'red3', pos = 4)
-text(x = 0, y = 140, labels = 'Prev. Extremely Diff.', srt = 2, col = 'red4', pos = 4)
+text(x = 0, y = 455, labels = 'Prev. Easy', srt = 24, col = 'blue', pos = 4)
+text(x = 0, y = 350, labels = 'Prev. Diff.', srt = 24, col = 'red', pos = 4)
+text(x = 0, y = 255, labels = 'Prev. Very Diff.', srt = 13, col = 'red3', pos = 4)
+text(x = 0, y = 140, labels = 'Prev. Extremely Diff.', srt = 3, col = 'red4', pos = 4)
 
 
 # Graph 2: Intermediate Difficulty ##########################################
