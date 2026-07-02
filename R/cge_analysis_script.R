@@ -439,7 +439,7 @@ cat('Beginning Optimization\n')
 
 for (subj in 1:number_of_clean_subjects){
   subj_id = keep_participants[subj];
-  cat(sprintf('%i of %i\n',subj_id, number_of_clean_subjects)
+  cat(sprintf('%i of %i\n',subj_id, number_of_clean_subjects))
 
   tmpdata = clean_data_dm[(clean_data_dm$subjectnumber == subj_id) &
                             (clean_data_dm$static0dynamic1 == 0) &
@@ -9944,6 +9944,11 @@ best_hessian = hessian(func=sigmoid_NLL, x = bestSigmParam, func_data = clean_da
 best_estimated_parameter_errors = sqrt(diag(solve(best_hessian)));
 # These are: 0.002095915 41.789305491
 #           super tight   very wide! Gamma is really the same as it increases
+
+save(bestSigmParam, bestSigmNLL, best_estimated_parameter_errors, file = sprintf('sigmoid_tWMC_results_%s.RData',format(Sys.Date(), format="%Y%m%d")))
+
+sigmoid_fn = dir(pattern = glob2rx('sigmoid_tWMC_results_*.RData'))
+load(sigmoid_fn)
 
 clean_data_dm$tWMC = make_tWMC(bestSigmParam, clean_data_dm$complexspan)
 clean_data_complexspan$tWMC = make_tWMC(bestSigmParam, clean_data_complexspan$compositeSpanScore)
