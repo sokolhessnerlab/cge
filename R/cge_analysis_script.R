@@ -9945,8 +9945,13 @@ best_estimated_parameter_errors = sqrt(diag(solve(best_hessian)));
 # These are: 0.002095915 41.789305491
 #           super tight   very wide! Gamma is really the same as it increases
 
+
+# Save out the Results!
 save(bestSigmParam, bestSigmNLL, best_estimated_parameter_errors, file = sprintf('sigmoid_tWMC_results_%s.RData',format(Sys.Date(), format="%Y%m%d")))
 
+
+
+# Load the Results!
 sigmoid_fn = dir(pattern = glob2rx('sigmoid_tWMC_results_*.RData'))
 load(sigmoid_fn)
 
