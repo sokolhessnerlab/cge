@@ -9845,10 +9845,9 @@ sigmoid_NLL = function(parameters, func_data) {
   alpha = parameters[1] # what does this represent again?
   gamma = parameters[2] # what does this represent again?
 
-  # ensure parameters don't fall below eps
-  eps = .Machine$double.eps
-  # if (alpha < eps) {alpha = eps} # I don't think I need this... I think only for gamma
-  # if (gamma < 1e-8) {gamma = 1e-8}
+  # ensure parameters don't fall below 0
+  if (alpha < 0) {alpha = 0} # Enforce the lower parameter bounds (these shouldn't be tested if optim() respects the lower bounds)
+  if (gamma < 0) {gamma = 0}
 
   # sigmoid transform WMC into tWMC and add to clean_data_dm - to use in the NLL
   func_data$tWMC = make_tWMC(c(alpha, gamma), func_data$complexspan)
@@ -9881,74 +9880,79 @@ sigmoid_NLL = function(parameters, func_data) {
 
 }
 
-# Setting up optim()
-iter = 1000
-tmp_parameters = array(dim = c(iter, 2)) # 2 for the alpha and gamma?
-# tmp_hessians = array(dim = c(2, 2, iter))
-tmp_NLLs = array(dim = c(iter, 1))
+# UNCOMMENT THE BELOW TO RUN THE FITTING
 
-par(mfrow = c(1,1))
-
-# Set up the parallelization
-n.cores <- parallel::detectCores() - 1; # Use 1 less than the full number of cores.
-my.cluster <- parallel::makeCluster(
-  n.cores,
-  type = "FORK"
-)
-doParallel::registerDoParallel(cl = my.cluster)
-
-# setting the bounds
-eps = .Machine$double.eps
-lower_bounds = c(0, 0); # we don't want 0s for alpa and gamma
-upper_bounds = c(1,15) # I'm literally using values that I had from my other code...
-
-
-# The parallelized loop
-
-tic()
-
-# Expected time is 122s/iteration/core. E.g., for 7 cores, 800 iterations, 
-# expect total time of 3.9 hours. 
-alloutput <- foreach(iteration=1:iter, .combine=rbind) %dorng% {
-  initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
-  
-  # The estimation itself
-  output <- optim(initial_values, sigmoid_NLL,
-                  func_data = clean_data_dm,
-                  lower = lower_bounds,
-                  upper = upper_bounds,
-                  method = "L-BFGS-B", 
-                  hessian = T)
-  
-  c(output$par,output$value); # the things (parameter values & NLL) to save/combine across parallel estimations
-}
-stopCluster(my.cluster)
-
-
-sigNLLtime = toc()
-
-all_estimates = alloutput[,1:2];
-all_nlls = alloutput[,3];
-
-best_nll_index = which.min(all_nlls); # identify the single best estimation
-
-# Save out the parameters & NLLs from the single best estimation
-bestSigmParam = all_estimates[best_nll_index,];
-# These are: 0.6785773 (alpha) 12.3147348 (gamma)
-
-# bestSigmParam[2] = 2^bestSigmParam[2]
-bestSigmNLL = all_nlls[best_nll_index];
-# This is: -4390.019
-
-best_hessian = hessian(func=sigmoid_NLL, x = bestSigmParam, func_data = clean_data_dm)
-best_estimated_parameter_errors = sqrt(diag(solve(best_hessian)));
-# These are: 0.002095915 41.789305491
-#           super tight   very wide! Gamma is really the same as it increases
-
-
-# Save out the Results!
-save(bestSigmParam, bestSigmNLL, best_estimated_parameter_errors, file = sprintf('sigmoid_tWMC_results_%s.RData',format(Sys.Date(), format="%Y%m%d")))
-
+# # Setting up optim()
+# iter = 1000
+# tmp_parameters = array(dim = c(iter, 2)) # 2 for the alpha and gamma?
+# # tmp_hessians = array(dim = c(2, 2, iter))
+# tmp_NLLs = array(dim = c(iter, 1))
+# 
+# par(mfrow = c(1,1))
+# 
+# # Set up the parallelization
+# n.cores <- parallel::detectCores() - 1; # Use 1 less than the full number of cores.
+# my.cluster <- parallel::makeCluster(
+#   n.cores,
+#   type = "FORK"
+# )
+# doParallel::registerDoParallel(cl = my.cluster)
+# 
+# # setting the bounds
+# eps = .Machine$double.eps
+# lower_bounds = c(0, 0); # we don't want 0s for alpha and gamma
+# upper_bounds = c(1,15) # I'm literally using values that I had from my other code...
+# 
+# 
+# # The parallelized loop
+# 
+# tic()
+# 
+# # Expected time is 122s/iteration/core. E.g., for 7 cores, 800 iterations, 
+# # expect total time of 3.9 hours. 
+# alloutput <- foreach(iteration=1:iter, .combine=rbind) %dorng% {
+#   initial_values = runif(2, min = lower_bounds, max = upper_bounds) # you need to randomize the initial so you can end up at different points
+#   
+#   # The estimation itself
+#   output <- optim(initial_values, sigmoid_NLL,
+#                   func_data = clean_data_dm,
+#                   lower = lower_bounds,
+#                   upper = upper_bounds,
+#                   method = "L-BFGS-B", 
+#                   hessian = T)
+#   
+#   c(output$par,output$value); # the things (parameter values & NLL) to save/combine across parallel estimations
+# }
+# stopCluster(my.cluster)
+# 
+# 
+# sigNLLtime = toc()
+# 
+# all_estimates = alloutput[,1:2];
+# all_nlls = alloutput[,3];
+# 
+# best_nll_index = which.min(all_nlls); # identify the single best estimation
+# 
+# # Save out the parameters & NLLs from the single best estimation
+# bestSigmParam = all_estimates[best_nll_index,];
+# # These are: 0.6785773 (alpha) 12.3147348 (gamma)
+# 
+# # bestSigmParam[2] = 2^bestSigmParam[2]
+# bestSigmNLL = all_nlls[best_nll_index];
+# # This is: -4390.019
+# 
+# best_hessian = hessian(func=sigmoid_NLL, x = bestSigmParam, func_data = clean_data_dm)
+# best_estimated_parameter_errors = sqrt(diag(solve(best_hessian)));
+# # These are: 0.002095915 41.789305491
+# #           super tight   very wide! Gamma is really the same as it increases
+# 
+# 
+# # Save out the Results!
+# save(bestSigmParam, bestSigmNLL, best_estimated_parameter_errors, # The main takeaways
+#      all_estimates, all_nlls, alloutput, best_nll_index, best_hessian, # the antecedents
+#      file = sprintf('sigmoid_tWMC_results_%s.RData',format(Sys.Date(), format="%Y%m%d")))
+# 
+# 
 
 
 # Load the Results!
@@ -9958,15 +9962,60 @@ load(sigmoid_fn)
 clean_data_dm$tWMC = make_tWMC(bestSigmParam, clean_data_dm$complexspan)
 clean_data_complexspan$tWMC = make_tWMC(bestSigmParam, clean_data_complexspan$compositeSpanScore)
 
+comp_Span_continuous = seq(from = 0, to = 1, by = 0.00001) # effectively continuous
+tWMC_continuous = make_tWMC(bestSigmParam, comp_Span_continuous)
+
 sorted_clean_data_complexspan = clean_data_complexspan[order(clean_data_complexspan$compositeSpanScore), ]
 
-plot(sorted_clean_data_complexspan$compositeSpanScore, sorted_clean_data_complexspan$tWMC, type = 'l',
+# plot(sorted_clean_data_complexspan$compositeSpanScore, sorted_clean_data_complexspan$tWMC, type = 'l',
+#      xlab = 'WMC (composite span score)', ylab = 'Transformed WMC', col = 'darkorange1', lwd = 4)
+
+# Full plot
+plot(comp_Span_continuous, tWMC_continuous, type = 'l',
      xlab = 'WMC (composite span score)', ylab = 'Transformed WMC', col = 'darkorange1', lwd = 4)
 points(clean_data_complexspan$compositeSpanScore, clean_data_complexspan$tWMC, pch = 16)
 abline(v = median_compositespan, col = 'red', lwd = 4, lty = 'dotted')
 abline(v = best_threshold, col = 'blue', lwd = 4)
 legend('topleft', legend = c('tWMC', 'Median span', 'Best binary threshold'), 
-       col = c('darkorange1','red','blue'), lty = 1, lwd = 3, cex = .6)
+       col = c('darkorange1','red','blue'), lty = 1, lwd = 3)
+
+# Zoomed-in on the point of change to illustrate range of possible solutions
+plot(comp_Span_continuous, tWMC_continuous, type = 'l',
+     xlab = 'WMC (composite span score)', ylab = 'Transformed WMC', col = 'darkorange1', lwd = 7, xlim = c(0.605, 0.635))
+lines(comp_Span_continuous, make_tWMC(c(.615, 13.212), comp_Span_continuous), col = 'orange1', lwd = 3, lty = 'dashed')
+lines(comp_Span_continuous, make_tWMC(c(.625, 15), comp_Span_continuous), col = 'orange2', lwd = 3, lty = 'dotted')
+lines(comp_Span_continuous, make_tWMC(c(.62, 12), comp_Span_continuous), col = 'orange3', lwd = 3, lty = 'dotdash')
+points(clean_data_complexspan$compositeSpanScore, clean_data_complexspan$tWMC, pch = 16, cex = 2)
+abline(v = median_compositespan, col = 'red', lwd = 4, lty = 'dotted')
+abline(v = best_threshold, col = 'blue', lwd = 4)
+# legend('topleft', legend = c('tWMC', 'Median span', 'Best binary threshold'), 
+#        col = c('darkorange1','red','blue'), lty = 1, lwd = 3)
+
+# Supplementary graph illustrating possible shapes of the relationship
+par(mfrow = c(2, 2)) # Make a 2x2 grid for plotting
+
+tmp_sigm_param = c(.5, .5) # LINEAR
+plot(comp_Span_continuous, make_tWMC(tmp_sigm_param, comp_Span_continuous), 
+     col = 'darkgray', lwd = 2, type = 'l', xlab = 'WMC', ylab = 'tWMC', main = bquote(alpha * .(sprintf(" = %g; ", tmp_sigm_param[1])) * gamma * .(sprintf(" = %g", tmp_sigm_param[2]))))
+points(clean_data_complexspan$compositeSpanScore, make_tWMC(tmp_sigm_param, clean_data_complexspan$compositeSpanScore), pch = 16)
+
+tmp_sigm_param = c(.1, 2.5) # CURVED
+plot(comp_Span_continuous, make_tWMC(tmp_sigm_param, comp_Span_continuous), 
+     col = 'darkgray', lwd = 2, type = 'l', xlab = 'WMC', ylab = 'tWMC', main = bquote(alpha * .(sprintf(" = %g; ", tmp_sigm_param[1])) * gamma * .(sprintf(" = %g", tmp_sigm_param[2]))))
+points(clean_data_complexspan$compositeSpanScore, make_tWMC(tmp_sigm_param, clean_data_complexspan$compositeSpanScore), pch = 16)
+
+tmp_sigm_param = c(.4, 4) # SIGMOID
+plot(comp_Span_continuous, make_tWMC(tmp_sigm_param, comp_Span_continuous), 
+     col = 'darkgray', lwd = 2, type = 'l', xlab = 'WMC', ylab = 'tWMC', main = bquote(alpha * .(sprintf(" = %g; ", tmp_sigm_param[1])) * gamma * .(sprintf(" = %g", tmp_sigm_param[2]))))
+points(clean_data_complexspan$compositeSpanScore, make_tWMC(tmp_sigm_param, clean_data_complexspan$compositeSpanScore), pch = 16)
+
+tmp_sigm_param = bestSigmParam # BINARY
+plot(comp_Span_continuous, make_tWMC(tmp_sigm_param, comp_Span_continuous), 
+     col = 'darkgray', lwd = 2, type = 'l', xlab = 'WMC', ylab = 'tWMC', main = bquote(alpha * .(sprintf(" = %.3f; ", tmp_sigm_param[1])) * gamma * .(sprintf(" = %.3f", tmp_sigm_param[2]))))
+points(clean_data_complexspan$compositeSpanScore, make_tWMC(tmp_sigm_param, clean_data_complexspan$compositeSpanScore), pch = 16)
+
+par(mfrow = c(1,1)) # reset plotting parameters
+
 
 # Checking how span, binary split, and tWMC compare
 sorted_clean_data_complexspan[,c('compositeSpanScore','capacity_HighP1_lowN1_best','tWMC')];
@@ -10011,7 +10060,8 @@ pLRT = 1 - pchisq(LRT_WMC_only, df = df) # the full sigmoid has slope and interc
 # 'log Lik.' 0 (df=8) -> so the new model is significantly different? wait... do I subtract the DFs from each model like for delta chi-square model compisons in SEM????? how do I get the DFs for each model...? but that leaves 0 -> similar issue as with LRT in anova
 cat(sprintf('Likelihood Ratio Test: Test statistic = %.1f, p = %.5f.\n', LRT_WMC_only, pLRT))
 # Likelihood Ratio Test: Test statistic = 0.0, p = 0.99999
-
+#
+# THEY ARE THE SAME
 
 
 
