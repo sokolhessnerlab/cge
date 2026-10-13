@@ -2576,7 +2576,11 @@ negLLprospect_cge_muPrevDiff <- function(parameters,choiceset,choices) {
     rho = .Machine$double.eps;
   }
   
+  # Addition within an exp() function
   applied_mu = exp(mu + choiceset$prev_all_diff_cont*muchange)
+  # Alternatives could include:
+  #   - a lower value base that produces a slightly less sharply curved transformation
+  #   - a different type of adjustment (not addition), e.g., multiplicative
   
   # calculate utility of the two options
   utility_risky_option = 0.5 * choiceset$riskyoption1^rho +
