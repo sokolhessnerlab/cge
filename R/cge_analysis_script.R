@@ -393,7 +393,7 @@ choice_probability <- function(parameters, choiceset) {
   utility_safe_option = choiceset$safeoption^rho;
 
   # normalize values using this term
-  div <- max(choiceset[,1:3])^rho; # decorrelates rho & mu
+  div <- 30^rho; # decorrelates rho & mu
 
   # calculate the probability of selecting the risky option
   p = 1/(1+exp(-mu/div*(utility_risky_option - utility_safe_option)));
@@ -2584,7 +2584,7 @@ negLLprospect_cge_muPrevDiff <- function(parameters,choiceset,choices) {
   utility_safe_option = choiceset$safeoption^rho;
   
   # normalize values using this term
-  div <- max(choiceset[,1:3])^rho; # decorrelates rho & mu
+  div <- 30^rho; # decorrelates rho & mu
   
   # calculate the probability of selecting the risky option
   choiceP = 1/(1+exp(-applied_mu/div*(utility_risky_option - utility_safe_option)));
